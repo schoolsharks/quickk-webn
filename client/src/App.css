@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
+.slick-dots li.slick-active div {
+    opacity: 1 !important;
+    background-color: rgba(150, 255, 67, 1) !important;
+  }
+  .slick-dots li div {
+    background-color: #0E0E0E !important;
+    transition: all 0.3s ease;
+    border: 1px solid #404040 !important;
+  }

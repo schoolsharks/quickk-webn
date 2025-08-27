@@ -62,9 +62,9 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
   return (
     <Box
       sx={{
-        color: "#fff",
+        color: "black",
         minHeight: window.innerHeight,
-        p: "50px 20px",
+        p: "30px 25px",
       }}
     >
       {/* Header */}
@@ -80,13 +80,13 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
       {/* Month Indicator */}
       <Box
         sx={{
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: theme.palette.text.secondary,
           py: "4px",
           px: 2,
           textAlign: "right",
         }}
       >
-        <Typography variant="body1" fontWeight={600} color="black">
+        <Typography variant="body1" fontWeight={600} color="white">
           Month - {leaderboardData.currentMonth}, {leaderboardData.currentYear}
         </Typography>
       </Box>
@@ -102,13 +102,13 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
       >
         {podiumOrder.map((user, index) => {
           const podiumStyles = [
-            { height: 180, background: "rgba(209, 209, 214, 1)" }, // #3
-            { height: 330, backgroundColor: theme.palette.primary.main }, // #1
-            { height: 260, background: "rgba(70, 70, 70, 1)" }, // #2
+            { height: 180, background: "#00000040" }, // #3
+            { height: 330, backgroundColor: "#00000033" }, // #1
+            { height: 260, background: "#4040409C" }, // #2
           ];
 
           return (
-            <Box textAlign="center" flex={1} key={index}>
+            <Box textAlign="center" key={index} flex={1}>
               <Typography
                 fontSize={"25px"}
                 fontWeight="bold"
@@ -144,7 +144,10 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   flexDirection={"row"}
                   justifyContent={"space-between"}
                 >
-                  <Typography color={index === 2 ? "inherit" : "black"}>
+                  <Typography
+                    color={index === 2 ? "inherit" : "black"}
+                    fontSize="14px"
+                  >
                     {user.name}
                   </Typography>
                   <Box display={"flex"} alignItems={"center"} gap={1}>
@@ -188,22 +191,26 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
               >
                 <Box
                   sx={{
-                    backgroundColor: isHighlight ? "#96FF43" : "#333",
-                    color: isHighlight ? "#000" : "#fff",
+                    backgroundColor: isHighlight ? "#333" : "transparent",
+                    color: !isHighlight ? "#000" : "#fff",
+                    border: `1px solid  ${theme.palette.primary.main}`,
                     p: "5px",
                   }}
                 >
-                  <Typography>{String(index + 4).padStart(2, "0")}</Typography>
+                  <Typography fontWeight={800}>
+                    {String(index + 4).padStart(2, "0")}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
-                    backgroundColor: isHighlight ? "#96FF43" : "#333",
-                    color: isHighlight ? "#000" : "#fff",
+                    backgroundColor: isHighlight ? "#333" : "transparent",
+                    color: !isHighlight ? "#000" : "#fff",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",
                     flex: "1",
                     alignItems: "center",
+                    border: `1px solid  ${theme.palette.primary.main}`,
                     px: 1,
                   }}
                 >
@@ -216,9 +223,17 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   <Typography sx={{ minWidth: 60 }}>{user.time}</Typography>
                   <Typography sx={{ minWidth: 50 }}>
                     {user.totalStars}{" "}
-                    <StarsOutlinedIcon
-                      sx={{ fontSize: 14, verticalAlign: "middle" }}
-                    />
+                    {isHighlight ? (
+                      <StarsOutlinedIcon
+                        sx={{
+                          fontSize: 18,
+                          verticalAlign: "middle",
+                          color: theme.palette.primary.main,
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
                   </Typography>
                 </Box>
               </ListItem>

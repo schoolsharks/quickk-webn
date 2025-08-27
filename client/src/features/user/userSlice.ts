@@ -14,6 +14,7 @@ interface UserState {
     avatarSelected: boolean;
     learningStreak: number | null;
     progress: number | null;
+    eventMode: boolean;
     users: Array<{
         name: string;
         totalStars: number;
@@ -49,6 +50,7 @@ const initialState: UserState = {
     progress: 0,
     address: null,
     contact: null,
+    eventMode: JSON.parse(localStorage.getItem('eventMode') || 'false'),
     users: null,
     currentMonth: null,
     currentYear: null,
@@ -59,7 +61,16 @@ const initialState: UserState = {
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        toggleEventMode: (state) => {
+            state.eventMode = !state.eventMode;
+            localStorage.setItem('eventMode', JSON.stringify(state.eventMode));
+        },
+        setEventMode: (state, action) => {
+            state.eventMode = action.payload;
+            localStorage.setItem('eventMode', JSON.stringify(state.eventMode));
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addMatcher(
@@ -170,4 +181,5 @@ const userSlice = createSlice({
     },
 });
 
+export const { toggleEventMode, setEventMode } = userSlice.actions;
 export default userSlice.reducer;

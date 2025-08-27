@@ -18,6 +18,7 @@ import AnimateNumber from "../../animation/AnimateNumber";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Upcoming_Event from "../../features/user/components/Upcoming_Event";
 import BottomNavigation from "../../components/ui/BottomNavigation";
+import Quickk from "../../components/ui/Quickk";
 
 const Dashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
@@ -156,8 +157,9 @@ const Dashboard = () => {
 
       {/* ToggleBar */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"} px={"30px"} mb={"30px"}>
+        <Box mt={"60px"} px={"30px"} mb={"30px"} display={"flex"}>
           <ToggleBar />
+          <Quickk />
         </Box>
       </AnimateOnScroll>
     </Box>

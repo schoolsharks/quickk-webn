@@ -1,6 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import { theme } from "../../theme/theme";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import AnimateOnScroll from "../../animation/AnimateOnScroll";
@@ -16,12 +15,12 @@ const ActiveLearning: React.FC = () => {
     <AnimateOnScroll variants={fadeInUp} transition={baseTransition}>
       <Box
         sx={{
-          bgcolor: theme.palette.primary.main,
+          bgcolor: "#404040",
           p: "14px",
         }}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
-          <Typography variant="body1" fontSize={"18px"} color="black">
+          <Typography variant="body1" fontSize={"18px"} color="white">
             Active learning {learningStreak} days🔥
           </Typography>
         </Stack>

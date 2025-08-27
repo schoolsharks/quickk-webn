@@ -6,16 +6,18 @@ import {
   IconButton,
   Checkbox,
   Button,
+  useTheme,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import QemojiImage from "./Qemoji";
+// import QemojiImage from "./Qemoji";
 import { LearningProps, ModuleProps } from "../../Types/types";
 import AnimateOnScroll from "../../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../../animation";
 import { baseTransition } from "../../../../animation/transitions/baseTransition";
 import ActiveLearning from "../../../../components/ui/ActiveLearning";
-import { theme } from "../../../../theme/theme";
+import { RootState } from "../../../../app/store";
+import { useSelector } from "react-redux";
 
 const Module: React.FC<ModuleProps> = ({
   moduleId,
@@ -24,6 +26,7 @@ const Module: React.FC<ModuleProps> = ({
   duration,
 }) => {
   const navigate = useNavigate();
+
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between">
       <Stack direction="row" alignItems="center">
@@ -95,6 +98,7 @@ const Learning: React.FC<LearningProps> = ({
   items = [],
   onToggle,
 }) => {
+  const theme = useTheme();
   return (
     <AnimateOnScroll variants={fadeInUp} transition={baseTransition}>
       <Box>
@@ -110,7 +114,7 @@ const Learning: React.FC<LearningProps> = ({
               checked={expanded}
               sx={{
                 "&.Mui-checked": {
-                  color: "#96FF43",
+                  color: theme.palette.primary.light,
                 },
               }}
             />
@@ -144,6 +148,9 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
   const navigate = useNavigate();
 
+  const { totalStars, progress } = useSelector(
+    (state: RootState) => state.user
+  );
   const navigateToHome = () => {
     navigate("/user/dashboard");
   };
@@ -157,15 +164,15 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
   }, []);
 
   return (
-    <Box sx={{ p: "66px 24px 16px 14px" }}>
+    <Box sx={{ pt: "36px" }}>
       {/* Header UI */}
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: "44px" }}
+        sx={{ mb: "28px" }}
       >
-        <Stack direction="row" alignItems="center">
+        <Stack direction="row" alignItems="center" px={"12px"}>
           <IconButton sx={{ color: "text.primary" }} onClick={navigateToHome}>
             <ArrowBackIcon />
           </IconButton>
@@ -173,11 +180,41 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
             Learnings
           </Typography>
         </Stack>
-        <QemojiImage width="81px" height="81px" />
+        {/* <QemojiImage width="81px" height="81px" /> */}
       </Stack>
 
+      <Box flexDirection={"row"} display={"flex"} mb={4} flex={1}>
+        <Box
+          color="white"
+          bgcolor={"#464646"}
+          p={"16px"}
+          flex={1}
+          textAlign={"center"}
+        >
+          <Typography variant="h4">{totalStars}</Typography>
+          <Typography fontSize={"16px"} fontWeight={500}>
+            Active Points
+          </Typography>
+        </Box>
+        <Box
+          color="white"
+          bgcolor={"#252525"}
+          p={"16px"}
+          flex={1}
+          textAlign={"center"}
+        >
+          <Typography variant="h4">
+            {progress}
+            {"%"}
+          </Typography>
+          <Typography fontSize={"16px"} fontWeight={500}>
+            Completion
+          </Typography>
+        </Box>
+      </Box>
+
       {/* Main Learnings */}
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 3, px: "20px" }}>
         {LearningData.map((learning, idx) => (
           <React.Fragment key={idx}>
             <Box>
@@ -190,7 +227,7 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
               />
             </Box>
             {idx === 0 && (
-              <Box sx={{ mt: "22px", ml: "11px" ,mb:"18px" }}>
+              <Box sx={{ mt: "22px", ml: "11px", mb: "18px" }}>
                 <ActiveLearning />
               </Box>
             )}
@@ -208,13 +245,13 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
       {/* Footer */}
       <Box
         sx={{
-          bgcolor: theme.palette.primary.main,
-          ml: "11px",
-          p: "14px",
-          mt: "20px",
+          bgcolor: "#404040",
+          mx: "25px",
+          p: "12px",
+          my: "20px",
         }}
       >
-        <Typography variant="body1" fontSize={"18px"} color="black">
+        <Typography fontWeight={600} fontSize={"16px"} color="white">
           Upcoming Challenge{" "}
           {(() => {
             const today = new Date();

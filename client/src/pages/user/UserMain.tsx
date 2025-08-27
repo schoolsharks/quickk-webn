@@ -23,6 +23,29 @@ import Loader from "../../components/ui/Loader";
 import BuyConfiramtionPage from "./BuyConfiramtionPage";
 import AvatarPage from "./AvatarPage";
 import VideoComponentPage from "./VideoComponentPage";
+import EventDashboard from "./EventDashboard";
+
+// Component to handle dashboard redirection based on event mode
+const DashboardRedirect = () => {
+  const { eventMode } = useSelector((state: RootState) => state.user);
+  
+  if (eventMode) {
+    return <Navigate to="/user/event-mode" replace />;
+  }
+  
+  return <Dashboard />;
+};
+
+// Component to handle initial redirection when user visits root
+const InitialRedirect = () => {
+  const { eventMode } = useSelector((state: RootState) => state.user);
+  
+  if (eventMode) {
+    return <Navigate to="/user/event-mode" replace />;
+  }
+  
+  return <Navigate to="/user/dashboard" replace />;
+};
 
 const UserMain = () => {
   const [fetchUser] = useLazyFetchUserQuery();
@@ -45,7 +68,7 @@ const UserMain = () => {
         maxWidth: "480px",
         margin: "0 auto",
         minHeight: window.innerHeight,
-        background:"#F7F0FB",
+        background: "#FFFFFF",
       }}
     >
       <Routes>
@@ -57,7 +80,8 @@ const UserMain = () => {
             <AuthWrapper verifyRole={Roles.USER} redirection="/user/login" />
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<InitialRedirect />} />
+          <Route path="dashboard" element={<DashboardRedirect />} />
           <Route path="learning" element={<LearningPage />} />
           <Route path="module/:moduleId" element={<ModulePage />} />
           <Route path="practice/:moduleId" element={<TimeToPracticePage />} />
@@ -75,6 +99,9 @@ const UserMain = () => {
           <Route path="leaderboard" element={<LeaderboardPage />} />
           <Route path="avatars" element={<AvatarPage />} />
           <Route path="video/:url" element={<VideoComponentPage />} />
+
+          {/* event mode route  */}
+          <Route path="event-mode" element={<EventDashboard />} />
         </Route>
         <Route path="*" element={<Navigate to="/user/onboarding" />} />
       </Routes>

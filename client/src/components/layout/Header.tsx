@@ -24,7 +24,7 @@ const Header: React.FC = () => {
           }}
         />
 
-        <EventModeToggle active={true}/>
+        <EventModeToggle />
         
       </Stack>
     </header>

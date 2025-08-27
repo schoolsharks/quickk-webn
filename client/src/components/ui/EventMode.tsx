@@ -1,15 +1,14 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-// import LanguageIcon from "@mui/icons-material/Language";
 
-const LanguageToggle: React.FC<{ active: boolean }> = ({ active }) => {
+const EventModeToggle: React.FC<{ active: boolean }> = ({ active }) => {
   return (
-    <>
+    <Box display={"flex"} flexDirection="column" alignItems="center">
       <Box
         sx={{
           width: 60,
           height: 24,
-          bgcolor: active ? "#96FF43" : "#464646",
+          bgcolor: active ? "#CD7BFF" : "#464646",
           display: "flex",
           alignItems: "center",
           p: "2px",
@@ -18,8 +17,8 @@ const LanguageToggle: React.FC<{ active: boolean }> = ({ active }) => {
       >
         <Box
           sx={{
-            width: 20,
-            height: 20,
+            width: 18,
+            height: 18,
             bgcolor: active ? "#0E0E0E" : "white",
             ml: active ? 0 : "auto",
             transition: "all 0.3s ease",
@@ -27,11 +26,12 @@ const LanguageToggle: React.FC<{ active: boolean }> = ({ active }) => {
         />
       </Box>
       <Box display="flex" alignItems="center" mt={0.5}>
-        {/* <LanguageIcon sx={{ color: "white", fontSize: 14 }} /> */}
-        <Typography fontSize={14}>Hinglish</Typography>
+        <Typography color="black" fontSize={12}>
+          Event Mode
+        </Typography>
       </Box>
-    </>
+    </Box>
   );
 };
 
-export default LanguageToggle;
+export default EventModeToggle;

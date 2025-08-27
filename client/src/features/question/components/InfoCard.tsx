@@ -1,4 +1,4 @@
-import { Box, useTheme, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import GreenBox from "./GreenBox";
 import WantFeedback, { FeedbackType } from "./WantFeedback";
@@ -24,12 +24,13 @@ const InfoCard: React.FC<InfoCardProps> = ({
   sx = {},
   smallSize = false,
 }) => {
-  const theme = useTheme();
+  // const theme = useTheme();
   return (
     <Box
       // height={"100%"}
-      bgcolor={theme.palette.primary.main}
+      bgcolor={"rgba(205, 123, 255, 0.3)"}
       p={smallSize ? "8px 12px" : "28px 12px"}
+      border="1px solid rgba(160, 74, 212, 1)"
       display={"flex"}
       flexDirection={"column"}
       sx={sx}

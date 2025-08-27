@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import OptionItem from "./OptionMicroComponent";
 import { QuestionProps } from "../Types/types";
@@ -15,7 +15,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   sx = {},
   smallSize = false,
 }) => {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const handleOptionSelect = (selectedOption: string) => {
     if (onAnswer) {
@@ -32,7 +32,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
         sx={{
           ...sx,
         }}
-        bgcolor={theme.palette.background.paper}
+        bgcolor={"#464646"}
       >
         {/* Question text section */}
         <Box

@@ -3,17 +3,28 @@ import { createTheme } from '@mui/material/styles';
 
 const baseTheme = createTheme({
   palette: {
-    mode: 'dark',
+    // White-label palette based on provided design tokens
+    // Primary family (purple)
+    mode: 'light',
     primary: {
-      main: '#96FF43',
+      // Brand primary
+      main: '#A04AD4', // provided
+      light: '#CD7BFF', // provided (lighter accent)
+      // dark omitted intentionally to stick to provided tokens
+      contrastText: '#FFFFFF',
+    },
+    secondary: {
+      main: '#CA93E4', // complementary brand tint
+      contrastText: '#252525',
     },
     background: {
-      default: '#0E0E0E',
-      paper: '#464646',
+      // Page background
+      default: '#F7F0FB', // provided page BG
+      paper: '#FFFFFF', // cards/surfaces on light theme
     },
     text: {
-      primary: '#FFFFFF',
-      secondary: '#A6A6A6',
+      primary: '#252525', // provided
+      secondary: '#404040', // provided
     },
   },
   typography: {

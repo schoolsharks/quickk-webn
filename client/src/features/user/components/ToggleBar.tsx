@@ -1,6 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
-import DarkModeToggle from "../../../components/ui/DarkModeToggle";
+// import DarkModeToggle from "../../../components/ui/DarkModeToggle";
 import LanguageToggle from "../../../components/ui/LanguageToggle";
 
 const ToggleBar: React.FC = () => {
@@ -13,9 +13,9 @@ const ToggleBar: React.FC = () => {
       mt={2}
     >
       {/* Dark Mode */}
-      <Box>
+      {/* <Box>
         <DarkModeToggle active={true} />
-      </Box>
+      </Box> */}
 
       {/* Language */}
       <Box>

@@ -117,7 +117,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
     ) {
       const selectedIndex = (options as string[]).indexOf(selectedOption);
       const selectedBgColor =
-        selectedIndex === 0 ? theme.palette.primary.main : "black";
+        selectedIndex === 0 ? theme.palette.primary.light : "black";
       return (
         <Box display="flex" fontSize={"30px"}>
           <Box
@@ -150,7 +150,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
-            bgcolor={theme.palette.primary.main}
+            bgcolor={theme.palette.primary.light}
             color={"black"}
             onClick={() => handleClick(options[0])}
             fontSize={smallSize ? "15px" : "30px"}
@@ -167,6 +167,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
+            color={"white"}
             bgcolor="black"
             onClick={() => handleClick(options[1])}
             fontSize={smallSize ? "15px" : "30px"}

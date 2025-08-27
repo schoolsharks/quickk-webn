@@ -166,18 +166,15 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h4" color="white">
-            Daily Interaction
-          </Typography>
+          <Typography variant="h4">Daily Pulse</Typography>
           {showScore && (
             <Typography
               variant="h4"
-              color="white"
               display={"flex"}
               alignItems={"center"}
             >
               {totalScore}
-              <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "16px" }} />
+              <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
             </Typography>
           )}
         </Box>

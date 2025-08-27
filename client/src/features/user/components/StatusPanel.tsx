@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Stack, Button } from "@mui/material";
+import { Box, Typography, Stack, Button, useTheme } from "@mui/material";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
@@ -10,7 +10,8 @@ import { useSelector } from "react-redux";
 
 const StatusPanel: React.FC = () => {
   const navigate = useNavigate();
-  const {totalStars,rank} = useSelector((state: RootState) => state.user);
+  const theme = useTheme();
+  const { totalStars, rank } = useSelector((state: RootState) => state.user);
 
   // Helper function to get ordinal suffix
   const getOrdinal = (n: number | null | undefined) => {
@@ -25,34 +26,34 @@ const StatusPanel: React.FC = () => {
       icon: <StarsOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Stars Earned",
       value: totalStars,
-      bgColor: "#252525",
+      bgColor: theme.palette.primary.main,
     },
     {
       icon: <LeaderboardIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Leaderboard",
       value: getOrdinal(rank),
-      bgColor: "#464646",
+      bgColor: theme.palette.primary.light,
       onClick: () => navigate("/user/leaderboard"),
     },
     {
       icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Rewards",
       value: null,
-      bgColor: "#464646",
+      bgColor: theme.palette.primary.light,
       onClick: () => navigate("/user/reward"),
     },
     {
       icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Profile",
       value: null,
-      bgColor: "#252525",
+      bgColor: theme.palette.primary.main,
       onClick: () => navigate("/user/profile"),
     },
   ];
 
   return (
     <Stack direction="row" flexWrap="wrap" width="100%">
-      {cardData.map((item, idx) => (
+      {cardData.map((item, _idx) => (
         <Button
           key={item.title}
           onClick={item.onClick || (() => {})}
@@ -65,8 +66,8 @@ const StatusPanel: React.FC = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
-            borderRight: idx % 2 === 0 ? "1px solid #252525" : "none",
-            borderBottom: idx < 2 ? "1px solid #252525" : "none",
+            // borderRight: idx % 2 === 0 ? "1px solid #252525" : "none",
+            // borderBottom: idx < 2 ? "1px solid #252525" : "none",
             "&:hover, &:focus": {
               backgroundColor: item.bgColor,
             },

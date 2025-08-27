@@ -1,9 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../theme/theme";
+import { PersonOutlineOutlined } from "@mui/icons-material";
 
 const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
   const navigate = useNavigate();
@@ -21,10 +21,7 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          background:
-            active == "home"
-              ? theme.palette.primary.main
-              : "rgba(37, 37, 37, 1)",
+          background: active == "home" ? theme.palette.primary.main : "#464646",
 
           color: active == "home" ? "black" : "white",
           flex: "1",
@@ -45,18 +42,20 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
           flexDirection: "column",
           alignItems: "flex-start",
           background:
-            active == "rewards"
-              ? theme.palette.primary.main
-              : theme.palette.background.paper,
-          color: active == "home" ? "black" : "white",
+            // active == "rewards"
+            theme.palette.primary.main,
+          // : theme.palette.background.paper,
+          color:
+            // active == "home" ? "black" :
+            "white",
           flex: "1",
           p: "12px 18px",
           borderRadius: "0",
         }}
       >
-        <CardGiftcardIcon sx={{ color: "text.primary", fontSize: 35 }} />
-        <Typography variant="h5" color="text.primary" mt={2}>
-          Rewards
+        <PersonOutlineOutlined sx={{ fontSize: 35 }} />
+        <Typography variant="h5" mt={2}>
+          Profile
         </Typography>
       </Button>
     </Box>

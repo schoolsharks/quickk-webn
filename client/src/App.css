@@ -2,10 +2,10 @@
 
 .slick-dots li.slick-active div {
     opacity: 1 !important;
-    background-color: rgba(150, 255, 67, 1) !important;
+    background-color: black !important;
   }
   .slick-dots li div {
-    background-color: #0E0E0E !important;
+    background-color: #FFFFFF !important;
     transition: all 0.3s ease;
     border: 1px solid #404040 !important;
   }

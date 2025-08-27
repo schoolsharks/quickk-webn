@@ -45,7 +45,7 @@ const UserMain = () => {
         maxWidth: "480px",
         margin: "0 auto",
         minHeight: window.innerHeight,
-        background:"black",
+        background:"#F7F0FB",
       }}
     >
       <Routes>

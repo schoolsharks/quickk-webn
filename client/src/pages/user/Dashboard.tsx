@@ -1,10 +1,10 @@
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, IconButton } from "@mui/material";
 import Header from "../../components/layout/Header";
 import { useTheme } from "@mui/material/styles";
 import DailyPulse from "./DailyPulse";
 import StatusPanel from "../../features/user/components/StatusPanel";
 import BidCard from "../../features/user/components/BidCard";
-import MissionMillion from "../../features/user/components/MisssionMillion";
+// import MissionMillion from "../../features/user/components/MisssionMillion";
 import ToggleBar from "../../features/user/components/ToggleBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
@@ -14,7 +14,10 @@ import AnimateOnScroll from "../../animation/AnimateOnScroll";
 import { baseTransition } from "../../animation/transitions/baseTransition";
 import { fadeInRight, fadeInUp } from "../../animation/variants/fadeInUp";
 import AnimateNumber from "../../animation/AnimateNumber";
-import ResultsAnounced from "../../components/ui/ResultsAnounced";
+// import ResultsAnounced from "../../components/ui/ResultsAnounced";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import Upcoming_Event from "../../features/user/components/Upcoming_Event";
+import BottomNavigation from "../../components/ui/BottomNavigation";
 
 const Dashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
@@ -25,49 +28,79 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Box color="#fff" py={"30px"}>
+    <Box color="#000" py={"30px"}>
       {/* Header */}
       <Header />
 
       {/* Greeting */}
-      <Typography mt={"40px"} variant="h2" px={"20px"}>
-        Hello,
-        <br />
-        {name}
-      </Typography>
+      <Box
+        display={"flex"}
+        justifyContent="space-between"
+        alignItems="center"
+        px={"20px"}
+      >
+        <Box>
+          <Typography mt={"40px"} variant="h2">
+            Hello,
+            <br />
+            {name}
+          </Typography>
+          <Box
+            border={`2px solid ${theme.palette.primary.light}`}
+            width={"fit-content"}
+            px={1}
+            mt={1}
+          >
+            <Typography color={"black"} fontSize={14}>
+              Weben Club Member
+            </Typography>
+          </Box>
+        </Box>
+        <IconButton sx={{ color: "#000" }}>
+          <NotificationsNoneOutlinedIcon />
+        </IconButton>
+      </Box>
 
       {/* Learnings and Challenges */}
       <Stack direction="row" mt={"16px"}>
         <Box
           flex={1}
-          bgcolor={theme.palette.primary.main}
+          border={`2px solid ${theme.palette.primary.main}`}
+          // bgcolor={"#404040"}
           alignContent={"center"}
           p={"16px"}
-          color={"black"}
+          color={theme.palette.primary.main}
         >
-          <Typography variant="h1">
+          <Typography variant="h1" fontSize={25}>
             <AnimateNumber target={15}></AnimateNumber>
           </Typography>
 
-          <Typography fontSize={25} fontWeight="500">
-            Learnings
+          <Typography fontSize={20} fontWeight="500">
+            Referrals
           </Typography>
         </Box>
         <Box
           flex={1}
-          bgcolor="#3B3B3B"
-          p={"16px"}
-          color={"white"}
+          border={`2px solid ${theme.palette.primary.main}`}
           alignContent={"center"}
+          p={"12px 20px"}
+          color={theme.palette.primary.main}
         >
-          <Typography variant="h1">
+          <Typography variant="h1" fontSize={25}>
             <AnimateNumber target={1}></AnimateNumber>
           </Typography>
-          <Typography fontSize={25} fontWeight="500">
-            Challenges
+          <Typography fontSize={20} fontWeight="500">
+            Connections
           </Typography>
         </Box>
       </Stack>
+
+      {/* Bid Card */}
+      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+        <Box mt={"60px"}>
+          <BidCard />
+        </Box>
+      </AnimateOnScroll>
 
       {/* Daily Pulse */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInRight}>
@@ -76,19 +109,33 @@ const Dashboard = () => {
         </Box>
       </AnimateOnScroll>
 
-      {/* Continue Learning */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <ContinueLearning />
-      </AnimateOnScroll>
-
       {/* Status Panel */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"} mb={"20px"}>
+        <Box mt={"100px"}>
           <StatusPanel />
         </Box>
       </AnimateOnScroll>
 
-      <Box
+      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+        <Box mt={"48px"}>
+          <Upcoming_Event />
+        </Box>
+      </AnimateOnScroll>
+
+      {/* Continue Learning */}
+      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+        <Box mt={"48px"}>
+          <ContinueLearning />
+        </Box>
+      </AnimateOnScroll>
+
+      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+        <Box mt={"48px"}>
+          <BottomNavigation />
+        </Box>
+      </AnimateOnScroll>
+
+      {/* <Box
         position="sticky"
         top={0}
         zIndex={1000}
@@ -98,21 +145,14 @@ const Dashboard = () => {
         <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
           <ResultsAnounced />
         </AnimateOnScroll>
-      </Box>
-
-      {/* Bid Card */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"}>
-          <BidCard />
-        </Box>
-      </AnimateOnScroll>
+      </Box> */}
 
       {/* Mission Million */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"60px"} px={"20px"}>
           <MissionMillion />
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* ToggleBar */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>

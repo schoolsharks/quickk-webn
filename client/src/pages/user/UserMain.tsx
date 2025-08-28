@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import OnboardingLayout from "../user/OnboardingLayout";
+// import OnboardingLayout from "../user/OnboardingLayout";
 import Login from "../../features/auth/components/Login";
 import Dashboard from "./Dashboard";
 import AuthWrapper from "../../features/auth/components/AuthWrapper";
@@ -24,15 +24,17 @@ import BuyConfiramtionPage from "./BuyConfiramtionPage";
 import AvatarPage from "./AvatarPage";
 import VideoComponentPage from "./VideoComponentPage";
 import EventDashboard from "./EventDashboard";
+import CompleteProfilePage from "./CompleteProfilePage";
+import ModeSelection from "./ModeSelection";
 
 // Component to handle dashboard redirection based on event mode
 const DashboardRedirect = () => {
   const { eventMode } = useSelector((state: RootState) => state.user);
-  
+
   if (eventMode) {
     return <Navigate to="/user/event-mode" replace />;
   }
-  
+
   return <Dashboard />;
 };
 
@@ -40,14 +42,19 @@ const DashboardRedirect = () => {
 const InitialRedirect = () => {
   const { eventMode } = useSelector((state: RootState) => state.user);
   
+  // Check if user has already selected a mode
+  const hasSelectedMode = localStorage.getItem('eventMode') !== null;
+  
+  if (!hasSelectedMode) {
+    return <Navigate to="/user/mode-selection" replace />;
+  }
+  
   if (eventMode) {
     return <Navigate to="/user/event-mode" replace />;
   }
   
   return <Navigate to="/user/dashboard" replace />;
-};
-
-const UserMain = () => {
+};const UserMain = () => {
   const [fetchUser] = useLazyFetchUserQuery();
   const { loading, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
@@ -72,7 +79,7 @@ const UserMain = () => {
       }}
     >
       <Routes>
-        <Route index path="/onboarding" element={<OnboardingLayout />} />
+        {/* <Route index path="/onboarding" element={<OnboardingLayout />} /> */}
         <Route path="/login" element={<Login />} />
         <Route
           path="/"
@@ -99,11 +106,13 @@ const UserMain = () => {
           <Route path="leaderboard" element={<LeaderboardPage />} />
           <Route path="avatars" element={<AvatarPage />} />
           <Route path="video/:url" element={<VideoComponentPage />} />
+          <Route path="complete-profile" element={<CompleteProfilePage />} />
+          <Route path="mode-selection" element={<ModeSelection />} />
 
           {/* event mode route  */}
           <Route path="event-mode" element={<EventDashboard />} />
         </Route>
-        <Route path="*" element={<Navigate to="/user/onboarding" />} />
+        <Route path="*" element={<Navigate to="/user/login" />} />
       </Routes>
     </div>
   );

@@ -150,7 +150,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
-            bgcolor={theme.palette.primary.light}
+            bgcolor={"#A8A6A7"}
             color={"black"}
             onClick={() => handleClick(options[0])}
             fontSize={smallSize ? "15px" : "30px"}

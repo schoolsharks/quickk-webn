@@ -26,34 +26,36 @@ const StatusPanel: React.FC = () => {
       icon: <StarsOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Stars Earned",
       value: totalStars,
-      bgColor: theme.palette.primary.main,
+      bgColor: theme.palette.text.secondary,
     },
     {
-      icon: <LeaderboardIcon sx={{ fontSize: 24, color: "white" }} />,
+      icon: <LeaderboardIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Leaderboard",
       value: getOrdinal(rank),
-      bgColor: theme.palette.primary.light,
+      bgColor: "#D9D9D9",
       onClick: () => navigate("/user/leaderboard"),
     },
     {
-      icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "white" }} />,
+      icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Rewards",
       value: null,
-      bgColor: theme.palette.primary.light,
+      bgColor: "#D9D9D9",
       onClick: () => navigate("/user/reward"),
     },
     {
       icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "white" }} />,
-      title: "Profile",
+      title: "Resources",
       value: null,
-      bgColor: theme.palette.primary.main,
-      onClick: () => navigate("/user/profile"),
+      bgColor: theme.palette.text.secondary,
+      onClick: () => {
+        //  navigate("/user/profile")
+      },
     },
   ];
 
   return (
     <Stack direction="row" flexWrap="wrap" width="100%">
-      {cardData.map((item, _idx) => (
+      {cardData.map((item, idx) => (
         <Button
           key={item.title}
           onClick={item.onClick || (() => {})}
@@ -66,6 +68,7 @@ const StatusPanel: React.FC = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
+            color: idx === 1 || idx === 2 ? "black" : "white",
             // borderRight: idx % 2 === 0 ? "1px solid #252525" : "none",
             // borderBottom: idx < 2 ? "1px solid #252525" : "none",
             "&:hover, &:focus": {
@@ -75,13 +78,9 @@ const StatusPanel: React.FC = () => {
         >
           <Box display="flex" alignItems="center" gap={1}>
             {item.icon}
-            {item.value && (
-              <Typography color="white" variant="h5">
-                {item.value}
-              </Typography>
-            )}
+            {item.value && <Typography variant="h5">{item.value}</Typography>}
           </Box>
-          <Typography color="white" variant="h5" mt={"18px"}>
+          <Typography variant="h5" mt={"18px"}>
             {item.title}
           </Typography>
         </Button>

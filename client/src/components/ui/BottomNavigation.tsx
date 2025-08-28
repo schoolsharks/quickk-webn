@@ -10,8 +10,8 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
   const navigateToHome = () => {
     navigate("/user/impact-dashboard");
   };
-  const navigateToRewards = () => {
-    navigate("/user/reward");
+  const navigateToProfile = () => {
+    navigate("/user/profile");
   };
 
   return (
@@ -36,18 +36,16 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
         </Typography>
       </Button>
       <Button
-        onClick={navigateToRewards}
+        onClick={navigateToProfile}
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
           background:
-            // active == "rewards"
-            theme.palette.primary.main,
-          // : theme.palette.background.paper,
+            active == "rewards" ? theme.palette.primary.main : "#D9D9D9",
           color:
             // active == "home" ? "black" :
-            "white",
+            "black",
           flex: "1",
           p: "12px 18px",
           borderRadius: "0",

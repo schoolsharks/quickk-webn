@@ -220,7 +220,8 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
             <Box>
               <Learning
                 title={learning.title}
-                week={`Week ${learning.week}`}
+                week={`Week ${idx + 1}`}
+                // week={`Week ${learning.week}`}
                 expanded={expandedIndex === idx}
                 items={learning.items}
                 onToggle={() => toggleExpand(idx)} // pass toggle function

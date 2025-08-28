@@ -28,7 +28,7 @@ const InfoCard: React.FC<InfoCardProps> = ({
   return (
     <Box
       // height={"100%"}
-      bgcolor={"rgba(205, 123, 255, 0.3)"}
+      boxShadow="0px 4px 19px 0px #CD7BFF4D inset"
       p={smallSize ? "8px 12px" : "28px 12px"}
       border="1px solid rgba(160, 74, 212, 1)"
       display={"flex"}

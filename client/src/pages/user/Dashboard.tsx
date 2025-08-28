@@ -47,7 +47,7 @@ const Dashboard = () => {
             {name}
           </Typography>
           <Box
-            border={`2px solid ${theme.palette.primary.light}`}
+            border={`2px solid ${theme.palette.primary.main}`}
             width={"fit-content"}
             px={1}
             mt={1}
@@ -66,11 +66,10 @@ const Dashboard = () => {
       <Stack direction="row" mt={"16px"}>
         <Box
           flex={1}
-          border={`2px solid ${theme.palette.primary.main}`}
-          // bgcolor={"#404040"}
+          bgcolor={"#D9D9D9"}
           alignContent={"center"}
           p={"16px"}
-          color={theme.palette.primary.main}
+          color={"black"}
         >
           <Typography variant="h1" fontSize={25}>
             <AnimateNumber target={15}></AnimateNumber>
@@ -82,13 +81,13 @@ const Dashboard = () => {
         </Box>
         <Box
           flex={1}
-          border={`2px solid ${theme.palette.primary.main}`}
+          bgcolor={theme.palette.text.secondary}
           alignContent={"center"}
           p={"12px 20px"}
-          color={theme.palette.primary.main}
+          color={"white"}
         >
           <Typography variant="h1" fontSize={25}>
-            <AnimateNumber target={1}></AnimateNumber>
+            <AnimateNumber target={9}></AnimateNumber>
           </Typography>
           <Typography fontSize={20} fontWeight="500">
             Connections
@@ -98,14 +97,18 @@ const Dashboard = () => {
 
       {/* Bid Card */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"}>
+        <Box
+          mt={"60px"}
+          borderTop={`2px solid ${theme.palette.primary.main}`}
+          borderBottom={`2px solid ${theme.palette.primary.main}`}
+        >
           <BidCard />
         </Box>
       </AnimateOnScroll>
 
       {/* Daily Pulse */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInRight}>
-        <Box mt={"52px"}>
+        <Box mt={"52px"} pt={"30px"}>
           <DailyPulse />
         </Box>
       </AnimateOnScroll>

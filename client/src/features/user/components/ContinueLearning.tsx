@@ -21,7 +21,9 @@ const ContinueLearning: React.FC = () => {
       justifyContent="space-between"
       alignItems="center"
       onClick={handleLearningClick}
-      bgcolor={theme.palette.secondary.main}
+      // bgcolor={theme.palette.secondary.main}
+      borderTop={`2px solid ${theme.palette.primary.main}`}
+      borderBottom={`2px solid ${theme.palette.primary.main}`}
       p={"38px 20px"}
       sx={{ cursor: "pointer" }}
     >

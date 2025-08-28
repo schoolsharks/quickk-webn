@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import EventsToday from "./EventsToday";
 import UpcomingEvents from "./UpcomingEvents";
 import Recordings from "./Recordings";
-import Quickk from "../../../components/ui/Quickk";
 
 const Events = () => {
   return (
@@ -10,7 +9,6 @@ const Events = () => {
       <EventsToday />
       <UpcomingEvents />
       <Recordings />
-      <Quickk />
     </Box>
   );
 };

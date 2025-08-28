@@ -46,28 +46,32 @@ const ProfileLayout = () => {
 
   const offers = [
     {
-      title: "20% on order above 2500Rs",
-      subtitle: "1000 Points",
+      title: "Logo Designing",
+      text: "Your brand deserves a face. Get a custom logo designed.",
+      subtitle: "5000 INR",
       img: amajon,
-      bgcolor: "rgba(37, 37, 37, 1)",
+      bgcolor: "#FFF",
     },
     {
-      title: "10% off on Wednesdays",
-      subtitle: "800 Points",
+      title: "Social Media Management",
+      text: "Grow your audience with engaging content and consistent strategy.",
+      subtitle: "12000 INR",
       img: starbucks,
-      bgcolor: "background.paper",
+      bgcolor: "#FFF",
     },
     {
-      title: "Upto 30% Off On Insurance Premium",
-      subtitle: "Unlocks at Level 2",
+      title: "E-commerce Store Setup",
+      text: "Launch your online store with seamless checkout and product management.",
+      subtitle: "Offer Flat 15% off",
       img: foundation,
-      bgcolor: "rgba(150, 255, 67, 1)",
+      bgcolor: "#FFF",
     },
     {
-      title: "5% off on Fitness tracker",
-      subtitle: "Unlocks on Level 5",
+      title: "UI/UX Design",
+      text: "Modern, user-friendly design that makes customers stay and convert.",
+      subtitle: "20% off",
       img: watch,
-      bgcolor: "rgba(37, 37, 37, 1)",
+      bgcolor: "#FFF",
     },
   ];
 
@@ -88,14 +92,13 @@ const ProfileLayout = () => {
             Profile
           </Typography>
         </Box>
-        <Typography
+        {/* <Typography
           variant="body1"
           sx={{ textDecoration: "underline" }}
           pl="52px"
         >
           Company - Quickk
-          {/* add name of company here  */}
-        </Typography>
+        </Typography> */}
       </Stack>
 
       {/* Personal Details */}
@@ -114,11 +117,7 @@ const ProfileLayout = () => {
             <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
           </IconButton>
         </Stack>
-        <Stack
-          spacing={2}
-          mt={2}
-          sx={{ p: "36px 24px", bgcolor: "primary.main" }}
-        >
+        <Stack spacing={2} mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
           {[
             `Name - ${name}`,
             `Contact - ${contact}`,
@@ -128,9 +127,10 @@ const ProfileLayout = () => {
             <Box
               key={idx}
               sx={{
+                border: `1px solid ${theme.palette.primary.main}`,
                 bgcolor: "background.paper",
                 p: 1.5,
-                color: "white",
+                color: "black",
               }}
             >
               <Typography fontSize={"14px"} fontWeight={"400"}>
@@ -160,6 +160,7 @@ const ProfileLayout = () => {
             gap={1}
             bgcolor="rgba(37, 37, 37, 1)"
             flex={1}
+            color={"white"}
             letterSpacing={"-3%"}
             height={"100px"}
           >
@@ -169,9 +170,10 @@ const ProfileLayout = () => {
           <Box
             display={"flex"}
             flexDirection={"column"}
-            p={"18px 24px"}
+            p={"18px 20px"}
             gap={1}
-            bgcolor={theme.palette.background.paper}
+            color={"white"}
+            bgcolor={theme.palette.text.secondary}
             flex={1}
             height={"100px"}
             letterSpacing={"-3%"}
@@ -204,11 +206,12 @@ const ProfileLayout = () => {
                   sx={{
                     height: "100%",
                     p: 3,
+                    border: `2px solid ${theme.palette.primary.main}`,
                     bgcolor: offer.bgcolor,
                     color:
-                      offer.bgcolor === "rgba(150, 255, 67, 1)"
-                        ? "black"
-                        : "white",
+                      // offer.bgcolor === "rgba(150, 255, 67, 1)"
+                      "black",
+                    // : "white",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -230,10 +233,13 @@ const ProfileLayout = () => {
                       <Typography variant="h5" fontWeight="bold" mt={6}>
                         {offer.title}
                       </Typography>
+                      <Typography variant="body2" mt={2} fontSize={14}>
+                        {offer.text}
+                      </Typography>
                       <Typography
-                        fontWeight={500}
+                        fontWeight={700}
                         fontSize={"16px"}
-                        sx={{ textDecoration: "underline", mt: "20px" }}
+                        sx={{ mt: "20px" }}
                       >
                         {offer.subtitle}
                       </Typography>
@@ -271,7 +277,7 @@ const ProfileLayout = () => {
               spacing={"12px"}
               mt={"10px"}
               p={"32px 36px"}
-              bgcolor={theme.palette.background.paper}
+              bgcolor={"#CD7BFF4D"}
             >
               <Badge title="Microfinance Star" image={badge1} progress={100} />
               <Badge
@@ -309,11 +315,12 @@ const ProfileLayout = () => {
             <Box
               mt={2}
               sx={{
-                bgcolor: theme.palette.background.paper,
+                // bgcolor: theme.palette.background.paper,
+                bgcolor: "#CD7BFF4D",
                 p: "24px 12px",
               }}
             >
-              <Certificate recipientName="John Doe" />
+              <Certificate recipientName={name ?? ""} />
             </Box>
           </Collapse>
         </Box>

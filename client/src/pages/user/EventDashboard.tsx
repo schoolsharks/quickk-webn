@@ -8,6 +8,7 @@ import AnimateNumber from "../../animation/AnimateNumber";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Events from "../../features/events/components/Events";
 import MyNetworks from "../../features/events/components/MyNetworks";
+import Quickk from "../../components/ui/Quickk";
 
 const EventDashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
@@ -111,6 +112,9 @@ const EventDashboard = () => {
 
       {/* Tab Content */}
       <Box mt={2}>{activeTab === "events" ? <Events /> : <MyNetworks />}</Box>
+      <Box mx={"25px"}>
+        <Quickk />
+      </Box>
     </Box>
   );
 };

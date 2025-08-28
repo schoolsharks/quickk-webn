@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import React from "react";
 import OptionItem from "./OptionMicroComponent";
 import { QuestionProps } from "../Types/types";
@@ -15,7 +15,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   sx = {},
   smallSize = false,
 }) => {
-  // const theme = useTheme();
+  const theme = useTheme();
 
   const handleOptionSelect = (selectedOption: string) => {
     if (onAnswer) {
@@ -24,7 +24,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   };
 
   return (
-    <Box>
+    <Box border={`2px solid ${theme.palette.primary.main}`}>
       <Box
         display="flex"
         flexDirection="column"
@@ -32,7 +32,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
         sx={{
           ...sx,
         }}
-        bgcolor={"#464646"}
+        // bgcolor={"#464646"}
       >
         {/* Question text section */}
         <Box
@@ -43,7 +43,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
         >
           <Typography
             variant={smallSize ? "h5" : "h2"}
-            color="white"
+            // color="white"
             fontWeight="medium"
           >
             {questionText}

@@ -1,17 +1,26 @@
 import { useState } from "react";
-import { Box, Stack, TextField, Typography, Alert } from "@mui/material";
-import Onboardinghead from "../../../assets/images/Onboardinghead.png";
+import {
+  Box,
+  Stack,
+  TextField,
+  Typography,
+  Alert,
+  useTheme,
+} from "@mui/material";
+// import Onboardinghead from "../../../assets/images/Onboardinghead.png";
 import GlobalButton from "../../../components/ui/button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { RootState } from "../../../app/store";
 import { useSelector } from "react-redux";
 import { useLoginUserMutation } from "../../user/userApi";
+import WebnLogo from "../../../assets/images/header/logo.webp";
 
 const Login = () => {
   const { isAuthenticated, role } = useSelector(
     (state: RootState) => state.auth
   );
+  const theme = useTheme();
 
   const [formData, setFormData] = useState({
     companyMail: "",
@@ -37,7 +46,6 @@ const Login = () => {
     }
   };
 
-
   const handleLogin = async () => {
     try {
       setLoginError(""); // Reset previous error
@@ -45,7 +53,7 @@ const Login = () => {
 
       // Only navigate on successful login
       if (result) {
-        navigate("/user/avatars");
+        navigate("/user/mode-selection");
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;
@@ -64,32 +72,69 @@ const Login = () => {
   return (
     <Box
       overflow={"hidden"}
+      p={"40px 24px 20px 24px"}
       sx={{
-        bgcolor: "#0E0E0E",
         color: "#fff",
         minHeight: window.innerHeight,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        justifyContent: "space-between",
+        // alignItems: "center",
       }}
     >
       {/* Header Image */}
       <Box
         component="img"
-        src={Onboardinghead}
-        alt="Onboarding"
-        sx={{ width: "740px", height: "300px", objectFit: "cover" }}
+        src={WebnLogo}
+        border={`2px solid ${theme.palette.primary.main}`}
+        borderRadius={"50%"}
+        alt=""
+        sx={{ width: "50px", height: "50px", objectFit: "cover" }}
       />
-      <Box px={"20px"} sx={{ width: "100%" }}>
+      <Box mt={"20px"} mb={"10px"}>
+        <Typography
+          fontWeight="700"
+          fontSize={"25px"}
+          // lineHeight={"36px"}
+          mb={"25px"}
+          color={theme.palette.text.primary}
+        >
+          Welcome to Quickk
+        </Typography>
+        <Typography
+          fontWeight="700"
+          fontSize={"25px"}
+          color={theme.palette.text.primary}
+        >
+          Welcome note
+        </Typography>
+        {/* <Typography
+          fontWeight="400"
+          fontSize={"14px"}
+          lineHeight={"24px"}
+          color={theme.palette.text.secondary}
+        >
+          to continue to Quickk
+        </Typography> */}
+      </Box>
+
+      <Box
+        sx={{ width: "100%" }}
+        display={"flex"}
+        flexDirection={"column"}
+        flex={1}
+        justifyContent="space-between"
+      >
         {/* Form Content */}
         <Box
           mt={"30px"}
           display="flex"
           flexDirection="column"
           justifyContent="flex-start"
-          bgcolor="#0E0E0E"
+          color={"black"}
+          // bgcolor="#0E0E0E"
         >
-          <Typography
+          {/* <Typography
             fontWeight="700"
             fontSize={"25px"}
             lineHeight={"24px"}
@@ -97,7 +142,7 @@ const Login = () => {
             mb={2}
           >
             Login
-          </Typography>
+          </Typography> */}
 
           {/* Show login error if any */}
           {(isError || loginError) && (
@@ -123,18 +168,18 @@ const Login = () => {
               value={formData.companyMail}
               onChange={handleChange}
               sx={{
-                input: { color: "#FFFFFF" },
-                "& .MuiInput-underline:before": {
-                  borderBottomColor: "#FFFFFF",
-                },
-                "& .MuiInput-underline:hover:before": {
-                  borderBottomColor: "#FFFFFF",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#FFFFFF",
-                },
+                // input: { color: "#FFFFFF" },
+                // "& .MuiInput-underline:before": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
+                // "& .MuiInput-underline:hover:before": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
+                // "& .MuiInput-underline:after": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
                 "& .MuiInputLabel-root": {
-                  color: "#FFFFFF",
+                  // color: "#FFFFFF",
                   fontSize: "20px",
                 },
               }}
@@ -147,18 +192,18 @@ const Login = () => {
               value={formData.companyCode}
               onChange={handleChange}
               sx={{
-                input: { color: "#FFFFFF" },
-                "& .MuiInput-underline:before": {
-                  borderBottomColor: "#FFFFFF",
-                },
-                "& .MuiInput-underline:hover:before": {
-                  borderBottomColor: "#FFFFFF",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#FFFFFF",
-                },
+                // input: { color: "#FFFFFF" },
+                // "& .MuiInput-underline:before": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
+                // "& .MuiInput-underline:hover:before": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
+                // "& .MuiInput-underline:after": {
+                //   borderBottomColor: "#FFFFFF",
+                // },
                 "& .MuiInputLabel-root": {
-                  color: "#FFFFFF",
+                  // color: "#FFFFFF",
                   fontSize: "20px",
                 },
               }}
@@ -170,7 +215,10 @@ const Login = () => {
           onClick={handleLogin}
           disabled={isLoading}
           onKeyDown={handleKeyDown}
-          sx={{ mt: "30px", mb: "30px" }}
+          sx={{
+            bgcolor: theme.palette.text.secondary,
+            color: "white",
+          }}
         >
           {isLoading ? "Logging in..." : "Login"}
         </GlobalButton>

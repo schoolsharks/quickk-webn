@@ -12,7 +12,9 @@ const Badge: React.FC<BadgeProps> = ({ title, image, progress }) => {
   return (
     <Box
       sx={{
-        bgcolor: theme.palette.primary.main,
+        // bgcolor: theme.palette.primary.main,
+        bgcolor: "white",
+        border:`1px solid ${theme.palette.primary.main}`,
         color: "black",
         flex: "1",
         display: "flex",
@@ -27,7 +29,7 @@ const Badge: React.FC<BadgeProps> = ({ title, image, progress }) => {
         fontWeight="700"
         textAlign="center"
         color="rgba(54, 54, 54, 1)"
-        sx={{textWrap:"nowrap"}}
+        sx={{ textWrap: "nowrap" }}
       >
         {title}
       </Typography>
@@ -40,7 +42,7 @@ const Badge: React.FC<BadgeProps> = ({ title, image, progress }) => {
         sx={{ width: 68, height: 95 }}
       />
 
-      <Typography  fontSize={"7px"} fontWeight="600" mt={2}>
+      <Typography fontSize={"7px"} fontWeight="600" mt={2}>
         {progress == 100 ? "Completed" : "Next"} {progress}%
       </Typography>
 
@@ -49,7 +51,7 @@ const Badge: React.FC<BadgeProps> = ({ title, image, progress }) => {
           mt: 1,
           width: "100%",
           height: 5,
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: "#CD7BFF",
           overflow: "hidden",
         }}
       >
@@ -57,7 +59,7 @@ const Badge: React.FC<BadgeProps> = ({ title, image, progress }) => {
           sx={{
             height: "100%",
             width: `${progress}%`,
-            backgroundColor: "black",
+            backgroundColor: theme.palette.primary.main,
             transition: "width 0.3s ease-in-out",
           }}
         />

@@ -16,7 +16,8 @@ class LearningService {
             const result = await LearningModel.aggregate([
                 {
                     $match: {
-                        week: { $in: [1, 2] },
+                        // week: { $in: [1, 2] },
+                        status: Status.Published,
                         company: new Types.ObjectId(companyId)
                     }
                 },

@@ -214,35 +214,43 @@ const ProfileLayout = () => {
                     // : "white",
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "space-between",
                     lineHeight: "-3%",
                   }}
                 >
                   <Box
-                    component="img"
-                    src={offer.img}
-                    alt="image"
+                    // component="img"
+                    // src={offer.img}
+                    // alt="image"
                     sx={{
+                      bgcolor: "#D9D9D9",
                       zIndex: 0,
-                      maxWidth: "88px",
-                      maxHeight: "54px",
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
                     }}
                   />
                   <Box>
-                    <Box>
-                      <Typography variant="h5" fontWeight="bold" mt={6}>
+                    <Box
+                      display={"flex"}
+                      flexDirection={"column"}
+                      justifyContent={"space-between"}
+                      alignContent={"space-between"}
+                    >
+                      <Typography variant="h5" fontWeight="bold" mt={3}>
                         {offer.title}
                       </Typography>
-                      <Typography variant="body2" mt={2} fontSize={14}>
-                        {offer.text}
-                      </Typography>
-                      <Typography
-                        fontWeight={700}
-                        fontSize={"16px"}
-                        sx={{ mt: "20px" }}
-                      >
-                        {offer.subtitle}
-                      </Typography>
+                      <Box>
+                        <Typography variant="body2" mt={2} fontSize={14}>
+                          {offer.text}
+                        </Typography>
+                        <Typography
+                          fontWeight={700}
+                          fontSize={"16px"}
+                          sx={{ mt: "20px" }}
+                        >
+                          {offer.subtitle}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
                 </Box>

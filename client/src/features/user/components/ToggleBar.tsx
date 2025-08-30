@@ -19,7 +19,7 @@ const ToggleBar: React.FC = () => {
 
       {/* Language */}
       <Box>
-        <LanguageToggle active={false} />
+        <LanguageToggle active={true} />
       </Box>
     </Box>
   );

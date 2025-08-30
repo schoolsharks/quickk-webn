@@ -8,7 +8,7 @@ import { PersonOutlineOutlined } from "@mui/icons-material";
 const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
   const navigate = useNavigate();
   const navigateToHome = () => {
-    navigate("/user/impact-dashboard");
+    navigate("/user/dashboard");
   };
   const navigateToProfile = () => {
     navigate("/user/profile");

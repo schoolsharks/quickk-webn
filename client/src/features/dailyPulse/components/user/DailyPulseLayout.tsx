@@ -145,7 +145,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
             optionType={item.optionType}
             options={item.options}
             questionOptions={item.questionOptions}
-            response={item.response}
+            // response={item.response}
             onAnswer={readOnly ? undefined : handleAnswer}
             smallSize={smallSize}
           />
@@ -168,11 +168,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         >
           <Typography variant="h4">Daily Pulse</Typography>
           {showScore && (
-            <Typography
-              variant="h4"
-              display={"flex"}
-              alignItems={"center"}
-            >
+            <Typography variant="h4" display={"flex"} alignItems={"center"}>
               {totalScore}
               <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
             </Typography>

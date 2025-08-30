@@ -76,13 +76,13 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             flex={1}
-            bgcolor="rgba(64, 64, 64, 1)"
+            bgcolor={"#F0D7FF"}
             py="18px"
             onClick={() => handleClick("right")}
           >
             <DoneOutlinedIcon
               fontSize={smallSize ? "small" : "large"}
-              sx={{ color: "white" }}
+              sx={{ color: "black" }}
             />
           </Box>
         </AnimateOnClick>
@@ -97,7 +97,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             flex={1}
-            bgcolor="rgba(166, 166, 166, 1)"
+            bgcolor="black"
             py="18px"
             onClick={() => handleClick("wrong")}
           >
@@ -127,7 +127,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             width={"100%"}
             py="18px"
             bgcolor={selectedBgColor}
-            border={"4px solid #464646"}
+            // border={"1px solid #464646"}
             color={"white"}
           >
             {selectedOption}
@@ -150,7 +150,9 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
-            bgcolor={"#A8A6A7"}
+            bgcolor={"#CD7BFF4D"}
+            borderTop={`1px solid ${theme.palette.primary.main}`}
+            borderRight={`1px solid ${theme.palette.primary.main}`}
             color={"black"}
             onClick={() => handleClick(options[0])}
             fontSize={smallSize ? "15px" : "30px"}
@@ -166,9 +168,10 @@ const OptionItem: React.FC<OptionItemProps> = ({
             display="flex"
             justifyContent="center"
             alignItems="center"
+            borderTop={`1px solid ${theme.palette.primary.main}`}
             py="18px"
-            color={"white"}
-            bgcolor="black"
+            color={"black"}
+            bgcolor="#CD7BFF4D"
             onClick={() => handleClick(options[1])}
             fontSize={smallSize ? "15px" : "30px"}
           >

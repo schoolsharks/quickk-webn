@@ -2,19 +2,23 @@ import { Box, Typography, Card, CardContent } from "@mui/material";
 import React from "react";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
+import event from "../../../assets/images/Onboardinghead.png";
 
 // Dummy data - replace with RTK Query later
 const dummyEventData = {
   date: new Date(), // Today's date
-  topic: "Bangalore",
-  time: "6:00pm - 8:00pm",
+  topic: "Pitch & Prosper 2025",
+  city: "Mumbai",
+  time: "10:00pm - 6:00pm",
   interestedCount: 200,
-  image: "/src/assets/images/Onboardinghead.png", // Using available dummy image
+  image: event,
 };
 
 const EventsToday: React.FC = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   // Format today's date
   const today = new Date();
@@ -24,11 +28,12 @@ const EventsToday: React.FC = () => {
     .toUpperCase();
 
   const handleInterestedClick = () => {
-    // Empty click function as requested
+    // Navigate to event details page
+    navigate("/user/events/1"); // Using fixed ID as discussed
   };
 
   return (
-    <Box>
+    <Box mt={6}>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -121,53 +126,40 @@ const EventsToday: React.FC = () => {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
             }}
-          >
-            {/* If image fails to load, show placeholder text */}
-            <Typography
-              variant="body2"
-              sx={{
-                color: theme.palette.text.secondary,
-                backgroundColor: "rgba(255,255,255,0.8)",
-                padding: "4px 8px",
-                borderRadius: "4px",
-              }}
-            >
-              Event Image
-            </Typography>
-          </Box>
+          ></Box>
         </Box>
 
         {/* Content Section */}
         <CardContent sx={{ padding: "16px !important" }}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: theme.palette.text.primary,
-              fontWeight: 700,
-              fontSize: "18px",
-              marginBottom: "4px",
-            }}
-          >
-            Topic
-          </Typography>
-
           <Box
             display="flex"
             justifyContent="space-between"
-            alignItems="center"
-            mb={2}
+            alignItems="flex-start"
+            flexDirection={"column"}
+            gap={1}
           >
-            <Box>
+            <Box mb={1}>
               <Typography
-                variant="body1"
                 sx={{
                   color: theme.palette.text.primary,
-                  fontWeight: 600,
-                  fontSize: "16px",
+                  fontWeight: 700,
+                  fontSize: "25px",
                 }}
               >
                 {dummyEventData.topic}
               </Typography>
+            </Box>
+            <Typography
+              variant="h4"
+              sx={{
+                color: theme.palette.text.primary,
+                fontWeight: 600,
+                fontSize: "20px",
+              }}
+            >
+              {dummyEventData.city}
+            </Typography>
+            <Box display={"flex"} justifyContent="space-between" width={"100%"}>
               <Typography
                 variant="body2"
                 sx={{
@@ -177,40 +169,37 @@ const EventsToday: React.FC = () => {
               >
                 {dummyEventData.time}
               </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: theme.palette.primary.light,
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                +{dummyEventData.interestedCount} interested
+              </Typography>
             </Box>
-
-            <Typography
-              variant="body2"
-              sx={{
-                color: theme.palette.primary.main,
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              +{dummyEventData.interestedCount} interested
-            </Typography>
           </Box>
-
-          {/* Interested Button */}
-          <GlobalButton
-            onClick={handleInterestedClick}
-            fullWidth
-            sx={{
-              backgroundColor: theme.palette.text.primary,
-              color: theme.palette.background.paper,
-              borderRadius: "8px",
-              textTransform: "none",
-              fontWeight: 600,
-              fontSize: "16px",
-              padding: "12px",
-              "&:hover": {
-                backgroundColor: theme.palette.text.secondary,
-              },
-            }}
-          >
-            Interested
-          </GlobalButton>
         </CardContent>
+        {/* Interested Button */}
+        <GlobalButton
+          onClick={handleInterestedClick}
+          fullWidth
+          sx={{
+            backgroundColor: theme.palette.text.primary,
+            color: theme.palette.background.paper,
+            textTransform: "none",
+            fontWeight: 600,
+            fontSize: "16px",
+            padding: "12px",
+            "&:hover": {
+              backgroundColor: theme.palette.text.secondary,
+            },
+          }}
+        >
+          Interested
+        </GlobalButton>
       </Card>
     </Box>
   );

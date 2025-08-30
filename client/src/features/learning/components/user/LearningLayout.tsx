@@ -33,7 +33,11 @@ const Module: React.FC<ModuleProps> = ({
         <Checkbox
           checked={isCompleted}
           sx={{
-            color: "#A6A6A6",
+            width: "24px",
+            height: "24px",
+            borderRadius: "0",
+            color: "transparent",
+            bgcolor: "#CD7BFF80",
             "&.Mui-checked": {
               color: "#96FF43",
             },
@@ -114,27 +118,38 @@ const Learning: React.FC<LearningProps> = ({
               checked={expanded}
               sx={{
                 "&.Mui-checked": {
-                  color: theme.palette.primary.light,
+                  color: theme.palette.primary.main,
                 },
               }}
             />
-            <Typography variant="h5" lineHeight={"24px"}>
+            <Typography
+              variant="h5"
+              fontSize={"16px"}
+              color={expanded ? theme.palette.primary.main : "text.primary"}
+            >
               {title}
             </Typography>
           </Stack>
-          <Typography variant="h5">{week}</Typography>
+          <Typography
+            variant="body1"
+            sx={{ textWrap: "nowrap" }}
+            color={expanded ? theme.palette.primary.main : "text.primary"}
+          >
+            {week}
+          </Typography>
         </Stack>
-
-        {expanded &&
-          items.map((item, index) => (
-            <Module
-              moduleId={item.moduleId}
-              key={index}
-              title={item.title}
-              isCompleted={item.isCompleted}
-              duration={item.duration}
-            />
-          ))}
+        <Box px={1.5}>
+          {expanded &&
+            items.map((item, index) => (
+              <Module
+                moduleId={item.moduleId}
+                key={index}
+                title={item.title}
+                isCompleted={item.isCompleted}
+                duration={item.duration}
+              />
+            ))}
+        </Box>
       </Box>
     </AnimateOnScroll>
   );
@@ -214,7 +229,7 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
       </Box>
 
       {/* Main Learnings */}
-      <Box sx={{ mb: 3, px: "20px" }}>
+      <Box sx={{ mb: 3, px: "16px" }}>
         {LearningData.map((learning, idx) => (
           <React.Fragment key={idx}>
             <Box>
@@ -236,10 +251,31 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
         ))}
 
         {/* Static Learnings */}
-        <Stack mt={"18px"}>
-          <Learning title="Topic 3" week="Week 3" expanded={false} items={[]} />
-          <Learning title="Topic 4" week="Week 4" expanded={false} items={[]} />
-          <Learning title="Topic 5" week="Week 5" expanded={false} items={[]} />
+        <Stack mt={"12px"}>
+          <Learning
+            title="Government Schemes to Support Startups"
+            week="Week 3"
+            expanded={false}
+            items={[]}
+          />
+          <Learning
+            title="Seed Funding and Grants Explained"
+            week="Week 4"
+            expanded={false}
+            items={[]}
+          />
+          <Learning
+            title="Finding Mentors & Business Guidance"
+            week="Week 5"
+            expanded={false}
+            items={[]}
+          />
+          <Learning
+            title="Boosting Your Social Media Presence"
+            week="Week 6"
+            expanded={false}
+            items={[]}
+          />
         </Stack>
       </Box>
 

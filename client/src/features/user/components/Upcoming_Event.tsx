@@ -1,28 +1,166 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, useTheme } from "@mui/material";
 import React from "react";
-import QuestionTwoOption from "../../question/components/QuestionTwoOption";
+import event from "../../../assets/images/Onboardinghead.png";
+import AnimateOnClick from "../../../animation/AnimateOnClick";
+import { baseTransition } from "../../../animation/transitions/baseTransition";
+import { responseSubmitted } from "../../../animation";
+
+const dummyEventData = {
+  date: new Date(), // Today's date
+  topic: "Pitch & Prosper 2025",
+  city: "Mumbai",
+  time: "10:00pm - 6:00pm",
+  interestedCount: 200,
+  image: event,
+};
 
 const Upcoming_Event: React.FC = () => {
+  const theme = useTheme();
+
   return (
-    <Box
-      display={"flex"}
-      gap={2}
-      flexDirection={"column"}
-      px={"20px"}
-      justifyContent={"flex-start"}
-    >
-      <Typography variant="h4" textAlign={"left"}>
-        Upcoming Events
-      </Typography>
-      <QuestionTwoOption
-        id={""}
-        questionText={"RSVP ?"}
-        image={
-          "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-        optionType={"text"}
-        options={["Yes", "No"]}
-      />
+    <Box px={"22px"}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
+          Upcoming Events
+        </Typography>
+      </Box>
+
+      <Card
+        sx={{
+          borderRadius: "0",
+          overflow: "hidden",
+          border: `2px solid ${theme.palette.primary.main}`,
+        }}
+      >
+        {/* Date Section */}
+        <Box
+          sx={{
+            position: "relative",
+            height: "200px",
+            background: `linear-gradient(135deg, ${theme.palette.primary.light}40, ${theme.palette.primary.main}40)`,
+            display: "flex",
+            alignItems: "flex-start",
+            padding: 2,
+          }}
+        >
+          {/* Dummy Image Placeholder */}
+          <Box
+            sx={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              left: 0,
+              backgroundColor: theme.palette.background.default,
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundImage: `url(${dummyEventData.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          ></Box>
+        </Box>
+
+        {/* Content Section */}
+        <CardContent sx={{ padding: "16px !important" }}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="flex-start"
+            flexDirection={"column"}
+            mb={1}
+            gap={1}
+          >
+            <Box mb={1}>
+              <Typography
+                sx={{
+                  color: theme.palette.text.primary,
+                  fontWeight: 700,
+                  fontSize: "25px",
+                }}
+              >
+                {dummyEventData.topic}
+              </Typography>
+            </Box>
+            <Typography
+              variant="h4"
+              sx={{
+                color: theme.palette.text.primary,
+                fontWeight: 600,
+                fontSize: "20px",
+              }}
+            >
+              {dummyEventData.city}
+            </Typography>
+            <Box display={"flex"} justifyContent="space-between" width={"100%"}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: theme.palette.text.secondary,
+                  fontSize: "14px",
+                }}
+              >
+                {dummyEventData.time}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: theme.palette.primary.light,
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                +{dummyEventData.interestedCount} interested
+              </Typography>
+            </Box>
+          </Box>
+        </CardContent>
+        {/* Interested Button */}
+        <Box display="flex" sx={{ cursor: "pointer" }} fontSize={"15px"}>
+          <AnimateOnClick
+            variants={responseSubmitted}
+            transition={baseTransition}
+          >
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              py="18px"
+              bgcolor={"#A8A6A7"}
+              color={"black"}
+              onClick={() => {}}
+              fontSize={"30px"}
+            >
+              Yes
+            </Box>
+          </AnimateOnClick>
+          <AnimateOnClick
+            variants={responseSubmitted}
+            transition={baseTransition}
+          >
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              py="18px"
+              color={"white"}
+              bgcolor="#000000"
+              onClick={() => {}}
+              fontSize={"30px"}
+            >
+              No
+            </Box>
+          </AnimateOnClick>
+        </Box>
+      </Card>
     </Box>
   );
 };

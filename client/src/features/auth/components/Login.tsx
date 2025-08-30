@@ -91,22 +91,25 @@ const Login = () => {
         alt=""
         sx={{ width: "50px", height: "50px", objectFit: "cover" }}
       />
-      <Box mt={"20px"} mb={"10px"}>
+      <Box mt={"40px"} mb={"10px"}>
         <Typography
           fontWeight="700"
           fontSize={"25px"}
-          // lineHeight={"36px"}
-          mb={"25px"}
+          lineHeight={"30px"}
+          mb={"10px"}
           color={theme.palette.text.primary}
         >
-          Welcome to Quickk
+          Welcome to the WEBN Community 🌟
         </Typography>
         <Typography
-          fontWeight="700"
-          fontSize={"25px"}
-          color={theme.palette.text.primary}
+          fontWeight="500"
+          fontSize={"14px"}
+          color="black"
+          lineHeight={"18px"}
         >
-          Welcome note
+          A space where budding entrepreneurs meet mentors, investors, and
+          peers. Log in to start your journey of learning, networking, and
+          growth.
         </Typography>
         {/* <Typography
           fontWeight="400"
@@ -159,56 +162,61 @@ const Login = () => {
             </Alert>
           )}
 
-          <Stack gap={"40px"} mt={"30px"}>
-            <TextField
-              name="companyMail"
-              placeholder="Company email address*"
-              variant="standard"
-              fullWidth
-              value={formData.companyMail}
-              onChange={handleChange}
-              sx={{
-                // input: { color: "#FFFFFF" },
-                // "& .MuiInput-underline:before": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                // "& .MuiInput-underline:hover:before": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                // "& .MuiInput-underline:after": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                "& .MuiInputLabel-root": {
-                  // color: "#FFFFFF",
-                  fontSize: "20px",
-                },
-              }}
-            />
-            <TextField
-              name="companyCode"
-              placeholder="Company code*"
-              variant="standard"
-              fullWidth
-              value={formData.companyCode}
-              onChange={handleChange}
-              sx={{
-                // input: { color: "#FFFFFF" },
-                // "& .MuiInput-underline:before": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                // "& .MuiInput-underline:hover:before": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                // "& .MuiInput-underline:after": {
-                //   borderBottomColor: "#FFFFFF",
-                // },
-                "& .MuiInputLabel-root": {
-                  // color: "#FFFFFF",
-                  fontSize: "20px",
-                },
-              }}
-            />
-          </Stack>
+          <Box mt={"100px"}>
+            <Typography variant="h4" color="black" fontSize={"14px"}>
+              Add details
+            </Typography>
+            <Stack gap={"30px"} mt={"10px"}>
+              <TextField
+                name="companyMail"
+                placeholder="Company email address*"
+                variant="standard"
+                fullWidth
+                value={formData.companyMail}
+                onChange={handleChange}
+                sx={{
+                  // input: { color: "#FFFFFF" },
+                  // "& .MuiInput-underline:before": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  // "& .MuiInput-underline:hover:before": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  // "& .MuiInput-underline:after": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  "& .MuiInputLabel-root": {
+                    // color: "#FFFFFF",
+                    fontSize: "20px",
+                  },
+                }}
+              />
+              <TextField
+                name="companyCode"
+                placeholder="Company code*"
+                variant="standard"
+                fullWidth
+                value={formData.companyCode}
+                onChange={handleChange}
+                sx={{
+                  // input: { color: "#FFFFFF" },
+                  // "& .MuiInput-underline:before": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  // "& .MuiInput-underline:hover:before": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  // "& .MuiInput-underline:after": {
+                  //   borderBottomColor: "#FFFFFF",
+                  // },
+                  "& .MuiInputLabel-root": {
+                    // color: "#FFFFFF",
+                    fontSize: "20px",
+                  },
+                }}
+              />
+            </Stack>
+          </Box>
         </Box>
 
         <GlobalButton

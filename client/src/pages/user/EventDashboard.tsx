@@ -13,7 +13,18 @@ import Quickk from "../../components/ui/Quickk";
 const EventDashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
   const theme = useTheme();
-  const [activeTab, setActiveTab] = useState<"events" | "networks">("events");
+  
+  // Initialize activeTab from localStorage or default to "events"
+  const [activeTab, setActiveTab] = useState<"events" | "networks">(() => {
+    const savedTab = localStorage.getItem("eventDashboardActiveTab");
+    return (savedTab === "events" || savedTab === "networks") ? savedTab : "events";
+  });
+
+  // Save activeTab to localStorage whenever it changes
+  const handleTabChange = (tab: "events" | "networks") => {
+    setActiveTab(tab);
+    localStorage.setItem("eventDashboardActiveTab", tab);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,7 +48,12 @@ const EventDashboard = () => {
             <br />
             {name}
           </Typography>
-          <Box border={`2px solid #E7CEF3`} width={"fit-content"} px={1} mt={1}>
+          <Box
+            border={`2px solid ${theme.palette.primary.main}`}
+            width={"fit-content"}
+            px={1}
+            mt={1}
+          >
             <Typography color={"black"} fontSize={14}>
               Weben Club Member
             </Typography>
@@ -69,7 +85,7 @@ const EventDashboard = () => {
             height: activeTab === "events" ? "90px" : "80px", // Height changes based on active tab
             transition: "all 0.3s ease",
           }}
-          onClick={() => setActiveTab("events")}
+          onClick={() => handleTabChange("events")}
         >
           <Typography variant="h1" fontSize={25}>
             <AnimateNumber target={15}></AnimateNumber>
@@ -99,7 +115,7 @@ const EventDashboard = () => {
             height: activeTab === "networks" ? "90px" : "80px", // Height changes based on active tab
             transition: "all 0.3s ease",
           }}
-          onClick={() => setActiveTab("networks")}
+          onClick={() => handleTabChange("networks")}
         >
           <Typography variant="h1" fontSize={25}>
             <AnimateNumber target={1}></AnimateNumber>

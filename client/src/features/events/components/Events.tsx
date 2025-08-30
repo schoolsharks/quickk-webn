@@ -5,7 +5,7 @@ import Recordings from "./Recordings";
 
 const Events = () => {
   return (
-    <Box p={"8px 26px"} display={"flex"} flexDirection={"column"} gap={6}>
+    <Box p={"8px 26px"} display={"flex"} flexDirection={"column"} gap={8}>
       <EventsToday />
       <UpcomingEvents />
       <Recordings />

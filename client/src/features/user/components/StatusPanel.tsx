@@ -40,7 +40,8 @@ const StatusPanel: React.FC = () => {
       title: "Rewards",
       value: null,
       bgColor: "#D9D9D9",
-      onClick: () => navigate("/user/reward"),
+      onClick: () => {},
+      // navigate("/user/reward")
     },
     {
       icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "white" }} />,

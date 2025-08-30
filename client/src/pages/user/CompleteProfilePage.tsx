@@ -41,6 +41,33 @@ const roles = [
   "Self Employed",
 ];
 
+// Step 3: Current Stage
+const stages = [
+  "Idea stage",
+  "Early prototype / MVP",
+  "Launched product/service",
+  "Scaling business",
+];
+
+// Step 4: Community Goals
+const communityGoals = [
+  "Finding investors",
+  "Meeting co-founders or team members",
+  "Mentorship & guidance",
+  "Learning (workshops, resources, courses)",
+  "Networking with other founders",
+  "Collaboration & partnerships",
+];
+
+// Step 5: Event Interests
+const eventTypes = [
+  "Pitch events",
+  "Pitch events",
+  "Networking mixers",
+  "Investor meetups",
+  "Panel discussions & talks",
+];
+
 interface StepProps {
   title: string;
   subtitle: string;
@@ -103,7 +130,7 @@ const SelectionStep: React.FC<StepProps> = ({
             marginBottom: "24px",
           }}
         >
-          {subtitle} {":"}
+          {subtitle} {subtitle ? ":" : ""}
         </Typography>
 
         {/* Options Grid */}
@@ -126,7 +153,7 @@ const SelectionStep: React.FC<StepProps> = ({
                   onClick={() => handleOptionClick(option)}
                   sx={{
                     cursor: "pointer",
-                    borderRadius: "8px",
+                    borderRadius: "0px",
                     border: isSelected
                       ? `2px solid ${theme.palette.primary.main}`
                       : `1px solid ${theme.palette.text.secondary}30`,
@@ -199,8 +226,13 @@ const CompleteProfilePage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<string[]>([]);
+  const [selectedStage, setSelectedStage] = useState<string[]>([]);
+  const [selectedCommunityGoals, setSelectedCommunityGoals] = useState<
+    string[]
+  >([]);
+  const [selectedEventTypes, setSelectedEventTypes] = useState<string[]>([]);
 
-  const totalSteps = 2;
+  const totalSteps = 5;
   //   const progress = (currentStep / totalSteps) * 100;
 
   const handleBack = () => {
@@ -219,6 +251,9 @@ const CompleteProfilePage: React.FC = () => {
       console.log("Profile completed:", {
         industries: selectedIndustries,
         role: selectedRole,
+        stage: selectedStage,
+        communityGoals: selectedCommunityGoals,
+        eventTypes: selectedEventTypes,
       });
       navigate("/user/event-mode");
     }
@@ -230,6 +265,15 @@ const CompleteProfilePage: React.FC = () => {
     }
     if (currentStep === 2) {
       return selectedRole.length > 0;
+    }
+    if (currentStep === 3) {
+      return selectedStage.length > 0;
+    }
+    if (currentStep === 4) {
+      return selectedCommunityGoals.length > 0;
+    }
+    if (currentStep === 5) {
+      return selectedEventTypes.length > 0;
     }
     return false;
   };
@@ -253,6 +297,33 @@ const CompleteProfilePage: React.FC = () => {
           selectedOptions: selectedRole,
           onSelectionChange: setSelectedRole,
           isMultiSelect: false,
+        };
+      case 3:
+        return {
+          title: "What stage are you currently at?",
+          subtitle: "",
+          options: stages,
+          selectedOptions: selectedStage,
+          onSelectionChange: setSelectedStage,
+          isMultiSelect: false,
+        };
+      case 4:
+        return {
+          title: "What are you looking for in this community?",
+          subtitle: "",
+          options: communityGoals,
+          selectedOptions: selectedCommunityGoals,
+          onSelectionChange: setSelectedCommunityGoals,
+          isMultiSelect: true,
+        };
+      case 5:
+        return {
+          title: "Which type of events interest you the most?",
+          subtitle: "",
+          options: eventTypes,
+          selectedOptions: selectedEventTypes,
+          onSelectionChange: setSelectedEventTypes,
+          isMultiSelect: true,
         };
       default:
         return {

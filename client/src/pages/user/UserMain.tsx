@@ -26,6 +26,9 @@ import VideoComponentPage from "./VideoComponentPage";
 import EventDashboard from "./EventDashboard";
 import CompleteProfilePage from "./CompleteProfilePage";
 import ModeSelection from "./ModeSelection";
+import EventDetails from "../../features/events/pages/EventDetails";
+import TicketPurchase from "../../features/events/pages/TicketPurchase";
+import PurchaseSuccess from "../../features/events/pages/PurchaseSuccess";
 
 // Component to handle dashboard redirection based on event mode
 const DashboardRedirect = () => {
@@ -41,20 +44,21 @@ const DashboardRedirect = () => {
 // Component to handle initial redirection when user visits root
 const InitialRedirect = () => {
   const { eventMode } = useSelector((state: RootState) => state.user);
-  
+
   // Check if user has already selected a mode
-  const hasSelectedMode = localStorage.getItem('eventMode') !== null;
-  
+  const hasSelectedMode = localStorage.getItem("eventMode") !== null;
+
   if (!hasSelectedMode) {
     return <Navigate to="/user/mode-selection" replace />;
   }
-  
+
   if (eventMode) {
     return <Navigate to="/user/event-mode" replace />;
   }
-  
+
   return <Navigate to="/user/dashboard" replace />;
-};const UserMain = () => {
+};
+const UserMain = () => {
   const [fetchUser] = useLazyFetchUserQuery();
   const { loading, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
@@ -108,6 +112,11 @@ const InitialRedirect = () => {
           <Route path="video/:url" element={<VideoComponentPage />} />
           <Route path="complete-profile" element={<CompleteProfilePage />} />
           <Route path="mode-selection" element={<ModeSelection />} />
+
+          {/* Event routes */}
+          <Route path="events/:eventId" element={<EventDetails />} />
+          <Route path="events/:eventId/purchase" element={<TicketPurchase />} />
+          <Route path="events/:eventId/success" element={<PurchaseSuccess />} />
 
           {/* event mode route  */}
           <Route path="event-mode" element={<EventDashboard />} />

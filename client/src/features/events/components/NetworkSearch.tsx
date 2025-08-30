@@ -10,6 +10,9 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import EmailIcon from "@mui/icons-material/Email";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../../components/ui/button";
 
@@ -22,6 +25,7 @@ interface NetworkProfile {
   industries: string[];
   connections: number;
   isConnected?: boolean;
+  showIcons?: boolean;
 }
 
 const dummyProfiles: NetworkProfile[] = [
@@ -33,6 +37,7 @@ const dummyProfiles: NetworkProfile[] = [
     industries: ["EdTech", "Branding", "Consultancy"],
     connections: 300,
     isConnected: false,
+    showIcons: false,
   },
   {
     id: "2",
@@ -42,6 +47,7 @@ const dummyProfiles: NetworkProfile[] = [
     industries: ["EdTech", "Healthcare", "Fintech"],
     connections: 450,
     isConnected: false,
+    showIcons: false,
   },
   {
     id: "3",
@@ -51,6 +57,7 @@ const dummyProfiles: NetworkProfile[] = [
     industries: ["SaaS", "Branding", "E-commerce"],
     connections: 275,
     isConnected: false,
+    showIcons: false,
   },
   {
     id: "4",
@@ -60,6 +67,7 @@ const dummyProfiles: NetworkProfile[] = [
     industries: ["Branding", "Marketing", "Consultancy"],
     connections: 520,
     isConnected: false,
+    showIcons: false,
   },
 ];
 
@@ -88,23 +96,14 @@ const NetworkSearch: React.FC = () => {
   };
 
   const handleQuickkConnect = (profileId: string) => {
-    // Update the connection status with animation
+    // Toggle the icons display
     setProfiles((prev) =>
       prev.map((profile) =>
-        profile.id === profileId ? { ...profile, isConnected: true } : profile
+        profile.id === profileId
+          ? { ...profile, showIcons: !profile.showIcons }
+          : profile
       )
     );
-
-    // Reset connection status after 2 seconds to show animation
-    setTimeout(() => {
-      setProfiles((prev) =>
-        prev.map((profile) =>
-          profile.id === profileId
-            ? { ...profile, isConnected: false }
-            : profile
-        )
-      );
-    }, 2000);
   };
 
   const ProfileCard: React.FC<{ profile: NetworkProfile }> = ({ profile }) => (
@@ -116,7 +115,7 @@ const NetworkSearch: React.FC = () => {
     >
       <Card
         sx={{
-          marginBottom: 2,
+          marginBottom: 4,
           borderRadius: "0px",
           backgroundColor: "#CD7BFF17",
           border: "none",
@@ -248,9 +247,7 @@ const NetworkSearch: React.FC = () => {
               onClick={() => handleQuickkConnect(profile.id)}
               fullWidth
               sx={{
-                backgroundColor: profile.isConnected
-                  ? theme.palette.primary.main
-                  : theme.palette.text.primary,
+                backgroundColor: theme.palette.text.primary,
                 color: theme.palette.background.paper,
                 borderRadius: "0px",
                 textTransform: "none",
@@ -259,21 +256,114 @@ const NetworkSearch: React.FC = () => {
                 padding: "12px",
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  backgroundColor: profile.isConnected
-                    ? theme.palette.primary.light
-                    : theme.palette.text.secondary,
+                  backgroundColor: theme.palette.text.secondary,
                 },
               }}
             >
-              <motion.span
-                initial={false}
-                animate={{
-                  scale: profile.isConnected ? [1, 1.1, 1] : 1,
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                {profile.isConnected ? "Connected! ✓" : "Quickk Connect"}
-              </motion.span>
+              {profile.showIcons ? (
+                <Box
+                  display="flex"
+                  justifyContent="space-around"
+                  alignItems="center"
+                  width="100%"
+                  gap={2}
+                >
+                  {/* LinkedIn Icon */}
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      backgroundColor: "#0077B5", // LinkedIn blue
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "transform 0.2s ease",
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                      },
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // LinkedIn share logic would go here
+                    }}
+                  >
+                    <LinkedInIcon 
+                      sx={{ 
+                        color: "white",
+                        fontSize: "20px"
+                      }} 
+                    />
+                  </Box>
+
+                  {/* Email Icon */}
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      backgroundColor: "#EA4335", // Gmail red
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "transform 0.2s ease",
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                      },
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Email share logic would go here
+                    }}
+                  >
+                    <EmailIcon 
+                      sx={{ 
+                        color: "white",
+                        fontSize: "20px"
+                      }} 
+                    />
+                  </Box>
+
+                  {/* WhatsApp Icon */}
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "50%",
+                      backgroundColor: "#25D366", // WhatsApp green
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "transform 0.2s ease",
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                      },
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // WhatsApp share logic would go here
+                    }}
+                  >
+                    <WhatsAppIcon 
+                      sx={{ 
+                        color: "white",
+                        fontSize: "20px"
+                      }} 
+                    />
+                  </Box>
+                </Box>
+              ) : (
+                <motion.span
+                  initial={false}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Quickk Connect
+                </motion.span>
+              )}
             </GlobalButton>
           </motion.div>
         </CardContent>
@@ -322,9 +412,9 @@ const NetworkSearch: React.FC = () => {
               },
             },
             "& .MuiInputBase-input": {
-              color: theme.palette.text.primary,
+              color: theme.palette.text.secondary,
               fontSize: "16px",
-              padding: "12px 14px",
+              padding: "12px 0px",
             },
             "& .MuiInputBase-input::placeholder": {
               color: theme.palette.text.secondary,
@@ -340,6 +430,36 @@ const NetworkSearch: React.FC = () => {
           }}
         />
       </Box>
+
+      {/* Results Count */}
+      {isSearching && (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mx="24px"
+          mb="16px"
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+              fontSize: "14px",
+            }}
+          >
+            Filters
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+              fontSize: "14px",
+            }}
+          >
+            {filteredProfiles.length} results
+          </Typography>
+        </Box>
+      )}
 
       {/* Search Results */}
       <AnimatePresence mode="wait">
@@ -373,7 +493,9 @@ const NetworkSearch: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Box sx={{ maxHeight: "600px", overflowY: "auto" }}>
+            <Box
+            // sx={{ maxHeight: "600px", overflowY: "auto" }}
+            >
               {filteredProfiles.map((profile) => (
                 <ProfileCard key={profile.id} profile={profile} />
               ))}

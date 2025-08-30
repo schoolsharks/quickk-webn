@@ -145,8 +145,8 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
     customPaging: () => (
       <Box
         sx={{
-          width: 10,
-          height: 10,
+          width: 9,
+          height: 9,
           bgcolor: theme.palette.text.primary,
           borderRadius: "0",
           transition: "all 0.4s",
@@ -326,7 +326,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           {dummyUpcomingEvents.map((monthData) => (
             <Box
               key={`${monthData.month}-${monthData.year}`}
-              sx={{ height: "100%", px: 1 }}
+              sx={{ height: "100%" }}
             >
               <motion.div
                 variants={carouselSlide}

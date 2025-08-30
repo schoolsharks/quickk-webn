@@ -1,8 +1,9 @@
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, useTheme } from "@mui/material";
 import logo from "../../assets/images/header/logo.webp";
 import EventModeToggle from "../ui/EventMode";
 
 const Header: React.FC = () => {
+  const theme = useTheme();
   return (
     <header>
       <Stack
@@ -14,18 +15,13 @@ const Header: React.FC = () => {
         <Box
           component="img"
           src={logo}
-          width={"50px"}
-          height={"auto"}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 0,
-          }}
+          border={`2px solid ${theme.palette.primary.main}`}
+          borderRadius={"50%"}
+          alt=""
+          sx={{ width: "50px", height: "50px", objectFit: "cover" }}
         />
 
         <EventModeToggle />
-        
       </Stack>
     </header>
   );

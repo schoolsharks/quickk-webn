@@ -46,9 +46,11 @@ const DailyPulse: React.FC = () => {
   }
 
   // Transform the API data to match the required props structure
-  const pulseItems: PulseItem[] = data?.pulseItems.map((item: any) => {
-    if (item.type === "infoCard") {
-      return {
+  // Separate infoCards and other items
+  const infoCards =
+    data?.pulseItems
+      .filter((item: any) => item.type === "infoCard")
+      .map((item: any) => ({
         type: "infoCard",
         response: item.feedback,
         id: item.id,
@@ -56,9 +58,12 @@ const DailyPulse: React.FC = () => {
         content: item.content,
         wantFeedback: item.wantFeedback,
         score: item.score,
-      };
-    } else {
-      return {
+      })) || [];
+
+  const otherItems =
+    data?.pulseItems
+      .filter((item: any) => item.type !== "infoCard")
+      .map((item: any) => ({
         type: "QuestionTwoOption",
         response: item.response,
         id: item.id,
@@ -68,9 +73,9 @@ const DailyPulse: React.FC = () => {
         options: item.options,
         questionOptions: item.questionOptions,
         score: item.score,
-      };
-    }
-  });
+      })) || [];
+
+  const pulseItems: PulseItem[] = [...infoCards, ...otherItems];
 
   return <DailyPulseLayout pulseItems={pulseItems} />;
 };

@@ -94,7 +94,7 @@ const BidCard: React.FC = () => {
           justifyContent="center"
           px={3}
           py={1}
-          color={"white"}
+          color={"black"}
         >
           <Typography variant="h4" fontSize={18}>
             Refer & Earn Big! 🔥
@@ -109,7 +109,7 @@ const BidCard: React.FC = () => {
             {countdown}
           </Typography> */}
           <Typography variant="h3" mt={0.5}>
-            Starts on {date}
+            Announcement on {date}
           </Typography>
           <Typography
             color="rgba(255, 255, 255, 0.6)"

@@ -89,8 +89,8 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
     customPaging: () => (
       <Box
         sx={{
-          width: 10,
-          height: 10,
+          width: 9,
+          height: 9,
           bgcolor: theme.palette.text.primary,
           borderRadius: "0",
           transition: "all 0.4s",
@@ -148,7 +148,12 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
               Date & Time
             </Typography> */}
 
-            <Box display={"flex"} justifyContent="space-between">
+            <Box
+              display={"flex"}
+              justifyContent="space-between"
+              mt={2}
+              alignItems={"center"}
+            >
               <Typography
                 sx={{
                   color: theme.palette.text.primary,
@@ -222,7 +227,7 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
   );
 
   return (
-    <Box width="100%">
+    <Box width="100%" mt={2}>
       {/* Header */}
       <Box
         display="flex"
@@ -250,7 +255,7 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
       <Box sx={{ height: "400px" }}>
         <Slider {...settings} ref={sliderRef}>
           {dummyRecordings.map((recording) => (
-            <Box key={recording.id} sx={{ height: "100%", px: 1 }}>
+            <Box key={recording.id} sx={{ height: "100%" }}>
               <motion.div
                 variants={carouselSlide}
                 initial="initial"

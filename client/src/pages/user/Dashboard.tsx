@@ -115,7 +115,7 @@ const Dashboard = () => {
 
       {/* Status Panel */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"100px"}>
+        <Box mt={"120px"}>
           <StatusPanel />
         </Box>
       </AnimateOnScroll>
@@ -134,7 +134,7 @@ const Dashboard = () => {
       </AnimateOnScroll>
 
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"48px"}>
+        <Box mt={"4px"}>
           <BottomNavigation />
         </Box>
       </AnimateOnScroll>

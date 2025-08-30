@@ -24,7 +24,10 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   };
 
   return (
-    <Box border={`2px solid ${theme.palette.primary.main}`}>
+    <Box
+      border={`2px solid ${theme.palette.primary.main}`}
+      boxShadow="0px 4px 19px 0px #CD7BFF4D inset"
+    >
       <Box
         display="flex"
         flexDirection="column"
@@ -54,7 +57,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
           <Box py={smallSize ? "20px" : "60px"}>
             {questionOptions.map((option, index) => (
               <Box key={index} p={smallSize ? "0px 20px" : "10px 20px"}>
-                <Typography variant="h5" color="white" gutterBottom>
+                <Typography variant="h5" color="black" gutterBottom>
                   {option}
                 </Typography>
               </Box>

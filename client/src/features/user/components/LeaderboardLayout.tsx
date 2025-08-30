@@ -101,10 +101,21 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
         width={"100%"}
       >
         {podiumOrder.map((user, index) => {
+          const isHighlight = user.name === name;
+
           const podiumStyles = [
-            { height: 180, background: "#00000040" }, // #3
-            { height: 330, backgroundColor: "#00000033" }, // #1
-            { height: 260, background: "#4040409C" }, // #2
+            {
+              height: 180,
+              background: isHighlight ? "#CD7BFF80" : "#00000040",
+            }, // #3
+            {
+              height: 330,
+              backgroundColor: isHighlight ? "#CD7BFF80" : "#00000033",
+            }, // #1
+            {
+              height: 260,
+              background: isHighlight ? "#CD7BFF80" : "#4040409C",
+            }, // #2
           ];
 
           return (
@@ -117,6 +128,11 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 #{user.rank}
               </Typography>
               <Box
+                border={
+                  isHighlight
+                    ? `2px solid ${theme.palette.primary.main}`
+                    : "none"
+                }
                 sx={{
                   ...podiumStyles[index],
                   p: 1,
@@ -141,8 +157,9 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 </Box>
                 <Box
                   display={"flex"}
-                  flexDirection={"row"}
-                  justifyContent={"space-between"}
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  // justifyContent={"space-between"}
                 >
                   <Typography
                     color={index === 2 ? "inherit" : "black"}
@@ -152,6 +169,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   </Typography>
                   <Box display={"flex"} alignItems={"center"} gap={1}>
                     <Typography
+                      ml={"4px"}
                       fontSize="14px"
                       color={index === 2 ? "inherit" : "black"}
                       sx={{

@@ -4,7 +4,7 @@ import { useGetUpcomingRewardQuery } from "../../biding/service/bidingApi";
 import Loader from "../../../components/ui/Loader";
 import { extractTimeAndDate } from "../../../utils/dateExtract";
 // import moment from "moment";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const BidCard: React.FC = () => {
   const {
@@ -18,7 +18,7 @@ const BidCard: React.FC = () => {
     date,
   } = extractTimeAndDate(upcomingReward?.upcomingReward?.startTime);
   // const [countdown, setCountdown] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // useEffect(() => {
   //   if (!upcomingReward?.upcomingReward?.startTime) return;
@@ -62,7 +62,7 @@ const BidCard: React.FC = () => {
     );
   }
   const handleClick = () => {
-    navigate("/user/reward");
+    // navigate("/user/reward");
   };
   const theme = useTheme();
 

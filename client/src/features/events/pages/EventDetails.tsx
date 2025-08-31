@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import event from "../../../assets/images/Onboardinghead.png"
 
 // Dummy event data - replace with RTK Query later
 const dummyEventData = {
@@ -14,7 +15,7 @@ const dummyEventData = {
   date: "Saturday, 18th October 2025",
   time: "10:00 AM - 6:00 PM",
   location: "WeWork, BKC, Mumbai",
-  image: "/src/assets/images/Onboardinghead.png",
+  image: event,
   description:
     "A high-energy pitch marathon where early-stage entrepreneurs showcase their startups to a panel of angel investors, venture capitalists, and industry experts. Attendees will witness founders compete in an exciting pitch battle. Founders and attendees will be treated to sessions on crafting an irresistible pitch deck, fundraising strategies, and founder storytelling.",
   sponsors: [

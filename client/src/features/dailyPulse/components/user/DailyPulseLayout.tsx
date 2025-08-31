@@ -145,7 +145,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
             optionType={item.optionType}
             options={item.options}
             questionOptions={item.questionOptions}
-            // response={item.response}
+            response={item.response}
             onAnswer={readOnly ? undefined : handleAnswer}
             smallSize={smallSize}
           />

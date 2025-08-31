@@ -20,12 +20,12 @@ import { RootState } from "../../../../app/store";
 import { useSelector } from "react-redux";
 
 const Module: React.FC<ModuleProps> = ({
-  moduleId,
+  // moduleId,
   title,
   isCompleted = false,
   duration,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -48,7 +48,7 @@ const Module: React.FC<ModuleProps> = ({
           disableRipple
           disabled={isCompleted}
           onClick={() => {
-            navigate(`/user/module/${moduleId}`);
+            // navigate(`/user/module/${moduleId}`);
           }}
           sx={{
             backgroundColor: "transparent",

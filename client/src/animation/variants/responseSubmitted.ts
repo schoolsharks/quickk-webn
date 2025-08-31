@@ -7,7 +7,7 @@ export const responseSubmitted = {
     opacity: 1,
     boxShadow: [
       "0px 0px 0px rgba(0,0,0,0)",
-      "0px 0px 15px rgba(150, 255, 67, 0.6)",
+      "0px 0px 15px rgba(230, 189, 255, 0.6)", // #E6BDFF in rgba
       "0px 0px 0px rgba(0,0,0,0)",
     ],
     transition: {

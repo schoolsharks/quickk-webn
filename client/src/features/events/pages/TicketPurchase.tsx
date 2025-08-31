@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
+import event from "../../../assets/images/Onboardinghead.png";
 
 // Dummy event data - replace with RTK Query later
 const dummyEventData = {
@@ -16,7 +17,7 @@ const dummyEventData = {
   date: "Saturday, 18th October 2025",
   time: "10:00 AM - 6:00 PM",
   location: "WeWork, BKC, Mumbai",
-  image: "/src/assets/images/Onboardinghead.png",
+  image: event,
   ticketPrice: 500, // Price per ticket in INR
 };
 

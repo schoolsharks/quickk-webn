@@ -153,26 +153,26 @@ const BulkUserUpload: React.FC = () => {
         errors.push(`Row ${rowNumber}: Contact must be exactly 10 digits`);
       }
 
-      // Validate Instagram format (should start with @)
-      if (
-        row.Instagram &&
-        row.Instagram.trim() &&
-        !row.Instagram.trim().startsWith("@")
-      ) {
-        errors.push(`Row ${rowNumber}: Instagram handle should start with @`);
-      }
+      // // Validate Instagram format (should start with @)
+      // if (
+      //   row.Instagram &&
+      //   row.Instagram.trim() &&
+      //   !row.Instagram.trim().startsWith("@")
+      // ) {
+      //   errors.push(`Row ${rowNumber}: Instagram handle should start with @`);
+      // }
 
-      // Validate Facebook URL format
-      if (
-        row.Facebook &&
-        row.Facebook.trim() &&
-        !row.Facebook.includes("facebook.com") &&
-        !row.Facebook.includes("fb.com")
-      ) {
-        errors.push(
-          `Row ${rowNumber}: Facebook should be a valid Facebook URL`
-        );
-      }
+      // // Validate Facebook URL format
+      // if (
+      //   row.Facebook &&
+      //   row.Facebook.trim() &&
+      //   !row.Facebook.includes("facebook.com") &&
+      //   !row.Facebook.includes("fb.com")
+      // ) {
+      //   errors.push(
+      //     `Row ${rowNumber}: Facebook should be a valid Facebook URL`
+      //   );
+      // }
     });
 
     return { isValid: errors.length === 0, errors };

@@ -80,12 +80,12 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
   fieldStyle,
 }) => {
   const defaultFieldStyle = {
-    backgroundColor: "#333",
+    // backgroundColor: "#333",
     borderRadius: "0",
     "& .MuiOutlinedInput-root": {
       borderRadius: "0",
       color: "white",
-      "& fieldset": { borderColor: "#444", borderRadius: "0" },
+      "& fieldset": {  borderRadius: "0" },
       "&:hover fieldset": { borderColor: "#666" },
       "&.Mui-focused fieldset": { borderColor: "#96FF43" },
     },
@@ -104,6 +104,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "number":
         return (
           <TextField
+            variant="standard"
             fullWidth
             type={field.type}
             value={value}
@@ -116,6 +117,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "textarea":
         return (
           <TextField
+            variant="standard"
             fullWidth
             multiline
             rows={field.rows || 3}
@@ -129,6 +131,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "date":
         return (
           <TextField
+            variant="standard"
             fullWidth
             type="text"
             value={value}
@@ -226,6 +229,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 sx={{ display: "flex", gap: 1, alignItems: "center" }}
               >
                 <TextField
+                  variant="standard"
                   fullWidth
                   value={item}
                   placeholder={
@@ -329,6 +333,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
             {tabValue === 1 && (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <TextField
+                  variant="standard"
                   fullWidth
                   value={value}
                   placeholder={field.placeholder || "Enter image URL"}
@@ -430,7 +435,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       {fields.map((field) => (
         <Box key={field.name}>
           {field.type !== "switch" && field.type !== "checkbox" && (
-            <Typography variant="h6" color="white" sx={{ mb: 1 }}>
+            <Typography variant="h6" color="black" sx={{ mb: 1 }}>
               {field.label}
               {field.required && <span style={{ color: "#ff4444" }}> *</span>}
             </Typography>

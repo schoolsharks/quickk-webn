@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Alert, useTheme } from "@mui/material";
+import { Box, Typography, Alert } from "@mui/material";
 import { useAddEditUserMutation } from "../service/adminApi";
 import FormBuilder, { FieldConfig } from "../../../components/ui/FromBuilder";
 import GreenButton from "../../../components/ui/GreenButton";
@@ -112,10 +112,9 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
     {
       name: "address",
       label: "Address",
-      type: "textarea",
+      type: "text",
       required: true,
       placeholder: "Enter address",
-      rows: 3,
     },
     {
       name: "chapter",
@@ -260,7 +259,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
       });
     }
   };
-  const theme = useTheme();
+  // const theme = useTheme();
   return (
     <Box
       sx={{
@@ -272,7 +271,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         sx={{
           maxWidth: "80vw",
           mx: "auto",
-          backgroundColor: theme.palette.text.secondary,
+          backgroundColor: "white",
           borderRadius: 0,
           p: 4,
         }}
@@ -315,29 +314,28 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
           data={formData}
           onChange={handleFieldChange}
           containerStyle={{
-            backgroundColor: theme.palette.text.secondary,
+            backgroundColor: "white",
           }}
         />
-
-        {/* Action Buttons */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            justifyContent: "flex-end",
-            mt: 4,
-          }}
-        >
-          <GreenButton onClick={handleSubmit} disabled={isLoading}>
-            {isLoading
-              ? !userData?.companyMail.startsWith("UNDEFINED_")
-                ? "Updating..."
-                : "Creating..."
-              : !userData?.companyMail.startsWith("UNDEFINED_")
-              ? "Update User"
-              : "Add User"}
-          </GreenButton>
-        </Box>
+      </Box>
+      {/* Action Buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          justifyContent: "flex-end",
+          mt: 4,
+        }}
+      >
+        <GreenButton onClick={handleSubmit} disabled={isLoading}>
+          {isLoading
+            ? !userData?.companyMail.startsWith("UNDEFINED_")
+              ? "Updating..."
+              : "Creating..."
+            : !userData?.companyMail.startsWith("UNDEFINED_")
+            ? "Update User"
+            : "Add User"}
+        </GreenButton>
       </Box>
     </Box>
   );

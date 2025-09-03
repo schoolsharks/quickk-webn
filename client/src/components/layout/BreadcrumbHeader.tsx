@@ -53,7 +53,7 @@ const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
   return (
     <Box
       sx={{
-        background: "rgba(37, 37, 37, 1)",
+        background: "#F7F0FB",
         px: 3,
         pt: 2,
         display: "flex",
@@ -66,7 +66,7 @@ const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
       <Box>
         <Breadcrumbs
           separator={
-            <Typography sx={{ color: "white", fontSize: "12px" }}>/</Typography>
+            <Typography sx={{ color: "black", fontSize: "12px" }}>/</Typography>
           }
           sx={{
             mb: 0.5,
@@ -90,7 +90,7 @@ const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
               <Typography
                 key={to}
                 sx={{
-                  color: "white",
+                  color: "black",
                   fontSize: "12px",
                   fontWeight: 400,
                 }}
@@ -104,7 +104,7 @@ const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
                 variant="body1"
                 onClick={() => handleBreadcrumbClick(to)}
                 sx={{
-                  color: "white",
+                  color: "black",
                   fontSize: "12px",
                   fontWeight: 400,
                   textDecoration: "none",

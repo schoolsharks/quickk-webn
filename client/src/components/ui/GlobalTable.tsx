@@ -6,7 +6,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   IconButton,
   //   Chip,
   Box,
@@ -101,7 +100,11 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
 
   return (
     <Box
-      sx={{ backgroundColor: theme.palette.background.default }}
+      sx={{
+        // backgroundColor: "#eacdfc",
+        bgcolor: "#eacdfc",
+        border: `1px solid ${theme.palette.primary.main}`,
+      }}
       p={"24px 28px"}
     >
       {/* Header */}
@@ -124,7 +127,12 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
       )}
 
       {/* Table */}
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <Box
+        sx={{
+          width: "100%",
+          overflow: "hidden",
+        }}
+      >
         <TableContainer sx={{ maxHeight }}>
           <Table stickyHeader={stickyHeader} size={dense ? "small" : "medium"}>
             <TableHead>
@@ -135,9 +143,10 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     align={column.align}
                     style={{ minWidth: column.minWidth }}
                     sx={{
-                      backgroundColor: theme.palette.background.default,
                       py: "10px",
-                      color: "rgba(160, 174, 192, 1)",
+                      borderBottom: "1px solid black",
+                      backgroundColor: "#eacdfc",
+                      color: "black",
                       fontWeight: 500,
                       fontSize: "10px",
                     }}
@@ -150,10 +159,11 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     align="center"
                     sx={{
                       py: "10px",
-                      backgroundColor: theme.palette.background.default,
-                      color: "rgba(160, 174, 192, 1)",
+                      backgroundColor: "#eacdfc",
+                      color: "black",
                       fontWeight: 500,
                       fontSize: "10px",
+                      borderBottom: "1px solid black",
                     }}
                   >
                     Actions
@@ -168,7 +178,13 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      sx={{ backgroundColor: theme.palette.background.default }}
+                      sx={{
+                        backgroundColor: "#eacdfc",
+                        // "& .MuiTableCell-root" :{
+                        //   borderBottom: "1px solid balck",
+                        // }
+                        borderBottom: "1px solid black",
+                      }}
                     >
                       {formatCellValue(column, row[column.id])}
                     </TableCell>
@@ -176,7 +192,10 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                   {showActions && (
                     <TableCell
                       align="center"
-                      sx={{ backgroundColor: theme.palette.background.default }}
+                      sx={{
+                        backgroundColor: "#eacdfc",
+                        borderBottom: "1px solid black",
+                      }}
                     >
                       <IconButton
                         onClick={(event) => handleActionClick(event, row)}
@@ -191,7 +210,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
             </TableBody>
           </Table>
         </TableContainer>
-      </Paper>
+      </Box>
 
       {/* Action Menu */}
       <Menu

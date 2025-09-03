@@ -9,6 +9,7 @@ import {
   Typography,
   Box,
   Collapse,
+  useTheme,
 } from "@mui/material";
 import {
   Home as DashboardIcon,
@@ -22,7 +23,7 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../../assets/images/header/logo.png";
+import logo from "../../assets/images/header/logo.webp";
 import AnimateOnState from "../../animation/AnimateOnState";
 import { movingBorderVariants } from "../../animation/variants/movingBorder";
 import { baseTransition } from "../../animation/transitions/baseTransition";
@@ -52,18 +53,18 @@ const menuItems: MenuItem[] = [
     label: "Quickk AI",
     icon: <BotIcon />,
     path: "/admin/quickk-ai",
-    isNewFeature: true, // Mark as new feature
+    isNewFeature: false, // Mark as new feature
     feature: FeatureKeys.QUICKKAI,
   },
   {
     id: "dashboard",
-    label: "Impact Dashboard",
+    label: "Dashboard",
     icon: <DashboardIcon />,
     path: "/admin/impact-dashboard",
   },
   {
     id: "learnings",
-    label: "Content",
+    label: "Learnings",
     icon: <SchoolIcon />,
     children: [
       {
@@ -92,9 +93,9 @@ const menuItems: MenuItem[] = [
 const otherMenuItems: MenuItem[] = [
   {
     id: "target-audience",
-    label: "Target Audience",
+    label: "Members",
     icon: <TargetAudienceIcon />,
-    path: "/admin/users",
+    path: "/admin/users/single-upload",
   },
   {
     id: "analytics",
@@ -125,7 +126,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { hasFeatureAccess } = useFeatureAccess();
-  const [expandedItems, setExpandedItems] = useState<string[]>(["learnings"]);
+  const [expandedItems, setExpandedItems] = useState<string[]>([
+    "target-audience",
+  ]);
 
   const filteredMenuItems = menuItems.filter(
     (item) => hasFeatureAccess(item.feature) || !item.feature
@@ -136,6 +139,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   );
 
   const handleItemClick = (item: MenuItem) => {
+    // Only allow Target Audience to be clickable
+    if (item.id !== "target-audience") {
+      return; // Prevent interaction with disabled items
+    }
+
     if (item.children) {
       const isExpanded = expandedItems.includes(item.id);
       if (isExpanded) {
@@ -143,6 +151,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       } else {
         setExpandedItems([...expandedItems, item.id]);
       }
+      // Don't navigate if item has children - only toggle dropdown
+      return;
     } else if (item.path) {
       navigate(item.path);
     }
@@ -153,12 +163,29 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   };
 
   const isActiveItem = (path?: string) => {
-    return path && location.pathname === path;
+    // Only allow Target Audience sub-items to be active
+    if (
+      path &&
+      (path.includes("/admin/users/single-upload") ||
+        path.includes("/admin/users/bulk-upload"))
+    ) {
+      return path && location.pathname === path;
+    }
+    return false; // Disable all other menu items
+  };
+
+  const isItemDisabled = (item: MenuItem) => {
+    // Only Target Audience is enabled, everything else is disabled
+    return item.id !== "target-audience";
   };
 
   const isActiveParent = (item: MenuItem) => {
     if (item.children) {
-      return item.children.some((child) => location.pathname === child.path);
+      // Only Target Audience should be active, others are disabled
+      if (item.id === "target-audience") {
+        return true;
+      }
+      return false; // Disable all other menu items with children
     }
     return false;
   };
@@ -169,6 +196,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     }
     const isExpanded = expandedItems.includes(item.id);
     const isActive = isActiveItem(item.path) || isActiveParent(item);
+    const isDisabled = isItemDisabled(item);
 
     const accessibleChildren = item.children?.filter(
       (child) => !child.feature || hasFeatureAccess(child.feature)
@@ -192,26 +220,44 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 disablePadding
                 sx={{
                   backgroundColor: isActive
-                    ? "rgba(37, 37, 37, 1)"
-                    : "background.default",
-                  borderRadius: "4px",
+                    ? "rgba(255, 255, 255, 0.9)"
+                    : "transparent",
+                  borderRadius: "8px",
+                  mb: 1,
                 }}
               >
                 <ListItemButton
                   onClick={() => handleItemClick(item)}
+                  disabled={isDisabled}
                   sx={{
                     minHeight: 48,
-                    borderRadius: "4px",
+                    borderRadius: "8px",
                     px: 2.5,
                     backgroundColor: isActive
-                      ? "rgba(37, 37, 37, 1)"
-                      : "transparent",
-                    boxShadow: " 0px 3.5px 5.5px 0px rgba(0, 0, 0, 0.02)",
-                    color: isActive ? "primary.main" : "text.primary",
+                      ? "rgba(255, 255, 255, 0.9)"
+                      : "rgba(255, 255, 255, 0.1)",
+                    backdropFilter: "blur(10px)",
+                    border: isActive
+                      ? "1px solid rgba(160, 74, 212, 0.3)"
+                      : "1px solid rgba(255, 255, 255, 0.2)",
+                    color: isDisabled
+                      ? "rgba(107, 33, 168, 0.5)"
+                      : isActive
+                      ? "#6B21A8"
+                      : "#FFFFFF",
                     "&:hover": {
-                      backgroundColor: isActive
-                        ? "rgba(37, 37, 37, 1)"
-                        : "rgba(150, 255, 67, 0.08)",
+                      backgroundColor: isDisabled
+                        ? "rgba(255, 255, 255, 0.1)"
+                        : isActive
+                        ? "rgba(255, 255, 255, 0.95)"
+                        : "rgba(255, 255, 255, 0.2)",
+                      border: isDisabled
+                        ? "1px solid rgba(255, 255, 255, 0.2)"
+                        : "1px solid rgba(160, 74, 212, 0.4)",
+                    },
+                    "&.Mui-disabled": {
+                      opacity: 0.6,
+                      cursor: "not-allowed",
                     },
                     mx: 1,
                     mb: 0.5,
@@ -226,22 +272,19 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      borderRadius: "2px",
-                      bgcolor: isActive
-                        ? "primary.main"
-                        : "rgba(37, 37, 37, 1)",
+                      borderRadius: "6px",
+                      bgcolor: isDisabled
+                        ? "rgba(107, 33, 168, 0.2)"
+                        : isActive
+                        ? "#A04AD4"
+                        : "rgba(255, 255, 255, 0.3)",
                     }}
                   >
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
-                        fontSize: "14px",
-                        color: isActive
-                          ? "rgba(13, 13, 13, 1)"
-                          : "primary.main",
-                        "& svg": {
-                          fontSize: "15px",
-                        },
+                        fontSize: "20px",
+                        color: "#FFFFFF",
                       }}
                     >
                       {item.icon}
@@ -251,7 +294,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     primary={
                       <Box display="flex" alignItems="center">
                         {item.label}
-                        {item.isNewFeature && (
+                        {/* {item.isNewFeature && (
                           <Box
                             component="span"
                             sx={{
@@ -268,7 +311,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                           >
                             NEW
                           </Box>
-                        )}
+                        )} */}
                       </Box>
                     }
                     sx={{
@@ -294,27 +337,19 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <ListItem
               disablePadding
               sx={{
-                backgroundColor: isActive
-                  ? "rgba(37, 37, 37, 1)"
-                  : "background.default",
-                borderRadius: "4px",
+                // borderRadius: "8px",
+                mb: 1,
               }}
             >
               <ListItemButton
                 onClick={() => handleItemClick(item)}
+                // disabled={isDisabled}
                 sx={{
                   minHeight: 48,
-                  borderRadius: "4px",
                   px: 2.5,
-                  backgroundColor: isActive
-                    ? "rgba(37, 37, 37, 1)"
-                    : "transparent",
-                  boxShadow: " 0px 3.5px 5.5px 0px rgba(0, 0, 0, 0.02)",
-                  color: isActive ? "primary.main" : "text.primary",
-                  "&:hover": {
-                    backgroundColor: isActive
-                      ? "rgba(37, 37, 37, 1)"
-                      : "rgba(150, 255, 67, 0.08)",
+                  color: "black",
+                  "&.Mui-disabled": {
+                    cursor: "not-allowed",
                   },
                   mx: 1,
                   mb: 0.5,
@@ -322,24 +357,23 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               >
                 <Box
                   sx={{
-                    width: "30px",
-                    height: "30px",
-                    mr: 2,
-                    p: "7.5px",
+                    backgroundColor: "black",
+                    width: 40,
+                    height: 40,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: "2px",
-                    bgcolor: isActive ? "primary.main" : "rgba(37, 37, 37, 1)",
+                    mr: 1.5,
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: isActive ? "rgba(13, 13, 13, 1)" : "primary.main",
+                      color: "#FFFFFF",
                       "& svg": {
-                        fontSize: "15px",
+                        fontSize: "20px",
                       },
                     }}
                   >
@@ -378,19 +412,20 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       pr: 2.5,
                       height: 32,
                       backgroundColor: isActiveItem(child.path)
-                        ? "rgba(37, 37, 37, 1)"
-                        : "transparent",
-                      color: isActiveItem(child.path)
-                        ? "primary.main"
-                        : "text.secondary",
+                        ? "rgba(255, 255, 255, 0.8)"
+                        : "rgba(255, 255, 255, 0.05)",
+                      color: isActiveItem(child.path) ? "#6B21A8" : "#FFFFFF",
                       "&:hover": {
                         backgroundColor: isActiveItem(child.path)
-                          ? "rgba(37, 37, 37, 1)"
-                          : "rgba(37, 37, 37, 1)",
+                          ? "rgba(255, 255, 255, 0.9)"
+                          : "rgba(255, 255, 255, 0.15)",
                       },
                       borderRadius: 1,
-                      mx: 1,
+                      mx: 2,
                       mb: 0.5,
+                      border: isActiveItem(child.path)
+                        ? "1px solid rgba(160, 74, 212, 0.3)"
+                        : "1px solid rgba(255, 255, 255, 0.1)",
                     }}
                   >
                     <ListItemIcon
@@ -398,8 +433,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                         minWidth: 0,
                         mr: 2,
                         color: isActiveItem(child.path)
-                          ? "#000000"
-                          : "text.secondary",
+                          ? "#6B21A8"
+                          : "rgba(255, 255, 255, 0.8)",
                       }}
                     ></ListItemIcon>
                     <ListItemText
@@ -421,13 +456,17 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     );
   };
 
+  const theme = useTheme();
+
   const drawerContent = (
     <Box
       sx={{
         width: DRAWER_WIDTH,
         overflowX: "hidden",
         height: "100%",
-        backgroundColor: "background.default",
+        background: "#EACDFC",
+        border: `1px solid ${theme.palette.primary.main}`,
+        boxShadow: "5px 0px 90px 11px #CD7BFF inset",
       }}
     >
       {/* Logo */}
@@ -437,25 +476,27 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
       <Box
         flex={1}
-        mx={"16px"}
+        mx={"8px"}
         height={"1px"}
         mb={"20px"}
         sx={{
           background:
-            "linear-gradient(90deg, rgba(224, 225, 226, 0) 0%, #E0E1E2 49.52%, rgba(224, 225, 226, 0.15625) 99.04%)",
+            "linear-gradient(90deg, rgba(205, 123, 255, 0.3) 0%, #A04AD4 49.52%, rgba(205, 123, 255, 0.3) 99.04%)",
         }}
-      ></Box>
+      />
 
       {/* Main Menu Items */}
       <List sx={{ px: 1 }}> {filteredMenuItems.map(renderMenuItem)}</List>
 
       {/* Divider and Other Section */}
-      <Box sx={{ px: 3, pt: 3, pb: 1 }}>
+      <Box sx={{ px: 5, pt: 3, pb: 1 }}>
         <Typography
           variant="overline"
           sx={{
             fontSize: "12px",
-            fontWeight: 500,
+            fontWeight: 600,
+            color: "black",
+            letterSpacing: "0.5px",
           }}
         >
           OTHER
@@ -478,7 +519,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           width: DRAWER_WIDTH,
           boxSizing: "border-box",
           backgroundColor: "background.default",
-          borderRight: "1px solid rgba(255, 255, 255, 0.12)",
+          borderRight: "1px solid rgba(160, 74, 212, 0.12)",
         },
       }}
     >

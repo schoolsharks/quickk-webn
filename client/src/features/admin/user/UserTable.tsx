@@ -16,6 +16,12 @@ export interface UserData {
   companyMail: string;
   contact: string;
   learningStreak: number;
+  chapter?: string;
+  businessName?: string;
+  instagram?: string;
+  facebook?: string;
+  businessCategory?: string;
+  specialisation?: string;
 }
 
 export interface UserTableProps {
@@ -35,6 +41,10 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
       companyMail: user.companyMail,
       contact: user.contact,
       learningStreak: user.learningStreak,
+      chapter: user.chapter || "",
+      businessName: user.businessName || "",
+      businessCategory: user.businessCategory || "",
+      specialisation: user.specialisation || "",
       originalData: user,
     };
   });
@@ -44,10 +54,10 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
     {
       id: "name",
       label: "Name",
-      minWidth: 180,
+      minWidth: 150,
       align: "left",
       format: (value: string) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
           {value}
         </Typography>
       ),
@@ -55,10 +65,10 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
     {
       id: "companyMail",
       label: "Company Email",
-      minWidth: 220,
+      minWidth: 200,
       align: "left",
       format: (value: string) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
           {value}
         </Typography>
       ),
@@ -66,11 +76,44 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
     {
       id: "contact",
       label: "Contact",
-      minWidth: 140,
+      minWidth: 120,
       align: "left",
       format: (value: string) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
           {value}
+        </Typography>
+      ),
+    },
+    {
+      id: "businessName",
+      label: "Business Name",
+      minWidth: 150,
+      align: "left",
+      format: (value: string) => (
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
+          {value || "-"}
+        </Typography>
+      ),
+    },
+    {
+      id: "businessCategory",
+      label: "Category",
+      minWidth: 130,
+      align: "left",
+      format: (value: string) => (
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
+          {value || "-"}
+        </Typography>
+      ),
+    },
+    {
+      id: "chapter",
+      label: "Chapter",
+      minWidth: 120,
+      align: "left",
+      format: (value: string) => (
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
+          {value || "-"}
         </Typography>
       ),
     },
@@ -82,7 +125,7 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
       format: (value: number) => (
         <Typography
           sx={{
-            color: value > 0 ? "#10B981" : "#9CA3AF",
+            // color: value > 0 ? "#10B981" : "#9CA3AF",
             fontSize: "14px",
             fontWeight: value > 0 ? "bold" : "normal",
           }}
@@ -118,15 +161,15 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
 
   if (isLoading) {
     return (
-      <Box sx={{ background: "black", p: "24px 28px" }}>
-        <Typography sx={{ color: "white" }}>Loading users...</Typography>
+      <Box sx={{ background: "white", p: "24px 28px" }}>
+        <Typography sx={{ color: "black" }}>Loading users...</Typography>
       </Box>
     );
   }
 
   return (
     <GlobalTable
-      title="Users"
+      title="Members"
       columns={columns}
       data={transformedData}
       showActions={true}

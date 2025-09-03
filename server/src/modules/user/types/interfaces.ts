@@ -9,14 +9,21 @@ export interface IUser {
     avatarSelected: boolean;
     address?: string;
     contact?: string;
-    
-    // New fields
-    time?: number; // Assuming this is a duration in minutes
+
+    time?: number;
     totalStars: number;
     redeemedStars: number;
     learningStreak: number;
     lastLearningActivity: Date;
     level: number;
+
+    // webn specific fields 
+    chapter?: string;
+    businessName?: string;
+    instagram?: string;
+    facebook?: string;
+    businessCategory?: string;
+    specialisation?: string;
 }
 
 export interface IAvatar {

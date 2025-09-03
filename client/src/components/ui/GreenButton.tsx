@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { Box, SxProps } from "@mui/material";
+import { Box, SxProps, useTheme } from "@mui/material";
 
 interface GreenButtonProps {
   onClick: () => void;
@@ -19,8 +19,9 @@ const GreenButton: React.FC<GreenButtonProps> = ({
   sx = {},
   startIcon, // Destructure startIcon
 }) => {
+  const theme = useTheme();
   return (
-    <Box 
+    <Box
       sx={{
         position: "relative",
         display: "inline-block",
@@ -35,12 +36,12 @@ const GreenButton: React.FC<GreenButtonProps> = ({
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "primary.main",
+          backgroundColor: theme.palette.primary.light,
           borderRadius: "2px",
           zIndex: 0,
         }}
       />
-      
+
       {/* Main white button */}
       <Button
         variant="contained"

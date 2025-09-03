@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Alert } from "@mui/material";
+import { Box, Typography, Alert, useTheme } from "@mui/material";
 import { useAddEditUserMutation } from "../service/adminApi";
 import FormBuilder, { FieldConfig } from "../../../components/ui/FromBuilder";
 import GreenButton from "../../../components/ui/GreenButton";
@@ -12,6 +12,12 @@ export interface UserFormData {
   name: string;
   contact: string;
   address: string;
+  chapter: string;
+  businessName: string;
+  instagram: string;
+  facebook: string;
+  businessCategory: string;
+  specialisation: string;
 }
 
 // Props interface for the component
@@ -30,6 +36,12 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
     name: "",
     contact: "",
     address: "",
+    chapter: "",
+    businessName: "",
+    instagram: "",
+    facebook: "",
+    businessCategory: "",
+    specialisation: "",
   });
 
   // Alert state for success/error messages
@@ -53,6 +65,12 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         name: userData.name === "New User" ? "" : userData.name || "",
         contact: userData.contact || "",
         address: userData.address || "",
+        chapter: userData.chapter || "",
+        businessName: userData.businessName || "",
+        instagram: userData.instagram || "",
+        facebook: userData.facebook || "",
+        businessCategory: userData.businessCategory || "",
+        specialisation: userData.specialisation || "",
       });
     }
   }, [userData]);
@@ -98,6 +116,48 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
       required: true,
       placeholder: "Enter address",
       rows: 3,
+    },
+    {
+      name: "chapter",
+      label: "Chapter",
+      type: "text",
+      required: false,
+      placeholder: "Enter chapter name",
+    },
+    {
+      name: "businessName",
+      label: "Business Name",
+      type: "text",
+      required: false,
+      placeholder: "Enter business name",
+    },
+    {
+      name: "instagram",
+      label: "Instagram Handle",
+      type: "text",
+      required: false,
+      placeholder: "Enter Instagram handle (e.g., @username)",
+    },
+    {
+      name: "facebook",
+      label: "Facebook Profile/Page",
+      type: "text",
+      required: false,
+      placeholder: "Enter Facebook URL",
+    },
+    {
+      name: "businessCategory",
+      label: "Business Category",
+      type: "text",
+      required: false,
+      placeholder: "Enter business category",
+    },
+    {
+      name: "specialisation",
+      label: "Specialisation",
+      type: "text",
+      required: false,
+      placeholder: "Enter area of specialisation",
     },
   ];
 
@@ -172,6 +232,12 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         name: formData.name,
         contact: formData.contact,
         address: formData.address,
+        chapter: formData.chapter,
+        businessName: formData.businessName,
+        instagram: formData.instagram,
+        facebook: formData.facebook,
+        businessCategory: formData.businessCategory,
+        specialisation: formData.specialisation,
       })
         .unwrap()
         .then(() => {
@@ -194,21 +260,20 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
       });
     }
   };
-
+  const theme = useTheme();
   return (
     <Box
       sx={{
-        background: "black",
         minHeight: "100vh",
         p: 4,
       }}
     >
       <Box
         sx={{
-          maxWidth: 600,
+          maxWidth: "80vw",
           mx: "auto",
-          backgroundColor: "#1a1a1a",
-          borderRadius: 2,
+          backgroundColor: theme.palette.text.secondary,
+          borderRadius: 0,
           p: 4,
         }}
       >
@@ -250,7 +315,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
           data={formData}
           onChange={handleFieldChange}
           containerStyle={{
-            backgroundColor: "#1a1a1a",
+            backgroundColor: theme.palette.text.secondary,
           }}
         />
 

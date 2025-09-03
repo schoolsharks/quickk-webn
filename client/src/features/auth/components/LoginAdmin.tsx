@@ -1,12 +1,20 @@
 import { useState } from "react";
-import GlobalButton from "../../../components/ui/button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { RootState } from "../../../app/store";
 import { useSelector } from "react-redux";
-import { Box, Stack, TextField, Typography, Alert, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  TextField,
+  Typography,
+  Alert,
+  Button,
+  useTheme,
+} from "@mui/material";
 import { useLoginAdminMutation } from "../../admin/service/adminApi";
-import logo from "../../../assets/images/header/logo.png";
+import logo from "../../../assets/images/header/logo.webp";
+import GreenButton from "../../../components/ui/GreenButton";
 
 const LoginAdmin = () => {
   const { isAuthenticated, role } = useSelector(
@@ -43,7 +51,7 @@ const LoginAdmin = () => {
       setLoginError("");
       const result = await login(formData).unwrap();
       if (result) {
-        navigate("/admin/impact-dashboard");
+        navigate("/admin/users");
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;
@@ -57,7 +65,7 @@ const LoginAdmin = () => {
   const handleSignup = () => {
     navigate("/admin/onboarding");
   };
-
+  const theme = useTheme();
   if (isAuthenticated && role === "ADMIN") {
     return <Navigate to="/admin/dashboard" />;
   }
@@ -69,23 +77,23 @@ const LoginAdmin = () => {
       alignItems="center"
       justifyContent="center"
       sx={{
-        bgcolor: "#0E0E0E",
+        bgcolor: "#F7F0FB",
       }}
     >
       <Box
         sx={{
-          bgcolor: "#181818",
+          bgcolor: "#CD7BFF4D",
           px: 6,
           py: 5,
           minWidth: 400,
           maxWidth: 620,
           width: "100%",
-          boxShadow: "0 8px 32px 0 rgba(150, 255, 67, 0.2)", 
-          border: "1.5px solid #232323",
+          border: `2px solid ${theme.palette.primary.main}`,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           position: "relative",
+          color: "black",
         }}
       >
         {/* Logo */}
@@ -96,14 +104,13 @@ const LoginAdmin = () => {
         <Typography
           fontWeight={700}
           fontSize="2rem"
-          color="#fff"
           mb={1}
           textAlign="center"
           letterSpacing={1}
         >
           Admin Login
         </Typography>
-        <Typography fontSize="1rem" color="#bdbdbd" mb={3} textAlign="center">
+        <Typography fontSize="1rem" mb={3} textAlign="center">
           Welcome back, Admin! Please sign in to continue.
         </Typography>
 
@@ -123,7 +130,7 @@ const LoginAdmin = () => {
           </Alert>
         )}
 
-        <Stack gap={3} sx={{ width: "100%" }}>
+        <Stack gap={3} sx={{ width: "100%" }} mb={4}>
           <TextField
             name="adminEmail"
             placeholder="Admin email address*"
@@ -135,6 +142,7 @@ const LoginAdmin = () => {
             sx={{
               "& .MuiInputBase-root": {
                 borderRadius: "0",
+                color: theme.palette.primary.main,
               },
             }}
           />
@@ -149,64 +157,54 @@ const LoginAdmin = () => {
             sx={{
               "& .MuiInputBase-root": {
                 borderRadius: "0",
+                color: theme.palette.primary.main,
               },
             }}
           />
         </Stack>
 
-        <GlobalButton
-          onClick={handleLogin}
-          disabled={isLoading}
-          sx={{
-            mt: 4,
-            width: "100%",
-            fontWeight: 600,
-            fontSize: "1.1rem",
-            bgcolor: "#7ED957", // softer green
-            color: "#181818",
-            borderRadius: 2,
-            boxShadow: "0 2px 8px 0 rgba(126,217,87,0.10)", // match button shadow
-            "&:hover": {
-              bgcolor: "#6FC24A", // slightly darker on hover
-            },
-          }}
+        <Box
+          width={"100%"}
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
         >
-          {isLoading ? "Logging in..." : "Login"}
-        </GlobalButton>
-
-        {/* Signup Section */}
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="center"
-          spacing={1}
-          sx={{ mt: 3, width: "100%" }}
-        >
-          <Typography color="#bdbdbd" fontSize="1rem">
-            Don't have an account?
-          </Typography>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={handleSignup}
-            sx={{
-              borderColor: "#7ED957",
-              color: "#7ED957",
-              fontWeight: 600,
-              borderRadius: 2,
-              textTransform: "none",
-              px: 2,
-              py: 0.5,
-              "&:hover": {
-                bgcolor: "#232323",
-                borderColor: "#6FC24A",
-                color: "#6FC24A",
-              },
-            }}
+          <GreenButton
+            onClick={handleLogin}
+            disabled={isLoading}
+            sx={{ width: "150px" }}
           >
-            Sign Up
-          </Button>
-        </Stack>
+            {isLoading ? "Logging in..." : "Login"}
+          </GreenButton>
+          {/* Signup Section */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-end"
+            spacing={2}
+            sx={{ width: "100%" }}
+          >
+            <Typography color="black" fontSize="1rem">
+              Don't have an account?
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={handleSignup}
+              sx={{
+                borderColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
+                fontWeight: 600,
+                borderRadius: 2,
+                textTransform: "none",
+                px: 2,
+                py: 0.5,
+              }}
+            >
+              Sign Up
+            </Button>
+          </Stack>
+        </Box>
       </Box>
     </Box>
   );

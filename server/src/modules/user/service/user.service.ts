@@ -238,6 +238,12 @@ class UserService {
                         name: userData.name,
                         address: userData.address,
                         contact: userData.contact,
+                        chapter: userData.chapter,
+                        businessName: userData.businessName,
+                        instagram: userData.instagram,
+                        facebook: userData.facebook,
+                        businessCategory: userData.businessCategory,
+                        specialisation: userData.specialisation,
                     },
                 },
                 { new: true, runValidators: true }
@@ -316,6 +322,125 @@ class UserService {
             }
         } catch (error) {
             throw new AppError('Error deleting user.', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async bulkCreateUsers(users: any[], companyId: string) {
+        try {
+            const results = {
+                success: true,
+                totalRows: users.length,
+                successfullyCreated: 0,
+                errors: [] as any[],
+                duplicates: [] as any[]
+            };
+
+            // Get company ObjectId
+            const company = await Company.findById(companyId);
+            if (!company) {
+                return {
+                    success: false,
+                    message: "Company not found"
+                };
+            }
+
+            // Process each user
+            for (let i = 0; i < users.length; i++) {
+                const userData = users[i];
+                const rowNumber = i + 1;
+
+                try {
+                    // Validate required fields
+                    if (!userData.name || !userData.companyMail) {
+                        results.errors.push({
+                            row: rowNumber,
+                            data: userData,
+                            error: "Name and Company Email are required"
+                        });
+                        continue;
+                    }
+
+                    // Validate email format
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(userData.companyMail)) {
+                        results.errors.push({
+                            row: rowNumber,
+                            data: userData,
+                            error: "Invalid email format"
+                        });
+                        continue;
+                    }
+
+                    // Validate contact if provided
+                    if (userData.contact && !/^\d{10}$/.test(userData.contact)) {
+                        results.errors.push({
+                            row: rowNumber,
+                            data: userData,
+                            error: "Contact number must be exactly 10 digits"
+                        });
+                        continue;
+                    }
+
+                    // Check if user already exists
+                    const existingUser = await User.findOne({
+                        companyMail: userData.companyMail,
+                        company: company._id
+                    });
+
+                    if (existingUser) {
+                        results.duplicates.push({
+                            row: rowNumber,
+                            data: userData,
+                            existingUser: {
+                                _id: existingUser._id,
+                                name: existingUser.name,
+                                companyMail: existingUser.companyMail
+                            }
+                        });
+                        continue;
+                    }
+
+                    // Create new user
+                    const newUser = new User({
+                        name: userData.name.trim(),
+                        companyMail: userData.companyMail.trim().toLowerCase(),
+                        contact: userData.contact?.trim() || '',
+                        address: userData.address?.trim() || '',
+                        chapter: userData.chapter?.trim() || '',
+                        businessName: userData.businessName?.trim() || '',
+                        instagram: userData.instagram?.trim() || '',
+                        facebook: userData.facebook?.trim() || '',
+                        businessCategory: userData.businessCategory?.trim() || '',
+                        specialisation: userData.specialisation?.trim() || '',
+                        company: company._id,
+                        learningStreak: 0,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    });
+
+                    await newUser.save();
+                    results.successfullyCreated++;
+
+                } catch (error: any) {
+                    results.errors.push({
+                        row: rowNumber,
+                        data: userData,
+                        error: error.message || "Failed to create user"
+                    });
+                }
+            }
+
+            // Set overall success based on whether we had any successful creations
+            results.success = results.successfullyCreated > 0;
+
+            return results;
+
+        } catch (error: any) {
+            console.error("Error in bulk user creation:", error);
+            return {
+                success: false,
+                message: error.message || "Failed to process bulk upload"
+            };
         }
     }
 

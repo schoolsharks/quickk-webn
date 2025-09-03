@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useLazyFetchAdminQuery } from "../../features/admin/service/adminApi";
 import { Roles } from "../../features/auth/authSlice";
-import OnboardingMain from "../../features/onboarding/pages/OnboardingMain";
+// import OnboardingMain from "../../features/onboarding/pages/OnboardingMain";
 import QuickkAiPage from "./QuickkAiPage";
 import UserPage from "./UserPage";
 import ReviewUserPage from "./ReviewUserPage";
@@ -25,6 +25,7 @@ import { FeatureKeys } from "../../features/onboarding/Types/features";
 // import RouteGuard from "../../features/onboarding/components/RouteGuard";
 import { setPreferences } from "../../features/onboarding/api/onboardingSlice";
 import { useDispatch } from "react-redux";
+import BulkUserUploadPage from "./BulkUserUploadPage";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -82,7 +83,7 @@ const AdminMain: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginAdmin />} />
-      <Route path="/onboarding" element={<OnboardingMain />} />
+      {/* <Route path="/onboarding" element={<OnboardingMain />} /> */}
       <Route path="/login" element={<LoginAdmin />} />
       <Route
         path="/"
@@ -97,7 +98,7 @@ const AdminMain: React.FC = () => {
               sx={{
                 display: "flex",
                 minHeight: "100vh",
-                backgroundColor: "background.default",
+                backgroundColor: "#F7F0FB",
               }}
             >
               <AdminSidebar />
@@ -105,8 +106,9 @@ const AdminMain: React.FC = () => {
                 component="main"
                 sx={{
                   flexGrow: 1,
-                  backgroundColor: "rgba(37, 37, 37, 1)",
+                  backgroundColor: "#F7F0FB",
                   minHeight: "100vh",
+                  color: "black",
                 }}
               >
                 <BreadcrumbHeader />
@@ -186,6 +188,10 @@ const AdminMain: React.FC = () => {
 
                   {/* Users Routes */}
                   <Route path="/users" element={<UserPage />} />
+                  <Route
+                    path="/users/bulk-upload"
+                    element={<BulkUserUploadPage />}
+                  />
                   <Route path="/user/:userId" element={<ReviewUserPage />} />
 
                   <Route
@@ -200,11 +206,11 @@ const AdminMain: React.FC = () => {
                   <Route path="/settings" element={<Settings />} />
                   <Route
                     path="/"
-                    element={<Navigate to="/admin/impact-dashboard" replace />}
+                    element={<Navigate to="/admin/users" replace />}
                   />
                   <Route
                     path="*"
-                    element={<Navigate to="/admin/impact-dashboard" replace />}
+                    element={<Navigate to="/admin/users" replace />}
                   />
                 </Routes>
                 {/* </RouteGuard> */}

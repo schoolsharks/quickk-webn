@@ -39,7 +39,7 @@ const UserLayout: React.FC = () => {
   const { data: regularData, isLoading: regularLoading } =
     useGetAllUsersTableDataQuery({ skip: shouldUseSearch });
 
-  const currentData = shouldUseSearch ? searchData?.data  : regularData;
+  const currentData = shouldUseSearch ? searchData?.data : regularData;
   const isLoading = shouldUseSearch ? searchLoading : regularLoading;
 
   return (

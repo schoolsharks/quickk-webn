@@ -47,7 +47,28 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
     level: {
         type: Number,
         default: 1
-    }
+    },
+    // webn specific fields
+    chapter: {
+        type: String,
+    },
+    businessName: {
+        type: String,
+    },
+    instagram: {
+        type: String,
+    },
+    facebook: {
+        type: String,
+    },
+    businessCategory: {
+        type: String,
+    },
+    specialisation: {
+        type: String,
+    },
+}, {
+    timestamps: true
 });
 
 // userSchema.path('contact').validate((value: string) => {

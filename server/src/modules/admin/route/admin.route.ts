@@ -235,6 +235,13 @@ router.post(
     asyncHandeler(UserControllers.addEditUser)
 );
 
+router.post(
+    '/bulkUploadUsers',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(UserControllers.bulkUploadUsers)
+);
+
 router.get(
     '/getUserById/:userId',
     authenticateUser,

@@ -78,6 +78,12 @@ export const getAllUsersTableData = async (
             companyMail: user.companyMail,
             contact: user.contact,
             learningStreak: user.learningStreak,
+            chapter: user.chapter,
+            businessName: user.businessName,
+            instagram: user.instagram,
+            facebook: user.facebook,
+            businessCategory: user.businessCategory,
+            specialisation: user.specialisation,
         }));
 
         res.status(StatusCodes.OK).json(filteredUsers);
@@ -111,6 +117,12 @@ export const addEditUser = async (req: Request, res: Response) => {
             name: userDetails.name,
             contact: userDetails.contact,
             address: userDetails.address,
+            chapter: userDetails.chapter,
+            businessName: userDetails.businessName,
+            instagram: userDetails.instagram,
+            facebook: userDetails.facebook,
+            businessCategory: userDetails.businessCategory,
+            specialisation: userDetails.specialisation,
         };
 
         const result = await userService.AddEditUser(userData);
@@ -251,6 +263,42 @@ export const getActiveUsersStats = async (
     } catch (error) {
         console.error("Error fetching active users stats:", error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: "Internal Server Error",
+        });
+    }
+};
+
+export const bulkUploadUsers = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const { users } = req.body;
+        const companyId = req.user?.companyId;
+
+        if (!users || !Array.isArray(users)) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: "Users array is required",
+            });
+            return;
+        }
+
+        if (!companyId) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: "Company ID is required",
+            });
+            return;
+        }
+
+        const result = await userService.bulkCreateUsers(users, companyId);
+
+        res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+        console.error("Error in bulk upload:", error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            success: false,
             message: "Internal Server Error",
         });
     }

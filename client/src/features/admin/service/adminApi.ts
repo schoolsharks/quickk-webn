@@ -111,6 +111,15 @@ export const adminApi = api.injectEndpoints({
             invalidatesTags: ["AdminUser"],
         }),
 
+        bulkUploadUsers: builder.mutation({
+            query: (users) => ({
+                url: '/admin/bulkUploadUsers',
+                method: 'POST',
+                body: { users },
+            }),
+            invalidatesTags: ["AdminUser"],
+        }),
+
         createBlankUser: builder.mutation({
             query: () => ({
                 url: '/admin/createBlankUser',
@@ -165,6 +174,7 @@ export const {
     useCheckAdminEmailExistsMutation,
     useGetAllUsersTableDataQuery,
     useAddEditUserMutation,
+    useBulkUploadUsersMutation,
     useGetUserByIdQuery,
     useCreateBlankUserMutation,
     useDeleteUserByIdMutation,

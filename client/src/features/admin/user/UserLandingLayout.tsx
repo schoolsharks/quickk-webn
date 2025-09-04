@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import UserToolbar from "./UserToolbar";
 import UserTable from "./UserTable";
+import UserFilterDrawer, { SortOption } from "./UserFilterDrawer";
 import {
   useGetAllUsersTableDataQuery,
   useSearchUsersQuery,
@@ -11,6 +12,8 @@ const UserLayout: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("recentActivity");
 
   // Debounce search term
   useEffect(() => {
@@ -42,15 +45,61 @@ const UserLayout: React.FC = () => {
   const currentData = shouldUseSearch ? searchData?.data : regularData;
   const isLoading = shouldUseSearch ? searchLoading : regularLoading;
 
+  // Sorting function
+  const sortUsers = (users: any[]) => {
+    if (!users) return [];
+    
+    return [...users].sort((a, b) => {
+      switch (sortBy) {
+        case "alphabetical":
+          return a.name.localeCompare(b.name);
+        
+        case "category":
+          const categoryA = a.businessCategory || "";
+          const categoryB = b.businessCategory || "";
+          if (!categoryA && categoryB) return 1; // Empty categories at bottom
+          if (categoryA && !categoryB) return -1;
+          return categoryA.localeCompare(categoryB);
+        
+        case "recentActivity":
+        default:
+          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+          return dateB - dateA; // Most recent first, empty dates last
+      }
+    });
+  };
+
+  const sortedData = sortUsers(currentData || []);
+
+  const handleFilterOpen = () => setFilterDrawerOpen(true);
+  const handleFilterClose = () => setFilterDrawerOpen(false);
+  const handleSortChange = (newSortBy: SortOption) => setSortBy(newSortBy);
+  const handleApplyFilter = () => setFilterDrawerOpen(false);
+
   return (
-    <Grid container p={"24px"} spacing={"24px"}>
-      <Grid size={12}>
-        <UserToolbar onSearchChange={setSearchTerm} searchValue={searchTerm} />
+    <>
+      <Grid container p={"24px"} spacing={"24px"}>
+        <Grid size={12}>
+          <UserToolbar 
+            onSearchChange={setSearchTerm} 
+            searchValue={searchTerm}
+            onFilterClick={handleFilterOpen}
+          />
+        </Grid>
+        <Grid size={12}>
+          <UserTable data={sortedData} isLoading={isLoading} />
+        </Grid>
       </Grid>
-      <Grid size={12}>
-        <UserTable data={currentData || []} isLoading={isLoading} />
-      </Grid>
-    </Grid>
+      
+      <UserFilterDrawer
+        open={filterDrawerOpen}
+        onClose={handleFilterClose}
+        sortBy={sortBy}
+        onSortChange={handleSortChange}
+        onApply={handleApplyFilter}
+      />
+    </>
   );
 };
 

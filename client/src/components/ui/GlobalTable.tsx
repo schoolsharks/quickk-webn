@@ -101,8 +101,8 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
   return (
     <Box
       sx={{
-        // backgroundColor: "#eacdfc",
-        bgcolor: "#eacdfc",
+        // backgroundColor: "white",
+        bgcolor: "white",
         border: `1px solid ${theme.palette.primary.main}`,
       }}
       p={"24px 28px"}
@@ -145,7 +145,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     sx={{
                       py: "10px",
                       borderBottom: "1px solid black",
-                      backgroundColor: "#eacdfc",
+                      backgroundColor: "white",
                       color: "black",
                       fontWeight: 500,
                       fontSize: "10px",
@@ -159,7 +159,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     align="center"
                     sx={{
                       py: "10px",
-                      backgroundColor: "#eacdfc",
+                      backgroundColor: "white",
                       color: "black",
                       fontWeight: 500,
                       fontSize: "10px",
@@ -179,7 +179,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                       key={column.id}
                       align={column.align}
                       sx={{
-                        backgroundColor: "#eacdfc",
+                        backgroundColor: "white",
                         // "& .MuiTableCell-root" :{
                         //   borderBottom: "1px solid balck",
                         // }
@@ -193,7 +193,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     <TableCell
                       align="center"
                       sx={{
-                        backgroundColor: "#eacdfc",
+                        backgroundColor: "white",
                         borderBottom: "1px solid black",
                       }}
                     >

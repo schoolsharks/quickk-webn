@@ -14,10 +14,12 @@ import { useNavigate } from "react-router-dom";
 interface UserToolbarProps {
   onSearchChange: (value: string) => void;
   searchValue: string;
+  onFilterClick: () => void;
 }
 
 const UserToolbar: React.FC<UserToolbarProps> = ({
   onSearchChange,
+  onFilterClick,
   // searchValue,
 }) => {
   const theme = useTheme();
@@ -36,7 +38,7 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
   // };
 
   const handleBulkUpload = () => {
-    navigate("/admin/users/bulk-upload");
+    navigate("/admin/users/new-members");
   };
 
   return (
@@ -64,7 +66,7 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
         />
       </Box>
       <Box display={"flex"} gap={"18px"} color={theme.palette.primary.light}>
-        <IconButton onClick={() => {}} sx={{ gap: 1 }}>
+        <IconButton onClick={onFilterClick} sx={{ gap: 1 }}>
           <FilterList sx={{ color: theme.palette.primary.light }} />
           <Typography
             variant="h3"

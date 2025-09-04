@@ -189,7 +189,7 @@ const AdminMain: React.FC = () => {
                   {/* Users Routes */}
                   <Route path="/users" element={<UserPage />} />
                   <Route
-                    path="/users/bulk-upload"
+                    path="/users/new-members"
                     element={<BulkUserUploadPage />}
                   />
                   <Route path="/user/:userId" element={<ReviewUserPage />} />

@@ -470,8 +470,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       }}
     >
       {/* Logo */}
-      <Box sx={{ p: "30px", mx: "auto", width: "max-content" }}>
+      <Box
+        sx={{
+          p: "30px",
+          mx: "auto",
+          width: "max-content",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          flexDirection: "column",
+        }}
+      >
         <Box component={"img"} width={"84px"} src={logo} alt="" />
+        <Typography variant="h5" fontWeight={500} color={"black"}>
+          WEBN
+        </Typography>
       </Box>
 
       <Box

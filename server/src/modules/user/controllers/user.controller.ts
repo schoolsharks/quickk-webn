@@ -84,6 +84,7 @@ export const getAllUsersTableData = async (
             facebook: user.facebook,
             businessCategory: user.businessCategory,
             specialisation: user.specialisation,
+            updatedAt: user.updatedAt || "",
         }));
 
         res.status(StatusCodes.OK).json(filteredUsers);

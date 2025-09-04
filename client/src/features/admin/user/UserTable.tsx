@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ export interface UserData {
   facebook?: string;
   businessCategory?: string;
   specialisation?: string;
+  updatedAt?: string;
 }
 
 export interface UserTableProps {
@@ -32,6 +33,15 @@ export interface UserTableProps {
 const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
   const [DeleteUserById] = useDeleteUserByIdMutation();
   const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [deletedUserName, setDeletedUserName] = useState("");
+
+  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   // Transform backend data to table format
   const transformedData = data?.map((user, index) => {
@@ -41,6 +51,7 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
       companyMail: user.companyMail,
       contact: user.contact,
       learningStreak: user.learningStreak,
+      activityStatus: user.learningStreak > 0,
       chapter: user.chapter || "",
       businessName: user.businessName || "",
       businessCategory: user.businessCategory || "",
@@ -119,7 +130,7 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
     },
     {
       id: "learningStreak",
-      label: "Learning Streak",
+      label: "Daily Streak",
       minWidth: 120,
       align: "center",
       format: (value: number) => (
@@ -132,6 +143,23 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
         >
           {value} days
         </Typography>
+      ),
+    },
+    {
+      id: "activityStatus",
+      label: "Status",
+      minWidth: 80,
+      align: "center",
+      format: (value: boolean) => (
+        <Box
+          sx={{
+            width: 12,
+            height: 12,
+            borderRadius: "50%",
+            backgroundColor: value ? "#10B981" : "#EF4444",
+            margin: "0 auto",
+          }}
+        />
       ),
     },
   ];
@@ -152,6 +180,8 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
       onClick: async (row) => {
         try {
           await DeleteUserById(row?.originalData._id).unwrap();
+          setDeletedUserName(row?.originalData.name || "User");
+          setSnackbarOpen(true);
         } catch (error) {
           console.log("Error deleting user:", error);
         }
@@ -168,14 +198,32 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
   }
 
   return (
-    <GlobalTable
-      title="Members"
-      columns={columns}
-      data={transformedData}
-      showActions={true}
-      maxHeight={600}
-      actionButtons={actionButtons}
-    />
+    <>
+      <GlobalTable
+        title="Webn Members Directory"
+        columns={columns}
+        data={transformedData}
+        showActions={true}
+        maxHeight={600}
+        actionButtons={actionButtons}
+      />
+      
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert 
+          onClose={handleSnackbarClose} 
+          severity="success" 
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {deletedUserName} has been deleted successfully!
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

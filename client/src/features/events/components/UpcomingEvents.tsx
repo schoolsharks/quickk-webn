@@ -16,8 +16,35 @@ import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { carouselSlide } from "../../../animation/variants/slideCarousel";
+import Loader from "../../../components/ui/Loader";
+import ErrorLayout from "../../../components/ui/Error";
+import { useGetUpcomingEventsQuery } from "../services/eventsApi";
+import formatEventTime from "../../../utils/formatEventTime";
 
-// Dummy data - replace with RTK Query later
+// API Response types
+interface ApiEvent {
+  _id: string;
+  title: string;
+  description: string;
+  eventImage: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  isVirtual: boolean;
+  virtualMeetingLink?: string;
+  ticketInfo: {
+    price: number;
+    currency: string;
+  };
+  sponsors: string[];
+  highlights: string[];
+  interestedCount: number;
+  attendedCount: number;
+  organizer: string;
+}
+
+// Component interfaces
 interface UpcomingEvent {
   id: string;
   date: string;
@@ -25,6 +52,7 @@ interface UpcomingEvent {
   description: string;
   location?: string;
   time?: string;
+  fullData: ApiEvent;
 }
 
 interface MonthEvents {
@@ -32,75 +60,6 @@ interface MonthEvents {
   year: number;
   events: UpcomingEvent[];
 }
-
-const dummyUpcomingEvents: MonthEvents[] = [
-  {
-    month: "September",
-    year: 2025,
-    events: [
-      {
-        id: "1",
-        date: "18th",
-        title: "Delhi Workshop",
-        description:
-          "A comprehensive workshop covering advanced topics in technology and innovation. This session will include hands-on activities and networking opportunities.",
-        location: "Delhi",
-        time: "10:00am - 5:00pm",
-      },
-      {
-        id: "2",
-        date: "21th",
-        title: "Goa Workshop",
-        description:
-          "Interactive learning session focused on practical applications and real-world scenarios. Perfect for professionals looking to enhance their skills.",
-        location: "Goa",
-        time: "2:00pm - 6:00pm",
-      },
-      {
-        id: "3",
-        date: "31th",
-        title: "Mumbai Workshop",
-        description:
-          "Interactive learning session focused on practical applications and real-world scenarios. Perfect for professionals looking to enhance their skills.",
-        location: "Mumbai",
-        time: "2:00pm - 6:00pm",
-      },
-    ],
-  },
-  {
-    month: "October",
-    year: 2025,
-    events: [
-      {
-        id: "3",
-        date: "5th",
-        title: "Bangalore",
-        description:
-          "Join fellow tech enthusiasts for an evening of knowledge sharing and collaboration. Features keynote speakers and panel discussions.",
-        location: "Bangalore",
-        time: "6:00pm - 9:00pm",
-      },
-      {
-        id: "4",
-        date: "12th",
-        title: "Professional",
-        description:
-          "Understanding career growth essentials and navigating professional challenges. Includes networking session and career guidance.",
-        location: "Pune",
-        time: "9:00am - 1:00pm",
-      },
-      {
-        id: "5",
-        date: "18th",
-        title: "Innovation",
-        description:
-          "Exploring the latest trends in technology and business innovation. Features industry leaders and startup showcases.",
-        location: "Hyderabad",
-        time: "8:00am - 6:00pm",
-      },
-    ],
-  },
-];
 
 interface UpcomingEventsProps {
   showScore?: boolean;
@@ -112,6 +71,75 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   const theme = useTheme();
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const sliderRef = React.useRef<Slider | null>(null);
+  const { data: EventData, isError, isLoading } = useGetUpcomingEventsQuery({});
+
+  // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
+  const getOrdinalSuffix = (day: number): string => {
+    if (day > 3 && day < 21) return "th";
+    switch (day % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+
+  // Transform API data to component format and group by month
+  const groupedEvents = React.useMemo(() => {
+    if (!EventData || !Array.isArray(EventData)) return [];
+
+    const grouped: { [key: string]: MonthEvents } = {};
+
+    EventData.forEach((apiEvent: ApiEvent) => {
+      const startDate = new Date(apiEvent.startDate);
+      const monthYear = `${startDate.toLocaleString("default", {
+        month: "long",
+      })}-${startDate.getFullYear()}`;
+
+      const transformedEvent: UpcomingEvent = {
+        id: apiEvent._id,
+        date:
+          startDate.getDate().toString() +
+          getOrdinalSuffix(startDate.getDate()),
+        title: apiEvent.title,
+        description: apiEvent.description,
+        location: apiEvent.location,
+        time: formatEventTime(apiEvent.startDate, apiEvent.endDate),
+        fullData: apiEvent,
+      };
+
+      if (!grouped[monthYear]) {
+        grouped[monthYear] = {
+          month: startDate.toLocaleString("default", { month: "long" }),
+          year: startDate.getFullYear(),
+          events: [],
+        };
+      }
+
+      grouped[monthYear].events.push(transformedEvent);
+    });
+
+    // Sort events within each month by date
+    Object.values(grouped).forEach((monthData) => {
+      monthData.events.sort((a, b) => {
+        const aDate = new Date(a.fullData.startDate);
+        const bDate = new Date(b.fullData.startDate);
+        return aDate.getTime() - bDate.getTime();
+      });
+    });
+
+    return Object.values(grouped).sort((a, b) => {
+      if (a.year !== b.year) return a.year - b.year;
+      return (
+        new Date(`${a.month} 1, ${a.year}`).getMonth() -
+        new Date(`${b.month} 1, ${b.year}`).getMonth()
+      );
+    });
+  }, [EventData]);
 
   const toggleEventExpansion = (eventId: string) => {
     const newExpanded = new Set(expandedEvents);
@@ -154,6 +182,57 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       />
     ),
   };
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError || !EventData) {
+    return <ErrorLayout />;
+  }
+
+  if (groupedEvents.length === 0) {
+    return (
+      <Box width="100%">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 2 }}
+        >
+          <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
+            Upcoming
+          </Typography>
+          {showScore && (
+            <Typography
+              variant="h4"
+              display="flex"
+              alignItems="center"
+              sx={{ color: theme.palette.text.primary }}
+            >
+              10
+              <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
+            </Typography>
+          )}
+        </Box>
+        <Box
+          sx={{
+            height: "300px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: `2px solid ${theme.palette.primary.main}`,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{ color: theme.palette.text.secondary }}
+          >
+            No upcoming events found
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   const EventCard: React.FC<{ event: UpcomingEvent }> = ({ event }) => {
     const isExpanded = expandedEvents.has(event.id);
@@ -237,7 +316,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
 
           {/* Expanded Content */}
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            <Box sx={{ pt: 1 }}>
+            <Box sx={{ pt: 1 , pb: 1}}>
               <Typography
                 variant="body2"
                 sx={{
@@ -249,6 +328,59 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
               >
                 {event.description}
               </Typography>
+
+              {/* Additional event details */}
+              {event.location && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    fontSize: "12px",
+                    marginBottom: 0.5,
+                  }}
+                >
+                  📍 {event.location}
+                </Typography>
+              )}
+
+              {event.time && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    fontSize: "12px",
+                    marginBottom: 0.5,
+                  }}
+                >
+                  🕒 {event.time}
+                </Typography>
+              )}
+
+              {event.fullData.interestedCount > 0 && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    fontSize: "12px",
+                    marginBottom: 0.5,
+                  }}
+                >
+                  👥 {event.fullData.interestedCount.toLocaleString()}{" "}
+                  interested
+                </Typography>
+              )}
+
+              {event.fullData.organizer && (
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    fontSize: "12px",
+                  }}
+                >
+                  🏢 Organized by {event.fullData.organizer}
+                </Typography>
+              )}
             </Box>
           </Collapse>
         </CardContent>
@@ -323,10 +455,10 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       //   sx={{ height: "300px" }}
       >
         <Slider {...settings} ref={sliderRef}>
-          {dummyUpcomingEvents.map((monthData) => (
+          {groupedEvents.map((monthData) => (
             <Box
               key={`${monthData.month}-${monthData.year}`}
-              sx={{ height: "100%" }}
+              sx={{ height: "100%" , px: 1}}
             >
               <motion.div
                 variants={carouselSlide}

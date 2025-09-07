@@ -1,9 +1,8 @@
-import { Box, Typography, Stack, IconButton } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 import Header from "../../components/layout/Header";
 import { useTheme } from "@mui/material/styles";
 import DailyPulse from "./DailyPulse";
 import StatusPanel from "../../features/user/components/StatusPanel";
-import BidCard from "../../features/user/components/BidCard";
 // import MissionMillion from "../../features/user/components/MisssionMillion";
 import ToggleBar from "../../features/user/components/ToggleBar";
 import { useSelector } from "react-redux";
@@ -12,13 +11,13 @@ import { useEffect } from "react";
 import ContinueLearning from "../../features/user/components/ContinueLearning";
 import AnimateOnScroll from "../../animation/AnimateOnScroll";
 import { baseTransition } from "../../animation/transitions/baseTransition";
-import { fadeInRight, fadeInUp } from "../../animation/variants/fadeInUp";
-import AnimateNumber from "../../animation/AnimateNumber";
+import { fadeInUp } from "../../animation/variants/fadeInUp";
+// import AnimateNumber from "../../animation/AnimateNumber";
 // import ResultsAnounced from "../../components/ui/ResultsAnounced";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import Upcoming_Event from "../../features/user/components/Upcoming_Event";
-import BottomNavigation from "../../components/ui/BottomNavigation";
+// import Upcoming_Event from "../../features/user/components/Upcoming_Event";
 import Quickk from "../../components/ui/Quickk";
+import TopStatusPanel from "../../features/user/components/TopStatusPanel";
 
 const Dashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
@@ -63,7 +62,7 @@ const Dashboard = () => {
       </Box>
 
       {/* Learnings and Challenges */}
-      <Stack direction="row" mt={"16px"}>
+      {/* <Stack direction="row" mt={"16px"}>
         <Box
           flex={1}
           bgcolor={"#D9D9D9"}
@@ -93,38 +92,31 @@ const Dashboard = () => {
             Connections
           </Typography>
         </Box>
-      </Stack>
+      </Stack> */}
 
-      {/* Bid Card */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box
-          mt={"60px"}
-          borderTop={`2px solid ${theme.palette.primary.main}`}
-          borderBottom={`2px solid ${theme.palette.primary.main}`}
-        >
-          <BidCard />
-        </Box>
-      </AnimateOnScroll>
+      <Box mt={"25px"}>
+        <TopStatusPanel />
+      </Box>
 
       {/* Daily Pulse */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInRight}>
-        <Box mt={"52px"} pt={"30px"}>
-          <DailyPulse />
-        </Box>
-      </AnimateOnScroll>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInRight}> */}
+      <Box mt={"52px"} pt={"30px"}>
+        <DailyPulse />
+      </Box>
+      {/* </AnimateOnScroll> */}
 
       {/* Status Panel */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"120px"}>
+        <Box mt={"60px"}>
           <StatusPanel />
         </Box>
       </AnimateOnScroll>
 
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"48px"}>
           <Upcoming_Event />
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* Continue Learning */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
@@ -133,11 +125,11 @@ const Dashboard = () => {
         </Box>
       </AnimateOnScroll>
 
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"4px"}>
           <BottomNavigation />
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* <Box
         position="sticky"

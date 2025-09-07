@@ -75,7 +75,24 @@ const DailyPulse: React.FC = () => {
         score: item.score,
       })) || [];
 
-  const pulseItems: PulseItem[] = [...infoCards, ...otherItems];
+  // Add BidCard as the first item in the pulse
+  const bidCardItem = {
+    type: "bidCard" as const,
+    id: "bid-card",
+    score: 10,
+  };
+  const eventCardItem = {
+    type: "eventCard" as const,
+    id: "event-card",
+    score: 10,
+  };
+
+  const pulseItems: PulseItem[] = [
+    ...infoCards,
+    ...otherItems,
+    eventCardItem,
+    bidCardItem,
+  ];
 
   return <DailyPulseLayout pulseItems={pulseItems} />;
 };

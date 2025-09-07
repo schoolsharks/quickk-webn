@@ -1,42 +1,63 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import BottomNavigation from "../../../components/ui/BottomNavigation";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
-// Dummy event data - replace with RTK Query later
-const dummyEventData = {
-  id: "1",
-  title: "Pitch & Prosper 2025",
-  organizer: "Bv Org.",
-  date: "Saturday, 18th October 2025",
-  time: "10:00 AM - 6:00 PM",
-  location: "WeWork, BKC, Mumbai",
-  userEmail: "kapoorshriya@gmail.com", // This would come from user auth context
-};
+import { useGetEventByIdQuery } from "../services/eventsApi";
+import ErrorLayout from "../../../components/ui/Error";
+import Loader from "../../../components/ui/Loader";
+import formatEventTime from "../../../utils/formatEventTime";
+import { extractFullDateWithDay } from "../../../utils/dateExtract";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 const PurchaseSuccess: React.FC = () => {
   const theme = useTheme();
-  //   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { eventId } = useParams();
+  // const [searchParams] = useSearchParams();
+
+  const user = useSelector((state: RootState) => state.user);
+  const {
+    data: EventData,
+    isError,
+    isLoading,
+  } = useGetEventByIdQuery(eventId, { skip: !eventId });
+
   const handleBack = () => {
     navigate(-1);
   };
 
   // Get quantity and amount from URL params (passed from previous page)
-  //   const quantity = searchParams.get("quantity") || "1";
-  //   const amount = searchParams.get("amount") || "500";
+  // const quantity = searchParams.get("quantity") || "1";
+  // const amount = searchParams.get("amount") || "500";
 
-  // Generate dummy order number
+  // Generate order number (could use quantity/amount for more complex logic)
   const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
 
   // TODO: Add Calendar functionality later
   // const handleAddToCalendar = () => {
   //   console.log("Add to calendar functionality will be added later");
   // };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError || !EventData) {
+    return <ErrorLayout />;
+  }
+
+  const eventTime =
+    EventData?.startDate && EventData?.endDate
+      ? formatEventTime(EventData.startDate, EventData.endDate)
+      : EventData?.time || "";
+
+  // TODO: Get user email from auth context
+  const userEmail = user?.companyMail || "";
 
   return (
     <Box
@@ -71,7 +92,7 @@ const PurchaseSuccess: React.FC = () => {
             color: theme.palette.text.primary,
           }}
         >
-          {dummyEventData.title}
+          {EventData.title}
         </Typography>
       </Box>
       <Box
@@ -134,7 +155,7 @@ const PurchaseSuccess: React.FC = () => {
             mb: 1,
           }}
         >
-          {dummyEventData.title}
+          {EventData.title}
         </Typography>
         <Typography
           variant="body2"
@@ -143,7 +164,7 @@ const PurchaseSuccess: React.FC = () => {
             mb: 6,
           }}
         >
-          By {dummyEventData.organizer}
+          By {EventData.organizer}
         </Typography>
 
         {/* Ticket Delivery Info */}
@@ -164,7 +185,7 @@ const PurchaseSuccess: React.FC = () => {
               fontWeight: 600,
             }}
           >
-            {dummyEventData.userEmail}
+            {userEmail}
           </Typography>
         </Box>
 
@@ -187,14 +208,17 @@ const PurchaseSuccess: React.FC = () => {
               variant="body1"
               sx={{ color: theme.palette.text.primary }}
             >
-              {dummyEventData.date}
+              {(() => {
+                const date = extractFullDateWithDay(EventData?.startDate || "");
+                return `${date}`;
+              })()}
             </Typography>
           </Box>
           <Typography
             variant="body2"
             sx={{ color: theme.palette.text.secondary, ml: 3 }}
           >
-            {dummyEventData.time}
+            {eventTime}
           </Typography>
         </Box>
 
@@ -217,7 +241,7 @@ const PurchaseSuccess: React.FC = () => {
               variant="body1"
               sx={{ color: theme.palette.text.primary }}
             >
-              {dummyEventData.location}
+              {EventData.location}
             </Typography>
           </Box>
         </Box>

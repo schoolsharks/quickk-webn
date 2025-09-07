@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
 import { Box, Typography } from "@mui/material";
 import InfoCard from "../../../question/components/InfoCard";
 import QuestionTwoOption from "../../../question/components/QuestionTwoOption";
+import BidCard from "../../../user/components/BidCard";
 import { useSubmitPulseResponseMutation } from "../../dailyPulseApi";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -11,8 +12,9 @@ import { motion } from "framer-motion";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { handleHaptic } from "../../../../utils/haptics";
 import { carouselSlide } from "../../../../animation/variants/slideCarousel";
+import Upcoming_Event from "../../../user/components/Upcoming_Event";
 
-type PulseItemType = "infoCard" | "QuestionTwoOption";
+type PulseItemType = "infoCard" | "QuestionTwoOption" | "bidCard" | "eventCard";
 
 interface BasePulseItem {
   type: PulseItemType;
@@ -37,7 +39,18 @@ interface QuestionTwoOptionPulseItem extends BasePulseItem {
   questionOptions?: string[];
 }
 
-export type PulseItem = InfoPulseItem | QuestionTwoOptionPulseItem;
+interface BidCardPulseItem extends BasePulseItem {
+  type: "bidCard";
+}
+interface EventCardPulseItem extends BasePulseItem {
+  type: "eventCard";
+}
+
+export type PulseItem =
+  | InfoPulseItem
+  | QuestionTwoOptionPulseItem
+  | BidCardPulseItem
+  | EventCardPulseItem;
 
 interface DailyPulseProps {
   pulseItems: PulseItem[];
@@ -54,9 +67,79 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   smallSize = false,
 }) => {
   const [submitPulseResponse] = useSubmitPulseResponseMutation();
+  const [_currentIndex, setCurrentIndex] = useState(0);
+  const [maxHeight, setMaxHeight] = useState<number>(1);
+  const sliderRef = useRef<Slider | null>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [_currentIndex, setCurrentIndex] = React.useState(0);
-  const sliderRef = React.useRef<Slider | null>(null);
+  // Initialize cardRefs array when pulseItems change
+  useEffect(() => {
+    cardRefs.current = new Array(pulseItems.length).fill(null);
+    setMaxHeight(0); // Reset max height when items change
+  }, [pulseItems.length]);
+
+  // Effect to calculate maximum height of all cards
+  useEffect(() => {
+    const calculateMaxHeight = () => {
+      let maxCardHeight = 0;
+
+      cardRefs.current.forEach((cardRef) => {
+        if (cardRef) {
+          // Temporarily reset height to get natural height
+          const originalHeight = cardRef.style.height;
+          const originalMinHeight = cardRef.style.minHeight;
+
+          cardRef.style.height = "auto";
+          cardRef.style.minHeight = "auto";
+
+          // Get the natural height of the card
+          const height = cardRef.scrollHeight;
+
+          // Restore original styles
+          cardRef.style.height = originalHeight;
+          cardRef.style.minHeight = originalMinHeight;
+
+          if (height > maxCardHeight) {
+            maxCardHeight = height;
+          }
+        }
+      });
+
+      if (maxCardHeight > 0 && maxCardHeight !== maxHeight) {
+        setMaxHeight(maxCardHeight);
+      }
+    };
+
+    // Calculate heights after component mount and data changes
+    const timeoutId = setTimeout(calculateMaxHeight, 150);
+
+    // Also recalculate on window resize (debounced)
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(calculateMaxHeight, 100);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [pulseItems, smallSize, maxHeight]);
+
+  // Effect to apply calculated height to all cards
+  useEffect(() => {
+    if (maxHeight > 0) {
+      cardRefs.current.forEach((cardRef) => {
+        if (cardRef) {
+          cardRef.style.height = `${maxHeight}px`;
+          cardRef.style.minHeight = `${maxHeight}px`;
+        }
+      });
+    }
+  }, [maxHeight]);
 
   const settings = {
     dots: true,
@@ -122,36 +205,88 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     0
   );
 
-  const renderPulseItem = (item: PulseItem) => {
+  const renderPulseItem = (item: PulseItem, index: number) => {
+    const cardStyle = {
+      height: maxHeight > 0 ? `${maxHeight}px` : "auto",
+      minHeight: maxHeight > 0 ? `${maxHeight}px` : "auto",
+    };
+
     switch (item.type) {
       case "infoCard":
         return (
-          <InfoCard
-            id={item.id}
-            title={item.title}
-            content={item.content}
-            response={item.response}
-            wantFeedback={item.wantFeedback && !readOnly}
-            onClickFeedback={readOnly ? undefined : handleAnswer}
-            smallSize={smallSize}
-          />
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <InfoCard
+              id={item.id}
+              title={item.title}
+              content={item.content}
+              response={item.response}
+              wantFeedback={item.wantFeedback && !readOnly}
+              onClickFeedback={readOnly ? undefined : handleAnswer}
+              smallSize={smallSize}
+              sx={{ height: "100%" }}
+            />
+          </Box>
         );
       case "QuestionTwoOption":
         return (
-          <QuestionTwoOption
-            id={item.id}
-            questionText={item.questionText}
-            image={item.image}
-            optionType={item.optionType}
-            options={item.options}
-            questionOptions={item.questionOptions}
-            response={item.response}
-            onAnswer={readOnly ? undefined : handleAnswer}
-            smallSize={smallSize}
-          />
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <QuestionTwoOption
+              id={item.id}
+              questionText={item.questionText}
+              image={item.image}
+              optionType={item.optionType}
+              options={item.options}
+              questionOptions={item.questionOptions}
+              response={item.response}
+              onAnswer={readOnly ? undefined : handleAnswer}
+              smallSize={smallSize}
+              sx={{ height: "100%" }}
+            />
+          </Box>
+        );
+      case "eventCard":
+        return (
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <Upcoming_Event />
+          </Box>
+        );
+      case "bidCard":
+        return (
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <BidCard />
+          </Box>
         );
       default:
-        return <Typography>Unknown pulse item type</Typography>;
+        return (
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <Typography>Unknown pulse item type</Typography>
+          </Box>
+        );
     }
   };
 
@@ -177,17 +312,31 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
       )}
 
       {/* Content slider */}
-      <Box mt={"15px"} height={smallSize ? "250px" : "420px"}>
-        <Slider {...settings} ref={sliderRef}>
-          {pulseItems.map((item) => (
+      <Box
+        mt={"15px"}
+        height={
+          maxHeight > 0
+            ? `${maxHeight + 60}px` // Add extra space for dots and padding
+            : smallSize
+            ? "250px"
+            : "420px"
+        }
+      >
+        <Slider
+          key={maxHeight}
+          {...settings}
+          ref={sliderRef}
+        >
+          {pulseItems.map((item, index) => (
             <Box px={"20px"} key={item.id} height={"100%"}>
               <motion.div
                 variants={carouselSlide}
                 initial="initial"
                 animate="animate"
                 exit="exit"
+                style={{ height: "100%" }}
               >
-                {renderPulseItem(item)}
+                {renderPulseItem(item, index)}
               </motion.div>
             </Box>
           ))}

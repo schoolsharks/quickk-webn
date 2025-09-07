@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { EventService } from '../services/events.services';
 import { IEventQuery, IRegisterEventRequest } from '../types/interface';
-import { EventStatus, EventType } from '../types/enum';
+import { EventStatus } from '../types/enum';
 import AppError from '../../../utils/appError';
 
 const eventService = new EventService();
@@ -15,16 +15,10 @@ export class EventController {
     try {
       const query: IEventQuery = {
         status: req.query.status as EventStatus,
-        eventType: req.query.eventType as EventType,
-        city: req.query.city as string,
         startDate: req.query.startDate ? new Date(req.query.startDate as string) : undefined,
         endDate: req.query.endDate ? new Date(req.query.endDate as string) : undefined,
-        isFeatured: req.query.isFeatured ? req.query.isFeatured === 'true' : undefined,
-        tags: req.query.tags ? (req.query.tags as string).split(',') : undefined,
         page: req.query.page ? parseInt(req.query.page as string) : 1,
         limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
-        sortBy: req.query.sortBy as string || 'startDate',
-        sortOrder: req.query.sortOrder as 'asc' | 'desc' || 'asc'
       };
 
       const result = await eventService.getEvents(query);
@@ -99,24 +93,6 @@ export class EventController {
     }
   }
 
-  /**
-   * Get featured events
-   */
-  async getFeaturedEvents(req: Request, res: Response, next: NextFunction) {
-    try {
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
-
-      const events = await eventService.getFeaturedEvents(limit);
-
-      res.status(200).json({
-        success: true,
-        message: 'Featured events retrieved successfully',
-        data: events
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
 
   /**
    * Get event by ID
@@ -130,7 +106,6 @@ export class EventController {
       if (!event) {
         throw new AppError('Event not found', 404);
       }
-
       res.status(200).json({
         success: true,
         message: 'Event retrieved successfully',
@@ -148,7 +123,7 @@ export class EventController {
     try {
       // Assuming user ID is available in req.user from auth middleware
       const createdBy = (req as any).user?.id || req.body.createdBy;
-      
+
       if (!createdBy) {
         throw new AppError('Creator information is required', 400);
       }
@@ -226,7 +201,7 @@ export class EventController {
   async searchEvents(req: Request, res: Response, next: NextFunction) {
     try {
       const { q: searchTerm } = req.query;
-      
+
       if (!searchTerm) {
         throw new AppError('Search term is required', 400);
       }
@@ -267,26 +242,6 @@ export class EventController {
     }
   }
 
-  /**
-   * Get events by type
-   */
-  async getEventsByType(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { type } = req.params;
-      const page = req.query.page ? parseInt(req.query.page as string) : 1;
-      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-
-      const result = await eventService.getEventsByType(type as EventType, page, limit);
-
-      res.status(200).json({
-        success: true,
-        message: `${type} events retrieved successfully`,
-        data: result
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
 
   /**
    * Register for event

@@ -4,22 +4,15 @@ import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
-import event from "../../../assets/images/Onboardinghead.png";
-
-// Dummy data - replace with RTK Query later
-const dummyEventData = {
-  date: new Date(), // Today's date
-  topic: "Pitch & Prosper 2025",
-  city: "Mumbai",
-  time: "10:00pm - 6:00pm",
-  interestedCount: 200,
-  image: event,
-};
+import { useGetActiveEventsQuery } from "../services/eventsApi";
+import Loader from "../../../components/ui/Loader";
+import ErrorLayout from "../../../components/ui/Error";
+import formatEventTime from "../../../utils/formatEventTime";
 
 const EventsToday: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
+  const { data: EventData, isError, isLoading } = useGetActiveEventsQuery({});
   // Format today's date
   const today = new Date();
   const dayNumber = today.getDate();
@@ -29,8 +22,21 @@ const EventsToday: React.FC = () => {
 
   const handleInterestedClick = () => {
     // Navigate to event details page
-    navigate("/user/events/1"); // Using fixed ID as discussed
+    navigate(`/user/events/${EventData._id}`);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    return <ErrorLayout />;
+  }
+
+  const eventTime =
+    EventData?.startDate && EventData?.endDate
+      ? formatEventTime(EventData.startDate, EventData.endDate)
+      : EventData?.time || "";
 
   return (
     <Box mt={6}>
@@ -117,11 +123,11 @@ const EventsToday: React.FC = () => {
               bottom: 0,
               left: 0,
               backgroundColor: theme.palette.background.default,
-              borderRadius: "8px",
+              borderRadius: "0px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundImage: `url(${dummyEventData.image})`,
+              backgroundImage: `url(${EventData.eventImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -146,7 +152,7 @@ const EventsToday: React.FC = () => {
                   fontSize: "25px",
                 }}
               >
-                {dummyEventData.topic}
+                {EventData.title}
               </Typography>
             </Box>
             <Typography
@@ -157,7 +163,7 @@ const EventsToday: React.FC = () => {
                 fontSize: "20px",
               }}
             >
-              {dummyEventData.city}
+              {EventData.location.split(",")[2]}
             </Typography>
             <Box display={"flex"} justifyContent="space-between" width={"100%"}>
               <Typography
@@ -167,7 +173,7 @@ const EventsToday: React.FC = () => {
                   fontSize: "14px",
                 }}
               >
-                {dummyEventData.time}
+                {eventTime}
               </Typography>
               <Typography
                 variant="body2"
@@ -177,7 +183,7 @@ const EventsToday: React.FC = () => {
                   fontWeight: 500,
                 }}
               >
-                +{dummyEventData.interestedCount} interested
+                +{EventData.interestedCount} interested
               </Typography>
             </Box>
           </Box>

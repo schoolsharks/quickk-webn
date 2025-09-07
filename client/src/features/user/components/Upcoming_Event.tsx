@@ -18,25 +18,18 @@ const Upcoming_Event: React.FC = () => {
   const theme = useTheme();
 
   return (
-    <Box px={"22px"}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Upcoming Events
-        </Typography>
-      </Box>
-
-      <Card
-        sx={{
-          borderRadius: "0",
-          overflow: "hidden",
-          border: `2px solid ${theme.palette.primary.main}`,
-        }}
-      >
+    <Card
+      sx={{
+        borderRadius: "0",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        border: `2px solid ${theme.palette.primary.main}`,
+        height: "100%",
+      }}
+    >
+      <Box>
         {/* Date Section */}
         <Box
           sx={{
@@ -57,7 +50,7 @@ const Upcoming_Event: React.FC = () => {
               bottom: 0,
               left: 0,
               backgroundColor: theme.palette.background.default,
-              borderRadius: "8px",
+              borderRadius: "0px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -123,45 +116,46 @@ const Upcoming_Event: React.FC = () => {
             </Box>
           </Box>
         </CardContent>
-        {/* Interested Button */}
-        <Box display="flex" sx={{ cursor: "pointer" }} fontSize={"15px"}>
-          <AnimateOnClick
-            variants={responseSubmitted}
-            transition={baseTransition}
+      </Box>
+
+      {/* Interested Button */}
+      <Box display="flex" sx={{ cursor: "pointer" }} fontSize={"15px"}>
+        <AnimateOnClick
+          variants={responseSubmitted}
+          transition={baseTransition}
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            py="18px"
+            bgcolor={"#A8A6A7"}
+            color={"black"}
+            onClick={() => {}}
+            fontSize={"30px"}
           >
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              py="18px"
-              bgcolor={"#A8A6A7"}
-              color={"black"}
-              onClick={() => {}}
-              fontSize={"30px"}
-            >
-              Yes
-            </Box>
-          </AnimateOnClick>
-          <AnimateOnClick
-            variants={responseSubmitted}
-            transition={baseTransition}
+            Yes
+          </Box>
+        </AnimateOnClick>
+        <AnimateOnClick
+          variants={responseSubmitted}
+          transition={baseTransition}
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            py="18px"
+            color={"white"}
+            bgcolor="#000000"
+            onClick={() => {}}
+            fontSize={"30px"}
           >
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              py="18px"
-              color={"white"}
-              bgcolor="#000000"
-              onClick={() => {}}
-              fontSize={"30px"}
-            >
-              No
-            </Box>
-          </AnimateOnClick>
-        </Box>
-      </Card>
-    </Box>
+            No
+          </Box>
+        </AnimateOnClick>
+      </Box>
+    </Card>
   );
 };
 

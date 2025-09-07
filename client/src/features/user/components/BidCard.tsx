@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, Button, useTheme } from "@mui/material";
 import { useGetUpcomingRewardQuery } from "../../biding/service/bidingApi";
 import Loader from "../../../components/ui/Loader";
 import { extractTimeAndDate } from "../../../utils/dateExtract";
@@ -69,71 +69,87 @@ const BidCard: React.FC = () => {
   return (
     <Box
       width="100%"
-      sx={{ overflow: "hidden", cursor: "pointer" }}
+      sx={{
+        overflow: "hidden",
+        cursor: "pointer",
+        bgcolor: "white",
+        border: `2px solid ${theme.palette.primary.main}`,
+        height: "100%",
+      }}
+      display={"flex"}
+      flexDirection={"column"}
+      justifyContent={"space-between"}
       onClick={handleClick}
     >
-      {/* <Box py={"12px"} px={"24px"} display="flex" flexDirection="column">
-        <Typography color="white" variant="h4">
-          Bid & Win Big! 🔥
-        </Typography>
-        <Typography color="white" fontSize={14} mt={0.5}>
-          Starts at just 100 Stars
-        </Typography>
-      </Box> */}
-
-      <Box
-        display="flex"
-        flexDirection="row"
-        // sx={{ border: "1px solid #96FF43" }}
-        bgcolor={theme.palette.secondary.main}
-      >
-        <Box
-          flex={2}
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          px={3}
-          py={1}
-          color={"black"}
-        >
-          <Typography variant="h4" fontSize={18}>
+      {/* Header */}
+      <Box>
+        <Box px={2} pt={2} pb={2}>
+          <Typography variant="h2" color="black" letterSpacing={"-1.1%"}>
             Refer & Earn Big! 🔥
           </Typography>
-          <Typography variant="h3" mt={0.5}>
-            Estimated Value
-          </Typography>
-          <Typography fontSize={20} fontWeight={600} mt={0.5}>
-            ₹ {upcomingReward?.upcomingReward?.estimatedValue ?? "--"}
-          </Typography>
-          {/* <Typography color="#96FF43" fontSize={18} fontWeight={600} mt={0.7}>
-            {countdown}
-          </Typography> */}
-          <Typography variant="h3" mt={0.5}>
-            Announcement on {date}
-          </Typography>
-          <Typography
-            color="rgba(255, 255, 255, 0.6)"
-            fontWeight="400"
-            fontSize={7}
-            mt={0.5}
-          >
-            *T&C applied
+          <Typography variant="body1" color={"grey"} sx={{ fontSize: "8px" }}>
+            *T&C Applied
           </Typography>
         </Box>
 
-        <Box
-          flex={1.5}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        {/* Content */}
+        <Box px={2} pb={2}>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography variant="body2" color="gray" sx={{ fontSize: "12px" }}>
+              Estimated Value
+            </Typography>
+            <Typography
+              variant="body2"
+              color={theme.palette.primary.main}
+              sx={{ fontSize: "12px" }}
+            >
+              Announcement on
+            </Typography>
+          </Box>
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Typography variant="h5" color="black">
+              ₹ {upcomingReward?.upcomingReward?.estimatedValue ?? "14,900"}
+            </Typography>
+            <Typography variant="h5" color={theme.palette.primary.main}>
+              {date || "28th October"}
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Interested Button */}
+      <Box>
+        {/* Image */}
+        <Box display="flex" justifyContent="center" alignItems="center">
           <Box
             component="img"
-            src={upcomingReward?.upcomingReward?.image}
+            src={
+              upcomingReward?.upcomingReward?.image ||
+              "/api/placeholder/120/120"
+            }
             alt="Image of Upcoming reward."
-            sx={{ width: "100%", objectFit: "contain" }}
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+            }}
           />
         </Box>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{
+            bgcolor: "#A8A6A7",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: "30px",
+            borderRadius: 0,
+            textTransform: "none",
+            py: 1.5,
+          }}
+        >
+          Interested
+        </Button>
       </Box>
     </Box>
   );

@@ -1,28 +1,9 @@
 import { Event, EventRegistration } from '../models/events.model';
 import { IEvent, IEventQuery, IEventResponse, IRegisterEventRequest, IEventRegistration } from '../types/interface';
-import { EventStatus, EventType, RegistrationStatus } from '../types/enum';
+import { EventStatus } from '../types/enum';
 import AppError from '../../../utils/appError';
 
 export class EventService {
-  
-  /**
-   * Check if registration is open for an event
-   */
-  private checkRegistrationStatus(event: any): boolean {
-    if (event.ticketInfo.registrationStatus === RegistrationStatus.CLOSED) {
-      return false;
-    }
-    
-    if (event.ticketInfo.registrationDeadline && new Date() > event.ticketInfo.registrationDeadline) {
-      return false;
-    }
-    
-    if (event.status === EventStatus.PAST) {
-      return false;
-    }
-    
-    return true;
-  }
 
   /**
    * Get events with filtering, pagination and sorting
@@ -30,12 +11,9 @@ export class EventService {
   async getEvents(query: IEventQuery): Promise<IEventResponse> {
     const {
       status,
-      eventType,
       city,
       startDate,
       endDate,
-      isFeatured,
-      tags,
       page = 1,
       limit = 10,
       sortBy = 'startDate',
@@ -43,26 +21,14 @@ export class EventService {
     } = query;
 
     // Build filter object
-    const filter: any = { isActive: true };
+    const filter: any = {};
 
     if (status) {
       filter.status = status;
     }
 
-    if (eventType) {
-      filter.eventType = eventType;
-    }
-
     if (city) {
       filter['location.city'] = new RegExp(city, 'i');
-    }
-
-    if (isFeatured !== undefined) {
-      filter.isFeatured = isFeatured;
-    }
-
-    if (tags && tags.length > 0) {
-      filter.tags = { $in: tags };
     }
 
     // Date range filter
@@ -90,7 +56,6 @@ export class EventService {
         .lean(),
       Event.countDocuments(filter)
     ]);
-
     const totalPages = Math.ceil(total / limit);
 
     return {
@@ -129,22 +94,6 @@ export class EventService {
    */
   async getPastEvents(page: number = 1, limit: number = 10): Promise<IEventResponse> {
     return this.getEventsByStatus(EventStatus.PAST, page, limit);
-  }
-
-  /**
-   * Get featured events
-   */
-  async getFeaturedEvents(limit: number = 5): Promise<IEvent[]> {
-    const events = await Event.find({
-      isActive: true,
-      isFeatured: true,
-      status: { $in: [EventStatus.UPCOMING, EventStatus.ACTIVE] }
-    })
-    .sort({ startDate: 1 })
-    .limit(limit)
-    .lean();
-
-    return events as IEvent[];
   }
 
   /**
@@ -204,7 +153,7 @@ export class EventService {
     };
 
     const skip = (page - 1) * limit;
-    
+
     const [events, total] = await Promise.all([
       Event.find(filter)
         .sort({ startDate: 1 })
@@ -234,13 +183,6 @@ export class EventService {
   }
 
   /**
-   * Get events by type
-   */
-  async getEventsByType(eventType: EventType, page: number = 1, limit: number = 10): Promise<IEventResponse> {
-    return this.getEvents({ eventType, page, limit });
-  }
-
-  /**
    * Register user for an event
    */
   async registerForEvent(registrationData: IRegisterEventRequest): Promise<IEventRegistration> {
@@ -248,25 +190,14 @@ export class EventService {
 
     // Check if event exists and is active
     const event = await Event.findById(eventId);
-    if (!event || !event.isActive) {
+    if (!event) {
       throw new AppError('Event not found or inactive', 404);
-    }
-
-    // Check if registration is open
-    const isRegistrationOpen = this.checkRegistrationStatus(event);
-    if (!isRegistrationOpen) {
-      throw new AppError('Registration is closed for this event', 400);
     }
 
     // Check if user is already registered
     const existingRegistration = await EventRegistration.findOne({ eventId, userId });
     if (existingRegistration) {
       throw new AppError('User already registered for this event', 400);
-    }
-
-    // Check if tickets are available
-    if (event.ticketInfo.totalTickets && event.registeredCount >= event.ticketInfo.totalTickets) {
-      throw new AppError('No tickets available', 400);
     }
 
     // Create registration
@@ -327,7 +258,7 @@ export class EventService {
   async markAttended(eventId: string, userId: string): Promise<boolean> {
     const registration = await EventRegistration.findOneAndUpdate(
       { eventId, userId, status: 'registered' },
-      { 
+      {
         status: 'attended',
         checkInTime: new Date()
       },

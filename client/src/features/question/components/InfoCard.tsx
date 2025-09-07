@@ -27,13 +27,15 @@ const InfoCard: React.FC<InfoCardProps> = ({
   // const theme = useTheme();
   return (
     <Box
-      // height={"100%"}
+      height={"100%"}
+      width={"100%"}
       boxShadow="0px 4px 19px 0px #CD7BFF4D inset"
       p={smallSize ? "8px 12px" : "28px 12px"}
       border="1px solid rgba(160, 74, 212, 1)"
       display={"flex"}
       flexDirection={"column"}
       sx={sx}
+      justifyContent={"space-between"}
     >
       <Box p={smallSize ? "0" : "0 18px"}>
         <Typography

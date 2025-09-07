@@ -7,25 +7,22 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
-import event from "../../../assets/images/Onboardinghead.png";
-
-// Dummy event data - replace with RTK Query later
-const dummyEventData = {
-  id: "1",
-  title: "Pitch & Prosper 2025",
-  organizer: "Bv Org.",
-  date: "Saturday, 18th October 2025",
-  time: "10:00 AM - 6:00 PM",
-  location: "WeWork, BKC, Mumbai",
-  image: event,
-  ticketPrice: 500, // Price per ticket in INR
-};
+import { useGetEventByIdQuery } from "../services/eventsApi";
+import ErrorLayout from "../../../components/ui/Error";
+import Loader from "../../../components/ui/Loader";
+import formatEventTime from "../../../utils/formatEventTime";
+import { extractFullDateWithDay } from "../../../utils/dateExtract";
 
 const TicketPurchase: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { eventId } = useParams();
   const [ticketQuantity, setTicketQuantity] = useState(1);
+  const {
+    data: EventData,
+    isError,
+    isLoading,
+  } = useGetEventByIdQuery(eventId, { skip: !eventId });
 
   const handleBack = () => {
     navigate(-1);
@@ -50,8 +47,8 @@ const TicketPurchase: React.FC = () => {
     //   key: "YOUR_RAZORPAY_KEY",
     //   amount: totalAmount * 100, // Amount in paise
     //   currency: "INR",
-    //   name: dummyEventData.title,
-    //   description: `${ticketQuantity} ticket(s) for ${dummyEventData.title}`,
+    //   name: EventData.title,
+    //   description: `${ticketQuantity} ticket(s) for ${EventData.title}`,
     //   handler: function(response) {
     //     // Payment success callback
     //     navigate(`/user/events/${eventId}/success`);
@@ -67,13 +64,24 @@ const TicketPurchase: React.FC = () => {
 
     // For now, directly navigate to success page
     navigate(
-      `/user/events/${
-        eventId || "1"
-      }/success?quantity=${ticketQuantity}&amount=${totalAmount}`
+      `/user/events/${eventId}/success?quantity=${ticketQuantity}&amount=${totalAmount}`
     );
   };
 
-  const totalAmount = ticketQuantity * dummyEventData.ticketPrice;
+  const totalAmount = ticketQuantity * EventData.ticketInfo.price;
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    return <ErrorLayout />;
+  }
+
+  const eventTime =
+    EventData?.startDate && EventData?.endDate
+      ? formatEventTime(EventData.startDate, EventData.endDate)
+      : EventData?.time || "";
 
   return (
     <Box sx={{ minHeight: "100vh" }}>
@@ -104,7 +112,7 @@ const TicketPurchase: React.FC = () => {
             color: theme.palette.text.primary,
           }}
         >
-          {dummyEventData.title}
+          {EventData.title}
         </Typography>
       </Box>
 
@@ -113,7 +121,7 @@ const TicketPurchase: React.FC = () => {
         sx={{
           height: "200px",
           backgroundColor: theme.palette.background.default,
-          backgroundImage: `url(${dummyEventData.image})`,
+          backgroundImage: `url(${EventData.eventImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -147,7 +155,7 @@ const TicketPurchase: React.FC = () => {
               mb: 1,
             }}
           >
-            {dummyEventData.title}
+            {EventData.title}
           </Typography>
           <Typography
             variant="body2"
@@ -156,7 +164,7 @@ const TicketPurchase: React.FC = () => {
               mb: 6,
             }}
           >
-            By {dummyEventData.organizer}
+            By {EventData.organizer}
           </Typography>
 
           {/* Date and Time */}
@@ -178,14 +186,19 @@ const TicketPurchase: React.FC = () => {
                 variant="body1"
                 sx={{ color: theme.palette.text.primary }}
               >
-                {dummyEventData.date}
+                {(() => {
+                  const date = extractFullDateWithDay(
+                    EventData?.startDate || ""
+                  );
+                  return `${date}`;
+                })()}
               </Typography>
             </Box>
             <Typography
               variant="body2"
               sx={{ color: theme.palette.text.secondary, ml: 3 }}
             >
-              {dummyEventData.time}
+              {eventTime}
             </Typography>
           </Box>
 
@@ -212,7 +225,7 @@ const TicketPurchase: React.FC = () => {
                 variant="body1"
                 sx={{ color: theme.palette.text.primary }}
               >
-                {dummyEventData.location}
+                {EventData.location}
               </Typography>
             </Box>
           </Box>
@@ -310,7 +323,7 @@ const TicketPurchase: React.FC = () => {
                 fontSize: 16,
               }}
             >
-              {totalAmount} INR
+              {totalAmount} {EventData.ticketInfo.currency}
             </Typography>
           </Box>
         </Box>

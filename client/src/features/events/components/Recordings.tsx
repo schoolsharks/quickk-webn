@@ -8,9 +8,35 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { carouselSlide } from "../../../animation/variants/slideCarousel";
 import GlobalButton from "../../../components/ui/button";
-import thumbnail from "../../../assets/images/Events/Recording.webp";
+import Loader from "../../../components/ui/Loader";
+import ErrorLayout from "../../../components/ui/Error";
+import { useGetPastEventsQuery } from "../services/eventsApi";
+import formatEventTime from "../../../utils/formatEventTime";
 
-// Dummy data - replace with RTK Query later
+// API Response types (same as UpcomingEvents)
+interface ApiEvent {
+  _id: string;
+  title: string;
+  description: string;
+  eventImage: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  isVirtual: boolean;
+  virtualMeetingLink?: string;
+  ticketInfo: {
+    price: number;
+    currency: string;
+  };
+  sponsors: string[];
+  highlights: string[];
+  interestedCount: number;
+  attendedCount: number;
+  organizer: string;
+}
+
+// Component interfaces
 interface Recording {
   id: string;
   topic: string;
@@ -20,40 +46,8 @@ interface Recording {
   attendees: number;
   thumbnail: string;
   videoUrl?: string;
+  fullData: ApiEvent;
 }
-
-const dummyRecordings: Recording[] = [
-  {
-    id: "1",
-    topic: "Digital Marketing Strategies",
-    date: "August 20, 2025",
-    time: "6:00pm - 8:00pm",
-    city: "Mumbai",
-    attendees: 250,
-    thumbnail: thumbnail,
-    videoUrl: "#",
-  },
-  {
-    id: "2",
-    topic: "AI and Machine Learning",
-    date: "August 15, 2025",
-    time: "2:00pm - 5:00pm",
-    city: "Bangalore",
-    attendees: 320,
-    thumbnail: thumbnail,
-    videoUrl: "#",
-  },
-  {
-    id: "3",
-    topic: "Startup Funding Workshop",
-    date: "August 10, 2025",
-    time: "10:00am - 1:00pm",
-    city: "Delhi",
-    attendees: 180,
-    thumbnail: thumbnail,
-    videoUrl: "#",
-  },
-];
 
 interface RecordingsProps {
   showScore?: boolean;
@@ -62,6 +56,34 @@ interface RecordingsProps {
 const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
   const theme = useTheme();
   const sliderRef = React.useRef<Slider | null>(null);
+  const { data: pastEvents, isError, isLoading } = useGetPastEventsQuery({});
+
+  // Transform API data to component format
+  const transformedRecordings = React.useMemo(() => {
+    if (!pastEvents || !Array.isArray(pastEvents)) return [];
+
+    return pastEvents.map((apiEvent: ApiEvent) => {
+      const startDate = new Date(apiEvent.startDate);
+
+      const transformedRecording: Recording = {
+        id: apiEvent._id,
+        topic: apiEvent.title,
+        date: startDate.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        time: formatEventTime(apiEvent.startDate, apiEvent.endDate),
+        city: apiEvent.location.split(",").pop()?.trim() || "", // Extract city from full location
+        attendees: apiEvent.attendedCount,
+        thumbnail: apiEvent.eventImage,
+        videoUrl: "#", // As requested, keeping it as # for now
+        fullData: apiEvent,
+      };
+
+      return transformedRecording;
+    });
+  }, [pastEvents]);
 
   const handleWatchClick = (videoUrl?: string) => {
     // Empty click function for now - will handle video playback later
@@ -99,6 +121,58 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
     ),
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError || !pastEvents) {
+    return <ErrorLayout />;
+  }
+
+  if (transformedRecordings.length === 0) {
+    return (
+      <Box width="100%" mt={2}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 2 }}
+        >
+          <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
+            Recordings
+          </Typography>
+          {showScore && (
+            <Typography
+              variant="h4"
+              display="flex"
+              alignItems="center"
+              sx={{ color: theme.palette.text.primary }}
+            >
+              10
+              <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
+            </Typography>
+          )}
+        </Box>
+        <Box
+          sx={{
+            height: "300px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: `2px solid ${theme.palette.primary.main}`,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{ color: theme.palette.text.secondary }}
+          >
+            No recordings found
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
+
   const RecordingCard: React.FC<{ recording: Recording }> = ({ recording }) => (
     <Card
       sx={{
@@ -106,7 +180,6 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
         overflow: "hidden",
         boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.12)",
         border: `2px solid ${theme.palette.primary.main}`,
-        height: "300px",
         display: "flex",
         flexDirection: "column",
       }}
@@ -184,7 +257,9 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
                 fontWeight: 600,
               }}
             >
-              {recording.attendees} attended
+              {recording.attendees > 0
+                ? `${recording.attendees} attended`
+                : "Event completed"}
             </Typography>
           </Box>
         </Box>
@@ -194,18 +269,27 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
       <Box
         sx={{
           position: "relative",
-          height: "180px",
+          height: "100%",
+          width: "100%",
           backgroundColor: theme.palette.background.default,
-          backgroundImage: `url(${recording.thumbnail})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          //   flex: "1 1 auto",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "hidden",
         }}
-      />
+      >
+        <img
+          src={recording.thumbnail}
+          alt={recording.topic}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            objectPosition: "0% 0%",
+            display: "block",
+          }}
+        />
+      </Box>
       {/* Watch Button */}
       <Box sx={{ width: "100%" }}>
         <GlobalButton
@@ -227,7 +311,7 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
   );
 
   return (
-    <Box width="100%" mt={2}>
+    <Box width="100%" mt={2} mb={2}>
       {/* Header */}
       <Box
         display="flex"
@@ -252,10 +336,10 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
       </Box>
 
       {/* Carousel */}
-      <Box sx={{ height: "400px" }}>
+      <Box sx={{ height: "500px" }}>
         <Slider {...settings} ref={sliderRef}>
-          {dummyRecordings.map((recording) => (
-            <Box key={recording.id} sx={{ height: "100%" }}>
+          {transformedRecordings.map((recording) => (
+            <Box key={recording.id} sx={{ height: "100%", px: 1 }}>
               <motion.div
                 variants={carouselSlide}
                 initial="initial"

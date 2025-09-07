@@ -7,6 +7,7 @@ import * as learningControllers from "../../learning/controllers/learning.contro
 import * as moduleControllers from "../../learning/controllers/module.controller";
 import * as userControllers from "../controllers/user.controller";
 import * as rewardControllers from "../../reward/controllers/reward.controller";
+import { eventController } from "../../events/controllers/events.controllers";
 
 const router = express.Router();
 
@@ -42,6 +43,12 @@ router.get('/getLastPastReward', authenticateUser, asyncHandeler(rewardControlle
 
 //Mission Million Route 
 router.get('/getMissionMillion', authenticateUser, asyncHandeler(learningControllers.getTotalLearningTimeForAllUsers));
+
+//Routes for events 
+router.get('/getActiveEvents', authenticateUser, asyncHandeler(eventController.getActiveEvents));
+router.get('/getUpcomingEvents', authenticateUser, asyncHandeler(eventController.getUpcomingEvents));
+router.get('/getPastEvents', authenticateUser, asyncHandeler(eventController.getPastEvents));
+router.get('/getEventById/:eventId', authenticateUser, asyncHandeler(eventController.getEventById));
 
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));

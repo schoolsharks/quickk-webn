@@ -1,40 +1,15 @@
 import React from "react";
 import { Box, Typography, Stack, Button, useTheme } from "@mui/material";
-import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
-import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../app/store";
-import { useSelector } from "react-redux";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
 const StatusPanel: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { totalStars, rank } = useSelector((state: RootState) => state.user);
-
-  // Helper function to get ordinal suffix
-  const getOrdinal = (n: number | null | undefined) => {
-    if (typeof n !== "number" || isNaN(n)) return "";
-    const s = ["th", "st", "nd", "rd"],
-      v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
-  };
 
   const cardData = [
-    {
-      icon: <StarsOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
-      title: "Stars Earned",
-      value: totalStars,
-      bgColor: theme.palette.text.secondary,
-    },
-    {
-      icon: <LeaderboardIcon sx={{ fontSize: 24, color: "black" }} />,
-      title: "Leaderboard",
-      value: getOrdinal(rank),
-      bgColor: "#D9D9D9",
-      onClick: () => navigate("/user/leaderboard"),
-    },
     {
       icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Rewards",
@@ -51,6 +26,19 @@ const StatusPanel: React.FC = () => {
       onClick: () => {
         //  navigate("/user/profile")
       },
+    },
+    {
+      icon: <HomeOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
+      title: "Home",
+      value: null,
+      bgColor: theme.palette.text.secondary,
+    },
+    {
+      icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "black" }} />,
+      title: "Profile",
+      value: null,
+      bgColor: "#D9D9D9",
+      onClick: () => navigate("/user/profile"),
     },
   ];
 
@@ -69,7 +57,7 @@ const StatusPanel: React.FC = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
-            color: idx === 1 || idx === 2 ? "black" : "white",
+            color: idx === 1 || idx === 2 ? "white" : "black",
             // borderRight: idx % 2 === 0 ? "1px solid #252525" : "none",
             // borderBottom: idx < 2 ? "1px solid #252525" : "none",
             "&:hover, &:focus": {

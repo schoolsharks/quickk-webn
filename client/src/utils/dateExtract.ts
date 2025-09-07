@@ -12,3 +12,8 @@ export const extractTimeInAmPm = (isoDateString: string) => {
     const date = moment.utc(isoDateString);
     return date.format('hh:mm A'); // e.g., "09:00 PM"
 };
+
+export const extractFullDateWithDay = (isoDateString: string) => {
+    const date = moment.utc(isoDateString);
+    return date.format('dddd, Do MMMM YYYY'); // e.g., "Saturday, 18th October 2025"
+};

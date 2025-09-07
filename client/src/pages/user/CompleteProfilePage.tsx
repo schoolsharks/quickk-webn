@@ -62,7 +62,6 @@ const communityGoals = [
 // Step 5: Event Interests
 const eventTypes = [
   "Pitch events",
-  "Pitch events",
   "Networking mixers",
   "Investor meetups",
   "Panel discussions & talks",

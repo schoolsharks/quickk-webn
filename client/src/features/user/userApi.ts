@@ -83,6 +83,15 @@ export const usersApi = api.injectEndpoints({
             }),
             invalidatesTags: ['User'],
         }),
+
+        searchNetworkUsers: builder.query({
+            query: (params) => ({
+                url: "/user/search/users",
+                method: 'GET',
+                params
+            }),
+            providesTags: ['User'],
+        }),
     }),
 });
 
@@ -94,4 +103,6 @@ export const {
     useGetAllAvatarsQuery,
     useSelectAvatarMutation,
     useUpdateUserProfileMutation,
+    useSearchNetworkUsersQuery,
+    useLazySearchNetworkUsersQuery,
 } = usersApi;

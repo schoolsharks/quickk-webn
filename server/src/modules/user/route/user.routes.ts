@@ -54,6 +54,9 @@ router.get('/getEventById/:eventId', authenticateUser, asyncHandeler(eventContro
 // route for user profile
 router.post('/updateUserProfile', authenticateUser, asyncHandeler(UserControllers.addEditUser));
 
+// route for searching network users
+router.get('/search/users', authenticateUser, asyncHandeler(UserControllers.searchUsers));
+
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));
 // router.post('/resetPassword', asyncHandeler(authControllers.resetPassword));

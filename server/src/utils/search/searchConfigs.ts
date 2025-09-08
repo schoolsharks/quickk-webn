@@ -6,7 +6,7 @@ import User from "../../modules/user/model/user.model";
 export const searchConfigs = {
     user: {
         model: User,
-        searchableFields: ['name', 'companyMail', 'contact'],
+        searchableFields: ['name', 'companyMail', 'contact', 'businessCategory', 'designation', 'specialisation'],
         populateFields: ['company', 'avatar']
     },
     dailyPulse: {

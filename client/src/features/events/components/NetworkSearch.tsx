@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -7,6 +7,7 @@ import {
   CardContent,
   Chip,
   InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,95 +16,110 @@ import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../../components/ui/button";
+import { useLazySearchNetworkUsersQuery } from "../../user/userApi";
 
-// Dummy data - replace with RTK Query later
+// Updated interface to match backend response
 interface NetworkProfile {
-  id: string;
+  _id: string;
   name: string;
-  role: string;
-  company: string;
-  industries: string[];
-  connections: number;
+  designation?: string;
+  businessName?: string;
+  businessCategory?: string;
+  specialisation?: string;
+  companyMail?: string;
+  contact?: string;
   isConnected?: boolean;
   showIcons?: boolean;
+  webnClubMember?: boolean;
 }
-
-const dummyProfiles: NetworkProfile[] = [
-  {
-    id: "1",
-    name: "Designer Name",
-    role: "Web Designer",
-    company: "Company",
-    industries: ["EdTech", "Branding", "Consultancy"],
-    connections: 300,
-    isConnected: false,
-    showIcons: false,
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    role: "UX Designer",
-    company: "TechCorp",
-    industries: ["EdTech", "Healthcare", "Fintech"],
-    connections: 450,
-    isConnected: false,
-    showIcons: false,
-  },
-  {
-    id: "3",
-    name: "Mike Chen",
-    role: "Product Designer",
-    company: "StartupXYZ",
-    industries: ["SaaS", "Branding", "E-commerce"],
-    connections: 275,
-    isConnected: false,
-    showIcons: false,
-  },
-  {
-    id: "4",
-    name: "Emily Davis",
-    role: "Web Designer",
-    company: "Creative Agency",
-    industries: ["Branding", "Marketing", "Consultancy"],
-    connections: 520,
-    isConnected: false,
-    showIcons: false,
-  },
-];
 
 const NetworkSearch: React.FC = () => {
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
-  const [profiles, setProfiles] = useState<NetworkProfile[]>(dummyProfiles);
+  const [profiles, setProfiles] = useState<NetworkProfile[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Filter profiles based on search query
-  const filteredProfiles = searchQuery.trim()
-    ? profiles.filter(
-        (profile) =>
-          profile.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          profile.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          profile.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          profile.industries.some((industry) =>
-            industry.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-      )
-    : [];
+  // RTK Query hook for searching users
+  const [searchUsers, { data: searchData, isLoading }] =
+    useLazySearchNetworkUsersQuery();
+
+  // Handle search with debouncing
+  useEffect(() => {
+    if (searchQuery.trim().length > 2) {
+      const timeoutId = setTimeout(() => {
+        searchUsers({
+          name: searchQuery,
+          businessCategory: searchQuery,
+          designation: searchQuery,
+          specialisation: searchQuery,
+          page: 1,
+          limit: 20,
+        });
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [searchQuery, searchUsers]);
+
+  // Update profiles when search data changes
+  useEffect(() => {
+    if (searchData?.data) {
+      const transformedProfiles: NetworkProfile[] = searchData.data.map(
+        (user: any) => ({
+          _id: user._id,
+          name: user.name || "Unknown User",
+          designation: user.designation || "",
+          businessName: user.businessName || "Not specified",
+          businessCategory: user.businessCategory || "Not specified",
+          specialisation: user.specialisation || "",
+          companyMail: user.companyMail,
+          contact: user.contact,
+          webnClubMember: user.webnClubMember || false,
+          isConnected: false,
+          showIcons: false,
+        })
+      );
+      setProfiles(transformedProfiles);
+    } else {
+      setProfiles([]);
+    }
+  }, [searchData]);
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
-    setIsSearching(value.trim().length > 0);
+    setIsSearching(value.trim().length > 2);
   };
 
   const handleQuickkConnect = (profileId: string) => {
     // Toggle the icons display
     setProfiles((prev) =>
       prev.map((profile) =>
-        profile.id === profileId
+        profile._id === profileId
           ? { ...profile, showIcons: !profile.showIcons }
           : profile
       )
     );
+  };
+
+  // Helper function to create email message
+  const createEmailMessage = (recipientName: string) => {
+    const subject = "Let's Connect - Found you on Webn";
+    const body = `Hi ${recipientName},
+
+I hope this message finds you well. I found your profile on Webn and would love to connect with you.
+
+I'm interested in networking with professionals like yourself and believe we could have some great opportunities to collaborate or share insights.
+
+Looking forward to connecting!
+
+Best regards`;
+
+    return { subject, body };
+  };
+
+  // Helper function to create WhatsApp message
+  const createWhatsAppMessage = (recipientName: string) => {
+    return `Hi ${recipientName}, I found your profile on Webn and wanted to connect with you. I'd love to network and explore potential collaboration opportunities. Looking forward to hearing from you!`;
   };
 
   const ProfileCard: React.FC<{ profile: NetworkProfile }> = ({ profile }) => (
@@ -122,25 +138,50 @@ const NetworkSearch: React.FC = () => {
           overflow: "hidden",
         }}
       >
-        {/* Role Badge */}
-        <Box
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.background.paper,
-            padding: "4px 12px",
-            display: "inline-block",
-            margin: "0px 16px 0 16px",
-          }}
-        >
-          <Typography
-            variant="body2"
-            sx={{
-              fontWeight: 600,
-              fontSize: "12px",
-            }}
-          >
-            {profile.role}
-          </Typography>
+        <Box display={"flex"} justifyContent={"space-between"} mx={"16px"}>
+          {/* Role Badge */}
+          {profile.designation != "" && (
+            <Box
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.paper,
+                padding: "4px 12px",
+                display: "inline-block",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "12px",
+                }}
+              >
+                {profile.designation}
+              </Typography>
+            </Box>
+          )}
+
+          {/* webnClubMember Badge */}
+          {profile.webnClubMember && (
+            <Box
+              sx={{
+                border: `1px solid ${theme.palette.primary.main}`,
+                color: theme.palette.primary.main,
+                padding: "4px 12px",
+                display: "inline-block",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "12px",
+                }}
+              >
+                Webn Member
+              </Typography>
+            </Box>
+          )}
         </Box>
 
         <CardContent sx={{ padding: "0px !important" }}>
@@ -176,7 +217,7 @@ const NetworkSearch: React.FC = () => {
                   fontWeight: 500,
                 }}
               >
-                {profile.company}
+                {profile.businessName}
               </Typography>
             </Box>
 
@@ -189,14 +230,34 @@ const NetworkSearch: React.FC = () => {
                 marginBottom: "8px",
               }}
             >
-              Belongs to industries like
+              Specializes in
             </Typography>
 
             <Box display="flex" flexWrap="wrap" gap={1} mb={6}>
-              {profile.industries.map((industry, index) => (
+              {profile.businessCategory &&
+                profile.businessCategory
+                  .split(",")
+                  .map((category: string, index: number) => (
+                    <Chip
+                      key={index}
+                      label={category}
+                      sx={{
+                        flex: 1,
+                        borderRadius: "0px",
+                        backgroundColor: "transparent",
+                        border: `1px solid ${theme.palette.text.secondary}`,
+                        color: theme.palette.text.primary,
+                        fontSize: "16px",
+                        height: "35px",
+                        "& .MuiChip-label": {
+                          padding: "0 8px",
+                        },
+                      }}
+                    />
+                  ))}
+              {profile.specialisation && (
                 <Chip
-                  key={index}
-                  label={industry}
+                  label={profile.specialisation}
                   sx={{
                     flex: 1,
                     borderRadius: "0px",
@@ -210,7 +271,7 @@ const NetworkSearch: React.FC = () => {
                     },
                   }}
                 />
-              ))}
+              )}
             </Box>
 
             {/* Connection Info */}
@@ -236,7 +297,7 @@ const NetworkSearch: React.FC = () => {
                   fontSize: "12px",
                 }}
               >
-                {profile.connections}+ Connections
+                Community Member
               </Typography>
             </Box>
           </Box>
@@ -244,7 +305,7 @@ const NetworkSearch: React.FC = () => {
           {/* Quickk Connect Button */}
           <motion.div whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
             <GlobalButton
-              onClick={() => handleQuickkConnect(profile.id)}
+              onClick={() => handleQuickkConnect(profile._id)}
               fullWidth
               sx={{
                 backgroundColor: theme.palette.text.primary,
@@ -269,91 +330,143 @@ const NetworkSearch: React.FC = () => {
                   gap={2}
                 >
                   {/* LinkedIn Icon */}
-                  <Box
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      backgroundColor: "#0077B5", // LinkedIn blue
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "transform 0.2s ease",
-                      "&:hover": {
-                        transform: "scale(1.1)",
-                      },
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // LinkedIn share logic would go here
-                    }}
-                  >
-                    <LinkedInIcon 
-                      sx={{ 
-                        color: "white",
-                        fontSize: "20px"
-                      }} 
-                    />
-                  </Box>
+                  <Tooltip title="Share about connecting on LinkedIn">
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: "#0077B5", // LinkedIn blue
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        transition: "transform 0.2s ease",
+                        "&:hover": {
+                          transform: "scale(1.1)",
+                        },
+                      }}
+                      onClick={
+                        () => {}
+                        //   (e) => {
+                        //   e.stopPropagation();
+                        //   // Create a LinkedIn share post about wanting to connect
+                        //   const shareText = `I found ${profile.name} on Webn and would love to connect! They specialize in ${profile.specialisation || profile.businessCategory} and work at ${profile.businessName}. Great to see professionals connecting through Webn! #Networking #Webn`;
+                        //   const linkedinShareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://webn.in')}&text=${encodeURIComponent(shareText)}`;
+                        //   window.open(linkedinShareLink, "_blank");
+                        // }
+                      }
+                    >
+                      <LinkedInIcon
+                        sx={{
+                          color: "white",
+                          fontSize: "20px",
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
 
                   {/* Email Icon */}
-                  <Box
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      backgroundColor: "#EA4335", // Gmail red
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "transform 0.2s ease",
-                      "&:hover": {
-                        transform: "scale(1.1)",
-                      },
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Email share logic would go here
-                    }}
+                  <Tooltip
+                    title={
+                      profile.companyMail
+                        ? `Send email to ${profile.companyMail}`
+                        : "Email not available"
+                    }
                   >
-                    <EmailIcon 
-                      sx={{ 
-                        color: "white",
-                        fontSize: "20px"
-                      }} 
-                    />
-                  </Box>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: profile.companyMail
+                          ? "#EA4335"
+                          : "#CCCCCC", // Gmail red or disabled gray
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: profile.companyMail ? "pointer" : "not-allowed",
+                        transition: "transform 0.2s ease",
+                        opacity: profile.companyMail ? 1 : 0.5,
+                        "&:hover": {
+                          transform: profile.companyMail
+                            ? "scale(1.1)"
+                            : "none",
+                        },
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (profile.companyMail) {
+                          const emailData = createEmailMessage(profile.name);
+                          const mailtoLink = `mailto:${
+                            profile.companyMail
+                          }?subject=${encodeURIComponent(
+                            emailData.subject
+                          )}&body=${encodeURIComponent(emailData.body)}`;
+                          window.open(mailtoLink, "_blank");
+                        }
+                      }}
+                    >
+                      <EmailIcon
+                        sx={{
+                          color: "white",
+                          fontSize: "20px",
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
 
                   {/* WhatsApp Icon */}
-                  <Box
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "50%",
-                      backgroundColor: "#25D366", // WhatsApp green
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      transition: "transform 0.2s ease",
-                      "&:hover": {
-                        transform: "scale(1.1)",
-                      },
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // WhatsApp share logic would go here
-                    }}
+                  <Tooltip
+                    title={
+                      profile.contact
+                        ? `Send WhatsApp message to ${profile.contact}`
+                        : "Phone number not available"
+                    }
                   >
-                    <WhatsAppIcon 
-                      sx={{ 
-                        color: "white",
-                        fontSize: "20px"
-                      }} 
-                    />
-                  </Box>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: profile.contact
+                          ? "#25D366"
+                          : "#CCCCCC", // WhatsApp green or disabled gray
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: profile.contact ? "pointer" : "not-allowed",
+                        transition: "transform 0.2s ease",
+                        opacity: profile.contact ? 1 : 0.5,
+                        "&:hover": {
+                          transform: profile.contact ? "scale(1.1)" : "none",
+                        },
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (profile.contact) {
+                          const message = createWhatsAppMessage(profile.name);
+                          // Format the phone number (remove any non-digits and add country code if needed)
+                          let phoneNumber = profile.contact.replace(/\D/g, "");
+                          // If the number doesn't start with country code, assume it's Indian (+91)
+                          if (phoneNumber.length === 10) {
+                            phoneNumber = "91" + phoneNumber;
+                          }
+                          const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+                            message
+                          )}`;
+                          window.open(whatsappLink, "_blank");
+                        }
+                      }}
+                    >
+                      <WhatsAppIcon
+                        sx={{
+                          color: "white",
+                          fontSize: "20px",
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
                 </Box>
               ) : (
                 <motion.span
@@ -456,7 +569,7 @@ const NetworkSearch: React.FC = () => {
               fontSize: "14px",
             }}
           >
-            {filteredProfiles.length} results
+            {profiles.length} results
           </Typography>
         </Box>
       )}
@@ -484,7 +597,33 @@ const NetworkSearch: React.FC = () => {
               </Typography>
             </Box>
           </motion.div>
-        ) : filteredProfiles.length > 0 ? (
+        ) : isLoading ? (
+          // Loading state
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Box
+              sx={{
+                textAlign: "center",
+                padding: "40px 20px",
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  color: theme.palette.text.secondary,
+                  fontSize: "16px",
+                }}
+              >
+                Searching for professionals...
+              </Typography>
+            </Box>
+          </motion.div>
+        ) : profiles.length > 0 ? (
           // Results found
           <motion.div
             key="results"
@@ -496,8 +635,8 @@ const NetworkSearch: React.FC = () => {
             <Box
             // sx={{ maxHeight: "600px", overflowY: "auto" }}
             >
-              {filteredProfiles.map((profile) => (
-                <ProfileCard key={profile.id} profile={profile} />
+              {profiles.map((profile) => (
+                <ProfileCard key={profile._id} profile={profile} />
               ))}
             </Box>
           </motion.div>

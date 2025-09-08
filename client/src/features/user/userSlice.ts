@@ -15,6 +15,12 @@ interface UserState {
     learningStreak: number | null;
     progress: number | null;
     eventMode: boolean;
+    // New profile completion fields
+    businessCategory: string | null;
+    designation: string | null;
+    currentStage: string | null;
+    communityGoal: string | null;
+    interestedEvents: string | null;
     users: Array<{
         name: string;
         totalStars: number;
@@ -50,6 +56,12 @@ const initialState: UserState = {
     progress: 0,
     address: null,
     contact: null,
+    // New profile completion fields
+    businessCategory: null,
+    designation: null,
+    currentStage: null,
+    communityGoal: null,
+    interestedEvents: null,
     eventMode: JSON.parse(localStorage.getItem('eventMode') || 'false'),
     users: null,
     currentMonth: null,
@@ -83,7 +95,24 @@ const userSlice = createSlice({
             .addMatcher(
                 usersApi.endpoints.fetchUser.matchFulfilled,
                 (state, { payload }) => {
-                    const user = payload as { data: { name: string; companyMail: string; _id: string; totalStars: number; redeemedStars: number; address: string; contact: string;rank :number; avatarSelected: boolean ;learningStreak:number;progress:number} };
+                    const user = payload as { data: { 
+                        name: string; 
+                        companyMail: string; 
+                        _id: string; 
+                        totalStars: number; 
+                        redeemedStars: number; 
+                        address: string; 
+                        contact: string;
+                        rank: number; 
+                        avatarSelected: boolean;
+                        learningStreak: number;
+                        progress: number;
+                        businessCategory: string;
+                        designation: string;
+                        currentStage: string;
+                        communityGoal: string;
+                        interestedEvents: string;
+                    } };
                     state.name = user.data.name;
                     state.companyMail = user.data.companyMail;
                     state.userId = user.data._id;
@@ -95,6 +124,12 @@ const userSlice = createSlice({
                     state.avatarSelected = user.data.avatarSelected;
                     state.learningStreak = user.data.learningStreak;
                     state.progress = user.data.progress;
+                    // Store new profile completion fields
+                    state.businessCategory = user.data.businessCategory || null;
+                    state.designation = user.data.designation || null;
+                    state.currentStage = user.data.currentStage || null;
+                    state.communityGoal = user.data.communityGoal || null;
+                    state.interestedEvents = user.data.interestedEvents || null;
                     state.isLoading = false;
                 }
             )

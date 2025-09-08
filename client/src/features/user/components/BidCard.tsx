@@ -12,6 +12,7 @@ const BidCard: React.FC = () => {
     isLoading,
     error,
   } = useGetUpcomingRewardQuery({});
+  const theme = useTheme();
 
   const {
     // time,
@@ -64,7 +65,6 @@ const BidCard: React.FC = () => {
   const handleClick = () => {
     // navigate("/user/reward");
   };
-  const theme = useTheme();
 
   return (
     <Box

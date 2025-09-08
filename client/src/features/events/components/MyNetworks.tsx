@@ -3,44 +3,59 @@ import { useNavigate } from "react-router-dom";
 import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
 import NetworkSearch from "./NetworkSearch";
 import BottomNavigation from "../../../components/ui/BottomNavigation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
+import { isProfileComplete } from "../../../utils/profileUtils";
 
 const MyNetworks = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+
+  // Get user data from Redux store
+  const user = useSelector((state: RootState) => state.user);
+
+  // Check if profile is complete
+  const profileComplete = isProfileComplete(user);
+
   const handleProfileClick = () => {
     navigate("/user/complete-profile");
   };
-  const theme = useTheme();
-  return (
-    <Box py={"8px"} display={"flex"} flexDirection={"column"} gap={8} mb={6}>
-      <Box
-        mt={"60px"}
-        display="flex"
-        borderTop={`2px solid ${theme.palette.primary.main}`}
-        borderBottom={`2px solid ${theme.palette.primary.main}`}
-        justifyContent="space-between"
-        alignItems="center"
-        onClick={handleProfileClick}
-        p={"38px 24px"}
-        sx={{ cursor: "pointer" }}
-      >
-        <Box>
-          <Typography
-            variant="h2"
-            fontSize={"20px"}
-            color="#000"
-            sx={{ textWrap: "nowrap" }}
-          >
-            Complete Your Profile
-          </Typography>
-          <Typography variant="h3" fontSize={"16px"} mt={1}>
-            Hardly takes 2 mins
-          </Typography>
-        </Box>
-        <Box>
-          <CallMadeOutlinedIcon sx={{ fontSize: 35 }} />
-        </Box>
-      </Box>
 
+  return (
+    <Box py={"8px"} display={"flex"} flexDirection={"column"} gap={8}>
+      {/* Conditionally render Complete Profile section only if profile is incomplete */}
+      {!profileComplete && (
+        <Box
+          mt="60px"
+          display="flex"
+          borderTop={`2px solid ${theme.palette.primary.main}`}
+          borderBottom={`2px solid ${theme.palette.primary.main}`}
+          justifyContent="space-between"
+          alignItems="center"
+          onClick={handleProfileClick}
+          p={"38px 24px"}
+          sx={{ cursor: "pointer" }}
+        >
+          <Box>
+            <Typography
+              variant="h2"
+              fontSize={"20px"}
+              color="#000"
+              sx={{ textWrap: "nowrap" }}
+            >
+              Complete Your Profile
+            </Typography>
+            <Typography variant="h3" fontSize={"16px"} mt={1}>
+              Hardly takes 2 mins
+            </Typography>
+          </Box>
+          <Box>
+            <CallMadeOutlinedIcon sx={{ fontSize: 35 }} />
+          </Box>
+        </Box>
+      )}
+
+      {profileComplete && <Box mt={"40px"} />}
       <NetworkSearch />
       <BottomNavigation />
     </Box>

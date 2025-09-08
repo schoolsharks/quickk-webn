@@ -244,6 +244,10 @@ class UserService {
                         facebook: userData.facebook,
                         businessCategory: userData.businessCategory,
                         specialisation: userData.specialisation,
+                        designation: userData.designation || "",
+                        currentStage: userData.currentStage || "",
+                        communityGoal: userData.communityGoal || "",
+                        interestedEvents: userData.interestedEvents || "",
                     },
                 },
                 { new: true, runValidators: true }
@@ -412,6 +416,7 @@ class UserService {
                         facebook: userData.facebook?.trim() || '',
                         businessCategory: userData.businessCategory?.trim() || '',
                         specialisation: userData.specialisation?.trim() || '',
+                        webnClubMember: userData.webnClubMember || false,
                         company: company._id,
                         learningStreak: 0,
                         createdAt: new Date(),

@@ -259,6 +259,7 @@ const BulkUserUpload: React.FC = () => {
           facebook: row.Facebook?.trim() || "",
           businessCategory: row["Business Category"]?.trim() || "",
           specialisation: row.Specialisation?.trim() || "",
+          webnClubMember: true,
         }));
 
         setParsedData(transformedData);

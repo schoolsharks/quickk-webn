@@ -61,11 +61,27 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
     facebook: {
         type: String,
     },
+    specialisation: {
+        type: String,
+    },
     businessCategory: {
         type: String,
     },
-    specialisation: {
+    designation: {
         type: String,
+    },
+    currentStage: {
+        type: String,
+    },
+    communityGoal: {
+        type: String,
+    },
+    interestedEvents: {
+        type: String,
+    },
+    webnClubMember: {
+        type: Boolean,
+        default: false,
     },
 }, {
     timestamps: true

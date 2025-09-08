@@ -1,21 +1,39 @@
 import { Box, Card, CardContent, Typography, useTheme } from "@mui/material";
 import React from "react";
-import event from "../../../assets/images/Onboardinghead.png";
+// import event from "../../../assets/images/Onboardinghead.png";
 import AnimateOnClick from "../../../animation/AnimateOnClick";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
 import { responseSubmitted } from "../../../animation";
+import { useGetActiveEventsQuery } from "../../events/services/eventsApi";
+import Loader from "../../../components/ui/Loader";
+import ErrorLayout from "../../../components/ui/Error";
+import formatEventTime from "../../../utils/formatEventTime";
 
-const dummyEventData = {
-  date: new Date(), // Today's date
-  topic: "Pitch & Prosper 2025",
-  city: "Mumbai",
-  time: "10:00pm - 6:00pm",
-  interestedCount: 200,
-  image: event,
-};
+// const EventData = {
+//   date: new Date(), // Today's date
+//   topic: "Pitch & Prosper 2025",
+//   city: "Mumbai",
+//   time: "10:00pm - 6:00pm",
+//   interestedCount: 200,
+//   image: event,
+// };
 
 const Upcoming_Event: React.FC = () => {
+  const { data: EventData, isError, isLoading } = useGetActiveEventsQuery({});
   const theme = useTheme();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError || !EventData) {
+    return <ErrorLayout />;
+  }
+
+  const eventTime =
+    EventData?.startDate && EventData?.endDate
+      ? formatEventTime(EventData.startDate, EventData.endDate)
+      : EventData?.time || "";
 
   return (
     <Card
@@ -54,7 +72,7 @@ const Upcoming_Event: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundImage: `url(${dummyEventData.image})`,
+              backgroundImage: `url(${EventData.eventImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -80,7 +98,7 @@ const Upcoming_Event: React.FC = () => {
                   fontSize: "25px",
                 }}
               >
-                {dummyEventData.topic}
+                {EventData.title}
               </Typography>
             </Box>
             <Typography
@@ -91,7 +109,7 @@ const Upcoming_Event: React.FC = () => {
                 fontSize: "20px",
               }}
             >
-              {dummyEventData.city}
+              {EventData.location.split(",")[2]}
             </Typography>
             <Box display={"flex"} justifyContent="space-between" width={"100%"}>
               <Typography
@@ -101,7 +119,7 @@ const Upcoming_Event: React.FC = () => {
                   fontSize: "14px",
                 }}
               >
-                {dummyEventData.time}
+                {eventTime}
               </Typography>
               <Typography
                 variant="body2"
@@ -111,7 +129,7 @@ const Upcoming_Event: React.FC = () => {
                   fontWeight: 500,
                 }}
               >
-                +{dummyEventData.interestedCount} interested
+                +{EventData.interestedCount} interested
               </Typography>
             </Box>
           </Box>

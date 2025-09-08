@@ -124,6 +124,10 @@ export const addEditUser = async (req: Request, res: Response) => {
             facebook: userDetails.facebook,
             businessCategory: userDetails.businessCategory,
             specialisation: userDetails.specialisation,
+            designation: userDetails.designation || "",
+            currentStage: userDetails.currentStage || "",
+            communityGoal: userDetails.communityGoal || "",
+            interestedEvents: userDetails.interestedEvents || "",
         };
 
         const result = await userService.AddEditUser(userData);

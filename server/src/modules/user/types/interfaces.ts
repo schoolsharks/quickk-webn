@@ -22,8 +22,13 @@ export interface IUser {
     businessName?: string;
     instagram?: string;
     facebook?: string;
-    businessCategory?: string;
     specialisation?: string;
+    businessCategory?: string;
+    designation?: string;
+    currentStage?: string;
+    communityGoal?: string;
+    interestedEvents?: string;
+    webnClubMember?: boolean;
 }
 
 export interface IAvatar {

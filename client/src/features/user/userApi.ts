@@ -28,7 +28,7 @@ export const usersApi = api.injectEndpoints({
                 url: '/user/fetchUser',
                 method: 'GET',
             }),
-            providesTags:["Learning","DailyPulse","Tickets"],
+            providesTags: ["Learning", "DailyPulse", "Tickets", "User"],
             transformResponse: (response) => {
                 return response;
             },
@@ -56,7 +56,7 @@ export const usersApi = api.injectEndpoints({
                 url: '/user/getLeaderboard',
                 method: 'GET',
             }),
-            providesTags:["Learning","DailyPulse","Tickets"]
+            providesTags: ["Learning", "DailyPulse", "Tickets"]
         }),
 
         getAllAvatars: builder.query({
@@ -65,7 +65,7 @@ export const usersApi = api.injectEndpoints({
                 method: 'GET',
             }),
         }),
-        
+
         selectAvatar: builder.mutation({
             query: (avatarId) => ({
                 url: `/user/selectAvatar`,
@@ -74,12 +74,15 @@ export const usersApi = api.injectEndpoints({
             }),
         }),
 
-        
 
-
-
-
-
+        updateUserProfile: builder.mutation({
+            query: (data) => ({
+                url: `/user/updateUserProfile`,
+                method: 'POST',
+                body: { userDetails: data },
+            }),
+            invalidatesTags: ['User'],
+        }),
     }),
 });
 
@@ -90,4 +93,5 @@ export const {
     useGetLeaderboardQuery,
     useGetAllAvatarsQuery,
     useSelectAvatarMutation,
+    useUpdateUserProfileMutation,
 } = usersApi;

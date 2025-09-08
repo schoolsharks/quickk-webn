@@ -8,6 +8,7 @@ import * as moduleControllers from "../../learning/controllers/module.controller
 import * as userControllers from "../controllers/user.controller";
 import * as rewardControllers from "../../reward/controllers/reward.controller";
 import { eventController } from "../../events/controllers/events.controllers";
+import * as UserControllers from "../../user/controllers/user.controller";
 
 const router = express.Router();
 
@@ -49,6 +50,9 @@ router.get('/getActiveEvents', authenticateUser, asyncHandeler(eventController.g
 router.get('/getUpcomingEvents', authenticateUser, asyncHandeler(eventController.getUpcomingEvents));
 router.get('/getPastEvents', authenticateUser, asyncHandeler(eventController.getPastEvents));
 router.get('/getEventById/:eventId', authenticateUser, asyncHandeler(eventController.getEventById));
+
+// route for user profile
+router.post('/updateUserProfile', authenticateUser, asyncHandeler(UserControllers.addEditUser));
 
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));

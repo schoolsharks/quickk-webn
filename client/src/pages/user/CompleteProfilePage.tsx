@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../components/ui/button";
+import { useUpdateUserProfileMutation } from "../../features/user/userApi";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 // Step 1: Industry Selection
 const industries = [
@@ -222,6 +225,9 @@ const SelectionStep: React.FC<StepProps> = ({
 const CompleteProfilePage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [updateUserProfile] = useUpdateUserProfileMutation();
+  const { userId, companyMail, name } = useSelector((state: RootState) => state.user);
+  
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<string[]>([]);
@@ -242,19 +248,29 @@ const CompleteProfilePage: React.FC = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Complete profile and redirect to event mode
-      console.log("Profile completed:", {
-        industries: selectedIndustries,
-        role: selectedRole,
-        stage: selectedStage,
-        communityGoals: selectedCommunityGoals,
-        eventTypes: selectedEventTypes,
-      });
-      navigate("/user/event-mode");
+      // Complete profile and update user data
+      try {
+        const profileData = {
+          userId: userId,
+          companyMail : companyMail,
+          name: name,
+          businessCategory: selectedIndustries.join(", "),
+          designation: selectedRole[0] || "",
+          currentStage: selectedStage[0] || "",
+          communityGoal: selectedCommunityGoals.join(", "),
+          interestedEvents: selectedEventTypes.join(", "),
+        };
+
+        await updateUserProfile(profileData).unwrap();
+        navigate("/user/event-mode");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        // You might want to show an error message to the user here
+      }
     }
   };
 

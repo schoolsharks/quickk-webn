@@ -33,7 +33,7 @@ const Referral: React.FC = () => {
   };
 
   const handleReferNow = async () => {
-    const referralLink = `${window.location.origin}/signup?ref=user123`;
+    const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
     const shareData = {
       title: "Join Gowomaniya Community",
       text: "Invite a friend. Earn 50⚡\n\nBring your friends to Gowomaniya Community and unlock exciting perks with every signup.",
@@ -58,7 +58,7 @@ const Referral: React.FC = () => {
   };
 
   const handleCopyLink = async () => {
-    const referralLink = `${window.location.origin}/signup?ref=${userId}`;
+    const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
 
     try {
       if (navigator.clipboard) {

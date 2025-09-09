@@ -85,10 +85,10 @@ const Login = () => {
   };
 
   // Handle signup
-  const handleSignup = async (signupData: SignupData) => {
+  const handleSignup = async (signupData: SignupData, ref?: string | null) => {
     try {
       setError("");
-      const result = await signupUser(signupData).unwrap();
+      const result = await signupUser({signupData, ref}).unwrap();
 
       if (result) {
         setEmail(signupData.companyMail);

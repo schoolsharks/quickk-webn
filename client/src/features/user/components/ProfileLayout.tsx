@@ -141,6 +141,108 @@ const ProfileLayout = () => {
         </Stack>
       </Box>
 
+      {/* Become a Webn Member Section */}
+      <AnimateOnScroll
+        variants={fadeInUp}
+        transition={baseTransition}
+        amount={0.3}
+      >
+        <Box
+          sx={{
+            mt: "32px",
+            mx: "20px",
+            overflow: "hidden",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/user/webn-membership")}
+        >
+          <Stack direction="row" sx={{ height: "120px" }}>
+            {/* Left side - Text content */}
+            <Box
+              sx={{
+                flex: 1,
+                bgcolor: "rgba(205, 123, 255, 0.1)",
+                p: "16px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderRight: "none",
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    color: "text.primary",
+                    mb: 0.5,
+                  }}
+                >
+                  Become a
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "600",
+                    fontSize: "16px",
+                    color: "text.primary",
+                    mb: 1,
+                  }}
+                >
+                  Webn Member
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontSize: "12px",
+                    color: "text.secondary",
+                    mb: 1,
+                  }}
+                >
+                  T&C Applied
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    border: `1px solid ${theme.palette.text.primary}`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "12px", transform: "rotate(45deg)" }}>
+                    →
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            {/* Right side - Image */}
+            <Box
+              sx={{
+                width: "40%",
+                backgroundImage: `url(${foundation})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderLeft: "none",
+              }}
+            />
+          </Stack>
+        </Box>
+      </AnimateOnScroll>
+
       {/* Stars Section */}
       <AnimateOnScroll
         variants={fadeInUp}

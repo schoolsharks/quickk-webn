@@ -13,6 +13,7 @@ import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { handleHaptic } from "../../../../utils/haptics";
 import { carouselSlide } from "../../../../animation/variants/slideCarousel";
 import Upcoming_Event from "../../../user/components/Upcoming_Event";
+import StarsEarnedPopup from "../../../../components/ui/StarsEarnedPopup";
 
 type PulseItemType = "infoCard" | "QuestionTwoOption" | "bidCard" | "eventCard";
 
@@ -67,8 +68,10 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   smallSize = false,
 }) => {
   const [submitPulseResponse] = useSubmitPulseResponseMutation();
-  const [_currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number>(1);
+  const [showStarsPopup, setShowStarsPopup] = useState(false);
+  const [earnedStars, setEarnedStars] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -179,6 +182,10 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     if (!pulseItem) return console.error("Daily pulse error.");
     handleHaptic();
 
+    // Show stars earned popup
+    setEarnedStars(pulseItem.score || 0);
+    setShowStarsPopup(true);
+
     const payload = {
       refId: itemId,
       type: pulseItem.type,
@@ -200,10 +207,14 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     }
   };
 
-  const totalScore = pulseItems.reduce(
-    (total, item) => total + (item.score || 0),
-    0
-  );
+  // const totalScore = pulseItems.reduce(
+  //   (total, item) => total + (item.score || 0),
+  //   0
+  // );
+
+  const handleCloseStarsPopup = () => {
+    setShowStarsPopup(false);
+  };
 
   const renderPulseItem = (item: PulseItem, index: number) => {
     const cardStyle = {
@@ -304,7 +315,8 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           <Typography variant="h4">Daily Pulse</Typography>
           {showScore && (
             <Typography variant="h4" display={"flex"} alignItems={"center"}>
-              {totalScore}
+              {/* {totalScore} */}
+              {pulseItems[currentIndex]?.score}
               <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
             </Typography>
           )}
@@ -322,11 +334,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
             : "420px"
         }
       >
-        <Slider
-          key={maxHeight}
-          {...settings}
-          ref={sliderRef}
-        >
+        <Slider key={maxHeight} {...settings} ref={sliderRef}>
           {pulseItems.map((item, index) => (
             <Box px={"20px"} key={item.id} height={"100%"}>
               <motion.div
@@ -342,6 +350,13 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           ))}
         </Slider>
       </Box>
+
+      {/* Stars Earned Popup */}
+      <StarsEarnedPopup
+        open={showStarsPopup}
+        stars={earnedStars}
+        onClose={handleCloseStarsPopup}
+      />
     </Box>
   );
 };

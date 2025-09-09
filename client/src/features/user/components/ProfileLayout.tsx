@@ -10,8 +10,7 @@ import {
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
-// Import your images
+import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
 import badge1 from "../../../assets/images/user/MedalBlue.png";
 import badge2 from "../../../assets/images/user/GoldMedal.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -20,7 +19,7 @@ import { theme } from "../../../theme/theme";
 import ActiveLearning from "../../../components/ui/ActiveLearning";
 import amajon from "../../../assets/images/user/amajon.png";
 import starbucks from "../../../assets/images/user/starbucks.png";
-import foundation from "../../../assets/images/user/foundation.png";
+import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
 import watch from "../../../assets/images/user/watch.png";
 import Badge from "../../../components/ui/badge";
 import Certificate from "../../../components/ui/certificate";
@@ -140,6 +139,76 @@ const ProfileLayout = () => {
           ))}
         </Stack>
       </Box>
+
+      {/* Become a Webn Member Section */}
+      <AnimateOnScroll
+        variants={fadeInUp}
+        transition={baseTransition}
+        amount={0.3}
+      >
+        <Box
+          sx={{
+            mt: "32px",
+            overflow: "hidden",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/user/webn-membership")}
+        >
+          <Stack direction="row" sx={{ height: "160px" }}>
+            {/* Left side - Text content */}
+            <Box
+              sx={{
+                flex: 1,
+                bgcolor: "rgba(205, 123, 255, 0.1)",
+                p: "16px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderRight: "none",
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "600",
+                    fontSize: "20px",
+                    color: "text.primary",
+                    mb: 0.5,
+                  }}
+                >
+                  Become a Webn Member
+                </Typography>
+                <Typography
+                  sx={{
+                    fontWeight: "600",
+                    fontSize: "10px",
+                    color: theme.palette.text.secondary,
+                    mb: 1,
+                  }}
+                >
+                  T&C Applied
+                </Typography>
+              </Box>
+              <CallMadeOutlinedIcon
+                sx={{ fontSize: 35, transform: "Rotate(45deg)", mt: "10px" }}
+              />
+            </Box>
+            {/* Right side - Image */}
+            <Box
+              sx={{
+                width: "50%",
+                backgroundImage: `url(${foundation})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                border: `1px solid ${theme.palette.primary.main}`,
+                borderLeft: "none",
+              }}
+            />
+          </Stack>
+        </Box>
+      </AnimateOnScroll>
 
       {/* Stars Section */}
       <AnimateOnScroll

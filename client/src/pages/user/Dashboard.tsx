@@ -7,7 +7,7 @@ import StatusPanel from "../../features/user/components/StatusPanel";
 import ToggleBar from "../../features/user/components/ToggleBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ContinueLearning from "../../features/user/components/ContinueLearning";
 import AnimateOnScroll from "../../animation/AnimateOnScroll";
 import { baseTransition } from "../../animation/transitions/baseTransition";
@@ -18,14 +18,28 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 // import Upcoming_Event from "../../features/user/components/Upcoming_Event";
 import Quickk from "../../components/ui/Quickk";
 import TopStatusPanel from "../../features/user/components/TopStatusPanel";
+import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
 
 const Dashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
   const theme = useTheme();
+  const [showStarsPopup, setShowStarsPopup] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Check if we should show stars popup from localStorage
+    const shouldShowStars = localStorage.getItem("showStarsPopup");
+    if (shouldShowStars === "true") {
+      setShowStarsPopup(true);
+    }
   }, []);
+
+  const handleCloseStarsPopup = () => {
+    setShowStarsPopup(false);
+    // Remove flag from localStorage
+    localStorage.removeItem("showStarsPopup");
+  };
 
   return (
     <Box color="#000" py={"30px"}>
@@ -157,6 +171,13 @@ const Dashboard = () => {
           <Quickk />
         </Box>
       </AnimateOnScroll>
+
+      {/* Stars Earned Popup */}
+      <StarsEarnedPopup
+        open={showStarsPopup}
+        stars={50}
+        onClose={handleCloseStarsPopup}
+      />
     </Box>
   );
 };

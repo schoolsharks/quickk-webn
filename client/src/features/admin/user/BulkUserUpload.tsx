@@ -193,7 +193,7 @@ const BulkUserUpload: React.FC = () => {
         errors.push(`Row ${rowNumber}: Company Email is required`);
       } else {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(row["Company Email"])) {
+        if (!emailPattern.test(row["Company Email"].trim())) {
           errors.push(`Row ${rowNumber}: Invalid email format`);
         }
       }
@@ -251,7 +251,7 @@ const BulkUserUpload: React.FC = () => {
         const transformedData: UserData[] = jsonData.map((row: any) => ({
           name: row.Name?.trim() || "",
           companyMail: row["Company Email"]?.trim().toLowerCase() || "",
-          contact: row.Contact?.trim() || "",
+          contact: String(row.Contact)?.trim() || "",
           address: row.Address?.trim() || "",
           chapter: row.Chapter?.trim() || "",
           businessName: row["Business Name"]?.trim() || "",
@@ -266,6 +266,7 @@ const BulkUserUpload: React.FC = () => {
         setValidationErrors([]);
         setUploadResult(null);
       } catch (error) {
+        console.log("Error",error)
         setValidationErrors([
           "Error reading Excel file. Please ensure it's a valid Excel file.",
         ]);

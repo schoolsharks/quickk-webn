@@ -240,6 +240,7 @@ class UserService {
                         contact: userData.contact,
                         chapter: userData.chapter,
                         businessName: userData.businessName,
+                        businessLogo: userData.businessLogo,
                         instagram: userData.instagram,
                         facebook: userData.facebook,
                         businessCategory: userData.businessCategory,

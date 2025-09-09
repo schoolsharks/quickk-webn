@@ -5,8 +5,10 @@ import AppError from '../../../utils/appError';
 import mongoose from 'mongoose';
 import { SearchHelper } from '../../../utils/search/searchHelper';
 import { searchConfigs } from '../../../utils/search/searchConfigs';
+import AdminService from '../../admin/service/admin.service';
 
 const userService = new UserService();
+const adminService = new AdminService();
 
 export const getAllUsersWithDetails = async (
     req: Request,
@@ -80,6 +82,7 @@ export const getAllUsersTableData = async (
             learningStreak: user.learningStreak,
             chapter: user.chapter,
             businessName: user.businessName,
+            businessLogo: user.businessLogo,
             instagram: user.instagram,
             facebook: user.facebook,
             businessCategory: user.businessCategory,
@@ -103,13 +106,44 @@ export const getAllUsersTableData = async (
 
 export const addEditUser = async (req: Request, res: Response) => {
     try {
-        const { userDetails } = req.body;
+        let userDetails: any;
+        let businessLogoUrl: string | undefined;
+
+        // Check if request contains files (FormData) or is JSON
+        const hasFiles = req.files && Array.isArray(req.files) && req.files.length > 0;
+
+        if (hasFiles) {
+            // Handle FormData request with file uploads
+            userDetails = JSON.parse(req.body.userDetails || '{}');
+            
+            // Find business logo file if uploaded
+            const logoFile = (req.files as Express.MulterS3.File[]).find((file: Express.MulterS3.File) => 
+                file.fieldname === 'businessLogo'
+            );
+            
+            if (logoFile) {
+                businessLogoUrl = logoFile.location; // S3 URL from multer-s3
+            }
+
+            // If updating user and has new logo, delete old logo
+            if (userDetails.userId && userDetails.currentBusinessLogo && logoFile) {
+                try {
+                    await adminService.deleteImageFromS3(userDetails.currentBusinessLogo);
+                } catch (error) {
+                    console.warn("Failed to delete old business logo:", error);
+                }
+            }
+        } else {
+            // Handle regular JSON request
+            userDetails = req.body.userDetails;
+        }
 
         if (!userDetails) {
             res.status(400).json({
                 success: false,
                 message: "User details are required in request body",
             });
+            return;
         }
 
         const userData = {
@@ -120,6 +154,7 @@ export const addEditUser = async (req: Request, res: Response) => {
             address: userDetails.address,
             chapter: userDetails.chapter,
             businessName: userDetails.businessName,
+            businessLogo: businessLogoUrl || userDetails.businessLogo || "",
             instagram: userDetails.instagram,
             facebook: userDetails.facebook,
             businessCategory: userDetails.businessCategory,

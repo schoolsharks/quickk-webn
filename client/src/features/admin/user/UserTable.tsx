@@ -170,7 +170,7 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
       label: "Edit",
       color: "info",
       onClick: (row) => {
-        navigate(`/admin/user/${row.originalData._id}`);
+        navigate(`/admin/member/${row.originalData._id}`);
       },
     },
     {

@@ -108,6 +108,7 @@ const AdminMain: React.FC = () => {
                   flexGrow: 1,
                   backgroundColor: "#F7F0FB",
                   minHeight: "100vh",
+                  overflowX: "hidden",
                   color: "black",
                 }}
               >
@@ -187,12 +188,12 @@ const AdminMain: React.FC = () => {
                   />
 
                   {/* Users Routes */}
-                  <Route path="/users" element={<UserPage />} />
+                  <Route path="/members" element={<UserPage />} />
                   <Route
-                    path="/users/new-members"
+                    path="/members/new-members"
                     element={<BulkUserUploadPage />}
                   />
-                  <Route path="/user/:userId" element={<ReviewUserPage />} />
+                  <Route path="/member/:userId" element={<ReviewUserPage />} />
 
                   <Route
                     path="/rewards"
@@ -206,11 +207,11 @@ const AdminMain: React.FC = () => {
                   <Route path="/settings" element={<Settings />} />
                   <Route
                     path="/"
-                    element={<Navigate to="/admin/users" replace />}
+                    element={<Navigate to="/admin/members" replace />}
                   />
                   <Route
                     path="*"
-                    element={<Navigate to="/admin/users" replace />}
+                    element={<Navigate to="/admin/members" replace />}
                   />
                 </Routes>
                 {/* </RouteGuard> */}

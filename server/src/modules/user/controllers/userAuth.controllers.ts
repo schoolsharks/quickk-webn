@@ -277,6 +277,7 @@ export const signup = async (
       currentStage,
       communityGoal,
       interestedEvents,
+      ref,
     } = req.body;
 
     // Validate required fields
@@ -319,9 +320,19 @@ export const signup = async (
       currentStage,
       communityGoal,
       interestedEvents,
+      totalStars: 50,
       company: defaultCompanyId,
       webnClubMember: true,
     });
+
+    if (ref) {
+      const referringUser = await User.findById(ref);
+      if (referringUser) {
+        newUser.referredBy = referringUser._id;
+        referringUser.totalStars += 50;
+        await Promise.all([newUser.save(), referringUser.save()]);
+      }
+    }
 
     // Generate and send OTP for immediate login
     const otp = generateOtp();

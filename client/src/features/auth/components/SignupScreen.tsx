@@ -12,7 +12,7 @@ import WebnLogo from "../../../assets/images/header/logo.webp";
 import GlobalButton from "../../../components/ui/button";
 
 interface SignupScreenProps {
-  onSignup: (data: SignupData) => void;
+  onSignup: (data: SignupData, ref?: string | null) => void;
   isLoading: boolean;
   error: string;
 }
@@ -47,6 +47,8 @@ const businessCategories = [
 
 const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
   const theme = useTheme();
+  const searchParams = new URLSearchParams(location.search);
+  const ref = searchParams.get("ref");
   const [formData, setFormData] = useState<SignupData>({
     companyMail: "",
     name: "",
@@ -68,7 +70,7 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
 
   const handleSubmit = () => {
     if (isFormValid()) {
-      onSignup(formData);
+      onSignup(formData, ref);
     }
   };
 
@@ -78,6 +80,7 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
       formData.name.trim() &&
       formData.businessName.trim() &&
       formData.contact.trim() &&
+      formData.contact.length === 10 &&
       formData.businessCategory.trim()
     );
   };

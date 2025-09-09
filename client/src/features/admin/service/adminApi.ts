@@ -103,11 +103,22 @@ export const adminApi = api.injectEndpoints({
         }),
 
         addEditUser: builder.mutation({
-            query: (data) => ({
-                url: '/admin/addEditUser',
-                method: 'POST',
-                body: { userDetails: data },
-            }),
+            query: (data) => {
+                // If data is FormData (file upload), send as is
+                if (data instanceof FormData) {
+                    return {
+                        url: '/admin/addEditUser',
+                        method: 'POST',
+                        body: data,
+                    };
+                }
+                // Otherwise, send as regular JSON
+                return {
+                    url: '/admin/addEditUser',
+                    method: 'POST',
+                    body: { userDetails: data },
+                };
+            },
             invalidatesTags: ["AdminUser"],
         }),
 

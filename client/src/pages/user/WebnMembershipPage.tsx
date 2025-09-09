@@ -12,8 +12,6 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import EmailIcon from "@mui/icons-material/Email";
-import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../theme/theme";
 import AnimateOnScroll from "../../animation/AnimateOnScroll";
@@ -21,7 +19,7 @@ import { fadeInUp } from "../../animation";
 import { baseTransition } from "../../animation/transitions/baseTransition";
 
 // Import an existing image as placeholder
-import membershipImage from "../../assets/images/user/foundation.png";
+import membershipImage from "../../assets/images/WebnMembership/WebnMembership.webp";
 
 const WebnMembershipPage = () => {
   const navigate = useNavigate();
@@ -35,21 +33,23 @@ const WebnMembershipPage = () => {
   };
 
   const handleApplyNow = () => {
-    // Add your application logic here
-    console.log("Applying for WEBN Membership");
+    window.open(
+      "https://docs.google.com/forms/d/e/1FAIpQLSdrjKSbUFL1YsHF3mg72Muw7578nNyd_lV1JRQVx53K5vnUzA/viewform",
+      "_blank"
+    );
   };
 
   const membershipSteps = [
     {
-      icon: <PersonIcon sx={{ color: theme.palette.primary.main }} />,
+      icon: <CalendarTodayIcon sx={{ fontSize: "18px" }} />,
       title: "Fill a form and check your eligibility.",
     },
     {
-      icon: <CalendarTodayIcon sx={{ color: theme.palette.primary.main }} />,
+      icon: <CalendarTodayIcon sx={{ fontSize: "18px" }} />,
       title: "Wait to get approved within 24 hours.",
     },
     {
-      icon: <EmailIcon sx={{ color: theme.palette.primary.main }} />,
+      icon: <CalendarTodayIcon sx={{ fontSize: "18px" }} />,
       title: "You'll receive a confirmation email once approved.",
     },
   ];
@@ -61,7 +61,7 @@ const WebnMembershipPage = () => {
     "We believe in Power of words- coming through reviews & recommendation.",
     "Everyone helps you to give your best to grow your business.",
     "You learn about how to grow your business from the best in the business through our guest speakers, expert invitees and workshops and collaborations partners.",
-    "You get a huge exposure to the local happenings, seminars, and business meets, get invitations to be a part of these potential network to mingle with the \"who's who\" of the business world.",
+    'You get a huge exposure to the local happenings, seminars, and business meets, get invitations to be a part of these potential network to mingle with the "who\'s who" of the business world.',
     "Getting recognition, appreciations and awards for all your efforts.",
   ];
 
@@ -78,7 +78,7 @@ const WebnMembershipPage = () => {
           <IconButton sx={{ color: "text.primary" }} onClick={navigateBack}>
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h1" fontSize={"25px"}>
+          <Typography variant="h1" fontSize={"20px"}>
             Webn Membership
           </Typography>
         </Box>
@@ -93,13 +93,13 @@ const WebnMembershipPage = () => {
         <Box
           sx={{
             width: "100%",
-            height: "200px",
+            height: "300px",
             backgroundImage: `url(${membershipImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             mt: 2,
-            mb: 3,
+            mb: 10,
           }}
         />
       </AnimateOnScroll>
@@ -112,11 +112,10 @@ const WebnMembershipPage = () => {
       >
         <Typography
           variant="h2"
-          fontSize={"28px"}
+          fontSize={"25px"}
           fontWeight={"bold"}
-          textAlign="center"
-          px={"20px"}
-          mb={4}
+          px={"32px"}
+          mb={6}
         >
           WEBN Membership
         </Typography>
@@ -128,11 +127,9 @@ const WebnMembershipPage = () => {
         transition={baseTransition}
         amount={0.3}
       >
-        <Box px={"20px"} mb={4}>
+        <Box px={"32px"} mb={4}>
           <Typography
-            variant="h3"
-            fontSize={"20px"}
-            fontWeight={"600"}
+            variant="h4"
             mb={2}
             sx={{ color: theme.palette.primary.main }}
           >
@@ -143,19 +140,16 @@ const WebnMembershipPage = () => {
               <Box
                 key={index}
                 display="flex"
-                alignItems="flex-start"
-                gap={2}
-                p={2}
+                alignItems="center"
+                gap={1}
                 sx={{
-                  border: `1px solid ${theme.palette.divider}`,
-                  borderRadius: "8px",
                   bgcolor: "background.paper",
                 }}
               >
                 <Box
                   sx={{
-                    minWidth: "24px",
-                    height: "24px",
+                    minWidth: "16px",
+                    height: "16px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -178,26 +172,25 @@ const WebnMembershipPage = () => {
         transition={baseTransition}
         amount={0.3}
       >
-        <Box px={"20px"} mb={4}>
+        <Box px={"32px"} mb={4}>
           <Typography
-            variant="h3"
+            variant="h1"
             fontSize={"20px"}
-            fontWeight={"600"}
             mb={2}
             sx={{ color: theme.palette.primary.main }}
           >
             Benefits of joining WEBN
           </Typography>
-          <List sx={{ padding: 0 }}>
+          <List sx={{ px: 1 }}>
             {benefits.map((benefit, index) => (
               <ListItem
                 key={index}
                 sx={{
-                  padding: "8px 0",
+                  padding: "0px 0",
                   alignItems: "flex-start",
                 }}
               >
-                <ListItemIcon sx={{ minWidth: "32px", mt: 0.5 }}>
+                <ListItemIcon sx={{ minWidth: "6px", mr: 2, mt: 1.5 }}>
                   <Box
                     sx={{
                       width: "6px",
@@ -211,8 +204,9 @@ const WebnMembershipPage = () => {
                   primary={benefit}
                   sx={{
                     "& .MuiListItemText-primary": {
-                      fontSize: "14px",
-                      lineHeight: "1.5",
+                      fontWeight: "600",
+                      fontSize: "16px",
+                      lineHeight: "20px",
                     },
                   }}
                 />
@@ -228,11 +222,10 @@ const WebnMembershipPage = () => {
         transition={baseTransition}
         amount={0.3}
       >
-        <Box px={"20px"} mb={4}>
+        <Box px={"32px"} mb={16}>
           <Typography
-            variant="h3"
+            variant="h1"
             fontSize={"20px"}
-            fontWeight={"600"}
             mb={2}
             sx={{ color: theme.palette.primary.main }}
           >
@@ -241,27 +234,27 @@ const WebnMembershipPage = () => {
           <Typography
             variant="body1"
             fontSize={"14px"}
-            lineHeight={1.6}
+            lineHeight={"20px"}
             mb={2}
             textAlign="justify"
           >
-            An initiative by a group of women entrepreneurs to provide a social
+            An Initiative by a group of women entrepreneurs to provide a social
             platform encourage, guide & build a support system for aspiring
             women entrepreneurs. This platform came into existence to build
-            confidence in women in order to explore entrepreneurial
-            opportunities to building skill sets as well as a strong motivated
+            confidence  in women in order to explore entrepreneurship
+            opportunities by building skill sets as well as a strong motivated
             mind set.
           </Typography>
           <Typography
             variant="body1"
             fontSize={"14px"}
-            lineHeight={1.6}
+            lineHeight={"20px"}
             textAlign="justify"
           >
             With a simple buy-sell model, the platform provides easy access to
             buyers to purchase home-crafted, handmade, eco friendly, and other
             such products as well as services while providing an impactful
-            online (and on-ground) marketplace for sellers (Goal: women
+            online (and on-ground) marketplace for sellers (Goan women
             entrepreneurs) to grow their visibility & reach.
           </Typography>
         </Box>
@@ -282,6 +275,7 @@ const WebnMembershipPage = () => {
               bgcolor: theme.palette.text.secondary,
               color: "white",
               py: 2,
+              borderRadius: "0px",
               fontSize: "16px",
               fontWeight: "600",
               textTransform: "none",

@@ -21,7 +21,6 @@ export class EmailService {
         secretAccessKey: process.env.AWS_SECRET_KEY.trim(),
       };
     }
-    console.log(config);
 
     this.sesClient = new SESClient(config);
   }
@@ -55,7 +54,7 @@ export class EmailService {
       });
 
       const response = await this.sesClient.send(command);
-      
+
       console.log("Email sent successfully:", response);
     } catch (error) {
       console.error("Error sending email:", error);

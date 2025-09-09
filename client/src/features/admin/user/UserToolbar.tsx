@@ -38,7 +38,7 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
   // };
 
   const handleBulkUpload = () => {
-    navigate("/admin/users/new-members");
+    navigate("/admin/members/new-members");
   };
 
   return (

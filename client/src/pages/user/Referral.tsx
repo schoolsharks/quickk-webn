@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -6,6 +6,8 @@ import {
   Stack,
   useTheme,
   Container,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
@@ -13,17 +15,25 @@ import GlobalButton from "../../components/ui/button";
 import ReferralImage from "../../assets/images/Referral/Referral.webp";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { Sparkle } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 const Referral: React.FC = () => {
   const theme = useTheme();
+  const { userId } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleBack = () => {
     navigate(-1);
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleReferNow = async () => {
-    const referralLink = `${window.location.origin}/signup?ref=user123`; // Replace with actual referral link
+    const referralLink = `${window.location.origin}/signup?ref=user123`;
     const shareData = {
       title: "Join Gowomaniya Community",
       text: "Invite a friend. Earn 50⚡\n\nBring your friends to Gowomaniya Community and unlock exciting perks with every signup.",
@@ -31,7 +41,6 @@ const Referral: React.FC = () => {
     };
 
     try {
-      // Check if Web Share API is supported (mostly mobile browsers)
       if (
         navigator.share &&
         navigator.canShare &&
@@ -39,28 +48,34 @@ const Referral: React.FC = () => {
       ) {
         await navigator.share(shareData);
       } else {
-        // Fallback for desktop or browsers without Web Share API
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(referralLink);
-        } else {
-          // Ultimate fallback
-          const textArea = document.createElement("textarea");
-          textArea.value = referralLink;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand("copy");
-          document.body.removeChild(textArea);
-        }
+        await handleCopyLink();
       }
     } catch (error) {
       console.error("Error sharing:", error);
-      // Fallback to clipboard copy
-      try {
+
+      await handleCopyLink();
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const referralLink = `${window.location.origin}/signup?ref=${userId}`;
+
+    try {
+      if (navigator.clipboard) {
         await navigator.clipboard.writeText(referralLink);
-        alert("Referral link copied to clipboard!");
-      } catch (clipboardError) {
-        console.error("Clipboard error:", clipboardError);
+        setSnackbarOpen(true);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = referralLink;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        setSnackbarOpen(true);
       }
+    } catch (error) {
+      console.error("Error copying link:", error);
+      setSnackbarOpen(true);
     }
   };
 
@@ -219,7 +234,7 @@ const Referral: React.FC = () => {
           </Stack>
 
           {/* Refer Now Button */}
-          <GlobalButton
+          {/* <GlobalButton
             onClick={handleReferNow}
             sx={{
               backgroundColor: "#404040",
@@ -232,9 +247,56 @@ const Referral: React.FC = () => {
             }}
           >
             Refer Now
-          </GlobalButton>
+          </GlobalButton> */}
         </Box>
       </Container>
+      <Stack direction={"row"}>
+        <GlobalButton
+          onClick={handleReferNow}
+          sx={{
+            backgroundColor: "#404040",
+            color: "#FFFFFF",
+            borderRadius: "0px",
+            fontWeight: 600,
+            fontSize: "16px",
+            textTransform: "none",
+            py: 2,
+          }}
+        >
+          Refer Now
+        </GlobalButton>
+        <GlobalButton
+          onClick={handleCopyLink}
+          sx={{
+            backgroundColor: "transparent",
+            color: "primary.main",
+            borderRadius: "0px",
+            border: `1px solid ${theme.palette.primary.main}`,
+            fontWeight: 700,
+            fontSize: "16px",
+            textTransform: "none",
+            py: 2,
+          }}
+        >
+          Copy Link
+        </GlobalButton>
+      </Stack>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Referral link copied to clipboard!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

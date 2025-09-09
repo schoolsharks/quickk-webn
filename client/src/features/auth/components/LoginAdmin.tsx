@@ -51,7 +51,7 @@ const LoginAdmin = () => {
       setLoginError("");
       const result = await login(formData).unwrap();
       if (result) {
-        navigate("/admin/users");
+        navigate("/admin/members");
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;

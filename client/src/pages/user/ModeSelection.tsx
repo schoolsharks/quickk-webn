@@ -64,7 +64,7 @@ const ModeSelection: React.FC = () => {
         <Typography
           variant="h4"
           sx={{
-            ml: 5,
+            ml: 3,
             color: theme.palette.text.primary,
             fontWeight: 600,
             fontSize: "30px",

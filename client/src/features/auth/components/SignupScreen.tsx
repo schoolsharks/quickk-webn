@@ -80,6 +80,7 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
       formData.name.trim() &&
       formData.businessName.trim() &&
       formData.contact.trim() &&
+      formData.contact.length === 10 &&
       formData.businessCategory.trim()
     );
   };

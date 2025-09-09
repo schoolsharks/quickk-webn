@@ -1,11 +1,11 @@
-import { Box, Typography, Stack, IconButton } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import Header from "../../components/layout/Header";
 import { useTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
 import AnimateNumber from "../../animation/AnimateNumber";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+// import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import Events from "../../features/events/components/Events";
 import MyNetworks from "../../features/events/components/MyNetworks";
 import Quickk from "../../components/ui/Quickk";
@@ -15,11 +15,13 @@ const EventDashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
   const theme = useTheme();
   const [showStarsPopup, setShowStarsPopup] = useState(false);
-  
+
   // Initialize activeTab from localStorage or default to "events"
   const [activeTab, setActiveTab] = useState<"events" | "networks">(() => {
     const savedTab = localStorage.getItem("eventDashboardActiveTab");
-    return (savedTab === "events" || savedTab === "networks") ? savedTab : "events";
+    return savedTab === "events" || savedTab === "networks"
+      ? savedTab
+      : "events";
   });
 
   // Save activeTab to localStorage whenever it changes
@@ -30,7 +32,7 @@ const EventDashboard = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Check if we should show stars popup from localStorage
     const shouldShowStars = localStorage.getItem("showStarsPopup");
     if (shouldShowStars === "true") {
@@ -73,9 +75,9 @@ const EventDashboard = () => {
             </Typography>
           </Box>
         </Box>
-        <IconButton sx={{ color: "#000" }}>
+        {/* <IconButton sx={{ color: "#000" }}>
           <NotificationsNoneOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       {/* Tabs */}

@@ -1,20 +1,20 @@
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Header from "../../components/layout/Header";
 import { useTheme } from "@mui/material/styles";
 import DailyPulse from "./DailyPulse";
 import StatusPanel from "../../features/user/components/StatusPanel";
 // import MissionMillion from "../../features/user/components/MisssionMillion";
-import ToggleBar from "../../features/user/components/ToggleBar";
+// import ToggleBar from "../../features/user/components/ToggleBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
-import ContinueLearning from "../../features/user/components/ContinueLearning";
+// import ContinueLearning from "../../features/user/components/ContinueLearning";
 import AnimateOnScroll from "../../animation/AnimateOnScroll";
 import { baseTransition } from "../../animation/transitions/baseTransition";
 import { fadeInUp } from "../../animation/variants/fadeInUp";
 // import AnimateNumber from "../../animation/AnimateNumber";
 // import ResultsAnounced from "../../components/ui/ResultsAnounced";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+// import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 // import Upcoming_Event from "../../features/user/components/Upcoming_Event";
 import Quickk from "../../components/ui/Quickk";
 import TopStatusPanel from "../../features/user/components/TopStatusPanel";
@@ -27,7 +27,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Check if we should show stars popup from localStorage
     const shouldShowStars = localStorage.getItem("showStarsPopup");
     if (shouldShowStars === "true") {
@@ -70,9 +70,9 @@ const Dashboard = () => {
             </Typography>
           </Box>
         </Box>
-        <IconButton sx={{ color: "#000" }}>
+        {/* <IconButton sx={{ color: "#000" }}>
           <NotificationsNoneOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       {/* Learnings and Challenges */}
@@ -133,11 +133,11 @@ const Dashboard = () => {
       </AnimateOnScroll> */}
 
       {/* Continue Learning */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"48px"}>
           <ContinueLearning />
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"4px"}>
@@ -166,8 +166,8 @@ const Dashboard = () => {
 
       {/* ToggleBar */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"} px={"30px"} mb={"30px"} display={"flex"}>
-          <ToggleBar />
+        <Box mt={"60px"} px={"30px"} mb={"30px"} display={"flex"} flexDirection={"row-reverse"}>
+          {/* <ToggleBar /> */}
           <Quickk />
         </Box>
       </AnimateOnScroll>

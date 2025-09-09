@@ -34,10 +34,10 @@ const Referral: React.FC = () => {
 
   const handleReferNow = async () => {
     const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
+    const shareMessage = `I'm part of a Gowomaniya community that brings together entrepreneurs, homepreneurs, investors & job seekers. Let's grow together.\nJoin here: ${referralLink}`;
+    
     const shareData = {
-      title: "Join Gowomaniya Community",
-      text: "Invite a friend. Earn 50⚡\n\nBring your friends to Gowomaniya Community and unlock exciting perks with every signup.",
-      url: referralLink,
+      text: shareMessage,
     };
 
     try {
@@ -59,14 +59,15 @@ const Referral: React.FC = () => {
 
   const handleCopyLink = async () => {
     const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
+    const shareMessage = `I'm part of a Gowomaniya community that brings together entrepreneurs, homepreneurs, investors & job seekers. Let's grow together.\nJoin here: ${referralLink}`;
 
     try {
       if (navigator.clipboard) {
-        await navigator.clipboard.writeText(referralLink);
+        await navigator.clipboard.writeText(shareMessage);
         setSnackbarOpen(true);
       } else {
         const textArea = document.createElement("textarea");
-        textArea.value = referralLink;
+        textArea.value = shareMessage;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");

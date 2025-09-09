@@ -10,8 +10,8 @@ import AppError from '../../../utils/appError';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import generateOtp from '../../../utils/generateOtp';
-import EmailVerficationOtp from '../../../services/emails/triggers/admin/otp-triger';
 import CompanyFeatureService from '../../adminOnboarding/services/companyFeature.service';
+import adminOtpTrigger from '../../../services/emails/triggers/admin/adminOtpTrigger';
 
 
 const adminService = new AdminService();
@@ -169,7 +169,7 @@ export const resendAdminOtp = async (req: Request, res: Response, next: NextFunc
         const { adminId } = req.body;
         const otp = generateOtp();
         const data = await adminService.findAdminById(adminId);
-        await EmailVerficationOtp(otp, data.email);
+        await adminOtpTrigger({ email: data.email, otp });
         const result = await adminService.resendAdminOtp({
             adminId: adminId,
             otp,

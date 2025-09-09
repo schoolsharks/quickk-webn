@@ -2,8 +2,9 @@ import React from "react";
 import { Box, Typography, Stack, Button, useTheme } from "@mui/material";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
 import { useNavigate } from "react-router-dom";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 
 const StatusPanel: React.FC = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const StatusPanel: React.FC = () => {
       // navigate("/user/reward")
     },
     {
-      icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "white" }} />,
+      icon: <LocalMallOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
       title: "Resources",
       value: null,
       bgColor: theme.palette.text.secondary,
@@ -28,10 +29,11 @@ const StatusPanel: React.FC = () => {
       },
     },
     {
-      icon: <HomeOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
-      title: "Home",
+      icon: <PeopleOutlineOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
+      title: "Referral",
       value: null,
       bgColor: theme.palette.text.secondary,
+      onClick: () => navigate("/user/referral"),
     },
     {
       icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "black" }} />,

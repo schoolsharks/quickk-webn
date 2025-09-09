@@ -15,14 +15,12 @@ const ModeSelection: React.FC = () => {
   const handleEventMode = () => {
     // Set event mode to true in Redux and localStorage
     dispatch(setEventMode(true));
-    // Navigate to event mode
     navigate("/user/event-mode");
   };
 
   const handleCommunityMode = () => {
     // Set event mode to false in Redux and localStorage
     dispatch(setEventMode(false));
-    // Navigate to dashboard
     navigate("/user/dashboard");
   };
 

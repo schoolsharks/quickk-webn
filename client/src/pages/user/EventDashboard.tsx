@@ -9,10 +9,12 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import Events from "../../features/events/components/Events";
 import MyNetworks from "../../features/events/components/MyNetworks";
 import Quickk from "../../components/ui/Quickk";
+import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
 
 const EventDashboard = () => {
   const { name } = useSelector((state: RootState) => state.user);
   const theme = useTheme();
+  const [showStarsPopup, setShowStarsPopup] = useState(false);
   
   // Initialize activeTab from localStorage or default to "events"
   const [activeTab, setActiveTab] = useState<"events" | "networks">(() => {
@@ -28,7 +30,19 @@ const EventDashboard = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Check if we should show stars popup from localStorage
+    const shouldShowStars = localStorage.getItem("showStarsPopup");
+    if (shouldShowStars === "true") {
+      setShowStarsPopup(true);
+    }
   }, []);
+
+  const handleCloseStarsPopup = () => {
+    setShowStarsPopup(false);
+    // Remove flag from localStorage
+    localStorage.removeItem("showStarsPopup");
+  };
 
   return (
     <Box color="#000" py={"30px"}>
@@ -131,6 +145,13 @@ const EventDashboard = () => {
       <Box mx={"25px"}>
         <Quickk />
       </Box>
+
+      {/* Stars Earned Popup */}
+      <StarsEarnedPopup
+        open={showStarsPopup}
+        stars={50}
+        onClose={handleCloseStarsPopup}
+      />
     </Box>
   );
 };

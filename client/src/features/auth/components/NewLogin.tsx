@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
 import { RootState } from "../../../app/store";
-import {
-  useSendOtpMutation,
-  useResendOtpMutation,
-  useVerifyOtpMutation,
-  useSignupUserMutation,
+import { 
+  useSendOtpMutation, 
+  useResendOtpMutation, 
+  useVerifyOtpMutation, 
+  useSignupUserMutation 
 } from "../../user/userApi";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
@@ -44,7 +44,7 @@ const Login = () => {
       const fetchError = err as FetchBaseQueryError;
       const message = (fetchError.data as any)?.message || "Failed to send OTP";
       setError(message);
-
+      
       // If user not found, they can signup
       if (message.includes("User not found")) {
         // Don't navigate automatically, let user choose
@@ -59,8 +59,7 @@ const Login = () => {
       await resendOtp({ companyMail: email }).unwrap();
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;
-      const message =
-        (fetchError.data as any)?.message || "Failed to resend OTP";
+      const message = (fetchError.data as any)?.message || "Failed to resend OTP";
       setError(message);
     }
   };
@@ -69,11 +68,8 @@ const Login = () => {
   const handleVerifyOtp = async (otpCode: string) => {
     try {
       setError("");
-      const result = await verifyOtp({
-        companyMail: email,
-        otp: otpCode,
-      }).unwrap();
-
+      const result = await verifyOtp({ companyMail: email, otp: otpCode }).unwrap();
+      
       if (result) {
         navigate("/user/mode-selection");
       }
@@ -89,7 +85,7 @@ const Login = () => {
     try {
       setError("");
       const result = await signupUser(signupData).unwrap();
-
+      
       if (result) {
         setEmail(signupData.companyMail);
         setCurrentStep("otp");
@@ -101,9 +97,21 @@ const Login = () => {
     }
   };
 
+  // Handle navigation back to email step
+  const handleBackToEmail = () => {
+    setCurrentStep("email");
+    setError("");
+  };
+
   // Handle navigation to signup
   const handleGoToSignup = () => {
     setCurrentStep("signup");
+    setError("");
+  };
+
+  // Handle navigation back to email from signup
+  const handleBackFromSignup = () => {
+    setCurrentStep("email");
     setError("");
   };
 
@@ -123,27 +131,29 @@ const Login = () => {
           error={error}
         />
       );
-
+    
     case "otp":
       return (
         <OtpVerificationScreen
           email={email}
           onVerifyOtp={handleVerifyOtp}
           onResendOtp={handleResendOtp}
+          onBack={handleBackToEmail}
           isLoading={isVerifyingOtp || isResendingOtp}
           error={error}
         />
       );
-
+    
     case "signup":
       return (
         <SignupScreen
           onSignup={handleSignup}
+          onBack={handleBackFromSignup}
           isLoading={isSigningUp}
           error={error}
         />
       );
-
+    
     default:
       return null;
   }

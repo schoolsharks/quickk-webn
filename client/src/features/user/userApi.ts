@@ -1,5 +1,6 @@
 import { api } from '../../app/api';
 import { Roles, setAuth } from '../auth/authSlice';
+import { SignupData } from '../auth/components/SignupScreen';
 
 export const usersApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -21,6 +22,50 @@ export const usersApi = api.injectEndpoints({
                 }
             },
             invalidatesTags: ['Auth'],
+        }),
+
+        sendOtp: builder.mutation({
+            query: (credentials) => ({
+                url: '/user/sendOtp',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+
+        resendOtp: builder.mutation({
+            query: (credentials) => ({
+                url: '/user/resendOtp',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+
+        verifyOtp: builder.mutation({
+            query: (credentials) => ({
+                url: '/user/verifyOtp',
+                method: 'POST',
+                body: credentials,
+            }),
+            async onQueryStarted(_, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    dispatch(setAuth({
+                        isAuthenticated: true,
+                        role: Roles.USER,
+                    }));
+                } catch (error) {
+                    console.error('Error verifying OTP:', error);
+                }
+            },
+            invalidatesTags: ['Auth'],
+        }),
+
+        signupUser: builder.mutation({
+            query: (userData: SignupData) => ({
+                url: '/user/signup',
+                method: 'POST',
+                body: userData,
+            }),
         }),
 
         fetchUser: builder.query({
@@ -97,6 +142,10 @@ export const usersApi = api.injectEndpoints({
 
 export const {
     useLoginUserMutation,
+    useSendOtpMutation,
+    useResendOtpMutation,
+    useVerifyOtpMutation,
+    useSignupUserMutation,
     useFetchUserQuery,
     useLazyFetchUserQuery,
     useGetLeaderboardQuery,

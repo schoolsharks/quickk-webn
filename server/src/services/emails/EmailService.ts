@@ -126,7 +126,7 @@ export class EmailService {
     const recipients = Array.isArray(options.to) ? options.to : [options.to];
 
     const command = new SendEmailCommand({
-      Source: `Quickk <${process.env.EMAIL_FROM}>`,
+      Source: `Webn <${process.env.EMAIL_FROM}>`,
       Destination: {
         ToAddresses: recipients,
       },

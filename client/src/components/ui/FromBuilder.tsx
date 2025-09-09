@@ -85,7 +85,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
     "& .MuiOutlinedInput-root": {
       borderRadius: "0",
       color: "white",
-      "& fieldset": {  borderRadius: "0" },
+      "& fieldset": { borderRadius: "0" },
       "&:hover fieldset": { borderColor: "#666" },
       "&.Mui-focused fieldset": { borderColor: "#96FF43" },
     },
@@ -281,6 +281,23 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
 
       case "image":
         const [tabValue, setTabValue] = React.useState(0);
+        const [previewUrl, setPreviewUrl] = React.useState<string>("");
+
+        React.useEffect(() => {
+          if (value instanceof File) {
+            // Create preview URL for uploaded file
+            const url = URL.createObjectURL(value);
+            setPreviewUrl(url);
+
+            // Cleanup function to revoke the URL
+            return () => URL.revokeObjectURL(url);
+          } else if (typeof value === "string" && value.trim()) {
+            // Use the URL string directly
+            setPreviewUrl(value);
+          } else {
+            setPreviewUrl("");
+          }
+        }, [value]);
 
         return (
           <Box sx={{ width: "100%" }}>
@@ -290,14 +307,16 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               sx={{
                 mb: 2,
                 "& .MuiTab-root": {
-                  color: "white",
+                  color: "#666",
                   borderRadius: "0",
+                  minHeight: "36px",
                 },
                 "& .Mui-selected": {
-                  color: "#96FF43",
+                  color: "#000",
+                  fontWeight: "bold",
                 },
                 "& .MuiTabs-indicator": {
-                  backgroundColor: "#96FF43",
+                  backgroundColor: "primary",
                 },
               }}
             >
@@ -310,8 +329,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 <input
                   type="file"
                   accept="image/*"
-                  // value={e}
-                  key={value}
+                  key={value instanceof File ? value.name : ""}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
@@ -320,13 +338,26 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                   }}
                   style={{
                     padding: "12px",
-                    backgroundColor: "#333",
-                    border: "1px solid #444",
+                    backgroundColor: "#f9f9f9",
+                    border: "1px solid #ddd",
                     borderRadius: "0",
-                    color: "white",
+                    color: "#333",
                     width: "100%",
+                    fontSize: "14px",
                   }}
                 />
+
+                {/* File Upload Preview */}
+                {value instanceof File && (
+                  <Box sx={{ mt: 1 }}>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "#666", mb: 1, display: "block" }}
+                    >
+                      Selected file: {value.name}
+                    </Typography>
+                  </Box>
+                )}
               </Box>
             )}
 
@@ -335,10 +366,41 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 <TextField
                   variant="standard"
                   fullWidth
-                  value={value}
+                  value={typeof value === "string" ? value : ""}
                   placeholder={field.placeholder || "Enter image URL"}
                   onChange={(e) => onChange(field.name, e.target.value)}
                   sx={{ ...defaultFieldStyle, ...fieldStyle }}
+                />
+              </Box>
+            )}
+
+            {/* Image Preview */}
+            {previewUrl && (
+              <Box sx={{ mt: 2 }}>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "#666", mb: 1, display: "block" }}
+                >
+                  Preview:
+                </Typography>
+                <Box
+                  component="img"
+                  src={previewUrl}
+                  alt="Preview"
+                  onError={() => {
+                    console.warn("Failed to load image:", previewUrl);
+                    setPreviewUrl(""); // Clear preview on error
+                  }}
+                  sx={{
+                    maxWidth: 200,
+                    maxHeight: 200,
+                    objectFit: "contain",
+                    border: "2px solid #ddd",
+                    borderRadius: 0,
+                    backgroundColor: "#f5f5f5",
+                    p: 1,
+                    display: "block",
+                  }}
                 />
               </Box>
             )}

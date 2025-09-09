@@ -14,6 +14,7 @@ export interface UserFormData {
   address: string;
   chapter: string;
   businessName: string;
+  businessLogo: string | File;
   instagram: string;
   facebook: string;
   businessCategory: string;
@@ -38,6 +39,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
     address: "",
     chapter: "",
     businessName: "",
+    businessLogo: "",
     instagram: "",
     facebook: "",
     businessCategory: "",
@@ -67,6 +69,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         address: userData.address || "",
         chapter: userData.chapter || "",
         businessName: userData.businessName || "",
+        businessLogo: userData.businessLogo || "",
         instagram: userData.instagram || "",
         facebook: userData.facebook || "",
         businessCategory: userData.businessCategory || "",
@@ -129,6 +132,13 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
       type: "text",
       required: false,
       placeholder: "Enter business name",
+    },
+    {
+      name: "businessLogo",
+      label: "Business Logo",
+      type: "image",
+      required: false,
+      placeholder: "Upload business logo or enter image URL",
     },
     {
       name: "instagram",
@@ -225,19 +235,53 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
     }
 
     try {
-      await addEditUser({
-        userId: formData._id,
-        companyMail: formData.companyMail,
-        name: formData.name,
-        contact: formData.contact,
-        address: formData.address,
-        chapter: formData.chapter,
-        businessName: formData.businessName,
-        instagram: formData.instagram,
-        facebook: formData.facebook,
-        businessCategory: formData.businessCategory,
-        specialisation: formData.specialisation,
-      })
+      // Check if businessLogo is a File (uploaded file) or string (URL)
+      const hasFileUpload = formData.businessLogo instanceof File;
+
+      let requestData;
+
+      if (hasFileUpload) {
+        // Create FormData for file upload
+        const formDataToSend = new FormData();
+        
+        const userDetails = {
+          userId: formData._id,
+          companyMail: formData.companyMail,
+          name: formData.name,
+          contact: formData.contact,
+          address: formData.address,
+          chapter: formData.chapter,
+          businessName: formData.businessName,
+          instagram: formData.instagram,
+          facebook: formData.facebook,
+          businessCategory: formData.businessCategory,
+          specialisation: formData.specialisation,
+          currentBusinessLogo: userData?.businessLogo || "", // For cleanup
+        };
+
+        formDataToSend.append("userDetails", JSON.stringify(userDetails));
+        formDataToSend.append("businessLogo", formData.businessLogo as File);
+        
+        requestData = formDataToSend;
+      } else {
+        // Regular JSON request
+        requestData = {
+          userId: formData._id,
+          companyMail: formData.companyMail,
+          name: formData.name,
+          contact: formData.contact,
+          address: formData.address,
+          chapter: formData.chapter,
+          businessName: formData.businessName,
+          businessLogo: formData.businessLogo as string,
+          instagram: formData.instagram,
+          facebook: formData.facebook,
+          businessCategory: formData.businessCategory,
+          specialisation: formData.specialisation,
+        };
+      }
+
+      await addEditUser(requestData)
         .unwrap()
         .then(() => {
           setAlert({

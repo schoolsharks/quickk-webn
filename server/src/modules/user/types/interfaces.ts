@@ -20,6 +20,7 @@ export interface IUser {
     // webn specific fields 
     chapter?: string;
     businessName?: string;
+    businessLogo?: string;
     instagram?: string;
     facebook?: string;
     specialisation?: string;

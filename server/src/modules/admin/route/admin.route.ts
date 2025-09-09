@@ -232,6 +232,7 @@ router.post(
     '/addEditUser',
     authenticateUser,
     authorizeRoles('ADMIN'),
+    imageUploadService.getS3Uploader('userLogos').any(),
     asyncHandeler(UserControllers.addEditUser)
 );
 

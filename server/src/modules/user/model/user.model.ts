@@ -55,6 +55,9 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
     businessName: {
         type: String,
     },
+    businessLogo: {
+        type: String,
+    },
     instagram: {
         type: String,
     },

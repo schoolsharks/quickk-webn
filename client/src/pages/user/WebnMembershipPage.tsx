@@ -140,22 +140,17 @@ const WebnMembershipPage = () => {
               <Box
                 key={index}
                 display="flex"
-                alignItems="center"
-                gap={1}
+                gap={"4px"}
                 sx={{
                   bgcolor: "background.paper",
                 }}
               >
                 <Box
                   sx={{
-                    minWidth: "16px",
-                    height: "16px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    minWidth: "max-content",
                   }}
                 >
-                  {step.icon}
+                  Step {index + 1}.
                 </Box>
                 <Typography variant="body1" fontSize={"16px"}>
                   {step.title}

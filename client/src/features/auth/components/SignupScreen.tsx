@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import WebnLogo from "../../../assets/images/header/logo.webp";
 import GlobalButton from "../../../components/ui/button";
+import GoWomaniaLogo from "../../../assets/images/header/goWomania.webp";
+
 
 interface SignupScreenProps {
   onSignup: (data: SignupData, ref?: string | null) => void;
@@ -88,7 +90,7 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
   return (
     <Box
       overflow={"hidden"}
-      p={"40px 24px 20px 24px"}
+      p={"40px 24px 30px 24px"}
       sx={{
         color: "#fff",
         minHeight: window.innerHeight,
@@ -98,14 +100,24 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
       }}
     >
       {/* Header Image */}
-      <Box
-        component="img"
-        src={WebnLogo}
-        border={`2px solid ${theme.palette.primary.main}`}
-        borderRadius={"50%"}
-        alt=""
-        sx={{ width: "50px", height: "50px", objectFit: "cover" }}
-      />
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Box
+          component="img"
+          src={GoWomaniaLogo}
+          border={`2px solid ${theme.palette.primary.main}`}
+          borderRadius={"50%"}
+          alt=""
+          sx={{ width: "50px", height: "50px", objectFit: "cover" }}
+        />
+        <Box
+          component="img"
+          src={WebnLogo}
+          border={`2px solid ${theme.palette.primary.main}`}
+          borderRadius={"50%"}
+          alt=""
+          sx={{ width: "50px", height: "50px", objectFit: "cover" }}
+        />
+      </Box>
 
       <Box mt={"20px"} mb={"10px"}>
         <Typography

@@ -27,7 +27,7 @@ const EventModeToggle: React.FC = () => {
       <Box
         sx={{
           width: 50,
-          height: 18,
+          height: 24,
           bgcolor: eventMode ? "#0E0E0E" : "#CD7BFF",
           display: "flex",
           alignItems: "center",
@@ -39,8 +39,8 @@ const EventModeToggle: React.FC = () => {
       >
         <Box
           sx={{
-            width: 14,
-            height: 14,
+            width: 18,
+            height: 18,
             bgcolor: eventMode ? "#CD7BFF" : "#0E0E0E",
             ml: eventMode ? "auto" : 0,
             transition: "all 0.3s ease",

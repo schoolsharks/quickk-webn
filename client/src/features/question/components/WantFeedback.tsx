@@ -103,7 +103,7 @@ const WantFeedback: React.FC<WantFeedbackProps> = ({
                 }}
               >
                 <EmojiEmotionsOutlinedIcon
-                  fontSize="medium"
+                  fontSize="large"
                   sx={{ color: "black" }}
                 />
               </Button>
@@ -126,7 +126,7 @@ const WantFeedback: React.FC<WantFeedbackProps> = ({
                 }}
               >
                 <SentimentSatisfiedAltOutlinedIcon
-                  fontSize="medium"
+                  fontSize="large"
                   sx={{ color: "black" }}
                 />
               </Button>
@@ -148,7 +148,7 @@ const WantFeedback: React.FC<WantFeedbackProps> = ({
                 }}
               >
                 <SentimentDissatisfiedOutlinedIcon
-                  fontSize="medium"
+                  fontSize="large"
                   sx={{ color: "black" }}
                 />
               </Button>

@@ -15,7 +15,7 @@ const ActiveLearning: React.FC = () => {
     <AnimateOnScroll variants={fadeInUp} transition={baseTransition}>
       <Box
         sx={{
-          bgcolor: "#404040",
+          bgcolor: "primary.main",
           p: "14px",
         }}
       >

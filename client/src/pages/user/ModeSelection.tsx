@@ -6,6 +6,8 @@ import { setEventMode } from "../../features/user/userSlice";
 import GlobalButton from "../../components/ui/button";
 import Quickk from "../../components/ui/Quickk";
 import WebnLogo from "../../assets/images/header/logo.webp";
+import GoWomaniaLogo from "../../assets/images/header/goWomania.webp";
+
 
 const ModeSelection: React.FC = () => {
   const theme = useTheme();
@@ -35,18 +37,22 @@ const ModeSelection: React.FC = () => {
       }}
     >
       {/* Header with Logo */}
-      <Box>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Box
+          component="img"
+          src={GoWomaniaLogo}
+          border={`2px solid ${theme.palette.primary.main}`}
+          borderRadius={"50%"}
+          alt=""
+          sx={{ width: "50px", height: "50px", objectFit: "contain",padding:"2px" }}
+        />
         <Box
           component="img"
           src={WebnLogo}
           border={`2px solid ${theme.palette.primary.main}`}
-          borderRadius="50%"
-          alt="Quickk Logo"
-          sx={{
-            width: "50px",
-            height: "50px",
-            objectFit: "cover",
-          }}
+          borderRadius={"50%"}
+          alt=""
+          sx={{ width: "50px", height: "50px", objectFit: "cover" }}
         />
       </Box>
 

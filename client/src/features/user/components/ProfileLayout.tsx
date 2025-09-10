@@ -4,13 +4,14 @@ import {
   Stack,
   Typography,
   IconButton,
-  Collapse,
+  // Collapse,
   Grid,
+  Collapse,
 } from "@mui/material";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
+// import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
 import badge1 from "../../../assets/images/user/MedalBlue.png";
 import badge2 from "../../../assets/images/user/GoldMedal.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -28,6 +29,7 @@ import { RootState } from "../../../app/store";
 import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
+import { ArrowRight } from "lucide-react";
 
 const ProfileLayout = () => {
   const [badgesOpen, setBadgesOpen] = useState(false);
@@ -75,7 +77,7 @@ const ProfileLayout = () => {
   ];
 
   return (
-    <Box sx={{ pt: "50px" }}>
+    <Box sx={{ pt: "50px", pb: "50px" }}>
       {/* Profile Header */}
       <Stack spacing={1} px={"20px"}>
         <Box
@@ -116,27 +118,48 @@ const ProfileLayout = () => {
             <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
           </IconButton>
         </Stack>
-        <Stack spacing={2} mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
-          {[
-            `Name - ${name}`,
-            `Contact - ${contact}`,
-            `Business email - ${companyMail}`,
-            `Address - ${address}`,
-          ].map((detail, idx) => (
-            <Box
-              key={idx}
-              sx={{
-                border: `1px solid ${theme.palette.primary.main}`,
-                bgcolor: "background.paper",
-                p: 1.5,
-                color: "black",
-              }}
-            >
-              <Typography fontSize={"14px"} fontWeight={"400"}>
-                {detail}
-              </Typography>
-            </Box>
-          ))}
+        <Stack mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
+          {Object.entries({
+            Name: name,
+            Contact: contact,
+            "Business email": companyMail,
+            Address: address,
+          }).map((item, idx) => {
+            if (!item[1]) {
+              return null;
+            }
+            return (
+              <Box
+                key={idx}
+                sx={{
+                  color: "black",
+                }}
+              >
+                <Typography fontSize={"12px"} fontWeight={"700"}>
+                  {item[0]}
+                </Typography>
+                <Typography
+                  fontSize={"20px"}
+                  fontWeight={"600"}
+                  marginTop={"4px"}
+                >
+                  {item[1]}
+                </Typography>
+                {idx < 2 && (
+                  <Box
+                    flex={1}
+                    mx={"8px"}
+                    height={"1px"}
+                    my="16px"
+                    sx={{
+                      background:
+                        "linear-gradient(90deg, rgba(205, 123, 255, 0.3) 0%, #A04AD4 49.52%, rgba(205, 123, 255, 0.3) 99.04%)",
+                    }}
+                  />
+                )}
+              </Box>
+            );
+          })}
         </Stack>
       </Box>
 
@@ -174,6 +197,7 @@ const ProfileLayout = () => {
                   sx={{
                     fontWeight: "600",
                     fontSize: "20px",
+                    lineHeight: "120%",
                     color: "text.primary",
                     mb: 0.5,
                   }}
@@ -191,9 +215,7 @@ const ProfileLayout = () => {
                   T&C Applied
                 </Typography>
               </Box>
-              <CallMadeOutlinedIcon
-                sx={{ fontSize: 35, transform: "Rotate(45deg)", mt: "10px" }}
-              />
+              <ArrowRight size={30} />
             </Box>
             {/* Right side - Image */}
             <Box
@@ -254,7 +276,7 @@ const ProfileLayout = () => {
       </AnimateOnScroll>
 
       {/* Active Learning */}
-      <Box mt={"50px"}>
+      <Box>
         <ActiveLearning />
       </Box>
 
@@ -268,64 +290,66 @@ const ProfileLayout = () => {
           <Typography fontSize={"20px"} fontWeight={"500"} pl={"22px"}>
             Offers
           </Typography>
-          <Grid container>
-            {offers.map((offer, idx) => (
-              <Grid size={6} key={idx}>
-                <Box
-                  sx={{
-                    height: "100%",
-                    p: 3,
-                    border: `2px solid ${theme.palette.primary.main}`,
-                    bgcolor: offer.bgcolor,
-                    color:
-                      // offer.bgcolor === "rgba(150, 255, 67, 1)"
-                      "black",
-                    // : "white",
-                    display: "flex",
-                    flexDirection: "column",
-                    lineHeight: "-3%",
-                  }}
-                >
+          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`,overflow:"hidden" }}>
+            <Grid container sx={{ filter: "blur(5px)" }}>
+              {offers.map((offer, idx) => (
+                <Grid size={6} key={idx}>
                   <Box
-                    // component="img"
-                    // src={offer.img}
-                    // alt="image"
                     sx={{
-                      bgcolor: "#D9D9D9",
-                      zIndex: 0,
-                      width: "50px",
-                      height: "50px",
-                      borderRadius: "50%",
+                      height: "100%",
+                      p: 3,
+                      border: `2px solid ${theme.palette.primary.main}`,
+                      bgcolor: offer.bgcolor,
+                      color:
+                        // offer.bgcolor === "rgba(150, 255, 67, 1)"
+                        "black",
+                      // : "white",
+                      display: "flex",
+                      flexDirection: "column",
+                      lineHeight: "-3%",
                     }}
-                  />
-                  <Box>
+                  >
                     <Box
-                      display={"flex"}
-                      flexDirection={"column"}
-                      justifyContent={"space-between"}
-                      alignContent={"space-between"}
-                    >
-                      <Typography variant="h5" fontWeight="bold" mt={3}>
-                        {offer.title}
-                      </Typography>
-                      <Box>
-                        <Typography variant="body2" mt={2} fontSize={14}>
-                          {offer.text}
+                      // component="img"
+                      // src={offer.img}
+                      // alt="image"
+                      sx={{
+                        bgcolor: "#D9D9D9",
+                        zIndex: 0,
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                    <Box>
+                      <Box
+                        display={"flex"}
+                        flexDirection={"column"}
+                        justifyContent={"space-between"}
+                        alignContent={"space-between"}
+                      >
+                        <Typography variant="h5" fontWeight="bold" mt={3}>
+                          {offer.title}
                         </Typography>
-                        <Typography
-                          fontWeight={700}
-                          fontSize={"16px"}
-                          sx={{ mt: "20px" }}
-                        >
-                          {offer.subtitle}
-                        </Typography>
+                        <Box>
+                          <Typography variant="body2" mt={2} fontSize={14}>
+                            {offer.text}
+                          </Typography>
+                          <Typography
+                            fontWeight={700}
+                            fontSize={"16px"}
+                            sx={{ mt: "20px" }}
+                          >
+                            {offer.subtitle}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Stack>
       </AnimateOnScroll>
 
@@ -366,8 +390,8 @@ const ProfileLayout = () => {
           </Collapse>
         </Box>
       </AnimateOnScroll>
-      {/* Certificates Section */}
-      <AnimateOnScroll
+
+       <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
         amount={0.3}
@@ -401,7 +425,7 @@ const ProfileLayout = () => {
             </Box>
           </Collapse>
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> 
     </Box>
   );
 };

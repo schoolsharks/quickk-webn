@@ -94,7 +94,7 @@ const Login = () => {
   const handleSignup = async (signupData: SignupData, ref?: string | null) => {
     try {
       setError("");
-      const result = await signupUser({signupData, ref}).unwrap();
+      const result = await signupUser({ signupData, ref }).unwrap();
 
       if (result) {
         setEmail(signupData.companyMail);
@@ -134,6 +134,7 @@ const Login = () => {
     case "otp":
       return (
         <OtpVerificationScreen
+          onSignup={handleGoToSignup}
           email={email}
           onVerifyOtp={handleVerifyOtp}
           onResendOtp={handleResendOtp}

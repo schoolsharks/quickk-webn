@@ -6,6 +6,7 @@ import BottomNavigation from "../../../components/ui/BottomNavigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { isProfileComplete } from "../../../utils/profileUtils";
+import { ArrowRight } from "lucide-react";
 
 const MyNetworks = () => {
   const navigate = useNavigate();
@@ -50,7 +51,8 @@ const MyNetworks = () => {
             </Typography>
           </Box>
           <Box>
-            <CallMadeOutlinedIcon sx={{ fontSize: 35 }} />
+            <ArrowRight size={36} strokeWidth={1.75} rotate={"45deg"} />
+            {/* <CallMadeOutlinedIcon sx={{ fontSize: 35,marginRight:"24px" }} /> */}
           </Box>
         </Box>
       )}

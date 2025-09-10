@@ -15,6 +15,7 @@ interface OtpVerificationScreenProps {
   email: string;
   onVerifyOtp: (otp: string) => void;
   onResendOtp: () => void;
+  onSignup?: () => void;
   isLoading: boolean;
   error: string;
 }
@@ -23,6 +24,7 @@ const OtpVerificationScreen = ({
   email,
   onVerifyOtp,
   onResendOtp,
+  onSignup,
   isLoading,
   error,
 }: OtpVerificationScreenProps) => {
@@ -121,7 +123,9 @@ const OtpVerificationScreen = ({
             mb={"10px"}
             color={theme.palette.text.primary}
           >
-            Welcome to the GoWomaniya Community 🌟
+            Welcome to the
+            <br />
+            GoWomaniya Community 🌟
           </Typography>
           <Typography
             fontWeight="500"
@@ -234,6 +238,15 @@ const OtpVerificationScreen = ({
                   </span>
                 </>
               )}
+            </Typography>
+            <Typography variant="body2" color="gray" fontSize="12px">
+              Not a Member?{" "}
+              <span
+                style={{ color: theme.palette.primary.main, cursor: "pointer" }}
+                onClick={onSignup}
+              >
+                Sign Up
+              </span>
             </Typography>
           </Box>
         </Box>

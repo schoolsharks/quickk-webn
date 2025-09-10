@@ -24,6 +24,7 @@ export interface SignupData {
   businessName: string;
   contact: string;
   businessCategory: string;
+  customBusinessCategory?: string;
   designation?: string;
   currentStage?: string;
   communityGoal?: string;
@@ -31,19 +32,38 @@ export interface SignupData {
 }
 
 const businessCategories = [
-  "Manufacturer",
-  "Education",
-  "Business Solutions",
-  "Clothing",
-  "Exporter",
-  "Food",
-  "Home Decor",
-  "Finance",
-  "Legal Services",
-  "Event Planning",
+  "Fine Jewellery",
+  "Fashion & Apparel",
+  "Beauty & Skincare",
   "Health & Wellness",
-  "IT Services",
-  "Marketing",
+  "Event Management & Wedding Planning",
+  "Travel & Tourism",
+  "Real Estate & Property Consultants",
+  "Financial Services",
+  "Legal Services",
+  "Education & Coaching",
+  "Interior Design & Architecture",
+  "Graphic Design & Branding",
+  "Digital Marketing & Social Media Management",
+  "Website & App Development",
+  "Home Décor & Furnishings",
+  "Food & Beverages",
+  "Photography & Videography",
+  "Printing & Packaging Solutions",
+  "Corporate Gifting & Personalized Gifts",
+  "Handicrafts & Artisans",
+  "Automobile Sales & Services",
+  "Logistics & Courier Services",
+  "HR & Recruitment Services",
+  "IT Services & Software Solutions",
+  "Stationery & Office Supplies",
+  "PR & Media Consultancy",
+  "Fitness Equipment & Sports Gear",
+  "Childcare & Parenting Services",
+  "NGOs & Social Enterprises",
+  "Agriculture & Organic Products",
+  "Other",
+  "None",
 ];
 
 const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
@@ -56,6 +76,7 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
     businessName: "",
     contact: "",
     businessCategory: "",
+    customBusinessCategory: "",
     designation: "",
     currentStage: "",
     communityGoal: "",
@@ -71,12 +92,19 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
 
   const handleSubmit = () => {
     if (isFormValid()) {
-      onSignup(formData, ref);
+      // If "Other" is selected, use the custom category value instead
+      const dataToSubmit = {
+        ...formData,
+        businessCategory: formData.businessCategory === "Other" 
+          ? formData.customBusinessCategory || "" 
+          : formData.businessCategory
+      };
+      onSignup(dataToSubmit, ref);
     }
   };
 
   const isFormValid = () => {
-    return (
+    const basicValidation = (
       formData.companyMail.trim() &&
       formData.name.trim() &&
       formData.businessName.trim() &&
@@ -84,6 +112,13 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
       formData.contact.length === 10 &&
       formData.businessCategory.trim()
     );
+
+    // If "Other" is selected, also check if custom category is filled
+    if (formData.businessCategory === "Other") {
+      return basicValidation && formData.customBusinessCategory?.trim();
+    }
+
+    return basicValidation;
   };
 
   return (
@@ -229,6 +264,16 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
                 </MenuItem>
               ))}
             </TextField>
+
+            {formData.businessCategory === "Other" && (
+              <TextField
+                placeholder="Please specify your business category*"
+                variant="standard"
+                fullWidth
+                value={formData.customBusinessCategory || ""}
+                onChange={(e) => handleChange("customBusinessCategory", e.target.value)}
+              />
+            )}
           </Stack>
         </Box>
 

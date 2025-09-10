@@ -1,13 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
-import { EventService } from '../services/events.services';
-import { IEventQuery, IRegisterEventRequest } from '../types/interface';
-import { EventStatus } from '../types/enum';
-import AppError from '../../../utils/appError';
+import { Request, Response, NextFunction } from "express";
+import { EventService } from "../services/events.services";
+import { IEventQuery, IRegisterEventRequest } from "../types/interface";
+import { EventStatus } from "../types/enum";
+import AppError from "../../../utils/appError";
 
 const eventService = new EventService();
 
 export class EventController {
-
   /**
    * Get all events with filtering and pagination
    */
@@ -15,8 +14,12 @@ export class EventController {
     try {
       const query: IEventQuery = {
         status: req.query.status as EventStatus,
-        startDate: req.query.startDate ? new Date(req.query.startDate as string) : undefined,
-        endDate: req.query.endDate ? new Date(req.query.endDate as string) : undefined,
+        startDate: req.query.startDate
+          ? new Date(req.query.startDate as string)
+          : undefined,
+        endDate: req.query.endDate
+          ? new Date(req.query.endDate as string)
+          : undefined,
         page: req.query.page ? parseInt(req.query.page as string) : 1,
         limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
       };
@@ -25,8 +28,8 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Events retrieved successfully',
-        data: result
+        message: "Events retrieved successfully",
+        data: result,
       });
     } catch (error) {
       next(error);
@@ -45,8 +48,8 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Upcoming events retrieved successfully',
-        data: result
+        message: "Upcoming events retrieved successfully",
+        data: result,
       });
     } catch (error) {
       next(error);
@@ -58,15 +61,22 @@ export class EventController {
    */
   async getActiveEvents(req: Request, res: Response, next: NextFunction) {
     try {
+      const { type } = req.query;
+
       const page = req.query.page ? parseInt(req.query.page as string) : 1;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
 
-      const result = await eventService.getActiveEvents(page, limit);
+      let result;
+      if (type === "miscellaneous") {
+        result = await eventService.getMiscellaneousEvents(page, limit);
+      } else {
+        result = await eventService.getActiveEvents(page, limit);
+      }
 
       res.status(200).json({
         success: true,
-        message: 'Active events retrieved successfully',
-        data: result
+        message: "Active events retrieved successfully",
+        data: result,
       });
     } catch (error) {
       next(error);
@@ -85,14 +95,13 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Past events retrieved successfully',
-        data: result
+        message: "Past events retrieved successfully",
+        data: result,
       });
     } catch (error) {
       next(error);
     }
   }
-
 
   /**
    * Get event by ID
@@ -104,12 +113,12 @@ export class EventController {
       const event = await eventService.getEventById(eventId);
 
       if (!event) {
-        throw new AppError('Event not found', 404);
+        throw new AppError("Event not found", 404);
       }
       res.status(200).json({
         success: true,
-        message: 'Event retrieved successfully',
-        data: event
+        message: "Event retrieved successfully",
+        data: event,
       });
     } catch (error) {
       next(error);
@@ -125,20 +134,20 @@ export class EventController {
       const createdBy = (req as any).user?.id || req.body.createdBy;
 
       if (!createdBy) {
-        throw new AppError('Creator information is required', 400);
+        throw new AppError("Creator information is required", 400);
       }
 
       const eventData = {
         ...req.body,
-        createdBy
+        createdBy,
       };
 
       const event = await eventService.createEvent(eventData);
 
       res.status(201).json({
         success: true,
-        message: 'Event created successfully',
-        data: event
+        message: "Event created successfully",
+        data: event,
       });
     } catch (error) {
       next(error);
@@ -154,19 +163,23 @@ export class EventController {
       const updatedBy = (req as any).user?.id || req.body.updatedBy;
 
       if (!updatedBy) {
-        throw new AppError('Updater information is required', 400);
+        throw new AppError("Updater information is required", 400);
       }
 
-      const event = await eventService.updateEvent(eventId, req.body, updatedBy);
+      const event = await eventService.updateEvent(
+        eventId,
+        req.body,
+        updatedBy
+      );
 
       if (!event) {
-        throw new AppError('Event not found', 404);
+        throw new AppError("Event not found", 404);
       }
 
       res.status(200).json({
         success: true,
-        message: 'Event updated successfully',
-        data: event
+        message: "Event updated successfully",
+        data: event,
       });
     } catch (error) {
       next(error);
@@ -183,12 +196,12 @@ export class EventController {
       const deleted = await eventService.deleteEvent(eventId);
 
       if (!deleted) {
-        throw new AppError('Event not found', 404);
+        throw new AppError("Event not found", 404);
       }
 
       res.status(200).json({
         success: true,
-        message: 'Event deleted successfully'
+        message: "Event deleted successfully",
       });
     } catch (error) {
       next(error);
@@ -203,18 +216,22 @@ export class EventController {
       const { q: searchTerm } = req.query;
 
       if (!searchTerm) {
-        throw new AppError('Search term is required', 400);
+        throw new AppError("Search term is required", 400);
       }
 
       const page = req.query.page ? parseInt(req.query.page as string) : 1;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
 
-      const result = await eventService.searchEvents(searchTerm as string, page, limit);
+      const result = await eventService.searchEvents(
+        searchTerm as string,
+        page,
+        limit
+      );
 
       res.status(200).json({
         success: true,
-        message: 'Search results retrieved successfully',
-        data: result
+        message: "Search results retrieved successfully",
+        data: result,
       });
     } catch (error) {
       next(error);
@@ -235,13 +252,12 @@ export class EventController {
       res.status(200).json({
         success: true,
         message: `Events in ${city} retrieved successfully`,
-        data: result
+        data: result,
       });
     } catch (error) {
       next(error);
     }
   }
-
 
   /**
    * Register for event
@@ -252,21 +268,23 @@ export class EventController {
       const userId = (req as any).user?.id || req.body.userId;
 
       if (!userId) {
-        throw new AppError('User authentication is required', 401);
+        throw new AppError("User authentication is required", 401);
       }
 
       const registrationData: IRegisterEventRequest = {
         eventId,
         userId,
-        registrationData: req.body.registrationData
+        registrationData: req.body.registrationData,
       };
 
-      const registration = await eventService.registerForEvent(registrationData);
+      const registration = await eventService.registerForEvent(
+        registrationData
+      );
 
       res.status(201).json({
         success: true,
-        message: 'Successfully registered for event',
-        data: registration
+        message: "Successfully registered for event",
+        data: registration,
       });
     } catch (error) {
       next(error);
@@ -281,15 +299,15 @@ export class EventController {
       const userId = (req as any).user?.id || req.params.userId;
 
       if (!userId) {
-        throw new AppError('User authentication is required', 401);
+        throw new AppError("User authentication is required", 401);
       }
 
       const registrations = await eventService.getUserRegistrations(userId);
 
       res.status(200).json({
         success: true,
-        message: 'User registrations retrieved successfully',
-        data: registrations
+        message: "User registrations retrieved successfully",
+        data: registrations,
       });
     } catch (error) {
       next(error);
@@ -307,8 +325,8 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Event registrations retrieved successfully',
-        data: registrations
+        message: "Event registrations retrieved successfully",
+        data: registrations,
       });
     } catch (error) {
       next(error);
@@ -324,18 +342,18 @@ export class EventController {
       const userId = (req as any).user?.id || req.body.userId;
 
       if (!userId) {
-        throw new AppError('User authentication is required', 401);
+        throw new AppError("User authentication is required", 401);
       }
 
       const cancelled = await eventService.cancelRegistration(eventId, userId);
 
       if (!cancelled) {
-        throw new AppError('Registration not found or already cancelled', 404);
+        throw new AppError("Registration not found or already cancelled", 404);
       }
 
       res.status(200).json({
         success: true,
-        message: 'Registration cancelled successfully'
+        message: "Registration cancelled successfully",
       });
     } catch (error) {
       next(error);
@@ -352,12 +370,15 @@ export class EventController {
       const marked = await eventService.markAttended(eventId, userId);
 
       if (!marked) {
-        throw new AppError('Registration not found or user not registered', 404);
+        throw new AppError(
+          "Registration not found or user not registered",
+          404
+        );
       }
 
       res.status(200).json({
         success: true,
-        message: 'User marked as attended successfully'
+        message: "User marked as attended successfully",
       });
     } catch (error) {
       next(error);
@@ -373,18 +394,18 @@ export class EventController {
       const userId = (req as any).user?.id || req.body.userId;
 
       if (!userId) {
-        throw new AppError('User authentication is required', 401);
+        throw new AppError("User authentication is required", 401);
       }
 
       const marked = await eventService.markInterested(eventId, userId);
 
       if (!marked) {
-        throw new AppError('Event not found', 404);
+        throw new AppError("Event not found", 404);
       }
 
       res.status(200).json({
         success: true,
-        message: 'Marked as interested successfully'
+        message: "Marked as interested successfully",
       });
     } catch (error) {
       next(error);
@@ -400,7 +421,7 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Event statuses updated successfully'
+        message: "Event statuses updated successfully",
       });
     } catch (error) {
       next(error);
@@ -416,8 +437,8 @@ export class EventController {
 
       res.status(200).json({
         success: true,
-        message: 'Event statistics retrieved successfully',
-        data: statistics
+        message: "Event statistics retrieved successfully",
+        data: statistics,
       });
     } catch (error) {
       next(error);

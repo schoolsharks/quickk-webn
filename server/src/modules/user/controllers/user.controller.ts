@@ -143,28 +143,23 @@ export const addEditUser = async (req: Request, res: Response) => {
     const user = await userService.getUserById(userDetails.userId);
 
     const userData = {
-      ...user,
-      ...userDetails,
+      userId: userDetails.userId,
+      companyMail: userDetails.companyMail,
+      name: userDetails.name,
+      contact: userDetails.contact,
+      address: userDetails.address,
+      chapter: userDetails.chapter,
+      businessName: userDetails.businessName,
+      businessLogo: businessLogoUrl || userDetails.businessLogo || "",
+      instagram: userDetails.instagram,
+      facebook: userDetails.facebook,
+      businessCategory: userDetails.businessCategory,
+      specialisation: userDetails.specialisation,
+      designation: userDetails.designation || user?.designation || "",
+      currentStage: userDetails.currentStage || user?.currentStage || "",
+      communityGoal: userDetails.communityGoal || user?.communityGoal || "",
+      interestedEvents: userDetails.interestedEvents || user?.interestedEvents || "",
     };
-
-    // const userData = {
-    //     userId: userDetails.userId,
-    //     companyMail: userDetails.companyMail,
-    //     name: userDetails.name,
-    //     contact: userDetails.contact,
-    //     address: userDetails.address,
-    //     chapter: userDetails.chapter,
-    //     businessName: userDetails.businessName,
-    //     businessLogo: businessLogoUrl || userDetails.businessLogo || "",
-    //     instagram: userDetails.instagram,
-    //     facebook: userDetails.facebook,
-    //     businessCategory: userDetails.businessCategory,
-    //     specialisation: userDetails.specialisation,
-    //     designation: userDetails.designation || "",
-    //     currentStage: userDetails.currentStage || "",
-    //     communityGoal: userDetails.communityGoal || "",
-    //     interestedEvents: userDetails.interestedEvents || "",
-    // };
 
     const result = await userService.AddEditUser(userData);
 

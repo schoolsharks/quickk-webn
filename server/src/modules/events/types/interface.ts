@@ -1,5 +1,5 @@
-import { Document } from 'mongoose';
-import { EventStatus } from './enum';
+import { Document } from "mongoose";
+import { EventStatus } from "./enum";
 
 export interface IEvent extends Document {
   title: string;
@@ -47,7 +47,8 @@ export interface IEventQuery {
   page?: number;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
+  type?: string;
 }
 
 export interface IEventResponse {
@@ -76,7 +77,7 @@ export interface IEventRegistration extends Document {
   eventId: string;
   userId: string;
   registrationDate: Date;
-  status: 'registered' | 'attended' | 'cancelled';
+  status: "registered" | "attended" | "cancelled";
   registrationData?: Record<string, any>;
   checkInTime?: Date;
   feedback?: {

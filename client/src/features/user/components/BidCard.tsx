@@ -130,8 +130,8 @@ const BidCard: React.FC = () => {
             alt="Image of Upcoming reward."
             sx={{
               width: "100%",
-              height: "100%",
-              objectFit: "contain",
+              height: "200px",
+              objectFit: "cover",
             }}
           />
         </Box>

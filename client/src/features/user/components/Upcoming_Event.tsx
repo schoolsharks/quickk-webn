@@ -19,7 +19,11 @@ import formatEventTime from "../../../utils/formatEventTime";
 // };
 
 const Upcoming_Event: React.FC = () => {
-  const { data: EventData, isError, isLoading } = useGetActiveEventsQuery({});
+  const {
+    data: EventData,
+    isError,
+    isLoading,
+  } = useGetActiveEventsQuery({ type: "active" });
   const theme = useTheme();
 
   if (isLoading) {
@@ -38,7 +42,7 @@ const Upcoming_Event: React.FC = () => {
   return (
     <Card
       sx={{
-        borderRadius: "0",
+        borderRadius: "0" ,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",

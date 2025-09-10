@@ -268,7 +268,7 @@ const CompleteProfilePage: React.FC = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     } else {
-      navigate(-1); // Go back to previous page
+      navigate(-1);
     }
   };
 

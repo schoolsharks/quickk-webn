@@ -1,5 +1,6 @@
 export enum EventStatus {
   UPCOMING = 'upcoming',
   ACTIVE = 'active',
-  PAST = 'past'
+  PAST = 'past',
+  MISCELLANEOUS = 'miscellaneous'
 }

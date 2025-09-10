@@ -9,14 +9,10 @@ import Loader from "../../../components/ui/Loader";
 import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
 
-const EventsToday: React.FC = () => {
+const InterestingEvent: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const {
-    data: EventData,
-    isError,
-    isLoading,
-  } = useGetActiveEventsQuery({ type: "active" });
+  const { data: EventData, isError, isLoading } = useGetActiveEventsQuery({type:"miscellaneous"});
   // Format today's date
   const today = new Date();
   const dayNumber = today.getDate();
@@ -51,7 +47,7 @@ const EventsToday: React.FC = () => {
         mb={2}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Today
+          Interesting Event
         </Typography>
         <Typography
           variant="h4"
@@ -179,7 +175,7 @@ const EventsToday: React.FC = () => {
               >
                 {eventTime}
               </Typography>
-              <Typography
+              {/* <Typography
                 variant="body2"
                 sx={{
                   color: theme.palette.primary.light,
@@ -188,7 +184,7 @@ const EventsToday: React.FC = () => {
                 }}
               >
                 +{EventData.interestedCount} interested
-              </Typography>
+              </Typography> */}
             </Box>
           </Box>
         </CardContent>
@@ -215,4 +211,4 @@ const EventsToday: React.FC = () => {
   );
 };
 
-export default EventsToday;
+export default InterestingEvent;

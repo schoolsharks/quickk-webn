@@ -1,10 +1,15 @@
-import { Event, EventRegistration } from '../models/events.model';
-import { IEvent, IEventQuery, IEventResponse, IRegisterEventRequest, IEventRegistration } from '../types/interface';
-import { EventStatus } from '../types/enum';
-import AppError from '../../../utils/appError';
+import { Event, EventRegistration } from "../models/events.model";
+import {
+  IEvent,
+  IEventQuery,
+  IEventResponse,
+  IRegisterEventRequest,
+  IEventRegistration,
+} from "../types/interface";
+import { EventStatus } from "../types/enum";
+import AppError from "../../../utils/appError";
 
 export class EventService {
-
   /**
    * Get events with filtering, pagination and sorting
    */
@@ -16,8 +21,8 @@ export class EventService {
       endDate,
       page = 1,
       limit = 10,
-      sortBy = 'startDate',
-      sortOrder = 'asc'
+      sortBy = "startDate",
+      sortOrder = "asc",
     } = query;
 
     // Build filter object
@@ -28,7 +33,7 @@ export class EventService {
     }
 
     if (city) {
-      filter['location.city'] = new RegExp(city, 'i');
+      filter["location.city"] = new RegExp(city, "i");
     }
 
     // Date range filter
@@ -45,16 +50,12 @@ export class EventService {
     // Calculate pagination
     const skip = (page - 1) * limit;
     const sortOptions: any = {};
-    sortOptions[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
 
     // Execute query
     const [events, total] = await Promise.all([
-      Event.find(filter)
-        .sort(sortOptions)
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Event.countDocuments(filter)
+      Event.find(filter).sort(sortOptions).skip(skip).limit(limit).lean(),
+      Event.countDocuments(filter),
     ]);
     const totalPages = Math.ceil(total / limit);
 
@@ -64,35 +65,54 @@ export class EventService {
       page,
       totalPages,
       hasNext: page < totalPages,
-      hasPrev: page > 1
+      hasPrev: page > 1,
     };
   }
 
   /**
    * Get events by status
    */
-  async getEventsByStatus(status: EventStatus, page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async getEventsByStatus(
+    status: EventStatus,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     return this.getEvents({ status, page, limit });
   }
 
   /**
    * Get upcoming events
    */
-  async getUpcomingEvents(page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async getUpcomingEvents(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     return this.getEventsByStatus(EventStatus.UPCOMING, page, limit);
   }
 
   /**
    * Get active events
    */
-  async getActiveEvents(page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async getActiveEvents(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     return this.getEventsByStatus(EventStatus.ACTIVE, page, limit);
   }
 
+  async getMiscellaneousEvents(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
+    return this.getEventsByStatus(EventStatus.MISCELLANEOUS, page, limit);
+  }
   /**
    * Get past events
    */
-  async getPastEvents(page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async getPastEvents(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     return this.getEventsByStatus(EventStatus.PAST, page, limit);
   }
 
@@ -116,7 +136,11 @@ export class EventService {
   /**
    * Update event
    */
-  async updateEvent(eventId: string, updateData: Partial<IEvent>, updatedBy: string): Promise<IEvent | null> {
+  async updateEvent(
+    eventId: string,
+    updateData: Partial<IEvent>,
+    updatedBy: string
+  ): Promise<IEvent | null> {
     const event = await Event.findByIdAndUpdate(
       eventId,
       { ...updateData, updatedBy },
@@ -142,25 +166,25 @@ export class EventService {
   /**
    * Search events by title or description
    */
-  async searchEvents(searchTerm: string, page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async searchEvents(
+    searchTerm: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     const filter = {
       isActive: true,
       $or: [
-        { title: new RegExp(searchTerm, 'i') },
-        { description: new RegExp(searchTerm, 'i') },
-        { shortDescription: new RegExp(searchTerm, 'i') }
-      ]
+        { title: new RegExp(searchTerm, "i") },
+        { description: new RegExp(searchTerm, "i") },
+        { shortDescription: new RegExp(searchTerm, "i") },
+      ],
     };
 
     const skip = (page - 1) * limit;
 
     const [events, total] = await Promise.all([
-      Event.find(filter)
-        .sort({ startDate: 1 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Event.countDocuments(filter)
+      Event.find(filter).sort({ startDate: 1 }).skip(skip).limit(limit).lean(),
+      Event.countDocuments(filter),
     ]);
 
     const totalPages = Math.ceil(total / limit);
@@ -171,33 +195,42 @@ export class EventService {
       page,
       totalPages,
       hasNext: page < totalPages,
-      hasPrev: page > 1
+      hasPrev: page > 1,
     };
   }
 
   /**
    * Get events by city
    */
-  async getEventsByCity(city: string, page: number = 1, limit: number = 10): Promise<IEventResponse> {
+  async getEventsByCity(
+    city: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
     return this.getEvents({ city, page, limit });
   }
 
   /**
    * Register user for an event
    */
-  async registerForEvent(registrationData: IRegisterEventRequest): Promise<IEventRegistration> {
+  async registerForEvent(
+    registrationData: IRegisterEventRequest
+  ): Promise<IEventRegistration> {
     const { eventId, userId } = registrationData;
 
     // Check if event exists and is active
     const event = await Event.findById(eventId);
     if (!event) {
-      throw new AppError('Event not found or inactive', 404);
+      throw new AppError("Event not found or inactive", 404);
     }
 
     // Check if user is already registered
-    const existingRegistration = await EventRegistration.findOne({ eventId, userId });
+    const existingRegistration = await EventRegistration.findOne({
+      eventId,
+      userId,
+    });
     if (existingRegistration) {
-      throw new AppError('User already registered for this event', 400);
+      throw new AppError("User already registered for this event", 400);
     }
 
     // Create registration
@@ -215,7 +248,7 @@ export class EventService {
    */
   async getUserRegistrations(userId: string): Promise<IEventRegistration[]> {
     const registrations = await EventRegistration.find({ userId })
-      .populate('eventId')
+      .populate("eventId")
       .sort({ registrationDate: -1 })
       .lean();
 
@@ -239,7 +272,7 @@ export class EventService {
   async cancelRegistration(eventId: string, userId: string): Promise<boolean> {
     const registration = await EventRegistration.findOneAndUpdate(
       { eventId, userId },
-      { status: 'cancelled' },
+      { status: "cancelled" },
       { new: true }
     );
 
@@ -257,10 +290,10 @@ export class EventService {
    */
   async markAttended(eventId: string, userId: string): Promise<boolean> {
     const registration = await EventRegistration.findOneAndUpdate(
-      { eventId, userId, status: 'registered' },
+      { eventId, userId, status: "registered" },
       {
-        status: 'attended',
-        checkInTime: new Date()
+        status: "attended",
+        checkInTime: new Date(),
       },
       { new: true }
     );
@@ -300,18 +333,19 @@ export class EventService {
    * Get event statistics
    */
   async getEventStatistics() {
-    const [totalEvents, upcomingEvents, activeEvents, pastEvents] = await Promise.all([
-      Event.countDocuments({ isActive: true }),
-      Event.countDocuments({ isActive: true, status: EventStatus.UPCOMING }),
-      Event.countDocuments({ isActive: true, status: EventStatus.ACTIVE }),
-      Event.countDocuments({ isActive: true, status: EventStatus.PAST })
-    ]);
+    const [totalEvents, upcomingEvents, activeEvents, pastEvents] =
+      await Promise.all([
+        Event.countDocuments({ isActive: true }),
+        Event.countDocuments({ isActive: true, status: EventStatus.UPCOMING }),
+        Event.countDocuments({ isActive: true, status: EventStatus.ACTIVE }),
+        Event.countDocuments({ isActive: true, status: EventStatus.PAST }),
+      ]);
 
     return {
       totalEvents,
       upcomingEvents,
       activeEvents,
-      pastEvents
+      pastEvents,
     };
   }
 }

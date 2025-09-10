@@ -47,7 +47,8 @@ const EventDetails: React.FC = () => {
   } = useGetEventByIdQuery(eventId, { skip: !eventId });
 
   const handleGetTickets = () => {
-    navigate(`/user/events/${eventId || "1"}/purchase`);
+    if (!EventData?.virtualMeetingLink) return;
+    window.open(EventData.virtualMeetingLink);
   };
 
   const handleBack = () => {
@@ -140,15 +141,16 @@ const EventDetails: React.FC = () => {
         >
           {EventData?.title}
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            color: theme.palette.text.secondary,
-            mb: 6,
-          }}
-        >
-          By {EventData?.organizer}
-        </Typography>
+        {EventData.organizer && (
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.palette.text.secondary,
+            }}
+          >
+            By {EventData?.organizer}
+          </Typography>
+        )}
 
         {/* Date and Time */}
         <Box sx={{ mb: 6 }}>
@@ -157,6 +159,7 @@ const EventDetails: React.FC = () => {
             sx={{
               color: theme.palette.primary.main,
               mb: 0.5,
+              mt: 6,
             }}
           >
             Date and Time
@@ -230,34 +233,36 @@ const EventDetails: React.FC = () => {
         </Box>
 
         {/* Sponsors */}
-        <Box sx={{ mb: 6 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: theme.palette.primary.main,
-              mb: 0.5,
-            }}
-          >
-            Sponsors
-          </Typography>
-          {EventData.sponsors.map((sponsor: any, index: number) => (
+        {EventData.sponsors?.length ? (
+          <Box sx={{ mb: 6 }}>
             <Typography
-              key={index}
-              variant="body1"
+              variant="h4"
               sx={{
-                color: theme.palette.text.primary,
+                color: theme.palette.primary.main,
                 mb: 0.5,
-                "&::before": {
-                  content: '"• "',
-                  color: theme.palette.primary.main,
-                  fontWeight: "bold",
-                },
               }}
             >
-              {sponsor}
+              Sponsors
             </Typography>
-          ))}
-        </Box>
+            {EventData.sponsors.map((sponsor: any, index: number) => (
+              <Typography
+                key={index}
+                variant="body1"
+                sx={{
+                  color: theme.palette.text.primary,
+                  mb: 0.5,
+                  "&::before": {
+                    content: '"• "',
+                    color: theme.palette.primary.main,
+                    fontWeight: "bold",
+                  },
+                }}
+              >
+                {sponsor}
+              </Typography>
+            ))}
+          </Box>
+        ) : null}
 
         {/* Key Highlights */}
         <Box sx={{ mb: 8 }}>
@@ -303,7 +308,7 @@ const EventDetails: React.FC = () => {
             borderRadius: "0px",
           }}
         >
-          Get Tickets
+          {EventData.virtualMeetingLink ? "Get Tickets" : "Coming Soon !"}
         </Button>
       </Box>
     </Box>

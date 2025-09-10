@@ -79,7 +79,18 @@ const NetworkSearch: React.FC = () => {
           showIcons: false,
         })
       );
-      setProfiles(transformedProfiles);
+      
+      // Sort profiles: webnClubMember true comes first
+      const sortedProfiles = transformedProfiles.sort((a, b) => {
+        // If both are webn members or both are not, maintain original order
+        if (a.webnClubMember === b.webnClubMember) return 0;
+        // If a is webn member and b is not, a comes first
+        if (a.webnClubMember && !b.webnClubMember) return -1;
+        // If b is webn member and a is not, b comes first
+        return 1;
+      });
+      
+      setProfiles(sortedProfiles);
     } else {
       setProfiles([]);
     }

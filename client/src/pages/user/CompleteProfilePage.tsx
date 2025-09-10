@@ -18,16 +18,38 @@ import { RootState } from "../../app/store";
 
 // Step 1: Industry Selection
 const industries = [
-  "Manufacturer",
-  "Education",
-  "Business Solutions",
-  "Clothing",
-  "Exporter",
-  "Food",
-  "Home Decor",
-  "Finance",
+  "Fine Jewellery",
+  "Fashion & Apparel",
+  "Beauty & Skincare",
+  "Health & Wellness",
+  "Event Management & Wedding Planning",
+  "Travel & Tourism",
+  "Real Estate & Property Consultants",
+  "Financial Services",
   "Legal Services",
-  "Event Planning",
+  "Education & Coaching",
+  "Interior Design & Architecture",
+  "Graphic Design & Branding",
+  "Digital Marketing & Social Media Management",
+  "Website & App Development",
+  "Home Décor & Furnishings",
+  "Food & Beverages",
+  "Photography & Videography",
+  "Printing & Packaging Solutions",
+  "Corporate Gifting & Personalized Gifts",
+  "Handicrafts & Artisans",
+  "Automobile Sales & Services",
+  "Logistics & Courier Services",
+  "HR & Recruitment Services",
+  "IT Services & Software Solutions",
+  "Stationery & Office Supplies",
+  "PR & Media Consultancy",
+  "Fitness Equipment & Sports Gear",
+  "Childcare & Parenting Services",
+  "NGOs & Social Enterprises",
+  "Agriculture & Organic Products",
+  "Other",
+  "None",
 ];
 
 // Step 2: Role Selection
@@ -226,7 +248,7 @@ const CompleteProfilePage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [updateUserProfile] = useUpdateUserProfileMutation();
-  const { userId, companyMail, name } = useSelector(
+  const { userId, companyMail, name, businessLogo } = useSelector(
     (state: RootState) => state.user
   );
 
@@ -265,6 +287,7 @@ const CompleteProfilePage: React.FC = () => {
           currentStage: selectedStage[0] || "",
           communityGoal: selectedCommunityGoals.join(", "),
           interestedEvents: selectedEventTypes.join(", "),
+          businessLogo: businessLogo,
         };
 
         await updateUserProfile(profileData).unwrap();

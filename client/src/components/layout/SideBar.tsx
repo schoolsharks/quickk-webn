@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import {
   Home as DashboardIcon,
-  SmartToy as BotIcon,
+  // SmartToy as BotIcon,
   QuestionAnswer as SchoolIcon,
   CardGiftcard as RewardsIcon,
   Person as TargetAudienceIcon,
@@ -48,14 +48,14 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  {
-    id: "quickkAi",
-    label: "Quickk AI",
-    icon: <BotIcon />,
-    path: "/admin/quickk-ai",
-    isNewFeature: false, // Mark as new feature
-    feature: FeatureKeys.QUICKKAI,
-  },
+  // {
+  //   id: "quickkAi",
+  //   label: "Quickk AI",
+  //   icon: <BotIcon />,
+  //   path: "/admin/quickk-ai",
+  //   isNewFeature: false, // Mark as new feature
+  //   feature: FeatureKeys.QUICKKAI,
+  // },
   {
     id: "dashboard",
     label: "Dashboard",

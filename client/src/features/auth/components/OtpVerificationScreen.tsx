@@ -103,7 +103,7 @@ const OtpVerificationScreen = ({
             border={`2px solid ${theme.palette.primary.main}`}
             borderRadius={"50%"}
             alt=""
-            sx={{ width: "50px", height: "50px", objectFit: "cover" }}
+            sx={{ width: "50px", height: "50px", objectFit: "cover",padding:"2px" }}
           />
           <Box
             component="img"

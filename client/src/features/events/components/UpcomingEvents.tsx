@@ -440,7 +440,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   );
 
   return (
-    <Box width="100%">
+    <Box width="100%" mb={10}>
       {/* Header */}
       <Box
         display="flex"

@@ -254,10 +254,10 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           sx={{
             height: "100%",
             backgroundColor: theme.palette.background.paper,
-            border: `0.5px solid ${theme.palette.text.secondary}`,
+            // border: `0.5px solid ${theme.palette.text.secondary}`,
             padding: "12px 12px",
-            textAlign: "center",
-            minWidth: "50px",
+            textAlign: "left",
+            minWidth: "70px",
             marginRight: 0.5,
           }}
         >
@@ -265,7 +265,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
             variant="body1"
             sx={{
               fontWeight: 600,
-              fontSize: "14px",
+              fontSize: "18px",
               color: theme.palette.text.primary,
               lineHeight: "16px",
             }}
@@ -277,7 +277,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           sx={{
             padding: "2px 16px !important",
             cursor: "pointer",
-            backgroundColor: "#E7CEF3",
+            // backgroundColor: "#E7CEF3",
             flex: 1,
           }}
           onClick={() => toggleEventExpansion(event.id)}
@@ -316,7 +316,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
 
           {/* Expanded Content */}
           <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-            <Box sx={{ pt: 1 , pb: 1}}>
+            <Box sx={{ pt: 1, pb: 1 }}>
               <Typography
                 variant="body2"
                 sx={{
@@ -418,8 +418,22 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
 
       {/* Events List */}
       <Box>
-        {monthData.events.map((event) => (
-          <EventCard key={event.id} event={event} />
+        {monthData.events.map((event, idx) => (
+          <>
+            <EventCard key={event.id} event={event} />
+            {idx === monthData.events.length - 1 ? null : (
+              <Box
+                flex={1}
+                mx={"8px"}
+                height={"1px"}
+                my="16px"
+                sx={{
+                  background:
+                    "linear-gradient(90deg, rgba(205, 123, 255, 0.3) 0%, #A04AD4 49.52%, rgba(205, 123, 255, 0.3) 99.04%)",
+                }}
+              />
+            )}
+          </>
         ))}
       </Box>
     </Box>
@@ -458,7 +472,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           {groupedEvents.map((monthData) => (
             <Box
               key={`${monthData.month}-${monthData.year}`}
-              sx={{ height: "100%" , px: 1}}
+              sx={{ height: "100%", px: 1 }}
             >
               <motion.div
                 variants={carouselSlide}

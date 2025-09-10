@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
 import NetworkSearch from "./NetworkSearch";
 import BottomNavigation from "../../../components/ui/BottomNavigation";
 import { useSelector } from "react-redux";

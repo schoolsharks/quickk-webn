@@ -34,9 +34,22 @@ import { ArrowRight } from "lucide-react";
 const ProfileLayout = () => {
   const [badgesOpen, setBadgesOpen] = useState(false);
   const [certificatesOpen, setCertificatesOpen] = useState(false);
+  const [businessDetailsOpen, setBusinessDetailsOpen] = useState(true);
   const navigate = useNavigate();
-  const { totalStars, redeemedStars, name, address, contact, companyMail } =
-    useSelector((state: RootState) => state.user);
+  const {
+    totalStars,
+    redeemedStars,
+    name,
+    address,
+    contact,
+    companyMail,
+    businessCategory,
+    designation,
+    currentStage,
+    communityGoal,
+    interestedEvents,
+    businessLogo,
+  } = useSelector((state: RootState) => state.user);
 
   const navigateToHome = () => {
     navigate("/user/dashboard");
@@ -161,6 +174,129 @@ const ProfileLayout = () => {
             );
           })}
         </Stack>
+      </Box>
+
+      {/* Business Details Section */}
+      <Box sx={{ mt: "32px" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          px={"24px"}
+        >
+          <Typography fontSize={"20px"} fontWeight={"500"}>
+            Business Details
+          </Typography>
+          <IconButton
+            size="small"
+            onClick={() => setBusinessDetailsOpen(!businessDetailsOpen)}
+          >
+            {businessDetailsOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          </IconButton>
+        </Stack>
+        <Collapse in={businessDetailsOpen}>
+          <Stack mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
+            {(() => {
+              const businessFields = {
+                "Business Category": businessCategory,
+                Designation: designation,
+                "Current Stage": currentStage,
+                "Community Goal": communityGoal,
+                "Interested Events": interestedEvents,
+              };
+
+              const hasBusinessData =
+                Object.values(businessFields).some((value) => value) ||
+                businessLogo;
+
+              if (!hasBusinessData) {
+                return (
+                  <Typography
+                    fontSize={"16px"}
+                    fontWeight={"500"}
+                    color="text.secondary"
+                    textAlign="center"
+                    py={2}
+                  >
+                    Complete your profile to see the details.
+                  </Typography>
+                );
+              }
+
+              return (
+                <>
+                  {businessLogo && (
+                    <Box
+                      sx={{
+                        mb: 3,
+                        mx: "auto",
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        bgcolor: "white",
+                        justifyContent: "center",
+                        p: 1,
+                        width: "max-content",
+                      }}
+                    >
+                      <Box>
+                        <Box
+                          component="img"
+                          src={businessLogo}
+                          alt="Business Logo"
+                          sx={{
+                            width: "100px",
+                            height: "100px",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  )}
+                  {Object.entries(businessFields).map((item, idx) => {
+                    if (!item[1]) {
+                      return null;
+                    }
+
+                    const isLast =
+                      idx ===
+                      Object.entries(businessFields).filter(
+                        ([, value]) => value
+                      ).length -
+                        1;
+
+                    return (
+                      <Box key={idx} sx={{ color: "black" }}>
+                        <Typography fontSize={"12px"} fontWeight={"700"}>
+                          {item[0]}
+                        </Typography>
+                        <Typography
+                          fontSize={"20px"}
+                          fontWeight={"600"}
+                          marginTop={"4px"}
+                        >
+                          {item[1]}
+                        </Typography>
+                        {!isLast && (
+                          <Box
+                            flex={1}
+                            mx={"8px"}
+                            height={"1px"}
+                            my="16px"
+                            sx={{
+                              background:
+                                "linear-gradient(90deg, rgba(205, 123, 255, 0.3) 0%, #A04AD4 49.52%, rgba(205, 123, 255, 0.3) 99.04%)",
+                            }}
+                          />
+                        )}
+                      </Box>
+                    );
+                  })}
+                </>
+              );
+            })()}
+          </Stack>
+        </Collapse>
       </Box>
 
       {/* Become a Webn Member Section */}
@@ -290,7 +426,12 @@ const ProfileLayout = () => {
           <Typography fontSize={"20px"} fontWeight={"500"} pl={"22px"}>
             Offers
           </Typography>
-          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`,overflow:"hidden" }}>
+          <Box
+            sx={{
+              border: `2px solid ${theme.palette.primary.main}`,
+              overflow: "hidden",
+            }}
+          >
             <Grid container sx={{ filter: "blur(5px)" }}>
               {offers.map((offer, idx) => (
                 <Grid size={6} key={idx}>
@@ -391,7 +532,7 @@ const ProfileLayout = () => {
         </Box>
       </AnimateOnScroll>
 
-       <AnimateOnScroll
+      <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
         amount={0.3}
@@ -425,7 +566,7 @@ const ProfileLayout = () => {
             </Box>
           </Collapse>
         </Box>
-      </AnimateOnScroll> 
+      </AnimateOnScroll>
     </Box>
   );
 };

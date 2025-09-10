@@ -322,7 +322,7 @@ export const signup = async (
       interestedEvents,
       totalStars: 50,
       company: defaultCompanyId,
-      webnClubMember: true,
+      webnClubMember: false,
     });
 
     if (ref) {

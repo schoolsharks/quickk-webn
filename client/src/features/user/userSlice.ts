@@ -21,6 +21,7 @@ interface UserState {
     currentStage: string | null;
     communityGoal: string | null;
     interestedEvents: string | null;
+    businessLogo: string | null;
     users: Array<{
         name: string;
         totalStars: number;
@@ -62,6 +63,7 @@ const initialState: UserState = {
     currentStage: null,
     communityGoal: null,
     interestedEvents: null,
+    businessLogo: null,
     eventMode: JSON.parse(localStorage.getItem('eventMode') || 'false'),
     users: null,
     currentMonth: null,
@@ -95,24 +97,27 @@ const userSlice = createSlice({
             .addMatcher(
                 usersApi.endpoints.fetchUser.matchFulfilled,
                 (state, { payload }) => {
-                    const user = payload as { data: { 
-                        name: string; 
-                        companyMail: string; 
-                        _id: string; 
-                        totalStars: number; 
-                        redeemedStars: number; 
-                        address: string; 
-                        contact: string;
-                        rank: number; 
-                        avatarSelected: boolean;
-                        learningStreak: number;
-                        progress: number;
-                        businessCategory: string;
-                        designation: string;
-                        currentStage: string;
-                        communityGoal: string;
-                        interestedEvents: string;
-                    } };
+                    const user = payload as {
+                        data: {
+                            name: string;
+                            companyMail: string;
+                            _id: string;
+                            totalStars: number;
+                            redeemedStars: number;
+                            address: string;
+                            contact: string;
+                            rank: number;
+                            avatarSelected: boolean;
+                            learningStreak: number;
+                            progress: number;
+                            businessCategory: string;
+                            designation: string;
+                            currentStage: string;
+                            communityGoal: string;
+                            interestedEvents: string;
+                            businessLogo: string;
+                        }
+                    };
                     state.name = user.data.name;
                     state.companyMail = user.data.companyMail;
                     state.userId = user.data._id;
@@ -129,6 +134,7 @@ const userSlice = createSlice({
                     state.designation = user.data.designation || null;
                     state.currentStage = user.data.currentStage || null;
                     state.communityGoal = user.data.communityGoal || null;
+                    state.businessLogo = user.data.businessLogo || null;
                     state.interestedEvents = user.data.interestedEvents || null;
                     state.isLoading = false;
                 }
@@ -167,28 +173,28 @@ const userSlice = createSlice({
                 }
             );
 
-            builder
-                .addMatcher(
-                    usersApi.endpoints.getAllAvatars.matchPending,
-                    (state) => {
-                        state.isLoading = true;
-                        state.error = null;
-                    }
-                )
-                .addMatcher(
-                    usersApi.endpoints.getAllAvatars.matchFulfilled,
-                    (state) => {
-                        state.isLoading = false;
-                        state.error = null;
-                    }
-                )
-                .addMatcher(
-                    usersApi.endpoints.getAllAvatars.matchRejected,
-                    (state, { error }) => {
-                        state.isLoading = false;
-                        state.error = error;
-                    }
-                );
+        builder
+            .addMatcher(
+                usersApi.endpoints.getAllAvatars.matchPending,
+                (state) => {
+                    state.isLoading = true;
+                    state.error = null;
+                }
+            )
+            .addMatcher(
+                usersApi.endpoints.getAllAvatars.matchFulfilled,
+                (state) => {
+                    state.isLoading = false;
+                    state.error = null;
+                }
+            )
+            .addMatcher(
+                usersApi.endpoints.getAllAvatars.matchRejected,
+                (state, { error }) => {
+                    state.isLoading = false;
+                    state.error = error;
+                }
+            );
 
 
         builder

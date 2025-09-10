@@ -226,8 +226,10 @@ const CompleteProfilePage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [updateUserProfile] = useUpdateUserProfileMutation();
-  const { userId, companyMail, name } = useSelector((state: RootState) => state.user);
-  
+  const { userId, companyMail, name, businessLogo } = useSelector(
+    (state: RootState) => state.user
+  );
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<string[]>([]);
@@ -256,13 +258,14 @@ const CompleteProfilePage: React.FC = () => {
       try {
         const profileData = {
           userId: userId,
-          companyMail : companyMail,
+          companyMail: companyMail,
           name: name,
           businessCategory: selectedIndustries.join(", "),
           designation: selectedRole[0] || "",
           currentStage: selectedStage[0] || "",
           communityGoal: selectedCommunityGoals.join(", "),
           interestedEvents: selectedEventTypes.join(", "),
+          businessLogo: businessLogo,
         };
 
         await updateUserProfile(profileData).unwrap();

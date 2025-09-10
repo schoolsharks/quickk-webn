@@ -12,7 +12,6 @@ import WebnLogo from "../../../assets/images/header/logo.webp";
 import GlobalButton from "../../../components/ui/button";
 import GoWomaniaLogo from "../../../assets/images/header/goWomania.webp";
 
-
 interface SignupScreenProps {
   onSignup: (data: SignupData, ref?: string | null) => void;
   isLoading: boolean;
@@ -107,7 +106,12 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
           border={`2px solid ${theme.palette.primary.main}`}
           borderRadius={"50%"}
           alt=""
-          sx={{ width: "50px", height: "50px", objectFit: "cover" }}
+          sx={{
+            width: "50px",
+            height: "50px",
+            objectFit: "cover",
+            padding: "2px",
+          }}
         />
         <Box
           component="img"

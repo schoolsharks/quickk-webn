@@ -47,9 +47,9 @@ const EmailInputScreen = ({
         minHeight: window.innerHeight,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
       }}
     >
+      {/* Header Section */}
       <Box display={"flex"} flexDirection={"column"} gap={"60px"}>
         {/* Header Image */}
         <Box display={"flex"} justifyContent={"space-between"}>
@@ -59,7 +59,7 @@ const EmailInputScreen = ({
             border={`2px solid ${theme.palette.primary.main}`}
             borderRadius={"50%"}
             alt=""
-            sx={{ width: "50px", height: "50px", objectFit: "cover" }}
+            sx={{ width: "50px", height: "50px", objectFit: "cover",padding:"2px" }}
           />
           <Box
             component="img"
@@ -93,11 +93,16 @@ const EmailInputScreen = ({
         </Box>
       </Box>
 
+      {/* Content Section - Takes remaining space */}
       <Box
-        sx={{ width: "100%" }}
-        display={"flex"}
-        flexDirection={"column"}
-        justifyContent="space-between"
+        sx={{ 
+          width: "100%",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          minHeight: "200px" // Ensures minimum space for content
+        }}
       >
         {/* Show error if any */}
         {error && (
@@ -151,16 +156,19 @@ const EmailInputScreen = ({
         </Box>
       </Box>
 
-      <GlobalButton
-        onClick={handleSubmit}
-        disabled={isLoading || !email.trim()}
-        sx={{
-          bgcolor: theme.palette.text.secondary,
-          color: "white",
-        }}
-      >
-        {isLoading ? "Sending OTP..." : "Send OTP"}
-      </GlobalButton>
+      {/* Fixed Button Section */}
+      <Box sx={{ mt: "60px", flexShrink: 0 }}>
+        <GlobalButton
+          onClick={handleSubmit}
+          disabled={isLoading || !email.trim()}
+          sx={{
+            bgcolor: theme.palette.text.secondary,
+            color: "white",
+          }}
+        >
+          {isLoading ? "Sending OTP..." : "Send OTP"}
+        </GlobalButton>
+      </Box>
     </Box>
   );
 };

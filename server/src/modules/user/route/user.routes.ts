@@ -61,6 +61,8 @@ router.post('/updateUserProfile', authenticateUser, asyncHandeler(UserController
 // route for searching network users
 router.get('/search/users', authenticateUser, asyncHandeler(UserControllers.searchUsers));
 
+// route for getting user recommendations
+router.get('/getRecommendations', authenticateUser, asyncHandeler(UserControllers.getUserRecommendations));
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));
 // router.post('/resetPassword', asyncHandeler(authControllers.resetPassword));

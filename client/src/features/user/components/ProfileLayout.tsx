@@ -290,7 +290,27 @@ const ProfileLayout = () => {
           <Typography fontSize={"20px"} fontWeight={"500"} pl={"22px"}>
             Offers
           </Typography>
-          <Box sx={{ border: `2px solid ${theme.palette.primary.main}`,overflow:"hidden" }}>
+          <Box
+            sx={{
+              border: `2px solid ${theme.palette.primary.main}`,
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <Box
+              position={"absolute"}
+              zIndex={2}
+              sx={{
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%,-50%)",
+                textAlign:"center",
+                padding:"0 20px",
+              }}
+            >
+              <Typography fontSize={"22px"} fontWeight={"700"}>Offers are on their way! 🚀</Typography>
+              <Typography fontSize={"18px"} fontWeight={"500"}>Stack up your stars now, so you’re ready the moment they go live.</Typography>
+            </Box>
             <Grid container sx={{ filter: "blur(5px)" }}>
               {offers.map((offer, idx) => (
                 <Grid size={6} key={idx}>
@@ -391,7 +411,7 @@ const ProfileLayout = () => {
         </Box>
       </AnimateOnScroll>
 
-       <AnimateOnScroll
+      <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
         amount={0.3}
@@ -425,7 +445,7 @@ const ProfileLayout = () => {
             </Box>
           </Collapse>
         </Box>
-      </AnimateOnScroll> 
+      </AnimateOnScroll>
     </Box>
   );
 };

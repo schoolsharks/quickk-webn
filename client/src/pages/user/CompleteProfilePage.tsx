@@ -226,8 +226,10 @@ const CompleteProfilePage: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [updateUserProfile] = useUpdateUserProfileMutation();
-  const { userId, companyMail, name } = useSelector((state: RootState) => state.user);
-  
+  const { userId, companyMail, name } = useSelector(
+    (state: RootState) => state.user
+  );
+
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
   const [selectedRole, setSelectedRole] = useState<string[]>([]);
@@ -256,7 +258,7 @@ const CompleteProfilePage: React.FC = () => {
       try {
         const profileData = {
           userId: userId,
-          companyMail : companyMail,
+          companyMail: companyMail,
           name: name,
           businessCategory: selectedIndustries.join(", "),
           designation: selectedRole[0] || "",
@@ -266,6 +268,7 @@ const CompleteProfilePage: React.FC = () => {
         };
 
         await updateUserProfile(profileData).unwrap();
+        localStorage.setItem("showStarsPopup", "true");
         navigate("/user/event-mode");
       } catch (error) {
         console.error("Error updating profile:", error);

@@ -234,21 +234,7 @@ class UserService {
                 userData.userId,
                 {
                     $set: {
-                        companyMail: userData.companyMail,
-                        name: userData.name,
-                        address: userData.address,
-                        contact: userData.contact,
-                        chapter: userData.chapter,
-                        businessName: userData.businessName,
-                        businessLogo: userData.businessLogo,
-                        instagram: userData.instagram,
-                        facebook: userData.facebook,
-                        businessCategory: userData.businessCategory,
-                        specialisation: userData.specialisation,
-                        designation: userData.designation || "",
-                        currentStage: userData.currentStage || "",
-                        communityGoal: userData.communityGoal || "",
-                        interestedEvents: userData.interestedEvents || "",
+                        ...userData
                     },
                 },
                 { new: true, runValidators: true }

@@ -75,12 +75,6 @@ const Login = () => {
       }).unwrap();
 
       if (result) {
-        // Check if this is from a new signup
-        const showStarsPopup = localStorage.getItem("showStarsPopup");
-        if (showStarsPopup) {
-          localStorage.removeItem("showStarsPopup");
-          localStorage.setItem("showStarsPopup", "true");
-        }
         navigate("/user/mode-selection");
       }
     } catch (err) {
@@ -99,7 +93,6 @@ const Login = () => {
       if (result) {
         setEmail(signupData.companyMail);
         setCurrentStep("otp");
-        localStorage.setItem("showStarsPopup", "true");
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;

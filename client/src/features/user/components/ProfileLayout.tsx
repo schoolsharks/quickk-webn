@@ -437,15 +437,21 @@ const ProfileLayout = () => {
               position={"absolute"}
               zIndex={2}
               sx={{
+                width: "80%",
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%,-50%)",
-                textAlign:"center",
-                padding:"0 20px",
+                textAlign: "center",
+                padding: "0 0px",
               }}
             >
-              <Typography fontSize={"22px"} fontWeight={"700"}>Offers are on their way! 🚀</Typography>
-              <Typography fontSize={"18px"} fontWeight={"500"}>Stack up your stars now, so you’re ready the moment they go live.</Typography>
+              <Typography fontSize={"22px"} fontWeight={"700"}>
+                Offers are on their way! 🚀
+              </Typography>
+              <Typography fontSize={"18px"} fontWeight={"500"}>
+                Stack up your stars now, so you’re ready the moment they go
+                live.
+              </Typography>
             </Box>
             <Grid container sx={{ filter: "blur(5px)" }}>
               {offers.map((offer, idx) => (

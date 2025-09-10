@@ -71,7 +71,7 @@ const EventDashboard = () => {
             mt={1}
           >
             <Typography color={"black"} fontSize={14}>
-              Weben Club Member
+              Webn Club Member
             </Typography>
           </Box>
         </Box>

@@ -3,7 +3,7 @@ import { IUser } from "../types/interfaces";
 
 const userSchema: Schema<IUser> = new Schema<IUser>(
   {
-    companyMail: { type: String, unique: true, lowercase: true },
+    companyMail: { type: String, unique: true },
     name: { type: String },
     company: {
       type: Schema.Types.ObjectId,

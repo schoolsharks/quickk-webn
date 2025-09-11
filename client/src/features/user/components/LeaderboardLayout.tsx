@@ -149,7 +149,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 >
                   <img
                     src={user?.businessLogo}
-                    alt={user.name}
+                    alt={user.name.charAt(0).toUpperCase()}
                     style={{
                       width: "100%",
                       height: 90,

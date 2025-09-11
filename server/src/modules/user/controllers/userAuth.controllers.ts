@@ -45,9 +45,11 @@ export const login = async (
 ): Promise<void> => {
   const { companyMail, companyCode } = req.body;
 
-  const user = await User.findOne({ 
-    companyMail: { $regex: new RegExp(`^${companyMail}$`, 'i') } 
+  const user = await User.findOne({
+    companyMail: { $regex: new RegExp(`^${companyMail}$`, "i") },
   });
+
+  console.log("User", user);
 
   if (!user) {
     return next(new AppError("User not found", 404));
@@ -125,7 +127,10 @@ export const sendOtp = async (
     }
 
     // Check if user exists
-    const user = await User.findOne({ companyMail });
+    const user = await User.findOne({
+      companyMail: { $regex: new RegExp(`^${companyMail}$`, "i") },
+    });
+
     if (!user) {
       return next(
         new AppError(
@@ -214,7 +219,10 @@ export const verifyOtp = async (
       );
     }
 
-    const user = await User.findOne({ companyMail });
+    const user = await User.findOne({
+      companyMail: { $regex: new RegExp(`^${companyMail}$`, "i") },
+    });
+
     if (!user) {
       return next(new AppError("User not found", StatusCodes.NOT_FOUND));
     }

@@ -34,8 +34,8 @@ const Referral: React.FC = () => {
 
   const handleReferNow = async () => {
     const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
-    const shareMessage = `I'm part of a Gowomaniya community that brings together entrepreneurs, homepreneurs, investors & job seekers. Let's grow together.\nJoin here: ${referralLink}`;
-    
+    const shareMessage = `I'm part of a Gowomania community that brings together entrepreneurs, homepreneurs, investors & job seekers. Let's grow together.\nJoin here: ${referralLink}`;
+
     const shareData = {
       text: shareMessage,
     };
@@ -59,7 +59,8 @@ const Referral: React.FC = () => {
 
   const handleCopyLink = async () => {
     const referralLink = `${window.location.origin}/user/login?ref=${userId}`;
-    const shareMessage = `I'm part of a Gowomaniya community that brings together entrepreneurs, homepreneurs, investors & job seekers. Let's grow together.\nJoin here: ${referralLink}`;
+    const shareMessage = `👋 Your friend just sent you an invite to Gowomania.
+It’s more than a platform, it’s a community where everyone’s growth matters. Sign up, join in, and let the rewards follow. ${referralLink}`;
 
     try {
       if (navigator.clipboard) {
@@ -173,7 +174,7 @@ const Referral: React.FC = () => {
               lineHeight: 1.5,
             }}
           >
-            Bring your friends to Gowomaniya Community and unlock exciting perks
+            Bring your friends to Gowomania Community and unlock exciting perks
             with every signup.
           </Typography>
 
@@ -229,6 +230,32 @@ const Referral: React.FC = () => {
                 >
                   Collect stars through referrals and unlock exclusive offers
                   and benefits.
+                </Typography>
+              </Box>
+            </Stack>
+
+            <Stack direction="row" spacing={2}>
+              <Sparkle fill="black" />
+              <Box>
+                <Typography
+                  sx={{
+                    color: theme.palette.text.primary,
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    mb: 1,
+                  }}
+                >
+                  Promote Your Business
+                </Typography>
+                <Typography
+                  sx={{
+                    color: theme.palette.text.primary,
+                    fontSize: "16px",
+                    fontWeight: 400,
+                  }}
+                >
+                  Gather 1000 stars to unlock a special voucher and advertise
+                  your business within the community.
                 </Typography>
               </Box>
             </Stack>

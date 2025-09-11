@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {
   Box,
   Typography,
-  Avatar,
+  // Avatar,
   IconButton,
   List,
   ListItem,
@@ -24,6 +24,7 @@ interface Leaderboard {
     totalStars: number;
     time: string;
     avatar?: string;
+    businessLogo?: string;
   }>;
   currentMonth: string;
   currentYear: number;
@@ -146,12 +147,24 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   display={"flex"}
                   justifyContent={"center"}
                 >
-                  <Avatar
-                    src={user.avatar}
-                    sx={{
-                      width: 60,
+                  <img
+                    src={user?.businessLogo}
+                    alt={user.name}
+                    style={{
+                      width: "100%",
                       height: 90,
-                      borderRadius: "0",
+                      objectFit: "contain",
+                      background: "white",
+                      color: "#333",
+                      borderRadius: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "https://via.placeholder.com/70?text=" +
+                        user.name.charAt(0).toUpperCase();
                     }}
                   />
                 </Box>
@@ -164,6 +177,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   <Typography
                     color={index === 2 ? "inherit" : "black"}
                     fontSize="14px"
+                    mt={1}
                   >
                     {user.name}
                   </Typography>
@@ -238,7 +252,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                       ".MuiTypography-root": { fontWeight: 500 },
                     }}
                   />
-                  <Typography sx={{ minWidth: 60 }}>{user.time}</Typography>
+                  {/* <Typography sx={{ minWidth: 60 }}>{user.time}</Typography> */}
                   <Typography sx={{ minWidth: 50 }}>
                     {user.totalStars}{" "}
                     {isHighlight ? (

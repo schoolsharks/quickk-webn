@@ -12,7 +12,9 @@ import Quickk from "../../components/ui/Quickk";
 import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
 
 const EventDashboard = () => {
-  const { name } = useSelector((state: RootState) => state.user);
+  const { name, webnClubMember } = useSelector(
+    (state: RootState) => state.user
+  );
   const theme = useTheme();
   const [showStarsPopup, setShowStarsPopup] = useState(false);
 
@@ -64,16 +66,31 @@ const EventDashboard = () => {
             <br />
             {name}
           </Typography>
-          <Box
-            border={`2px solid ${theme.palette.primary.main}`}
-            width={"fit-content"}
-            px={1}
-            mt={1}
-          >
-            <Typography color={"black"} fontSize={14}>
-              Webn Club Member
-            </Typography>
-          </Box>
+          {webnClubMember ? (
+            <Box
+              border={`2px solid ${theme.palette.primary.main}`}
+              width={"fit-content"}
+              px={1}
+              mt={1}
+            >
+              <Typography color={"black"} fontSize={14}>
+                Webn Club Member
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              border={`2px solid ${theme.palette.primary.main}`}
+              width={"fit-content"}
+              px={1}
+              mt={1}
+              sx={{ cursor: "pointer" }}
+              onClick={() => (window.location.href = "/user/webn-membership")}
+            >
+              <Typography color={"black"} fontSize={14}>
+                Become Webn Member
+              </Typography>
+            </Box>
+          )}
         </Box>
         {/* <IconButton sx={{ color: "#000" }}>
           <NotificationsNoneOutlinedIcon />

@@ -12,8 +12,8 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 // import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
-import badge1 from "../../../assets/images/user/MedalBlue.png";
-import badge2 from "../../../assets/images/user/GoldMedal.png";
+// import badge1 from "../../../assets/images/user/MedalBlue.png";
+// import badge2 from "../../../assets/images/user/GoldMedal.png";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../../theme/theme";
@@ -22,18 +22,19 @@ import amajon from "../../../assets/images/user/amajon.png";
 import starbucks from "../../../assets/images/user/starbucks.png";
 import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
 import watch from "../../../assets/images/user/watch.png";
-import Badge from "../../../components/ui/badge";
-import Certificate from "../../../components/ui/certificate";
+// import Badge from "../../../components/ui/badge";
+// import Certificate from "../../../components/ui/certificate";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
 import { ArrowRight } from "lucide-react";
+import { isProfileComplete } from "../../../utils/profileUtils";
 
 const ProfileLayout = () => {
-  const [badgesOpen, setBadgesOpen] = useState(false);
-  const [certificatesOpen, setCertificatesOpen] = useState(false);
+  // const [badgesOpen, setBadgesOpen] = useState(false);
+  // const [certificatesOpen, setCertificatesOpen] = useState(false);
   const [businessDetailsOpen, setBusinessDetailsOpen] = useState(true);
   const navigate = useNavigate();
   const {
@@ -50,6 +51,7 @@ const ProfileLayout = () => {
     interestedEvents,
     businessLogo,
   } = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
 
   const navigateToHome = () => {
     navigate("/user/dashboard");
@@ -89,6 +91,9 @@ const ProfileLayout = () => {
     },
   ];
 
+  // Check if profile is complete
+  const profileComplete = isProfileComplete(user);
+
   return (
     <Box sx={{ pt: "50px", pb: "50px" }}>
       {/* Profile Header */}
@@ -127,9 +132,6 @@ const ProfileLayout = () => {
           <Typography fontSize={"20px"} fontWeight={"500"}>
             Personal Details
           </Typography>
-          <IconButton size="small">
-            <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
-          </IconButton>
         </Stack>
         <Stack mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
           {Object.entries({
@@ -137,6 +139,7 @@ const ProfileLayout = () => {
             Contact: contact,
             "Business email": companyMail,
             Address: address,
+            chapter: user.chapter,
           }).map((item, idx) => {
             if (!item[1]) {
               return null;
@@ -158,7 +161,7 @@ const ProfileLayout = () => {
                 >
                   {item[1]}
                 </Typography>
-                {idx < 2 && (
+                {idx < 3 && (
                   <Box
                     flex={1}
                     mx={"8px"}
@@ -187,6 +190,7 @@ const ProfileLayout = () => {
           <Typography fontSize={"20px"} fontWeight={"500"}>
             Business Details
           </Typography>
+
           <IconButton
             size="small"
             onClick={() => setBusinessDetailsOpen(!businessDetailsOpen)}
@@ -203,6 +207,8 @@ const ProfileLayout = () => {
                 "Current Stage": currentStage,
                 "Community Goal": communityGoal,
                 "Interested Events": interestedEvents,
+                facebook: user.facebook,
+                instagram: user.instagram,
               };
 
               const hasBusinessData =
@@ -225,6 +231,15 @@ const ProfileLayout = () => {
 
               return (
                 <>
+                  {!profileComplete && (
+                    <IconButton
+                      size="small"
+                      sx={{ display: "flex", justifyContent: "flex-end" }}
+                      onClick={() => navigate("/user/complete-profile")}
+                    >
+                      <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
+                    </IconButton>
+                  )}
                   {businessLogo && (
                     <Box
                       sx={{
@@ -516,7 +531,7 @@ const ProfileLayout = () => {
       </AnimateOnScroll>
 
       {/* Badges Section */}
-      <AnimateOnScroll
+      {/* <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
         amount={0.3}
@@ -587,7 +602,7 @@ const ProfileLayout = () => {
             </Box>
           </Collapse>
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
     </Box>
   );
 };

@@ -308,7 +308,7 @@ const EventDetails: React.FC = () => {
             borderRadius: "0px",
           }}
         >
-          {EventData.virtualMeetingLink ? "Get Tickets" : "Coming Soon !"}
+          {EventData.virtualMeetingLink ? "Apply Now" : "Coming Soon !"}
         </Button>
       </Box>
     </Box>

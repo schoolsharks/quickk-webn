@@ -125,7 +125,7 @@ const OtpVerificationScreen = ({
           >
             Welcome to the
             <br />
-            GoWomaniya Community 🌟
+            GoWomania Community 🌟
           </Typography>
           <Typography
             fontWeight="500"

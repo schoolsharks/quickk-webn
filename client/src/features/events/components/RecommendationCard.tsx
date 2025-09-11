@@ -112,7 +112,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
                 variant="body2"
                 color={theme.palette.text.secondary}
                 fontSize="14px"
-                noWrap
+                // noWrap
                 title={`${user.businessName}${
                   user.businessCategory ? ` (${user.businessCategory})` : ""
                 }`}

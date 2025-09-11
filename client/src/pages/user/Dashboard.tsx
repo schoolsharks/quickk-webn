@@ -21,7 +21,9 @@ import TopStatusPanel from "../../features/user/components/TopStatusPanel";
 import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
 
 const Dashboard = () => {
-  const { name } = useSelector((state: RootState) => state.user);
+  const { name, webnClubMember } = useSelector(
+    (state: RootState) => state.user
+  );
   const theme = useTheme();
   const [showStarsPopup, setShowStarsPopup] = useState(false);
 
@@ -59,16 +61,31 @@ const Dashboard = () => {
             <br />
             {name}
           </Typography>
-          <Box
-            border={`2px solid ${theme.palette.primary.main}`}
-            width={"fit-content"}
-            px={1}
-            mt={1}
-          >
-            <Typography color={"black"} fontSize={14}>
-              Webn Club Member
-            </Typography>
-          </Box>
+          {webnClubMember ? (
+            <Box
+              border={`2px solid ${theme.palette.primary.main}`}
+              width={"fit-content"}
+              px={1}
+              mt={1}
+            >
+              <Typography color={"black"} fontSize={14}>
+                Webn Club Member
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              border={`2px solid ${theme.palette.primary.main}`}
+              width={"fit-content"}
+              px={1}
+              mt={1}
+              sx={{ cursor: "pointer" }}
+              onClick={() => window.location.href = "/user/webn-membership"}
+            >
+              <Typography color={"black"} fontSize={14}>
+                Become Webn Member
+              </Typography>
+            </Box>
+          )}
         </Box>
         {/* <IconButton sx={{ color: "#000" }}>
           <NotificationsNoneOutlinedIcon />
@@ -166,7 +183,13 @@ const Dashboard = () => {
 
       {/* ToggleBar */}
       <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
-        <Box mt={"60px"} px={"30px"} mb={"30px"} display={"flex"} flexDirection={"row-reverse"}>
+        <Box
+          mt={"60px"}
+          px={"30px"}
+          mb={"30px"}
+          display={"flex"}
+          flexDirection={"row-reverse"}
+        >
           {/* <ToggleBar /> */}
           <Quickk />
         </Box>

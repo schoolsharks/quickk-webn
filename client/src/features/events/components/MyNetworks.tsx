@@ -24,7 +24,7 @@ const MyNetworks = () => {
   };
 
   return (
-    <Box py={"8px"} display={"flex"} flexDirection={"column"} gap={8}>
+    <Box pt={"8px"} pb={8} display={"flex"} flexDirection={"column"} gap={8}>
       {/* Conditionally render Complete Profile section only if profile is incomplete */}
       {!profileComplete && (
         <Box

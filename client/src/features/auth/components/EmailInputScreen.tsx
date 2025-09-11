@@ -79,7 +79,7 @@ const EmailInputScreen = ({
             mb={"10px"}
             color={theme.palette.text.primary}
           >
-            Welcome to the<br/> GoWomaniya Community 🌟
+            Welcome to the<br/> GoWomania Community 🌟
           </Typography>
           <Typography
             fontWeight="500"

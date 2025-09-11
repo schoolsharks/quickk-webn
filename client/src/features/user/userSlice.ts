@@ -22,12 +22,16 @@ interface UserState {
     communityGoal: string | null;
     interestedEvents: string | null;
     businessLogo: string | null;
+    webnClubMember: boolean | null;
     users: Array<{
         name: string;
         totalStars: number;
         time: string;
         avatar?: string;
     }> | null;
+    chapter: string | null;
+    instagram: string | null;
+    facebook: string | null;
     currentMonth: string | null;
     currentYear: number | null;
     isLoading: boolean;
@@ -64,6 +68,10 @@ const initialState: UserState = {
     communityGoal: null,
     interestedEvents: null,
     businessLogo: null,
+    webnClubMember: null,
+    chapter: null,
+    instagram: null,
+    facebook: null,
     eventMode: JSON.parse(localStorage.getItem('eventMode') || 'false'),
     users: null,
     currentMonth: null,
@@ -116,6 +124,10 @@ const userSlice = createSlice({
                             communityGoal: string;
                             interestedEvents: string;
                             businessLogo: string;
+                            webnClubMember: boolean;
+                            chapter: string;
+                            instagram: string;
+                            facebook: string;
                         }
                     };
                     state.name = user.data.name;
@@ -136,6 +148,10 @@ const userSlice = createSlice({
                     state.communityGoal = user.data.communityGoal || null;
                     state.businessLogo = user.data.businessLogo || null;
                     state.interestedEvents = user.data.interestedEvents || null;
+                    state.webnClubMember = user.data.webnClubMember || false;
+                    state.chapter = user.data.chapter || null;
+                    state.instagram = user.data.instagram || null;
+                    state.facebook = user.data.facebook || null;
                     state.isLoading = false;
                 }
             )

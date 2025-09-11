@@ -12,10 +12,14 @@ import formatEventTime from "../../../utils/formatEventTime";
 const InterestingEvent: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { data: EventData, isError, isLoading } = useGetActiveEventsQuery({type:"miscellaneous"});
+  const {
+    data: EventData,
+    isError,
+    isLoading,
+  } = useGetActiveEventsQuery({ type: "miscellaneous" });
   // Format today's date
   const today = new Date();
-  const dayNumber = today.getDate();
+  // const dayNumber = today.getDate();
   const monthName = today
     .toLocaleDateString("en-US", { month: "short" })
     .toUpperCase();
@@ -47,7 +51,7 @@ const InterestingEvent: React.FC = () => {
         mb={2}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Interesting Event
+          Upcoming Event
         </Typography>
         <Typography
           variant="h4"
@@ -82,7 +86,7 @@ const InterestingEvent: React.FC = () => {
           <Box
             zIndex={10}
             sx={{
-              backgroundColor: "black",
+              backgroundColor: "primary.main",
               color: theme.palette.background.paper,
               borderRadius: "0px",
               p: "8px",
@@ -99,7 +103,7 @@ const InterestingEvent: React.FC = () => {
                 margin: 0,
               }}
             >
-              {dayNumber}
+              12
             </Typography>
             <Typography
               variant="h6"

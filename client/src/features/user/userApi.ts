@@ -148,6 +148,15 @@ export const usersApi = api.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+
+    getUserRecommendations: builder.query({
+      query: (params) => ({
+        url: "/user/getRecommendations",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -165,4 +174,6 @@ export const {
   useUpdateUserProfileMutation,
   useSearchNetworkUsersQuery,
   useLazySearchNetworkUsersQuery,
+  useGetUserRecommendationsQuery,
+  useLazyGetUserRecommendationsQuery,
 } = usersApi;

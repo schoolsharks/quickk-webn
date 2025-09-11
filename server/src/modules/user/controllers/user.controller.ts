@@ -347,3 +347,59 @@ export const bulkUploadUsers = async (
     });
   }
 };
+
+export const getUserRecommendations = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.user.id;
+    const companyId = req.user?.companyId;
+    const { page = 1, limit = 10, refreshToken } = req.query;
+
+    if (!companyId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Company ID is required",
+      });
+      return;
+    }
+
+    console.log(`Getting recommendations for user: ${userId}, excluding from results`);
+
+    const result = await userService.getUserRecommendations(
+      userId,
+      companyId,
+      {
+        page: Number(page),
+        limit: Number(limit),
+        refreshToken: refreshToken as string,
+      }
+    );
+
+    // Additional safety check - filter out current user if somehow included
+    if (result.recommendations) {
+      result.recommendations = result.recommendations.filter(
+        (user: any) => user._id.toString() !== userId.toString()
+      );
+    }
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({
+        success: false,
+        message: error.message,
+      });
+    } else {
+      console.error("Error fetching user recommendations:", error);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: "Internal Server Error",
+      });
+    }
+  }
+};

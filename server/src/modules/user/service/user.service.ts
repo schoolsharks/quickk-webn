@@ -475,15 +475,180 @@ class UserService {
       // Set overall success based on whether we had any successful creations
       results.success = results.successfullyCreated > 0;
 
-      return results;
-    } catch (error: any) {
-      console.error("Error in bulk user creation:", error);
-      return {
-        success: false,
-        message: error.message || "Failed to process bulk upload",
-      };
+            return results;
+
+        } catch (error: any) {
+            console.error("Error in bulk user creation:", error);
+            return {
+                success: false,
+                message: error.message || "Failed to process bulk upload"
+            };
+        }
     }
-  }
+
+    async getUserRecommendations(
+        userId: mongoose.Types.ObjectId,
+        companyId: string,
+        options: {
+            page: number;
+            limit: number;
+            refreshToken?: string;
+        }
+    ) {
+        try {
+            const { page, limit, refreshToken } = options;
+            
+            // Get current user to understand their profile for matching
+            const currentUser = await User.findById(userId);
+            if (!currentUser) {
+                throw new AppError('User not found', StatusCodes.NOT_FOUND);
+            }
+
+            // Create aggregation pipeline for recommendations
+            const pipeline = [
+                // Exclude current user and ensure they are in same company
+                {
+                    $match: {
+                        _id: { $ne: new Types.ObjectId(userId) }, // Explicitly exclude current user
+                        company: new Types.ObjectId(companyId),
+                        // Ensure user has basic profile info
+                        name: { $exists: true, $ne: "" },
+                        businessName: { $exists: true, $ne: "" },
+                    }
+                },
+                // Lookup avatar information
+                {
+                    $lookup: {
+                        from: 'avatars',
+                        localField: 'avatar',
+                        foreignField: '_id',
+                        as: 'avatarDetails',
+                    }
+                },
+                // Add calculated match score
+                {
+                    $addFields: {
+                        matchScore: {
+                            $add: [
+                                // Chapter match (40 points)
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$chapter", currentUser.chapter] },
+                                        then: 40,
+                                        else: 0
+                                    }
+                                },
+                                // Business category match (30 points)
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$businessCategory", currentUser.businessCategory] },
+                                        then: 30,
+                                        else: 0
+                                    }
+                                },
+                                // Specialisation match (20 points)
+                                {
+                                    $cond: {
+                                        if: { $eq: ["$specialisation", currentUser.specialisation] },
+                                        then: 20,
+                                        else: 0
+                                    }
+                                },
+                                // Same company base points (10 points)
+                                10
+                            ]
+                        },
+                        // Add randomization factor for shuffling
+                        randomFactor: {
+                            $multiply: [
+                                { $rand: {} },
+                                refreshToken ? 1 : 10 // Less randomness on pagination
+                            ]
+                        }
+                    }
+                },
+                // Sort by match score and randomization
+                {
+                    $sort: {
+                        matchScore: -1 as const,
+                        randomFactor: -1 as const,
+                        _id: 1 as const // For consistent pagination
+                    }
+                },
+                // Project required fields
+                {
+                    $project: {
+                        _id: 1,
+                        name: 1,
+                        businessName: 1,
+                        businessLogo: 1,
+                        businessCategory: 1,
+                        specialisation: 1,
+                        chapter: 1,
+                        instagram: 1,
+                        facebook: 1,
+                        companyMail: 1,
+                        avatar: { $arrayElemAt: ['$avatarDetails.src', 0] },
+                        matchScore: 1
+                    }
+                }
+            ];
+
+            // Get total count for pagination
+            const totalCountPipeline = [
+                {
+                    $match: {
+                        _id: { $ne: new Types.ObjectId(userId) }, // Explicitly exclude current user
+                        company: new Types.ObjectId(companyId),
+                        name: { $exists: true, $ne: "" },
+                        businessName: { $exists: true, $ne: "" },
+                    }
+                },
+                { $count: "total" }
+            ];
+
+            const [recommendations, totalCountResult] = await Promise.all([
+                User.aggregate([
+                    ...pipeline,
+                    { $skip: (page - 1) * limit },
+                    { $limit: limit }
+                ]),
+                User.aggregate(totalCountPipeline)
+            ]);
+
+            const total = totalCountResult[0]?.total || 0;
+            const totalPages = Math.ceil(total / limit);
+            const hasMore = page < totalPages;
+
+            return {
+                recommendations,
+                pagination: {
+                    currentPage: page,
+                    totalPages,
+                    hasMore,
+                    total,
+                    limit
+                },
+                meta: {
+                    algorithm: 'weighted_matching_v1',
+                    refreshToken: refreshToken || `${Date.now()}_${userId}`,
+                    matchingCriteria: {
+                        chapter: currentUser.chapter,
+                        businessCategory: currentUser.businessCategory,
+                        specialisation: currentUser.specialisation
+                    }
+                }
+            };
+
+        } catch (error) {
+            console.error('Error getting user recommendations:', error);
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError('Failed to get recommendations', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
 export default UserService;

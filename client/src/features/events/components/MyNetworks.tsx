@@ -7,6 +7,7 @@ import { RootState } from "../../../app/store";
 import { isProfileComplete } from "../../../utils/profileUtils";
 // import { ArrowRight } from "lucide-react";
 import { CallMadeOutlined } from "@mui/icons-material";
+import Recommendation from "./Recommendation";
 
 const MyNetworks = () => {
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ const MyNetworks = () => {
 
       {profileComplete && <Box mt={"40px"} />}
       <NetworkSearch />
+      <Recommendation/>
       <BottomNavigation />
     </Box>
   );

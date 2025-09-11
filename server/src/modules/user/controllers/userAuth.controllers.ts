@@ -45,7 +45,9 @@ export const login = async (
 ): Promise<void> => {
   const { companyMail, companyCode } = req.body;
 
-  const user = await User.findOne({ companyMail });
+  const user = await User.findOne({ 
+    companyMail: { $regex: new RegExp(`^${companyMail}$`, 'i') } 
+  });
 
   if (!user) {
     return next(new AppError("User not found", 404));

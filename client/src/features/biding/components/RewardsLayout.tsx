@@ -95,11 +95,11 @@ export const RewardsLayout: React.FC<RewardsScreenProps> = ({
         <Typography fontSize={"22px"} fontWeight={"700"}>
           ✨ Something exciting is brewing!
         </Typography>
-        <Typography fontSize={"18px"} fontWeight={"500"}>
+        <Typography fontSize={"18px"} fontWeight={"600"}>
           Keep earning stars, your rewards will unlock soon.
         </Typography>
       </Box>
-      <Box sx={{ filter: "blur(6px)" }}>
+      <Box sx={{ filter: "blur(10px)" }}>
         {/* Stars Counter */}
         <Grid container mt={"30px"}>
           <Grid

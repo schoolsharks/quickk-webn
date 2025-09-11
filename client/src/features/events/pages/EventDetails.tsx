@@ -104,10 +104,10 @@ const EventDetails: React.FC = () => {
       {/* Event Image */}
       <Box
         sx={{
-          height: "200px",
+          height: "400px",
           backgroundColor: theme.palette.background.default,
           backgroundImage: `url(${EventData?.eventImage})`,
-          backgroundSize: "cover",
+          backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           display: "flex",

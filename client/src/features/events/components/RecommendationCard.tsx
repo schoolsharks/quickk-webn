@@ -52,7 +52,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
       sx={{
         minWidth: 300,
         maxWidth: 320,
-        border: `1px solid black`,
+        border: `1px solid ${theme.palette.primary.main}`,
         flexShrink: 0,
         borderRadius: 0,
         transition: "all 0.3s ease",

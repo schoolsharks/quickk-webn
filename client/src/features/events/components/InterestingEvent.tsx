@@ -167,7 +167,7 @@ const InterestingEvent: React.FC = () => {
                 fontSize: "20px",
               }}
             >
-              {EventData.location.split(",")[2]}
+              {EventData.location}
             </Typography>
             <Box display={"flex"} justifyContent="space-between" width={"100%"}>
               <Typography

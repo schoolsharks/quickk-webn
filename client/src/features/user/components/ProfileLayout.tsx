@@ -333,7 +333,7 @@ const ProfileLayout = () => {
             <Box
               sx={{
                 flex: 1,
-                bgcolor: "rgba(205, 123, 255, 0.1)",
+                bgcolor: theme.palette.primary.main,
                 p: "16px",
                 display: "flex",
                 flexDirection: "column",
@@ -349,7 +349,7 @@ const ProfileLayout = () => {
                     fontWeight: "600",
                     fontSize: "20px",
                     lineHeight: "120%",
-                    color: "text.primary",
+                    color: "white",
                     mb: 0.5,
                   }}
                 >
@@ -359,14 +359,14 @@ const ProfileLayout = () => {
                   sx={{
                     fontWeight: "600",
                     fontSize: "10px",
-                    color: theme.palette.text.secondary,
+                    color: "white",
                     mb: 1,
                   }}
                 >
                   T&C Applied
                 </Typography>
               </Box>
-              <ArrowRight size={30} />
+              <ArrowRight size={30} color="white" />
             </Box>
             {/* Right side - Image */}
             <Box
@@ -468,7 +468,7 @@ const ProfileLayout = () => {
                 live.
               </Typography>
             </Box>
-            <Grid container sx={{ filter: "blur(5px)" }}>
+            <Grid container sx={{ filter: "blur(10px)" }}>
               {offers.map((offer, idx) => (
                 <Grid size={6} key={idx}>
                   <Box

@@ -14,6 +14,16 @@ export interface QuestionProps {
   id: string;
   onOptionClick?: (answer: string | string[], id: string) => void;
   smallSize?: boolean;
+  pulseStats?: {
+    pulseItemId: string;
+    optionType: string;
+    totalResponses: number;
+    results: Array<{
+      option: string;
+      count: number;
+      percentage: number;
+    }>;
+  };
 }
 
 

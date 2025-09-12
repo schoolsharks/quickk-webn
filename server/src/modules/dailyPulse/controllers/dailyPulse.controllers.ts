@@ -8,6 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 import UserService from '../../user/service/user.service';
 import { PulseType, Status } from '../types/enum';
 import DailyPulseService from '../services/dailyPulse.Service';
+import PulseStatsService from '../services/pulseStats.Service';
 import { SearchHelper } from '../../../utils/search/searchHelper';
 import { searchConfigs } from '../../../utils/search/searchConfigs';
 import mongoose from 'mongoose';
@@ -19,6 +20,7 @@ const questionService = new QuestionService();
 const infoCardService = new InfoCardService();
 const userService = new UserService();
 const dailyPulseService = new DailyPulseService();
+const pulseStatsService = new PulseStatsService();
 
 export const getDailyPulses = async (
   req: Request,
@@ -57,43 +59,57 @@ export const getDailyPulses = async (
     const infoCardFeedbackMap = new Map(infoCardFeedback.map(f => [f.infoCard.toString(), f.feedback]));
 
     // Merge & transform into a unified array
-    const pulseItems = dailyPulse.pulses.map(pulse => {
-      const id = pulse.refId.toString();
+    const pulseItems = await Promise.all(
+      dailyPulse.pulses.map(async pulse => {
+        const id = pulse.refId.toString();
 
-      if (infoCardMap.has(id)) {
-        const i = infoCardMap.get(id);
-        if (!i) return null;
-        return {
-          id,
-          type: 'infoCard',
-          title: i.title,
-          content: i.content,
-          wantFeedback: i.wantFeedback,
-          feedback: infoCardFeedbackMap.get(id) || null,
-          score: i.score,
-        };
-      } else if (questionMap.has(id)) {
-        const q = questionMap.get(id);
-        if (!q) return null;
-        return {
-          id,
-          type: 'QuestionTwoOption',
-          questionText: q.questionText,
-          image: q.image || null,
-          optionType: q.optionType,
-          options: q.options,
-          questionOptions: q.questionOptions || [],
-          response: questionResponseMap.get(id) || null,
-          score: q.score,
-        };
-      } else {
-        return null;
-      }
-    }).filter(item => item !== null);
+        if (infoCardMap.has(id)) {
+          const i = infoCardMap.get(id);
+          if (!i) return null;
+          return {
+            id,
+            type: 'infoCard',
+            title: i.title,
+            content: i.content,
+            wantFeedback: i.wantFeedback,
+            feedback: infoCardFeedbackMap.get(id) || null,
+            score: i.score,
+          };
+        } else if (questionMap.has(id)) {
+          const q = questionMap.get(id);
+          if (!q) return null;
+          
+          const userResponse = questionResponseMap.get(id) || null;
+          let pulseStats = null;
+          
+          // If user has already answered and it's a supported question type, get pulse stats
+          if (userResponse && companyId && (q.optionType === 'text' || q.optionType === 'correct-incorrect')) {
+            pulseStats = await pulseStatsService.calculateQuestionPulseStats(id, companyId);
+          }
+          
+          return {
+            id,
+            type: 'QuestionTwoOption',
+            questionText: q.questionText,
+            image: q.image || null,
+            optionType: q.optionType,
+            options: q.options,
+            questionOptions: q.questionOptions || [],
+            response: userResponse,
+            score: q.score,
+            pulseStats: pulseStats // Include pulse stats if available
+          };
+        } else {
+          return null;
+        }
+      })
+    );
+
+    const filteredPulseItems = pulseItems.filter(item => item !== null);
 
     res.status(200).json({
       date,
-      pulseItems,
+      pulseItems: filteredPulseItems,
     });
   } catch (error) {
     next(error);
@@ -109,6 +125,7 @@ export const submitPulseResponse = async (
   try {
     const { refId, type, feedback, questionResponse } = req.body;
     const user = req.user?.id;
+    const companyId = req.user?.companyId;
 
     if (!user || !refId || !type) {
       return next(new AppError('user, refId, and type are required', StatusCodes.BAD_REQUEST));
@@ -131,12 +148,18 @@ export const submitPulseResponse = async (
     }
 
     let result;
+    let pulseStats = null;
 
     if (type === 'QuestionTwoOption') {
       if (!questionResponse) {
         return next(new AppError('Question response is required for QuestionTwoOption type', StatusCodes.BAD_REQUEST));
       }
       result = await questionService.collectResponse({ user, question: refId, response: questionResponse });
+      
+      // Calculate pulse stats for supported question types
+      if (companyId) {
+        pulseStats = await pulseStatsService.calculateQuestionPulseStats(refId, companyId);
+      }
     } else if (type === 'infoCard') {
       if (!feedback) {
         return next(new AppError('Feedback is required for infoCard type', StatusCodes.BAD_REQUEST));
@@ -152,6 +175,7 @@ export const submitPulseResponse = async (
     res.status(StatusCodes.CREATED).json({
       success: true,
       data: result,
+      pulseStats: pulseStats // Include pulse stats in response
     });
   } catch (error) {
     next(error);

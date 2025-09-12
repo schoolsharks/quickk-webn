@@ -20,6 +20,7 @@ import { baseTransition } from "../../../animation/transitions/baseTransition";
 
 interface Leaderboard {
   users: Array<{
+    _id: string;
     name: string;
     totalStars: number;
     time: string;
@@ -118,7 +119,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
           ];
 
           return (
-            <Box textAlign="center" key={index} flex={1}>
+            <Box textAlign="center" key={user._id} flex={1}>
               <Typography
                 fontSize={"25px"}
                 fontWeight="bold"
@@ -140,32 +141,51 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   flex: 1,
                 }}
               >
-                <Box
-                  bgcolor={"white"}
-                  display={"flex"}
-                  justifyContent={"center"}
-                >
-                  <img
-                    src={user?.businessLogo}
-                    alt={user.name.charAt(0).toUpperCase()}
-                    style={{
-                      width: "100%",
-                      height: 90,
-                      objectFit: "contain",
-                      background: "white",
-                      color: "#333",
-                      borderRadius: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/70?text=" +
-                        user.name.charAt(0).toUpperCase();
-                    }}
-                  />
-                </Box>
+                {user.businessLogo ? (
+                  <Box
+                    bgcolor={"white"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    height={90}
+                  >
+                    <img
+                      src={user.businessLogo}
+                      alt={user.name.charAt(0).toUpperCase()}
+                      style={{
+                        width: "100%",
+                        height: 90,
+                        objectFit: "contain",
+                        background: "white",
+                        color: "#333",
+                        borderRadius: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  </Box>
+                ) : (
+                  <Box
+                    bgcolor={"white"}
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    height={90}
+                  >
+                    <Typography
+                      fontWeight="bold"
+                      fontSize={{ xs: "40px", sm: "60px" }}
+                      color="#333"
+                      sx={{ textAlign: "center" }}
+                    >
+                      {user.name.charAt(0).toUpperCase()}
+                    </Typography>
+                  </Box>
+                )}
                 <Box
                   display={"flex"}
                   flexDirection={"column"}
@@ -207,12 +227,13 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
           const isHighlight = user.name === name;
           return (
             <AnimateOnScroll
+              key={user._id}
               variants={fadeInUp}
               transition={baseTransition}
               amount={0.2}
             >
               <ListItem
-                key={index}
+                key={user._id}
                 sx={{
                   p: "0",
                   mb: 1,

@@ -13,10 +13,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../components/ui/button";
 import ReferralImage from "../../assets/images/Referral/Referral.webp";
-import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { Sparkle } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 
 const Referral: React.FC = () => {
   const theme = useTheme();
@@ -161,7 +161,7 @@ It’s more than a platform, it’s a community where everyone’s growth matter
             >
               Invite a friend. Earn 50
             </Typography>
-            <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
+            <StarsOutlinedIcon sx={{ marginLeft: "4px", fontSize: "24px" }} />
           </Box>
 
           {/* Description */}
@@ -181,8 +181,12 @@ It’s more than a platform, it’s a community where everyone’s growth matter
           {/* Benefits section */}
           <Stack spacing={3} sx={{ mb: 4 }}>
             {/* Earn 50 Stars per Referral */}
-            <Stack direction="row" spacing={2}>
-              <Sparkle fill="black" />
+            <Stack direction="row" spacing={2} alignItems="flex-start">
+              <Sparkle
+                size={18}
+                fill="black"
+                style={{ marginTop: "4px", flexShrink: 0 }}
+              />
               <Box>
                 <Typography
                   sx={{
@@ -208,8 +212,12 @@ It’s more than a platform, it’s a community where everyone’s growth matter
             </Stack>
 
             {/* More Referrals, More Rewards */}
-            <Stack direction="row" spacing={2}>
-              <Sparkle fill="black" />
+            <Stack direction="row" spacing={2} alignItems="flex-start">
+              <Sparkle
+                size={18}
+                fill="black"
+                style={{ marginTop: "4px", flexShrink: 0 }}
+              />
               <Box>
                 <Typography
                   sx={{
@@ -234,8 +242,12 @@ It’s more than a platform, it’s a community where everyone’s growth matter
               </Box>
             </Stack>
 
-            <Stack direction="row" spacing={2}>
-              <Sparkle fill="black" />
+            <Stack direction="row" spacing={2} alignItems="flex-start">
+              <Sparkle
+                size={18}
+                fill="black"
+                style={{ marginTop: "4px", flexShrink: 0 }}
+              />
               <Box>
                 <Typography
                   sx={{

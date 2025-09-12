@@ -21,12 +21,12 @@ const TopStatusPanel: React.FC = () => {
 
   const topCardData = [
     {
-      icon: <StarsOutlinedIcon sx={{ fontSize: 28, color: "white" }} />,
+      icon: <StarsOutlinedIcon sx={{ fontSize: 34, color: "white" }} />,
       value: totalStars,
       bgColor: theme.palette.text.secondary,
     },
     {
-      icon: <LeaderboardIcon sx={{ fontSize: 28, color: "black" }} />,
+      icon: <LeaderboardIcon sx={{ fontSize: 34, color: "black" }} />,
       value: getOrdinal(rank),
       bgColor: "#D9D9D9",
       onClick: () => navigate("/user/leaderboard"),

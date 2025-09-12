@@ -47,10 +47,8 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
     window.scrollTo(0, 0);
   }, []);
 
-  // Sort users by totalStars in descending order and take the top 6
-  const sortedUsers = [...leaderboardData.users]
-    .sort((a, b) => b.totalStars - a.totalStars)
-    .slice(0, 10);
+  // Users are already sorted and limited to top 10 from server
+  const sortedUsers = leaderboardData.users;
 
   const topThree = sortedUsers.slice(0, 3).map((user, index) => ({
     rank: index + 1,

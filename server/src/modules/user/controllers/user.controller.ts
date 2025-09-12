@@ -16,8 +16,19 @@ export const getAllUsersWithDetails = async (
 ): Promise<void> => {
   try {
     const companyId = req.user?.companyId;
-    const users = await userService.getAllUsersWithDetails(companyId);
-    res.status(200).json(users);
+    const usersData = await userService.getAllUsersWithDetails(companyId);
+
+    // Sort users by totalStars in descending order and limit to top 10
+    const sortedUsers = [...usersData.users]
+      .sort((a, b) => b.totalStars - a.totalStars)
+      .slice(0, 10);
+
+    const responseData = {
+      ...usersData,
+      users: sortedUsers
+    };
+
+    res.status(200).json(responseData);
   } catch (error) {
     console.error("Error fetching users with details:", error);
     res.status(500).json({ message: "Internal Server Error" });

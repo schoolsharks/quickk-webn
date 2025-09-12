@@ -1,6 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import OptionItem from "./OptionMicroComponent";
+import OptionResultsComponent from "./OptionResultsComponent";
 import { QuestionProps } from "../Types/types";
 
 const QuestionTwoOption: React.FC<QuestionProps> = ({
@@ -16,12 +17,27 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   smallSize = false,
 }) => {
   const theme = useTheme();
+  const [showResults, setShowResults] = useState(false);
+  const [userResponse, setUserResponse] = useState<string | undefined>(response);
+
+  // Update userResponse when response prop changes
+  useEffect(() => {
+    setUserResponse(response);
+    setShowResults(!!response);
+  }, [response]);
 
   const handleOptionSelect = (selectedOption: string) => {
     if (onAnswer) {
+      setUserResponse(selectedOption);
+      // Show results immediately for supported option types
+      if (optionType === "text" || optionType === "correct-incorrect") {
+        setShowResults(true);
+      }
       onAnswer(selectedOption, id);
     }
   };
+
+  const shouldShowResults = showResults && userResponse && (optionType === "text" || optionType === "correct-incorrect");
 
   return (
     <Box
@@ -93,13 +109,22 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
       </Box>
       {/* Options section */}
       <Box>
-        <OptionItem
-          selectedOption={response}
-          options={options}
-          type={optionType}
-          onSelect={handleOptionSelect}
-          smallSize={smallSize}
-        />
+        {shouldShowResults ? (
+          <OptionResultsComponent
+            options={options}
+            type={optionType}
+            selectedOption={userResponse!}
+            smallSize={smallSize}
+          />
+        ) : (
+          <OptionItem
+            selectedOption={response}
+            options={options}
+            type={optionType}
+            onSelect={handleOptionSelect}
+            smallSize={smallSize}
+          />
+        )}
       </Box>
     </Box>
   );

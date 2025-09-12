@@ -30,7 +30,6 @@ import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
 import { ArrowRight } from "lucide-react";
-import { isProfileComplete } from "../../../utils/profileUtils";
 
 const ProfileLayout = () => {
   // const [badgesOpen, setBadgesOpen] = useState(false);
@@ -50,8 +49,11 @@ const ProfileLayout = () => {
     communityGoal,
     interestedEvents,
     businessLogo,
+    facebook,
+    chapter,
+    instagram,
   } = useSelector((state: RootState) => state.user);
-  const user = useSelector((state: RootState) => state.user);
+  // const user = useSelector((state: RootState) => state.user);
 
   const navigateToHome = () => {
     navigate("/user/dashboard");
@@ -92,7 +94,7 @@ const ProfileLayout = () => {
   ];
 
   // Check if profile is complete
-  const profileComplete = isProfileComplete(user);
+  // const profileComplete = isProfileComplete(user);
 
   return (
     <Box sx={{ pt: "50px", pb: "50px" }}>
@@ -133,13 +135,13 @@ const ProfileLayout = () => {
             Personal Details
           </Typography>
         </Stack>
-        <Stack mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
+        <Stack mt={2} sx={{ p: "24px", bgcolor: "#CD7BFF4D" }}>
           {Object.entries({
             Name: name,
             Contact: contact,
             "Business email": companyMail,
             Address: address,
-            chapter: user.chapter,
+            chapter: chapter,
           }).map((item, idx) => {
             if (!item[1]) {
               return null;
@@ -199,7 +201,7 @@ const ProfileLayout = () => {
           </IconButton>
         </Stack>
         <Collapse in={businessDetailsOpen}>
-          <Stack mt={2} sx={{ p: "36px 24px", bgcolor: "#CD7BFF4D" }}>
+          <Stack mt={2} sx={{ p: "24px", bgcolor: "#CD7BFF4D" }}>
             {(() => {
               const businessFields = {
                 "Business Category": businessCategory,
@@ -207,8 +209,8 @@ const ProfileLayout = () => {
                 "Current Stage": currentStage,
                 "Community Goal": communityGoal,
                 "Interested Events": interestedEvents,
-                facebook: user.facebook,
-                instagram: user.instagram,
+                facebook: facebook,
+                instagram: instagram,
               };
 
               const hasBusinessData =
@@ -217,29 +219,36 @@ const ProfileLayout = () => {
 
               if (!hasBusinessData) {
                 return (
-                  <Typography
-                    fontSize={"16px"}
-                    fontWeight={"500"}
-                    color="text.secondary"
-                    textAlign="center"
-                    py={2}
-                  >
-                    Complete your profile to see the details.
-                  </Typography>
+                  <>
+                    <IconButton
+                      size="small"
+                      sx={{ display: "flex", justifyContent: "center" }}
+                      onClick={() => navigate("/user/complete-profile")}
+                    >
+                      <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
+                    </IconButton>
+                    <Typography
+                      fontSize={"16px"}
+                      fontWeight={"500"}
+                      color="text.secondary"
+                      textAlign="center"
+                      py={2}
+                    >
+                      Complete your profile to see the details.
+                    </Typography>
+                  </>
                 );
               }
 
               return (
                 <>
-                  {!profileComplete && (
-                    <IconButton
-                      size="small"
-                      sx={{ display: "flex", justifyContent: "flex-end" }}
-                      onClick={() => navigate("/user/complete-profile")}
-                    >
-                      <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
-                    </IconButton>
-                  )}
+                  <IconButton
+                    size="small"
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                    onClick={() => navigate("/user/complete-profile")}
+                  >
+                    <BorderColorOutlinedIcon sx={{ color: "text.primary" }} />
+                  </IconButton>
                   {businessLogo && (
                     <Box
                       sx={{
@@ -262,7 +271,7 @@ const ProfileLayout = () => {
                           sx={{
                             width: "100px",
                             height: "100px",
-                            objectFit: "cover",
+                            objectFit: "contain",
                           }}
                         />
                       </Box>

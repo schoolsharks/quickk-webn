@@ -197,7 +197,8 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     setTimeout(() => {
       sliderRef.current?.slickNext();
       setCurrentIndex((prev) => prev + 1);
-    }, 700);
+    }, pulseItem.type === "QuestionTwoOption" && 
+       (pulseItem.optionType === "text" || pulseItem.optionType === "correct-incorrect") ? 2000 : 700);
 
     try {
       await submitPulseResponse(payload).unwrap();

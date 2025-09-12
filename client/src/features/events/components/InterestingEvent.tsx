@@ -51,7 +51,7 @@ const InterestingEvent: React.FC = () => {
         mb={2}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Upcoming Event
+          Today's Event
         </Typography>
         <Typography
           variant="h4"

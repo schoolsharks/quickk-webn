@@ -153,6 +153,9 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     swipe: true,
     swipeToSlide: true,
     arrows: false,
+    afterChange: (current: number) => {
+      setCurrentIndex(current);
+    },
     appendDots: (dots: React.ReactNode) => (
       <Box
         display="flex"
@@ -194,11 +197,17 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         pulseItem.type === "QuestionTwoOption" ? answer : undefined,
     };
 
-    setTimeout(() => {
-      sliderRef.current?.slickNext();
-      setCurrentIndex((prev) => prev + 1);
-    }, pulseItem.type === "QuestionTwoOption" && 
-       (pulseItem.optionType === "text" || pulseItem.optionType === "correct-incorrect") ? 2000 : 700);
+    setTimeout(
+      () => {
+        sliderRef.current?.slickNext();
+        setCurrentIndex((prev) => prev + 1);
+      },
+      pulseItem.type === "QuestionTwoOption" &&
+        (pulseItem.optionType === "text" ||
+          pulseItem.optionType === "correct-incorrect")
+        ? 2000
+        : 700
+    );
 
     try {
       await submitPulseResponse(payload).unwrap();
@@ -316,7 +325,6 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           <Typography variant="h4">Daily Pulse</Typography>
           {showScore && (
             <Typography variant="h4" display={"flex"} alignItems={"center"}>
-              {/* {totalScore} */}
               {pulseItems[currentIndex]?.score}
               <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
             </Typography>

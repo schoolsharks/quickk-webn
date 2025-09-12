@@ -38,6 +38,16 @@ interface QuestionTwoOptionPulseItem extends BasePulseItem {
   optionType: OptionType;
   options: string[];
   questionOptions?: string[];
+  pulseStats?: {
+    pulseItemId: string;
+    optionType: string;
+    totalResponses: number;
+    results: Array<{
+      option: string;
+      count: number;
+      percentage: number;
+    }>;
+  };
 }
 
 interface BidCardPulseItem extends BasePulseItem {
@@ -210,8 +220,14 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     );
 
     try {
-      await submitPulseResponse(payload).unwrap();
+      const response = await submitPulseResponse(payload).unwrap();
       console.log("Response submitted successfully");
+      
+      // If we got pulse stats back, log it for now
+      if (response.pulseStats && pulseItem.type === "QuestionTwoOption") {
+        console.log("Received pulse stats:", response.pulseStats);
+        // The QuestionTwoOption component will handle showing results using its local state
+      }
     } catch (error) {
       console.error("Failed to submit response:", error);
     }
@@ -269,6 +285,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
               options={item.options}
               questionOptions={item.questionOptions}
               response={item.response}
+              pulseStats={item.pulseStats}
               onAnswer={readOnly ? undefined : handleAnswer}
               smallSize={smallSize}
               sx={{ height: "100%" }}

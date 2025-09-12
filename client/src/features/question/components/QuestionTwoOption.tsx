@@ -12,6 +12,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   questionOptions = [],
   options = [],
   response,
+  pulseStats,
   onAnswer,
   sx = {},
   smallSize = false,
@@ -23,8 +24,9 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   // Update userResponse when response prop changes
   useEffect(() => {
     setUserResponse(response);
-    setShowResults(!!response);
-  }, [response]);
+    // Show results if user has responded to supported question types
+    setShowResults(!!response && (optionType === "text" || optionType === "correct-incorrect"));
+  }, [response, optionType]);
 
   const handleOptionSelect = (selectedOption: string) => {
     if (onAnswer) {
@@ -114,6 +116,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
             options={options}
             type={optionType}
             selectedOption={userResponse!}
+            pulseStats={pulseStats}
             smallSize={smallSize}
           />
         ) : (

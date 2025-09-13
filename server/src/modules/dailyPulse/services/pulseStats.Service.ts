@@ -17,11 +17,12 @@ class PulseStatsService {
   private questionService = new QuestionService();
 
   async calculateQuestionPulseStats(
-    questionId: string, 
+    questionId: string,
     companyId: string
   ): Promise<PulseStatsResult | null> {
     try {
       // Get question details first
+      console.log("Calculating pulse stats for questionId:", questionId, "and companyId:", companyId);
       const question = await this.questionService.getQuestionById(questionId);
       if (!question) {
         return null;
@@ -34,10 +35,10 @@ class PulseStatsService {
 
       // Get all users in the company first
       const User = mongoose.model('User');
-      const companyUsers = await User.find({ 
-        company: new mongoose.Types.ObjectId(companyId) 
+      const companyUsers = await User.find({
+        company: new mongoose.Types.ObjectId(companyId)
       }, { _id: 1 });
-      
+
       const companyUserIds = companyUsers.map(user => user._id);
 
       // Aggregate responses for this question from company users only
@@ -73,7 +74,7 @@ class PulseStatsService {
         // Ensure we have data for both right and wrong
         const rightStat = responseStats.find(stat => stat._id === 'right') || { _id: 'right', count: 0 };
         const wrongStat = responseStats.find(stat => stat._id === 'wrong') || { _id: 'wrong', count: 0 };
-        
+
         results = [
           {
             option: 'right',
@@ -81,7 +82,7 @@ class PulseStatsService {
             percentage: Math.round((rightStat.count / totalResponses) * 100)
           },
           {
-            option: 'wrong', 
+            option: 'wrong',
             count: wrongStat.count,
             percentage: Math.round((wrongStat.count / totalResponses) * 100)
           }
@@ -90,10 +91,10 @@ class PulseStatsService {
         // For text options, use the actual question options
         const optionA = question.options[0] || '';
         const optionB = question.options[1] || '';
-        
-        const optionAStat = responseStats.find(stat => stat._id === optionA) || { _id: optionA, count: 0 };
-        const optionBStat = responseStats.find(stat => stat._id === optionB) || { _id: optionB, count: 0 };
-        
+
+        const optionAStat = responseStats.find(stat => stat._id[0] === optionA) || { _id: optionA, count: 0 };
+        const optionBStat = responseStats.find(stat => stat._id[0] === optionB) || { _id: optionB, count: 0 };
+
         results = [
           {
             option: optionA,
@@ -102,7 +103,7 @@ class PulseStatsService {
           },
           {
             option: optionB,
-            count: optionBStat.count, 
+            count: optionBStat.count,
             percentage: Math.round((optionBStat.count / totalResponses) * 100)
           }
         ];

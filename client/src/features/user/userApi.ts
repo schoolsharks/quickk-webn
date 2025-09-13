@@ -34,6 +34,13 @@ export const usersApi = api.injectEndpoints({
       }),
     }),
 
+    logout: builder.mutation({
+      query: () => ({
+        url: "/user/logout",
+        method: "POST",
+      }),
+    }),
+
     resendOtp: builder.mutation({
       query: (credentials) => ({
         url: "/user/resendOtp",
@@ -163,6 +170,7 @@ export const usersApi = api.injectEndpoints({
 export const {
   useLoginUserMutation,
   useSendOtpMutation,
+  useLogoutMutation,
   useResendOtpMutation,
   useVerifyOtpMutation,
   useSignupUserMutation,

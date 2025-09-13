@@ -6,20 +6,26 @@ import { Box, Typography } from "@mui/material";
 
 const Events = () => {
   return (
-    <Box>
+    <Box position={"relative"}>
       <Box
         position={"absolute"}
         zIndex={2}
         sx={{
-          width: "80%",
+          width: "100%",
+          mx: "auto",
           left: "50%",
-          top: "80%",
+          top: "60%",
           transform: "translate(-50%,-50%)",
           textAlign: "center",
           padding: "0 0px",
         }}
       >
-        <Typography fontSize={"22px"} fontWeight={"700"}>
+        <Typography
+          mx={"22px"}
+          fontSize={"22px"}
+          fontWeight={"700"}
+          sx={{ textWrap: "wrap" }}
+        >
           Events are on the way — make sure you’re ready when they drop!
         </Typography>
       </Box>

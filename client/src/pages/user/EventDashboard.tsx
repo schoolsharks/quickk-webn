@@ -121,7 +121,7 @@ const EventDashboard = () => {
           onClick={() => handleTabChange("events")}
         >
           <Typography variant="h1" fontSize={25}>
-            <AnimateNumber target={1}></AnimateNumber>
+            <AnimateNumber target={0}></AnimateNumber>
           </Typography>
           <Typography fontSize={20} fontWeight="500">
             Events

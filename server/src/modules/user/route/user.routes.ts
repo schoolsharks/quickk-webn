@@ -13,6 +13,7 @@ import * as UserControllers from "../../user/controllers/user.controller";
 const router = express.Router();
 
 router.post('/login', asyncHandeler(userAuthControllers.login));
+router.post('/logout', asyncHandeler(userAuthControllers.logout));
 router.post('/sendOtp', asyncHandeler(userAuthControllers.sendOtp));
 router.post('/resendOtp', asyncHandeler(userAuthControllers.resendOtp));
 router.post('/verifyOtp', asyncHandeler(userAuthControllers.verifyOtp));

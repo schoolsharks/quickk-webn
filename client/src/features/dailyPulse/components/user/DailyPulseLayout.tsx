@@ -222,7 +222,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     try {
       const response = await submitPulseResponse(payload).unwrap();
       console.log("Response submitted successfully");
-      
+
       // If we got pulse stats back, log it for now
       if (response.pulseStats && pulseItem.type === "QuestionTwoOption") {
         console.log("Received pulse stats:", response.pulseStats);

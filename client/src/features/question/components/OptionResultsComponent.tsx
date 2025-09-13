@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import React from "react";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
@@ -35,14 +35,16 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
   pulseStats,
   smallSize = false,
 }) => {
+  const theme = useTheme();
   // Use real pulse stats if available, otherwise generate dummy data for fallback
   const generateResultData = (): ResultData[] => {
     // If we have real pulse stats, use them
+    // console.log("Using real pulse stats:", pulseStats);
     if (pulseStats && pulseStats.results.length > 0) {
-      return pulseStats.results.map(stat => ({
+      return pulseStats.results.map((stat) => ({
         option: stat.option,
         percentage: stat.percentage,
-        isSelected: stat.option === selectedOption
+        isSelected: stat.option === selectedOption[0],
       }));
     }
 
@@ -87,36 +89,55 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
 
   // Render based on the option type
   if (type === "correct-incorrect") {
-    const selectedResult = resultData.find(result => result.isSelected);
+    const selectedResult = resultData.find((result) => result.isSelected);
     if (!selectedResult) return null;
 
     const isCorrect = selectedResult.option === "right";
-    
+
     return (
-      <Box display="flex" flexDirection="column" height="70px" bgcolor="#CD7BFF4D">
-        <Box 
-          display="flex" 
-          justifyContent="space-between" 
-          alignItems="center" 
-          px={2} 
-          py={1}
-          flex={1}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="85px"
+        bgcolor="#CD7BFF4D"
+        py="18px"
+        borderTop={`1px solid ${theme.palette.primary.main}`}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          px={4}
         >
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body2" color="textSecondary" sx={{ fontSize: smallSize ? "10px" : "12px" }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ fontSize: smallSize ? "10px" : "12px" }}
+            >
               Your choice
             </Typography>
             <Box display="flex" alignItems="center" justifyContent="center">
               {isCorrect ? (
-                <DoneOutlinedIcon fontSize={smallSize ? "small" : "medium"} sx={{ color: "black" }} />
+                <DoneOutlinedIcon
+                  fontSize={smallSize ? "small" : "medium"}
+                  sx={{ color: "black" }}
+                />
               ) : (
-                <ClearOutlinedIcon fontSize={smallSize ? "small" : "medium"} sx={{ color: "black" }} />
+                <ClearOutlinedIcon
+                  fontSize={smallSize ? "small" : "medium"}
+                  sx={{ color: "black" }}
+                />
               )}
             </Box>
           </Box>
-          
+
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body2" color="textSecondary" sx={{ fontSize: smallSize ? "10px" : "12px" }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ fontSize: smallSize ? "10px" : "12px" }}
+            >
               Selected by
             </Typography>
             <Typography variant="h4" fontWeight="bold" color="black">
@@ -126,35 +147,52 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
         </Box>
       </Box>
     );
-  } else if (type === "text") {
-    const selectedResult = resultData.find(result => result.isSelected);
+  } else if (type == "text") {
+    const selectedResult = resultData.find((result) => result.isSelected);
+    // console.log(resultData);
+    // console.log("Selected result for text option:", selectedResult);
     if (!selectedResult) return null;
 
     // Find the option letter/index
-    const selectedOptionIndex = (options as string[]).indexOf(selectedResult.option);
-    const optionLetter = selectedOptionIndex === 0 ? "A" : "B";
-    
+    // const selectedOptionIndex = (options as string[]).indexOf(
+    //   selectedResult.option
+    // );
+    // const optionLetter = selectedOptionIndex === 0 ? "A" : "B";
+
     return (
-      <Box display="flex" flexDirection="column" height="70px" bgcolor="#CD7BFF4D">
-        <Box 
-          display="flex" 
-          justifyContent="space-between" 
-          alignItems="center" 
-          px={2} 
-          py={1}
-          flex={1}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="85px"
+        bgcolor="#CD7BFF4D"
+        py="18px"
+        borderTop={`1px solid ${theme.palette.primary.main}`}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          px={4}
         >
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body2" color="textSecondary" sx={{ fontSize: smallSize ? "10px" : "12px" }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ fontSize: smallSize ? "10px" : "12px" }}
+            >
               Your choice
             </Typography>
             <Typography variant="h4" fontWeight="bold" color="black">
-              {optionLetter}
+              {selectedOption}
             </Typography>
           </Box>
-          
+
           <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body2" color="textSecondary" sx={{ fontSize: smallSize ? "10px" : "12px" }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ fontSize: smallSize ? "10px" : "12px" }}
+            >
               Selected by
             </Typography>
             <Typography variant="h4" fontWeight="bold" color="black">

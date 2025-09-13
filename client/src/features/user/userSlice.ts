@@ -162,6 +162,50 @@ const userSlice = createSlice({
                     state.error = error;
                 }
             );
+        builder
+            .addMatcher(
+                usersApi.endpoints.logout.matchPending,
+                (state) => {
+                    state.isLoading = true;
+                    state.error = null;
+                }
+            )
+            .addMatcher(
+                usersApi.endpoints.logout.matchFulfilled,
+                (state) => {
+                    state.companyMail = null;
+                    state.name = null;
+                    state.userId = null;
+                    state.totalStars = 0;
+                    state.redeemedStars = 0;
+                    state.rank = null;
+                    state.avatarSelected = false;
+                    state.learningStreak = 0;
+                    state.progress = 0;
+                    state.address = null;
+                    state.contact = null;
+                    // New profile completion fields
+                    state.businessCategory = null;
+                    state.designation = null;
+                    state.currentStage = null;
+                    state.communityGoal = null;
+                    state.interestedEvents = null;
+                    state.businessLogo = null;
+                    state.webnClubMember = null;
+                    state.chapter = null;
+                    state.instagram = null;
+                    state.facebook = null;
+                    state.isLoading = false;
+                    localStorage.clear();
+                }
+            )
+            .addMatcher(
+                usersApi.endpoints.logout.matchRejected,
+                (state, { error }) => {
+                    state.isLoading = false;
+                    state.error = error;
+                }
+            );
 
         builder
             .addMatcher(

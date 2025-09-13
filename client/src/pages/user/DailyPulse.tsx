@@ -73,6 +73,7 @@ const DailyPulse: React.FC = () => {
         options: item.options,
         questionOptions: item.questionOptions,
         score: item.score,
+        pulseStats: item.pulseStats,
       })) || [];
 
   // Add BidCard as the first item in the pulse

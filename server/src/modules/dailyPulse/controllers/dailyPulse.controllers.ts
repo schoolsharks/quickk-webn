@@ -155,6 +155,7 @@ export const submitPulseResponse = async (
         return next(new AppError('Question response is required for QuestionTwoOption type', StatusCodes.BAD_REQUEST));
       }
       result = await questionService.collectResponse({ user, question: refId, response: questionResponse });
+      // console.log("Question response collected:", result);
       
       // Calculate pulse stats for supported question types
       if (companyId) {

@@ -18,24 +18,29 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../../theme/theme";
 import ActiveLearning from "../../../components/ui/ActiveLearning";
+import GlobalButton from "../../../components/ui/button";
 import amajon from "../../../assets/images/user/amajon.png";
 import starbucks from "../../../assets/images/user/starbucks.png";
 import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
 import watch from "../../../assets/images/user/watch.png";
 // import Badge from "../../../components/ui/badge";
 // import Certificate from "../../../components/ui/certificate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
+import { logout as logoutAction } from "../../auth/authSlice";
 import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
 import { ArrowRight } from "lucide-react";
+import { useLogoutMutation } from "../userApi";
 
 const ProfileLayout = () => {
   // const [badgesOpen, setBadgesOpen] = useState(false);
   // const [certificatesOpen, setCertificatesOpen] = useState(false);
   const [businessDetailsOpen, setBusinessDetailsOpen] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [logoutApi, { isLoading: isLoggingOut }] = useLogoutMutation();
   const {
     totalStars,
     redeemedStars,
@@ -61,6 +66,17 @@ const ProfileLayout = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi(undefined).unwrap();
+    } catch (e) {
+      // optional: show toast/snackbar
+    } finally {
+      dispatch(logoutAction());
+      navigate("/user/login");
+    }
+  };
 
   const offers = [
     {
@@ -612,6 +628,25 @@ const ProfileLayout = () => {
           </Collapse>
         </Box>
       </AnimateOnScroll> */}
+      {/* Logout Button */}
+      <Box sx={{ mt: "50px", px: "24px" }}>
+        <GlobalButton
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          fullWidth
+          sx={{
+            bgcolor: "white",
+            color: theme.palette.primary.main,
+            border: `2px solid ${theme.palette.primary.main}`,
+
+            "&:hover": {
+              bgcolor: "#F7F0FB",
+            },
+          }}
+        >
+          {isLoggingOut ? "Logging out..." : "Logout"}
+        </GlobalButton>
+      </Box>
     </Box>
   );
 };

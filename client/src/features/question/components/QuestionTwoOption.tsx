@@ -19,13 +19,18 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
 }) => {
   const theme = useTheme();
   const [showResults, setShowResults] = useState(false);
-  const [userResponse, setUserResponse] = useState<string | undefined>(response);
+  const [userResponse, setUserResponse] = useState<string | undefined>(
+    response
+  );
 
   // Update userResponse when response prop changes
   useEffect(() => {
     setUserResponse(response);
     // Show results if user has responded to supported question types
-    setShowResults(!!response && (optionType === "text" || optionType === "correct-incorrect"));
+    setShowResults(
+      !!response &&
+        (optionType === "text" || optionType === "correct-incorrect")
+    );
   }, [response, optionType]);
 
   const handleOptionSelect = (selectedOption: string) => {
@@ -39,7 +44,10 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
     }
   };
 
-  const shouldShowResults = showResults && userResponse && (optionType === "text" || optionType === "correct-incorrect");
+  const shouldShowResults =
+    showResults &&
+    userResponse &&
+    (optionType === "text" || optionType === "correct-incorrect");
 
   return (
     <Box

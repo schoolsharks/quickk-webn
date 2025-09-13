@@ -76,6 +76,16 @@ export const login = async (
   res.json({ success: true, accessToken });
 };
 
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    res.clearCookie("accessToken", setCookieOptions);
+    res.clearCookie("refreshToken", { ...setCookieOptions, httpOnly: true });
+    res.status(StatusCodes.OK).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const refreshToken = async (
   req: Request,
   res: Response,

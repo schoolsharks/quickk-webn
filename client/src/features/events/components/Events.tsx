@@ -20,7 +20,7 @@ const Events = () => {
         }}
       >
         <Typography fontSize={"22px"} fontWeight={"700"}>
-          ✨ Something exciting is brewing!
+          Events are on the way — make sure you’re ready when they drop!
         </Typography>
       </Box>
       <Box

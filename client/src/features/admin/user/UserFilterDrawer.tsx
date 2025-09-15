@@ -13,7 +13,12 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import GreenButton from "../../../components/ui/GreenButton";
 
-export type SortOption = "recentActivity" | "alphabetical" | "category";
+export type SortOption =
+  | "recentActivity"
+  | "alphabetical"
+  | "category"
+  | "active"
+  | "notActive";
 
 interface UserFilterDrawerProps {
   open: boolean;
@@ -38,6 +43,8 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
     { value: "recentActivity", label: "Recent Activity" },
     { value: "alphabetical", label: "Alphabetical (A-Z)" },
     { value: "category", label: "Business Category" },
+    { value: "active", label: "Active Members" },
+    { value: "notActive", label: "Not Active Members" },
   ];
 
   return (
@@ -104,7 +111,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
         <GreenButton
           onClick={onApply}
           fullWidth
-          sx={{ background: "white", borderRadius: "2px" }}
+          sx={{ background: "black", borderRadius: "2px", color: "white" }}
         >
           Apply
         </GreenButton>

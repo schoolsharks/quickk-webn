@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Card, CardContent } from '@mui/material';
+import React from "react";
+import { Box, Typography, Card, CardContent } from "@mui/material";
 
 interface StatsCardProps {
   title: string;
@@ -16,31 +16,31 @@ const StatsCard: React.FC<StatsCardProps> = ({
   value,
   subtitle,
   icon,
-  backgroundColor = 'rgba(37, 37, 37, 1)',
-  textColor = 'text.primary',
-  iconColor = 'primary.main',
+  backgroundColor = "rgba(37, 37, 37, 1)",
+  textColor = "text.primary",
+  iconColor = "primary.main",
 }) => {
   return (
     <Card
       sx={{
         backgroundColor: backgroundColor,
-        border: 'none',
-        boxShadow: 'none',
-        height: '100%',
-        minHeight: '100px',
-        borderRadius:"0px",
-        display: 'flex',
-        flexDirection: 'column',
+        border: "none",
+        boxShadow: "none",
+        height: "100%",
+        minHeight: "100px",
+        borderRadius: "0px",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <CardContent
         sx={{
           padding: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          height: '100%',
-          '&:last-child': {
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          "&:last-child": {
             paddingBottom: 3,
           },
         }}
@@ -48,9 +48,9 @@ const StatsCard: React.FC<StatsCardProps> = ({
         {/* Header with title and icon */}
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
             // mb: 1,
           }}
         >
@@ -65,10 +65,10 @@ const StatsCard: React.FC<StatsCardProps> = ({
           <Box
             sx={{
               color: iconColor,
-              display: 'flex',
-              alignItems: 'flex-end',
-              '& svg': {
-                fontSize: '24px',
+              display: "flex",
+              alignItems: "flex-end",
+              "& svg": {
+                fontSize: "24px",
               },
             }}
           >
@@ -81,17 +81,17 @@ const StatsCard: React.FC<StatsCardProps> = ({
           variant="h5"
           sx={{
             color: iconColor,
-            fontSize: '24px',
+            fontSize: "24px",
           }}
         >
-          {value}
+          {typeof value === "number" && value < 10 ? `0${value}` : value}
         </Typography>
 
         {/* Subtitle */}
         <Typography
           variant="body2"
           sx={{
-            textDecoration:"underline",
+            textDecoration: "underline",
             color: textColor,
           }}
         >

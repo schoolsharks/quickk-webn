@@ -26,6 +26,7 @@ import { FeatureKeys } from "../../features/onboarding/Types/features";
 import { setPreferences } from "../../features/onboarding/api/onboardingSlice";
 import { useDispatch } from "react-redux";
 import BulkUserUploadPage from "./BulkUserUploadPage";
+import GowomaniaUsers from "../../features/admin/user/GowomaniaUsers";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -188,12 +189,16 @@ const AdminMain: React.FC = () => {
                   />
 
                   {/* Users Routes */}
-                  <Route path="/members" element={<UserPage />} />
+                  <Route path="/members/webn" element={<UserPage />} />
                   <Route
                     path="/members/new-members"
                     element={<BulkUserUploadPage />}
                   />
                   <Route path="/member/:userId" element={<ReviewUserPage />} />
+                  <Route
+                    path="/members/gowomania"
+                    element={<GowomaniaUsers />}
+                  />
 
                   <Route
                     path="/rewards"
@@ -207,11 +212,11 @@ const AdminMain: React.FC = () => {
                   <Route path="/settings" element={<Settings />} />
                   <Route
                     path="/"
-                    element={<Navigate to="/admin/members" replace />}
+                    element={<Navigate to="/admin/members/webn" replace />}
                   />
                   <Route
                     path="*"
-                    element={<Navigate to="/admin/members" replace />}
+                    element={<Navigate to="/admin/members/webn" replace />}
                   />
                 </Routes>
                 {/* </RouteGuard> */}

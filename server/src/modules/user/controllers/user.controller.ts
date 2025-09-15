@@ -77,7 +77,15 @@ export const getAllUsersTableData = async (
 ): Promise<void> => {
   try {
     const companyId = req.user?.companyId;
-    const users = await userService.getAllUsers(companyId);
+    const { webnClubMember } = req.query; // Get filter from query params
+
+    let users = await userService.getAllUsers(companyId);
+
+    // Filter users by webnClubMember if provided
+    if (typeof webnClubMember !== "undefined") {
+      const isMember = webnClubMember === "true";
+      users = users.filter((user: any) => !!user.webnClubMember === isMember);
+    }
 
     const filteredUsers = users.map((user: any) => ({
       _id: user._id,
@@ -93,6 +101,7 @@ export const getAllUsersTableData = async (
       businessCategory: user.businessCategory,
       specialisation: user.specialisation,
       updatedAt: user.updatedAt || "",
+      webnClubMember: user.webnClubMember || false,
     }));
 
     res.status(StatusCodes.OK).json(filteredUsers);

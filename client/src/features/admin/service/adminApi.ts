@@ -93,11 +93,11 @@ export const adminApi = api.injectEndpoints({
             }),
         }),
 
-
         getAllUsersTableData: builder.query({
-            query: () => ({
+            query: (webnClubMember) => ({
                 url: '/admin/getAllUsersTableData',
                 method: 'GET',
+                params: { webnClubMember },
             }),
             providesTags: ['AdminUser'],
         }),

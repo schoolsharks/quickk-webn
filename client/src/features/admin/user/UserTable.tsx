@@ -27,17 +27,25 @@ export interface UserData {
 
 export interface UserTableProps {
   data: UserData[];
+  webnClubMember?: boolean;
   isLoading?: boolean;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
+const UserTable: React.FC<UserTableProps> = ({
+  data,
+  isLoading = false,
+  webnClubMember = true,
+}) => {
   const [DeleteUserById] = useDeleteUserByIdMutation();
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [deletedUserName, setDeletedUserName] = useState("");
 
-  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleSnackbarClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
     setSnackbarOpen(false);
@@ -117,6 +125,27 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
         </Typography>
       ),
     },
+    // {
+    //   id: "Membership",
+    //   label: "Membership Status",
+    //   minWidth: 130,
+    //   align: "left",
+    //   format: (value: string) => (
+    //     <select
+    //       style={{
+    //         fontSize: "14px",
+    //         color: "black",
+    //         background: "transparent",
+    //         border: "1px solid #ccc",
+    //         borderRadius: "4px",
+    //         padding: "4px 8px",
+    //         minWidth: "110px",
+    //       }}
+    //       value={value || "pending"}
+    //       disabled
+    //     ></select>
+    //   ),
+    // },
     {
       id: "chapter",
       label: "Chapter",
@@ -200,25 +229,29 @@ const UserTable: React.FC<UserTableProps> = ({ data, isLoading = false }) => {
   return (
     <>
       <GlobalTable
-        title="Webn Members Directory"
-        columns={columns}
+        title={webnClubMember ? "Webn Members Directory" : "Gowomania Members"}
+        columns={
+          webnClubMember
+            ? columns
+            : columns.filter((col) => col.id !== "chapter")
+        }
         data={transformedData}
         showActions={true}
         maxHeight={600}
         actionButtons={actionButtons}
       />
-      
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert 
-          onClose={handleSnackbarClose} 
-          severity="success" 
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
           variant="filled"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {deletedUserName} has been deleted successfully!
         </Alert>

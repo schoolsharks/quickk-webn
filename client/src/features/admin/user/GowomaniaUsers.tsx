@@ -9,7 +9,7 @@ import {
 } from "../service/adminApi";
 import MemberStats from "./MemberStats";
 
-const UserLayout: React.FC = () => {
+const GowomaniaUsers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -41,7 +41,7 @@ const UserLayout: React.FC = () => {
   );
 
   const { data: regularData, isLoading: regularLoading } =
-    useGetAllUsersTableDataQuery(true, { skip: shouldUseSearch });
+    useGetAllUsersTableDataQuery(false, { skip: shouldUseSearch });
 
   const currentData = shouldUseSearch ? searchData?.data : regularData;
   const isLoading = shouldUseSearch ? searchLoading : regularLoading;
@@ -61,6 +61,7 @@ const UserLayout: React.FC = () => {
           if (!categoryA && categoryB) return 1; // Empty categories at bottom
           if (categoryA && !categoryB) return -1;
           return categoryA.localeCompare(categoryB);
+
         case "active":
           return b.learningStreak - a.learningStreak; // Active members first
 
@@ -100,7 +101,7 @@ const UserLayout: React.FC = () => {
     <>
       <Grid container p={"24px"} spacing={"24px"}>
         <Grid size={12}>
-          <MemberStats Stats={Stats} webnClubMember={true} />
+          <MemberStats Stats={Stats} webnClubMember={false} />
         </Grid>
         <Grid size={12}>
           <UserToolbar
@@ -110,7 +111,11 @@ const UserLayout: React.FC = () => {
           />
         </Grid>
         <Grid size={12}>
-          <UserTable data={sortedData} isLoading={isLoading} />
+          <UserTable
+            data={sortedData}
+            isLoading={isLoading}
+            webnClubMember={false}
+          />
         </Grid>
       </Grid>
 
@@ -125,4 +130,4 @@ const UserLayout: React.FC = () => {
   );
 };
 
-export default UserLayout;
+export default GowomaniaUsers;

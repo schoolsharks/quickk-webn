@@ -311,7 +311,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         await UpdateDailyPulse(newFormData).unwrap();
       }
       setConfirmDialog({ open: false, action: "", title: "", message: "" });
-      navigate("/admin/learnings/dailyInteraction");
+      navigate("/admin/learnings/dailyPulse");
     } catch (error) {
       console.error(`Failed to ${action} DailyPulse:`, error);
     }
@@ -415,16 +415,18 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
     switch (pulseType) {
       case "Flash Card":
         return (
-          <InfoCard
-            id="preview"
-            title={
-              currentPulse.title || ""
-              // defaultData.flashCard.title
-            }
-            content={currentPulse.content || ""}
-            wantFeedback={currentPulse.wantFeedback}
-            onClickFeedback={() => {}}
-          />
+          <Box sx={{ minHeight: "400px" }}>
+            <InfoCard
+              id="preview"
+              title={
+                currentPulse.title || ""
+                // defaultData.flashCard.title
+              }
+              content={currentPulse.content || ""}
+              wantFeedback={currentPulse.wantFeedback}
+              onClickFeedback={() => {}}
+            />
+          </Box>
         );
 
       case "Multiple Choice Question":
@@ -436,62 +438,68 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
           currentPulse.optionB = currentPulse.questionOptions[1];
         }
         return (
-          <QuestionTwoOption
-            id="preview"
-            questionText={currentPulse.questionText || ""}
-            questionOptions={
-              currentPulse.optionA && currentPulse.optionB
-                ? [`${currentPulse.optionA}`, `${currentPulse.optionB}`]
-                : []
-              // currentPulse.options || []
-            }
-            optionType="text"
-            options={
-              currentPulse.optionA && currentPulse.optionB ? ["A", "B"] : []
-            }
-            correctAnswer={currentPulse.correctAnswer || ""}
-            onAnswer={() => {}}
-          />
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={currentPulse.questionText || ""}
+              questionOptions={
+                currentPulse.optionA && currentPulse.optionB
+                  ? [`${currentPulse.optionA}`, `${currentPulse.optionB}`]
+                  : []
+                // currentPulse.options || []
+              }
+              optionType="text"
+              options={
+                currentPulse.optionA && currentPulse.optionB ? ["A", "B"] : []
+              }
+              correctAnswer={currentPulse.correctAnswer || ""}
+              onAnswer={() => {}}
+            />
+          </Box>
         );
 
       case "Image (Right / Wrong)":
         return (
-          <QuestionTwoOption
-            id="preview"
-            questionText={
-              currentPulse.questionText || ""
-              // defaultData.rightWrong.questionText
-            }
-            optionType="correct-incorrect"
-            options={["right", "wrong"]}
-            image={
-              currentPulse.image || uploadedImages[currentPulseIndex] || ""
-            }
-            onAnswer={() => {}}
-          />
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={
+                currentPulse.questionText || ""
+                // defaultData.rightWrong.questionText
+              }
+              optionType="correct-incorrect"
+              options={["right", "wrong"]}
+              image={
+                currentPulse.image || uploadedImages[currentPulseIndex] || ""
+              }
+              onAnswer={() => {}}
+            />
+          </Box>
         );
 
       default:
         return (
-          <QuestionTwoOption
-            id="preview"
-            questionText={
-              currentPulse.questionText || ""
-              // defaultData.multipleImages.questionText
-            }
-            optionType="image"
-            options={
-              uploadedOptionImages[currentPulseIndex]?.some(Boolean)
-                ? [0, 1]
-                    .map(
-                      (i) =>
-                        uploadedOptionImages[currentPulseIndex]?.[i] || null
-                    )
-                    .filter((f): f is File => !!f)
-                : [0, 1].map((i) => currentPulse.options[i] || "")
-            }
-            onAnswer={() => {}}
-          />
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={
+                currentPulse.questionText || ""
+                // defaultData.multipleImages.questionText
+              }
+              optionType="image"
+              options={
+                uploadedOptionImages[currentPulseIndex]?.some(Boolean)
+                  ? [0, 1]
+                      .map(
+                        (i) =>
+                          uploadedOptionImages[currentPulseIndex]?.[i] || null
+                      )
+                      .filter((f): f is File => !!f)
+                  : [0, 1].map((i) => currentPulse.options[i] || "")
+              }
+              onAnswer={() => {}}
+            />
+          </Box>
         );
     }
   };
@@ -515,7 +523,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
                 "& .MuiInputLabel-root": { color: "white" },
                 "& .MuiInputBase-root": {
@@ -538,7 +546,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
                 "& .MuiInputLabel-root": { color: "white" },
                 "& .MuiInputBase-root": {
@@ -554,7 +562,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   onChange={(e) =>
                     handleInputChange("wantFeedback", e.target.checked)
                   }
-                  color="success"
+                  sx={{ color: "primary.main" }}
                 />
               }
               label="Want Feedback?"
@@ -581,7 +589,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -599,7 +607,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -617,7 +625,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -663,7 +671,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -690,10 +698,10 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     imageInputModes[currentPulseIndex] === "file"
                       ? "black"
                       : "white",
-                  borderColor: "#96FF43",
+                  borderColor: "primary.main",
                   background:
                     imageInputModes[currentPulseIndex] === "file"
-                      ? "#96FF43"
+                      ? "primary.main"
                       : "transparent",
                   minWidth: 0,
                 }}
@@ -718,11 +726,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     imageInputModes[currentPulseIndex] === "url"
                       ? "black"
                       : "white",
-                  borderColor: "#96FF43",
+                  borderColor: "primary.main",
                   background:
                     imageInputModes[currentPulseIndex] === "url" ||
                     !imageInputModes[currentPulseIndex]
-                      ? "#96FF43"
+                      ? "primary.main"
                       : "transparent",
                   minWidth: 0,
                 }}
@@ -761,7 +769,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     color: "white",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
-                    "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                    "&.Mui-focused fieldset": { borderColor: "primary.main" },
                   },
                 }}
                 placeholder="Paste image URL"
@@ -788,7 +796,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -824,10 +832,10 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                         optionImageInputModes[currentPulseIndex]?.[i] === "file"
                           ? "black"
                           : "white",
-                      borderColor: "#96FF43",
+                      borderColor: "primary.main",
                       background:
                         optionImageInputModes[currentPulseIndex]?.[i] === "file"
-                          ? "#96FF43"
+                          ? "primary.main"
                           : "transparent",
                       minWidth: 0,
                     }}
@@ -856,12 +864,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                         optionImageInputModes[currentPulseIndex]?.[i] === "url"
                           ? "black"
                           : "white",
-                      borderColor: "#96FF43",
+                      borderColor: "primary.main",
                       background:
                         optionImageInputModes[currentPulseIndex]?.[i] ===
                           "url" ||
                         !optionImageInputModes[currentPulseIndex]?.[i]
-                          ? "#96FF43"
+                          ? "primary.main"
                           : "transparent",
                       minWidth: 0,
                     }}
@@ -912,7 +920,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                         color: "white",
                         "& fieldset": { borderColor: "#444" },
                         "&:hover fieldset": { borderColor: "#666" },
-                        "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "primary.main",
+                        },
                       },
                     }}
                     placeholder="Paste image URL"
@@ -940,7 +950,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -961,7 +971,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -982,7 +992,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   color: "white",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
@@ -1021,22 +1031,22 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             >
               <Typography variant="h6" color="white">
-                Interaction {currentPulseIndex + 1} of {pulses.length}
+                Pulse {currentPulseIndex + 1} of {pulses.length}
               </Typography>
               <Box sx={{ display: "flex", gap: 1 }}>
                 <Button
                   onClick={addNewPulse}
                   startIcon={<Add />}
                   sx={{
-                    backgroundColor: "#96FF43",
-                    color: "black",
+                    backgroundColor: "primary.main",
+                    color: "white",
                     borderRadius: "0",
-                    "&:hover": { backgroundColor: "#7BD932" },
+                    "&:hover": { backgroundColor: "primary.main" },
                     minWidth: "auto",
                     px: 2,
                   }}
                 >
-                  Add Interaction
+                  Add Pulse
                 </Button>
                 {pulses.length > 1 && (
                   <IconButton
@@ -1057,7 +1067,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             {/* Pulse Type Selector */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Choose the type of Interaction.
+                Choose the type of Pulse.
               </Typography>
               <FormControl fullWidth>
                 <Select
@@ -1074,7 +1084,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       borderColor: "#666",
                     },
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#96FF43",
+                      borderColor: "primary.main",
                     },
                     "& .MuiSvgIcon-root": {
                       color: "white",
@@ -1104,7 +1114,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
             <Box sx={{ mt: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Stars-(For all Daily Interaction)
+                Stars-(For all Daily Pulse)
               </Typography>
               <TextField
                 type="string"
@@ -1118,7 +1128,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     color: "white",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
-                    "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                    "&.Mui-focused fieldset": { borderColor: "primary.main" },
                   },
                 }}
               />
@@ -1138,6 +1148,21 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       color: "white",
                       "& .MuiPickersInputBase-root": {
                         borderRadius: "0",
+                      },
+                      "& .MuiInputBase-root": {
+                        color: "white",
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "white",
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "black",
+                      },
+                      "& .MuiPickersSectionList-section ": {
+                        color: "white",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        color: "white",
                       },
                     },
                   },
@@ -1182,16 +1207,17 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               onChange={handlePageChange}
               sx={{
                 "& .MuiPaginationItem-root": {
-                  color: "white",
+                  color: "black",
                   borderColor: "#444",
                   "&:hover": {
-                    backgroundColor: "#333",
+                    backgroundColor: "primary.main",
+                    color: "white",
                   },
                   "&.Mui-selected": {
-                    backgroundColor: "#96FF43",
-                    color: "black",
+                    backgroundColor: "primary.main",
+                    color: "white",
                     "&:hover": {
-                      backgroundColor: "#7BD932",
+                      backgroundColor: "primary.main",
                     },
                   },
                 },
@@ -1268,6 +1294,23 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     const dateStr = formatDate(day as Date);
                     return disabledDates.includes(dateStr);
                   }}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      color: "white",
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "white",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "black",
+                    },
+                    "& .MuiPickersSectionList-section ": {
+                      color: "white",
+                    },
+                    "& .MuiSvgIcon-root": {
+                      color: "white",
+                    },
+                  }}
                   slotProps={{
                     textField: {
                       fullWidth: true,
@@ -1341,7 +1384,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
               sx={{
                 backgroundColor:
-                  confirmDialog.action === "publish" ? "#96FF43" : "#666",
+                  confirmDialog.action === "publish" ? "primary.main" : "#666",
                 color: confirmDialog.action === "publish" ? "black" : "white",
                 "&:hover": {
                   backgroundColor:

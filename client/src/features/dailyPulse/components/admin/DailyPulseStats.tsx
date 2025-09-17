@@ -34,28 +34,28 @@ const DailyPulseStats: React.FC<DailyPulseStatsProps> = ({ Stats }) => {
       value: Stats.total,
       icon: <PopularIcon />,
       backgroundColor: "#000000",
-      iconColor: "primary.main",
+      iconColor: "white",
     },
     {
       title: "Published",
       value: Stats.published,
       icon: <UploadFileIcon />,
-      backgroundColor: "#474747",
-      iconColor: "primary.main",
+      backgroundColor: "#CD7BFF4D",
+      iconColor: "black",
     },
     {
       title: "Drafts",
       value: Stats.drafts,
       icon: <DraftsIcon />,
       backgroundColor: "#000000",
-      iconColor: "primary.main",
+      iconColor: "white",
     },
     {
       title: "Archived",
       value: Stats.archived,
       icon: <ArchiveIcon />,
-      backgroundColor: "#474747",
-      iconColor: "primary.main",
+      backgroundColor: "#CD7BFF4D",
+      iconColor: "black",
     },
   ];
 
@@ -65,6 +65,7 @@ const DailyPulseStats: React.FC<DailyPulseStatsProps> = ({ Stats }) => {
         {statsData.map((stat, index) => (
           <Grid size={3} key={index}>
             <StatsCard
+              textColor={index % 2 === 0 ? "white" : "black"}
               title={stat.title}
               value={stat.value}
               icon={stat.icon}

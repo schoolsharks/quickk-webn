@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import GlobalTable, {
   ActionButton,
   TableColumn,
@@ -74,7 +74,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       minWidth: 150,
       align: "left",
       format: (value: string) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
           {value}
         </Typography>
       ),
@@ -85,22 +85,19 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       minWidth: 120,
       align: "left",
       format: (value: string) => (
-        <Chip
-          label={value}
-          sx={{
-            bgcolor:
-              value === "published"
-                ? "#96FF43"
-                : value === "drafts"
-                ? "#64748b"
-                : "#64748b",
-            color: value === "published" ? "black" : "white",
-            fontWeight: "bold",
-            fontSize: "13px",
-            height: 24,
-          }}
-          size="small"
-        />
+        // <Chip
+        //   label={value}
+        //   sx={{
+        //     backgroundColor: "transparent",
+        //     fontWeight: "bold",
+        //     fontSize: "13px",
+        //     height: 24,
+        //   }}
+        //   size="small"
+        // />
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
+          {value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()}
+        </Typography>
       ),
     },
     {
@@ -109,7 +106,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       minWidth: 100,
       align: "left",
       format: (value: number) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
           {value}
         </Typography>
       ),
@@ -137,9 +134,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       label: "Edit",
       color: "info",
       onClick: (row) => {
-        navigate(
-          `/admin/learnings/dailyInteraction/review/${row.originalData._id}`
-        );
+        navigate(`/admin/learnings/dailyPulse/review/${row.originalData._id}`);
       },
     },
     {
@@ -166,7 +161,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
 
   return (
     <GlobalTable
-      title="List"
+      title="Daily Pulse"
       columns={columns}
       data={transformedData}
       showActions={true}

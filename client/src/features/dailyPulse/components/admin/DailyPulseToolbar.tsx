@@ -25,7 +25,7 @@ const DailyPulseToolbar: React.FC<DailyPulseToolbarProps> = ({
       .then((data) => {
         const id = data?.data;
         if (id) {
-          navigate(`/admin/learnings/dailyInteraction/review/${id}`);
+          navigate(`/admin/learnings/dailyPulse/review/${id}`);
         }
       })
       .catch((error) => {
@@ -35,7 +35,7 @@ const DailyPulseToolbar: React.FC<DailyPulseToolbarProps> = ({
 
   return (
     <DailyPulseSearchToolbar
-      buttonTitle="Create New Interaction"
+      buttonTitle="Create New Pulse"
       onButtonClick={handleCreateDP}
       onDateChange={onDateChange}
       onStatusChange={onStatusChange}

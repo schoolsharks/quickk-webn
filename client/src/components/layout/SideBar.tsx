@@ -81,20 +81,20 @@ const menuItems: MenuItem[] = [
   },
   {
     id: "learnings",
-    label: "Learnings",
+    label: "Content",
     icon: <SchoolIcon />,
     children: [
+      {
+        id: "daily-pulse",
+        label: "Daily Pulse",
+        path: "/admin/learnings/dailyPulse",
+        feature: FeatureKeys.DAILYPULSE,
+      },
       {
         id: "modules",
         label: "Modules",
         path: "/admin/learnings/modules",
         feature: FeatureKeys.MODULES,
-      },
-      {
-        id: "daily-pulse",
-        label: "Daily interaction",
-        path: "/admin/learnings/dailyInteraction",
-        feature: FeatureKeys.DAILYPULSE,
       },
     ],
   },
@@ -151,8 +151,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   const handleItemClick = (item: MenuItem) => {
     // Only allow Target Audience to be clickable
-    if (item.id !== "target-audience") {
-      return; // Prevent interaction with disabled items
+    if (item.id !== "target-audience" && item.id !== "learnings") {
+      return;
     }
 
     if (item.children) {
@@ -182,14 +182,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   };
 
   const isItemDisabled = (item: MenuItem) => {
-    // Only Target Audience is enabled, everything else is disabled
-    return item.id !== "target-audience";
+    // Only Target Audience and Learnings are enabled, everything else is disabled
+    return !(item.id === "target-audience" || item.id === "learnings");
   };
 
   const isActiveParent = (item: MenuItem) => {
     if (item.children) {
       // Only Target Audience should be active, others are disabled
-      if (item.id === "target-audience") {
+      if (item.id === "target-audience" || item.id === "learnings") {
         return true;
       }
       return false; // Disable all other menu items with children
@@ -426,7 +426,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               {accessibleChildren.map((child) => (
                 <ListItem key={child.id} disablePadding>
                   <ListItemButton
-                    onClick={() => handleChildClick(child.path)}
+                    onClick={() => {
+                      child.id == "modules"
+                        ? null
+                        : handleChildClick(child.path);
+                    }}
                     sx={{
                       pl: 6,
                       pr: 2.5,

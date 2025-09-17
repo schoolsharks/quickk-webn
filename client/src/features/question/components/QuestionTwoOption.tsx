@@ -78,6 +78,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
           <Typography
             variant={smallSize ? "h5" : "h2"}
             // color="white"
+            color="black"
             fontWeight="medium"
           >
             {questionText}

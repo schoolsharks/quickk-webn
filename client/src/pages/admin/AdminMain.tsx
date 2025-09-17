@@ -146,7 +146,7 @@ const AdminMain: React.FC = () => {
 
                   {/* Daily Pulse routes */}
                   <Route
-                    path="/learnings/dailyInteraction"
+                    path="/learnings/dailyPulse"
                     element={
                       <FeatureGuard feature={FeatureKeys.DAILYPULSE}>
                         <DailyPulse />
@@ -154,7 +154,7 @@ const AdminMain: React.FC = () => {
                     }
                   />
                   <Route
-                    path="/learnings/dailyInteraction/create"
+                    path="/learnings/dailyPulse/create"
                     element={
                       <FeatureGuard feature={FeatureKeys.DAILYPULSE}>
                         <CreateDailyPulsePage />
@@ -162,7 +162,7 @@ const AdminMain: React.FC = () => {
                     }
                   />
                   <Route
-                    path="/learnings/dailyInteraction/review/:dailyPulseId"
+                    path="/learnings/dailyPulse/review/:dailyPulseId"
                     element={
                       // <FeatureGuard feature={FeatureKeys.DAILYPULSE}>
                       <ReviewDailyPulsePage />

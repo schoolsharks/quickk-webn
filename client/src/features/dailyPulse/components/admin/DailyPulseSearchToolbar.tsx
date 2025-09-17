@@ -69,7 +69,13 @@ const DailyPulseSearchToolbar: React.FC<DailyPulseSearchToolbarProps> = ({
                       color: "white",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "transparent",
+                      borderColor: "black",
+                    },
+                    "& .MuiPickersSectionList-section ": {
+                      color: "white",
+                    },
+                    "& .MuiSvgIcon-root": {
+                      color: "white",
                     },
                   },
                 },
@@ -80,8 +86,8 @@ const DailyPulseSearchToolbar: React.FC<DailyPulseSearchToolbarProps> = ({
 
         <Box display="flex" gap="18px">
           <IconButton onClick={() => setFiltersOpen(true)} sx={{ gap: 1 }}>
-            <FilterListAltIcon sx={{ color: "white" }} />
-            <Typography variant="h3" fontSize="16px">
+            <FilterListAltIcon sx={{ color: "primary.main" }} />
+            <Typography variant="h3" fontSize="16px" color="primary.main">
               Filters
             </Typography>
           </IconButton>

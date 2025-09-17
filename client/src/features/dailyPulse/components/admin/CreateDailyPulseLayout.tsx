@@ -82,7 +82,7 @@ const CreateDailyPulseLayout: React.FC = () => {
   const navigate = useNavigate();
   const handleCreate = () => {
     console.log("Creating with content:", generatedContent);
-    navigate("/admin/learnings/dailyInteraction/review");
+    navigate("/admin/learnings/dailyPulse/review");
   };
 
   return (

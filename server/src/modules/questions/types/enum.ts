@@ -4,6 +4,7 @@ export enum QuestionType {
     TWO_CHOICE = 'TWO_CHOICE', 
     DRAG_ORDER = "DRAG_ORDER",
     MEMORY_MATCH = "MEMORY_MATCH",
+    ADVERTISEMENT = "ADVERTISEMENT",
 }
 
 export enum OptionType {

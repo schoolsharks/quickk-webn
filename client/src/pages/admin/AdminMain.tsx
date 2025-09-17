@@ -156,9 +156,9 @@ const AdminMain: React.FC = () => {
                   <Route
                     path="/learnings/dailyPulse/create"
                     element={
-                      <FeatureGuard feature={FeatureKeys.DAILYPULSE}>
-                        <CreateDailyPulsePage />
-                      </FeatureGuard>
+                      // <FeatureGuard feature={FeatureKeys.DAILYPULSE}>
+                      <CreateDailyPulsePage />
+                      // </FeatureGuard>
                     }
                   />
                   <Route

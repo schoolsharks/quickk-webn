@@ -18,11 +18,16 @@ const InterestingEvent: React.FC = () => {
     isLoading,
   } = useGetActiveEventsQuery({ type: "miscellaneous" });
   // Format today's date
-  const today = new Date();
+  // const today = new Date();
   // const dayNumber = today.getDate();
-  const monthName = today
-    .toLocaleDateString("en-US", { month: "short" })
-    .toUpperCase();
+  const monthName = EventData?.startDate
+    ? new Date(EventData.startDate)
+        .toLocaleString("en-US", { month: "short" })
+        .toLowerCase()
+    : "";
+  // today
+  //   .toLocaleDateString("en-US", { month: "short" })
+  //   .toUpperCase();
 
   const handleInterestedClick = () => {
     // Navigate to event details page
@@ -51,7 +56,7 @@ const InterestingEvent: React.FC = () => {
         mb={2}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Today's Event
+          Upcoming Event
         </Typography>
         <Typography
           variant="h4"
@@ -114,7 +119,7 @@ const InterestingEvent: React.FC = () => {
                 margin: 0,
               }}
             >
-              {monthName}
+              {monthName[0].toUpperCase() + monthName.slice(1)}
             </Typography>
           </Box>
 

@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import InfoCard from "../../../question/components/InfoCard";
+import Advertisement from "../../../question/components/Advertisement";
 import QuestionTwoOption from "../../../question/components/QuestionTwoOption";
 import GreenButton from "../../../../components/ui/GreenButton";
 import {
@@ -145,7 +146,22 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   pulseType = "Multiple Images";
                   break;
                 case "text":
-                  pulseType = "Multiple Choice Question";
+                  // Detect Advertisement when it's a single 'Interested' option
+                  if (
+                    (Array.isArray((p as any).options) &&
+                      (p as any).options.length === 1 &&
+                      (p as any).options[0]?.toLowerCase?.() ===
+                        "interested") ||
+                    (Array.isArray((p as any).questionOptions) &&
+                      (p as any).questionOptions.length === 1 &&
+                      (p as any).questionOptions[0]?.toLowerCase?.() ===
+                        "interested") ||
+                    (p as any).qType === "ADVERTISEMENT"
+                  ) {
+                    pulseType = "Advertisement";
+                  } else {
+                    pulseType = "Multiple Choice Question";
+                  }
 
                   break;
                 default:
@@ -153,12 +169,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             }
 
-            if ("data" in p && typeof p.data === "object" && p.data !== null) {
+      if ("data" in p && typeof p.data === "object" && p.data !== null) {
               return {
                 ...defaultPulseData,
                 ...(p.data as Partial<PulseData>),
                 type: p.type?.toLowerCase() || "question",
-                pulseType,
+        pulseType,
+        qType: pulseType === "Advertisement" ? "ADVERTISEMENT" : (p as any).qType || "",
               };
             }
 
@@ -167,6 +184,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               ...(p as Partial<PulseData>),
               type: p.type?.toLowerCase() || "question",
               pulseType,
+              qType: pulseType === "Advertisement" ? "ADVERTISEMENT" : (p as any).qType || "",
               questionOptions: p.questionOptions,
             };
           })
@@ -234,6 +252,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         pulse.qType = "TWO_CHOICE";
         pulse.type = "question";
         return pulse.questionText.trim() !== "" && pulse.options.length >= 2;
+      } else if (pulse.pulseType === "Advertisement") {
+        // Enforce single Interested option and text optionType
+        pulse.type = "question";
+        pulse.qType = "ADVERTISEMENT";
+        pulse.optionType = "text";
+        pulse.options = ["Interested"];
+        return pulse.questionText.trim() !== "" &&
+          (imageInputModes[currentPulseIndex] === "file"
+            ? !!uploadedImages[currentPulseIndex]
+            : (pulse.image || "").trim() !== "");
       }
       return false;
     });
@@ -362,6 +390,14 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       ...updatedPulses[currentPulseIndex],
       pulseType: newType,
       type: dailyPulseType,
+      // When switching to Advertisement, initialize specific fields
+      ...(newType === "Advertisement"
+        ? {
+            qType: "ADVERTISEMENT",
+            optionType: "text",
+            options: ["Interested"],
+          }
+        : {}),
     };
     setPulses(updatedPulses);
   };
@@ -473,6 +509,20 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 currentPulse.image || uploadedImages[currentPulseIndex] || ""
               }
               onAnswer={() => {}}
+            />
+          </Box>
+        );
+
+      case "Advertisement":
+        return (
+          <Box sx={{ minHeight: "400px" }}>
+            <Advertisement
+              id="preview"
+              questionText={currentPulse.questionText || ""}
+              image={currentPulse.image || uploadedImages[currentPulseIndex] || ""}
+              optionType="text"
+              response={undefined}
+              // onAnswer={() => {}}
             />
           </Box>
         );
@@ -932,6 +982,128 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             ))}
           </Box>
         );
+      case "Advertisement":
+        return (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <Typography variant="h6" color="white">
+              Company Name
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.questionText ?? ""}
+              onChange={(e) => handleInputChange("questionText", e.target.value)}
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+              placeholder="Enter company name"
+            />
+
+            <Typography variant="h6" color="white">
+              Image
+            </Typography>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <Button
+                startIcon={<CloudUpload />}
+                variant={
+                  imageInputModes[currentPulseIndex] === "file"
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() =>
+                  setImageInputModes((m) => ({
+                    ...m,
+                    [currentPulseIndex]: "file",
+                  }))
+                }
+                sx={{
+                  color:
+                    imageInputModes[currentPulseIndex] === "file"
+                      ? "black"
+                      : "white",
+                  borderColor: "primary.main",
+                  background:
+                    imageInputModes[currentPulseIndex] === "file"
+                      ? "primary.main"
+                      : "transparent",
+                  minWidth: 0,
+                }}
+              >
+                File
+              </Button>
+              <Button
+                variant={
+                  imageInputModes[currentPulseIndex] === "url" ||
+                  !imageInputModes[currentPulseIndex]
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() =>
+                  setImageInputModes((m) => ({
+                    ...m,
+                    [currentPulseIndex]: "url",
+                  }))
+                }
+                sx={{
+                  color:
+                    imageInputModes[currentPulseIndex] === "url"
+                      ? "black"
+                      : "white",
+                  borderColor: "primary.main",
+                  background:
+                    imageInputModes[currentPulseIndex] === "url" ||
+                    !imageInputModes[currentPulseIndex]
+                      ? "primary.main"
+                      : "transparent",
+                  minWidth: 0,
+                }}
+              >
+                URL
+              </Button>
+            </Box>
+            {imageInputModes[currentPulseIndex] === "file" ? (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setUploadedImages((imgs) => ({
+                    ...imgs,
+                    [currentPulseIndex]: file,
+                  }));
+                  handleInputChange("image", "");
+                }}
+              />
+            ) : (
+              <TextField
+                fullWidth
+                value={currentPulse.image ?? ""}
+                onChange={(e) => {
+                  handleInputChange("image", e.target.value);
+                  setUploadedImages((imgs) => ({
+                    ...imgs,
+                    [currentPulseIndex]: null,
+                  }));
+                }}
+                sx={{
+                  backgroundColor: "#333",
+                  "& .MuiOutlinedInput-root": {
+                    color: "white",
+                    "& fieldset": { borderColor: "#444" },
+                    "&:hover fieldset": { borderColor: "#666" },
+                    "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                  },
+                }}
+                placeholder="Paste image URL"
+              />
+            )}
+          </Box>
+        );
       default:
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -1104,6 +1276,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     Image (Right / Wrong)
                   </MenuItem>
                   <MenuItem value="Multiple Images">Multiple Images</MenuItem>
+                  <MenuItem value="Advertisement">Advertisement</MenuItem>
                 </Select>
               </FormControl>
             </Box>

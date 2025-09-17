@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import { Box, Typography } from "@mui/material";
 import InfoCard from "../../../question/components/InfoCard";
 import QuestionTwoOption from "../../../question/components/QuestionTwoOption";
+import Advertisement from "../../../question/components/Advertisement";
 import BidCard from "../../../user/components/BidCard";
 import { useSubmitPulseResponseMutation } from "../../dailyPulseApi";
 import "slick-carousel/slick/slick.css";
@@ -270,6 +271,12 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           </Box>
         );
       case "QuestionTwoOption":
+        // Detect Advertisement shape: optionType text + single option Interested
+        const isAdvertisement =
+          item.optionType === "text" &&
+          Array.isArray(item.options) &&
+          item.options.length === 1 &&
+          (item.options[0] || "").toLowerCase() === "interested";
         return (
           <Box
             ref={(el: HTMLDivElement | null) => {
@@ -277,19 +284,33 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
             }}
             sx={cardStyle}
           >
-            <QuestionTwoOption
-              id={item.id}
-              questionText={item.questionText}
-              image={item.image}
-              optionType={item.optionType}
-              options={item.options}
-              questionOptions={item.questionOptions}
-              response={item.response}
-              pulseStats={item.pulseStats}
-              onAnswer={readOnly ? undefined : handleAnswer}
-              smallSize={smallSize}
-              sx={{ height: "100%" }}
-            />
+            {isAdvertisement ? (
+              <Advertisement
+                id={item.id}
+                questionText={item.questionText}
+                image={item.image}
+                optionType="text"
+                response={item.response}
+                pulseStats={item.pulseStats}
+                onAnswer={readOnly ? undefined : handleAnswer}
+                smallSize={smallSize}
+                sx={{ height: "100%" }}
+              />
+            ) : (
+              <QuestionTwoOption
+                id={item.id}
+                questionText={item.questionText}
+                image={item.image}
+                optionType={item.optionType}
+                options={item.options}
+                questionOptions={item.questionOptions}
+                response={item.response}
+                pulseStats={item.pulseStats}
+                onAnswer={readOnly ? undefined : handleAnswer}
+                smallSize={smallSize}
+                sx={{ height: "100%" }}
+              />
+            )}
           </Box>
         );
       case "eventCard":

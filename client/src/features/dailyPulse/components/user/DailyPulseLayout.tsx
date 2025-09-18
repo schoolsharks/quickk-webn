@@ -86,11 +86,17 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   const sliderRef = useRef<Slider | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  const [localPulseItems, setLocalPulseItems] = useState<PulseItem[]>([]);
+
+  useEffect(() => {
+    setLocalPulseItems(pulseItems);
+  }, [pulseItems]);
+
   // Initialize cardRefs array when pulseItems change
   useEffect(() => {
-    cardRefs.current = new Array(pulseItems.length).fill(null);
+    cardRefs.current = new Array(localPulseItems.length).fill(null);
     setMaxHeight(0); // Reset max height when items change
-  }, [pulseItems.length]);
+  }, [localPulseItems.length]);
 
   // Effect to calculate maximum height of all cards
   useEffect(() => {
@@ -141,7 +147,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
       clearTimeout(resizeTimeout);
       window.removeEventListener("resize", handleResize);
     };
-  }, [pulseItems, smallSize, maxHeight]);
+  }, [localPulseItems, smallSize, maxHeight]);
 
   // Effect to apply calculated height to all cards
   useEffect(() => {
@@ -192,7 +198,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     // Skip answer handling in read-only mode
     if (readOnly) return;
 
-    const pulseItem = pulseItems.find((item) => item.id === itemId);
+    const pulseItem = localPulseItems.find((item) => item.id === itemId);
     if (!pulseItem) return console.error("Daily pulse error.");
     handleHaptic();
 
@@ -208,25 +214,32 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         pulseItem.type === "QuestionTwoOption" ? answer : undefined,
     };
 
-    setTimeout(
-      () => {
-        sliderRef.current?.slickNext();
-        setCurrentIndex((prev) => prev + 1);
-      },
-      pulseItem.type === "QuestionTwoOption" &&
-        (pulseItem.optionType === "text" ||
-          pulseItem.optionType === "correct-incorrect")
-        ? 2000
-        : 700
-    );
+    // setTimeout(
+    //   () => {
+    //     sliderRef.current?.slickNext();
+    //     setCurrentIndex((prev) => prev + 1);
+    //   },
+    //   pulseItem.type === "QuestionTwoOption" &&
+    //     (pulseItem.optionType === "text" ||
+    //       pulseItem.optionType === "correct-incorrect")
+    //     ? 2000
+    //     : 700
+    // );
 
     try {
       const response = await submitPulseResponse(payload).unwrap();
-      console.log("Response submitted successfully");
 
       // If we got pulse stats back, log it for now
       if (response.pulseStats && pulseItem.type === "QuestionTwoOption") {
         console.log("Received pulse stats:", response.pulseStats);
+        setLocalPulseItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === itemId
+              ? { ...item, pulseStats: response.pulseStats, response: response.data?.response }
+              : item
+          )
+        );
+
         // The QuestionTwoOption component will handle showing results using its local state
       }
     } catch (error) {
@@ -234,7 +247,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     }
   };
 
-  // const totalScore = pulseItems.reduce(
+  // const totalScore = localPulseItems.reduce(
   //   (total, item) => total + (item.score || 0),
   //   0
   // );
@@ -242,6 +255,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   const handleCloseStarsPopup = () => {
     setShowStarsPopup(false);
   };
+ 
 
   const renderPulseItem = (item: PulseItem, index: number) => {
     const cardStyle = {
@@ -352,7 +366,6 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   return (
     <Box width="100%">
       {/* Header */}
-
       {!smallSize && (
         <Box
           display="flex"
@@ -363,7 +376,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           <Typography variant="h4">Daily Pulse</Typography>
           {showScore && (
             <Typography variant="h4" display={"flex"} alignItems={"center"}>
-              {pulseItems[currentIndex]?.score}
+              {localPulseItems[currentIndex]?.score}
               <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
             </Typography>
           )}
@@ -382,7 +395,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         }
       >
         <Slider key={maxHeight} {...settings} ref={sliderRef}>
-          {pulseItems.map((item, index) => (
+          {localPulseItems.map((item, index) => (
             <Box px={"20px"} key={item.id} height={"100%"}>
               <motion.div
                 variants={carouselSlide}

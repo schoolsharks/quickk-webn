@@ -16,7 +16,7 @@ export const dailyPulseApi = api.injectEndpoints({
                 method: 'POST',
                 body: response,
             }),
-            invalidatesTags: ['DailyPulse'],
+            // invalidatesTags: ['DailyPulse'],
         }),
 
         getDailyPulseTable: builder.query({

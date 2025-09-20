@@ -53,6 +53,7 @@ const GreenButton: React.FC<GreenButtonProps> = ({
           position: "relative",
           backgroundColor: "white",
           color: "black",
+          border: "1px solid black",
           borderRadius: "2px",
           fontWeight: 600,
           fontSize: "18px",

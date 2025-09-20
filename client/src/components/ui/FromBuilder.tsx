@@ -82,17 +82,22 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
   const defaultFieldStyle = {
     // backgroundColor: "#333",
     borderRadius: "0",
+    color: "white",
     "& .MuiOutlinedInput-root": {
       borderRadius: "0",
+      border: "1px solid #464646",
       color: "white",
       "& fieldset": { borderRadius: "0" },
-      "&:hover fieldset": { borderColor: "#666" },
-      "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+      "&:hover fieldset": { borderColor: "#464646" },
+      "&.Mui-focused fieldset": { borderColor: "464646" },
     },
     "& .MuiInputLabel-root": { color: "white" },
     "& .MuiSelect-icon": { color: "white" },
     "& .MuiInputBase-root": {
       borderRadius: "0",
+    },
+    "& .MuiInputBase-input": {
+      color: "white",
     },
   };
 
@@ -104,7 +109,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "number":
         return (
           <TextField
-            variant="standard"
+            variant="outlined"
             fullWidth
             type={field.type}
             value={value}
@@ -117,7 +122,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "textarea":
         return (
           <TextField
-            variant="standard"
+            variant="outlined"
             fullWidth
             multiline
             rows={field.rows || 3}
@@ -131,7 +136,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       case "date":
         return (
           <TextField
-            variant="standard"
+            variant="outlined"
             fullWidth
             type="text"
             value={value}
@@ -150,6 +155,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               sx={{
                 ...defaultFieldStyle,
                 ...fieldStyle,
+                border: "1px solid #464646",
                 "& .MuiSvgIcon-root": { color: "white" },
                 "& .MuiInputBase-root": {
                   borderRadius: "0",
@@ -229,7 +235,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 sx={{ display: "flex", gap: 1, alignItems: "center" }}
               >
                 <TextField
-                  variant="standard"
+                  variant="outlined"
                   fullWidth
                   value={item}
                   placeholder={
@@ -364,7 +370,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
             {tabValue === 1 && (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <TextField
-                  variant="standard"
+                  variant="outlined"
                   fullWidth
                   value={typeof value === "string" ? value : ""}
                   placeholder={field.placeholder || "Enter image URL"}
@@ -497,9 +503,9 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       {fields.map((field) => (
         <Box key={field.name}>
           {field.type !== "switch" && field.type !== "checkbox" && (
-            <Typography variant="h6" color="black" sx={{ mb: 1 }}>
+            <Typography variant="h6" color="white" sx={{ mb: 1 }}>
               {field.label}
-              {field.required && <span style={{ color: "#ff4444" }}> *</span>}
+              {field.required && <span style={{ color: "white" }}> *</span>}
             </Typography>
           )}
           {renderField(field)}

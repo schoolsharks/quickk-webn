@@ -1,6 +1,7 @@
 import DailyPulse from "../../modules/dailyPulse/model/dailyPulse.model";
 import LearningModel from "../../modules/learning/model/learning.model";
 import User from "../../modules/user/model/user.model";
+import { Event } from "../../modules/events/models/events.model";
 
 
 export const searchConfigs = {
@@ -19,5 +20,11 @@ export const searchConfigs = {
         model: LearningModel,
         searchableFields: ['title'],
         populateFields: ['modules', 'company']
+    },
+    events: {
+        model: Event,
+        searchableFields: ['title', 'description', 'organizer', 'location'],
+        dateFields: ['startDate', 'endDate'],
+        populateFields: []
     }
 };

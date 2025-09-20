@@ -224,7 +224,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
               </Typography>
               <DatePicker
                 value={publishOn}
-                onChange={(date) => setPublishOn(date)}
+                onChange={(date) => setPublishOn(date ? new Date(date.valueOf()) : null)}
                 minDate={new Date(new Date().setHours(0, 0, 0, 0))}
                 slotProps={{
                   textField: {
@@ -247,7 +247,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
               </Typography>
               <DatePicker
                 value={validTill}
-                onChange={(date) => setValidTill(date)}
+                onChange={(date) => setValidTill(date ? new Date(date.valueOf()) : null)}
                 minDate={
                   publishOn
                     ? new Date(

@@ -53,7 +53,7 @@ const BreadcrumbHeader: React.FC<BreadcrumbHeaderProps> = ({
   return (
     <Box
       sx={{
-        background: "#F7F0FB",
+        background: "#FFFFFF",
         px: 3,
         pt: 2,
         display: "flex",

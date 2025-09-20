@@ -19,10 +19,21 @@ const EventSchema = new Schema<IEvent>({
   status: {
     type: String,
     enum: Object.values(EventStatus),
-    default: EventStatus.UPCOMING
+    default: EventStatus.DRAFT
   },
 
-  // Date and Time
+  // Event Type and Audience
+  eventType: {
+    type: String,
+    enum: ['ONLINE', 'OFFLINE'],
+    default: 'ONLINE'
+  },
+  targetAudience: [{
+    type: String,
+    enum: ['All', 'Gowomania Only', 'Webn Only']
+  }],
+
+
   startDate: {
     type: Date,
     required: true
@@ -44,14 +55,45 @@ const EventSchema = new Schema<IEvent>({
     type: String
   },
 
+  // Speakers
+  speakers: [{
+    name: {
+      type: String,
+    },
+    designation: {
+      type: String,
+    }
+  }],
+
+  // Key Highlights
+  keyHighlights: [String],
+
   // Registration and Tickets
+  ticketTypes: [{
+    type: String,
+    enum: ['Paid', 'Free']
+  }],
+  starsToBeEarned: {
+    type: Number,
+    default: 0
+  },
+  registrationLink: {
+    type: String
+  },
   ticketInfo: {
     price: { type: Number },
     currency: { type: String, default: 'INR' }
   },
 
   // Event Details
-  sponsors: [String],
+  sponsors: [{
+    name: {
+      type: String,
+    },
+    logo: {
+      type: String
+    }
+  }],
   highlights: [String],
 
   // Engagement

@@ -154,7 +154,8 @@ export const api = createApi({
         "Features",
         "Company",
         "AdminUser",
-        "QuickkAi"
+        "QuickkAi",
+        "AdminEvents"
 
     ],
 

@@ -57,7 +57,22 @@ const DailyPulseSearchToolbar: React.FC<DailyPulseSearchToolbarProps> = ({
             <DatePicker
               label="Search by Date"
               value={searchDate}
-              onChange={onDateChange}
+              onChange={(value) => {
+                // value can be Date, null, or possibly Dayjs depending on the date adapter
+                if (value instanceof Date || value === null) {
+                  onDateChange(value);
+                } else if (
+                  value &&
+                  typeof value === "object" &&
+                  "toDate" in value &&
+                  typeof value.toDate === "function"
+                ) {
+                  // For adapters like Dayjs
+                  onDateChange(value.toDate());
+                } else {
+                  onDateChange(null);
+                }
+              }}
               slotProps={{
                 textField: {
                   size: "small",

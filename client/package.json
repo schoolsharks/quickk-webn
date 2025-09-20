@@ -24,6 +24,7 @@
     "@tiptap/starter-kit": "^2.23.0",
     "date-fns": "^4.1.0",
     "DatePicker": "^2.0.0",
+    "dayjs": "^1.11.18",
     "dompurify": "^3.2.6",
     "framer-motion": "^12.11.1",
     "install": "^0.13.0",

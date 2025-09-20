@@ -7,6 +7,7 @@ import * as LearningControllers from "../../learning/controllers/learning.contro
 import * as ModuleControllers from "../../learning/controllers/module.controller"
 import * as QuickkAiControllers from "../../quickkAi/controllers/quickkAi.controller"
 import * as UserControllers from "../../user/controllers/user.controller"
+import { eventController } from "../../events/controllers/events.controllers"
 import AdminService from '../service/admin.service';
 
 const imageUploadService = new AdminService();
@@ -333,6 +334,71 @@ router.get('/search/learning',
     authenticateUser,
     authorizeRoles('ADMIN'),
     asyncHandeler(LearningControllers.searchLearning)
+);
+
+// Events Routes for Admin
+router.get(
+    '/getAdminEventStats',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.getAdminEventStats)
+);
+
+router.get(
+    '/getAllEventsAdmin',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.getAllEventsAdmin)
+);
+
+router.get(
+    '/searchEventsAdmin',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.searchEventsAdmin)
+);
+
+router.post(
+    '/createEvent',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.createEvent)
+);
+
+router.post(
+    '/createBlankEvent',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.createBlankEvent)
+);
+
+router.get(
+    '/getEvent/:eventId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.getEventById)
+);
+
+router.put(
+    '/updateEvent/:eventId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    imageUploadService.getS3Uploader('events').any(),
+    asyncHandeler(eventController.updateEvent)
+);
+
+router.delete(
+    '/deleteEvent/:eventId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.deleteEvent)
+);
+
+router.post(
+    '/cloneEvent/:eventId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.cloneEvent)
 );
 
 export default router;

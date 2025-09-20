@@ -315,7 +315,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         sx={{
           maxWidth: "80vw",
           mx: "auto",
-          backgroundColor: "white",
+          backgroundColor: "black",
           borderRadius: 0,
           p: 4,
         }}
@@ -358,7 +358,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
           data={formData}
           onChange={handleFieldChange}
           containerStyle={{
-            backgroundColor: "white",
+            backgroundColor: "black",
           }}
         />
       </Box>

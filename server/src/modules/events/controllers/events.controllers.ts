@@ -131,7 +131,7 @@ export class EventController {
   async createEvent(req: Request, res: Response, next: NextFunction) {
     try {
       // Assuming user ID is available in req.user from auth middleware
-      const createdBy = (req as any).user?.id || req.body.createdBy;
+      const createdBy = req.user?.id;
 
       if (!createdBy) {
         throw new AppError("Creator information is required", 400);
@@ -166,9 +166,66 @@ export class EventController {
         throw new AppError("Updater information is required", 400);
       }
 
+      // Process uploaded files
+      const files = req.files as Express.MulterS3.File[];
+      const eventUpdateData = { ...req.body };
+
+      // Handle event banner image
+      if (files && files.length > 0) {
+        const eventImageFile = files.find(file => file.fieldname === 'eventImage');
+        if (eventImageFile) {
+          eventUpdateData.eventImage = eventImageFile.location;
+        }
+
+        // Handle sponsor logos
+        const sponsorLogoFiles = files.filter(file => file.fieldname.startsWith('sponsor_logo_'));
+        if (sponsorLogoFiles.length > 0) {
+          const sponsors = JSON.parse(eventUpdateData.sponsors || '[]');
+          sponsorLogoFiles.forEach(file => {
+            const index = parseInt(file.fieldname.split('_')[2]);
+            if (sponsors[index]) {
+              sponsors[index].logo = file.location;
+            }
+          });
+          eventUpdateData.sponsors = sponsors;
+        }
+      }
+
+      // Parse JSON fields
+      if (eventUpdateData.targetAudience && typeof eventUpdateData.targetAudience === 'string') {
+        eventUpdateData.targetAudience = JSON.parse(eventUpdateData.targetAudience);
+      }
+      if (eventUpdateData.speakers && typeof eventUpdateData.speakers === 'string') {
+        eventUpdateData.speakers = JSON.parse(eventUpdateData.speakers);
+      }
+      if (eventUpdateData.keyHighlights && typeof eventUpdateData.keyHighlights === 'string') {
+        eventUpdateData.keyHighlights = JSON.parse(eventUpdateData.keyHighlights);
+      }
+      if (eventUpdateData.sponsors && typeof eventUpdateData.sponsors === 'string') {
+        eventUpdateData.sponsors = JSON.parse(eventUpdateData.sponsors);
+      }
+      if (eventUpdateData.ticketTypes && typeof eventUpdateData.ticketTypes === 'string') {
+        eventUpdateData.ticketTypes = JSON.parse(eventUpdateData.ticketTypes);
+      }
+
+      if (eventUpdateData.ticketInfo && typeof eventUpdateData.ticketInfo === 'string') {
+        try {
+          eventUpdateData.ticketInfo = JSON.parse(eventUpdateData.ticketInfo);
+        } catch (e) {
+          throw new AppError("Invalid ticketInfo format", 400);
+        }
+      }
+      if (eventUpdateData.starsToBeEarned) {
+        eventUpdateData.starsToBeEarned = parseInt(eventUpdateData.starsToBeEarned);
+      }
+
+      if (eventUpdateData.status) {
+        eventUpdateData.status = eventUpdateData.status.toLowerCase();
+      }
+
       const event = await eventService.updateEvent(
         eventId,
-        req.body,
+        eventUpdateData,
         updatedBy
       );
 
@@ -439,6 +496,141 @@ export class EventController {
         success: true,
         message: "Event statistics retrieved successfully",
         data: statistics,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get admin event statistics (for admin dashboard)
+   */
+  async getAdminEventStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const stats = await eventService.getAdminEventStats();
+
+      res.status(200).json({
+        success: true,
+        message: "Admin event statistics retrieved successfully",
+        data: stats,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get all events for admin with advanced filtering
+   */
+  async getAllEventsAdmin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const query: IEventQuery = {
+        status: req.query.status as EventStatus,
+        city: req.query.city as string,
+        startDate: req.query.startDate
+          ? new Date(req.query.startDate as string)
+          : undefined,
+        endDate: req.query.endDate
+          ? new Date(req.query.endDate as string)
+          : undefined,
+        page: req.query.page ? parseInt(req.query.page as string) : 1,
+        limit: req.query.limit ? parseInt(req.query.limit as string) : 10,
+        sortBy: req.query.sortBy as string || "createdAt",
+        sortOrder: req.query.sortOrder as "asc" | "desc" || "desc",
+      };
+
+      const result = await eventService.getAllEventsAdmin(query);
+
+      res.status(200).json({
+        success: true,
+        message: "Admin events retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Advanced search events for admin
+   */
+  async searchEventsAdmin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {
+        q: searchTerm,
+        startDate,
+        city,
+        status,
+        page = 1,
+        limit = 10,
+      } = req.query;
+
+      const searchParams = {
+        searchTerm: searchTerm as string,
+        startDate: startDate ? new Date(startDate as string) : undefined,
+        city: city as string,
+        status: status as EventStatus,
+        page: parseInt(page as string),
+        limit: parseInt(limit as string),
+      };
+
+      const result = await eventService.searchEventsAdmin(searchParams);
+
+      res.status(200).json({
+        success: true,
+        message: "Admin search results retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Clone an existing event
+   */
+  async cloneEvent(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { eventId } = req.params;
+      const createdBy = (req as any).user?.id || req.body.createdBy;
+
+      if (!createdBy) {
+        throw new AppError("Creator information is required", 400);
+      }
+
+      const clonedEvent = await eventService.cloneEvent(eventId, createdBy);
+
+      if (!clonedEvent) {
+        throw new AppError("Event not found", 404);
+      }
+
+      res.status(201).json({
+        success: true,
+        message: "Event cloned successfully",
+        data: clonedEvent,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Create blank event for admin
+   */
+  async createBlankEvent(req: Request, res: Response, next: NextFunction) {
+    try {
+      const createdBy = (req as any).user?.id || req.body.createdBy;
+
+      if (!createdBy) {
+        throw new AppError("Creator information is required", 400);
+      }
+
+      const blankEvent = await eventService.createBlankEvent(createdBy);
+
+      res.status(201).json({
+        success: true,
+        message: "Blank event created successfully",
+        data: blankEvent,
       });
     } catch (error) {
       next(error);

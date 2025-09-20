@@ -52,7 +52,6 @@ export class EventService {
     const sortOptions: any = {};
     sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
 
-    console.log("skip", skip, "limit", limit, "sortOptions", sortOptions);
 
     // Execute query
     const [events, total] = await Promise.all([

@@ -6,6 +6,10 @@ import mongoose, { Types } from "mongoose";
 import Avatar from "../model/user.avatar.model";
 import { generateTodayDate } from "../../../utils/generateTodayDate";
 import { IUser } from "../types/interfaces";
+import QuestionResponse from "../../questions/model/question.response";
+import UserModule from "../../learning/model/user.module.model";
+import { EventRegistration } from "../../events/models/events.model";
+import DailyPulse from "../../dailyPulse/model/dailyPulse.model";
 
 class UserService {
   async getUserByIdWithCompany(userId: mongoose.Types.ObjectId) {
@@ -661,11 +665,11 @@ class UserService {
 
       // Get all users for the company
       const users = await User.find({ company: companyId }).lean();
-      
+
       // Import required models
-      const QuestionResponse = (await import('../../questions/model/question.response')).default;
-      const UserModule = (await import('../../learning/model/user.module.model')).default;
-      const { EventRegistration } = (await import('../../events/models/events.model'));
+      // const QuestionResponse = (await import('../../questions/model/question.response')).default;
+      // const UserModule = (await import('../../learning/model/user.module.model')).default;
+      // const { EventRegistration } = (await import('../../events/models/events.model'));
 
       const analyticsData = await Promise.all(
         months.map(async (month, index) => {
@@ -724,7 +728,7 @@ class UserService {
 
           // Filter active users by webnClubMember status
           const activeUsers = users.filter(user => activeUserIds.has(user._id.toString()));
-          
+
           const gowomaniaCount = activeUsers.filter(user => !user.webnClubMember).length;
           const webnCount = activeUsers.filter(user => user.webnClubMember === true).length;
 
@@ -740,6 +744,91 @@ class UserService {
     } catch (error) {
       console.error('Error getting engagement analytics:', error);
       throw new AppError('Failed to get engagement analytics', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async getParticipationLeaderboard(companyId: string) {
+    try {
+      // Get date range for last 7 days
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - 7);
+
+      // Get all users for the company
+      const users = await User.find({ company: companyId })
+        .select('_id name businessLogo businessName')
+        .lean();
+
+      if (!users.length) {
+        return [];
+      }
+
+      // Get published daily pulses from last 7 days
+      const dailyPulses = await DailyPulse.find({
+        company: companyId,
+        publishOn: { $gte: sevenDaysAgo, $lte: today },
+      }).select('pulses').lean();
+
+      // Extract all question IDs from daily pulses
+      const questionIds = dailyPulses.flatMap(pulse =>
+        pulse.pulses.map(p => p.refId)
+      );
+
+
+      if (questionIds.length === 0) {
+        // No daily pulses in last 7 days, return users with 0% participation
+        return users.slice(0, 6).map((user, index) => ({
+          id: user._id.toString(),
+          rank: index + 1,
+          name: user.name,
+          businessLogo: user.businessLogo,
+          businessName: user.businessName,
+          percentage: 0
+        }));
+      }
+
+      // Get user responses to these questions in last 7 days
+      const responses = await QuestionResponse.find({
+        question: { $in: questionIds },
+      }).select('user question').lean();
+
+      // Calculate participation percentage for each user
+      const userParticipation = users.map(user => {
+        const userResponses = responses.filter(
+          response => response.user.toString() === user._id.toString()
+        );
+
+        // Calculate unique questions answered by user
+        const uniqueQuestionsAnswered = new Set(
+          userResponses.map(r => r.question.toString())
+        ).size;
+
+        const percentage = questionIds.length > 0
+          ? Math.round((uniqueQuestionsAnswered / questionIds.length) * 100)
+          : 0;
+
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          businessLogo: user.businessLogo,
+          businessName: user.businessName,
+          percentage
+        };
+      });
+
+      // Sort by percentage (descending) and assign ranks
+      const sortedUsers = userParticipation
+        .sort((a, b) => b.percentage - a.percentage)
+        .slice(0, 6) // Top 10 users
+        .map((user, index) => ({
+          ...user,
+          rank: index + 1
+        }));
+
+      return sortedUsers;
+    } catch (error) {
+      console.error('Error getting participation leaderboard:', error);
+      throw new AppError('Failed to get participation leaderboard', StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 

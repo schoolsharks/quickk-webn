@@ -78,6 +78,13 @@ router.get(
     asyncHandeler(adminControllers.getEngagementAnalytics)
 );
 
+router.get(
+    '/getParticipationLeaderboard',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getParticipationLeaderboard)
+);
+
 
 // Daily Pulse Route
 router.get(
@@ -414,5 +421,7 @@ router.post(
     authorizeRoles('ADMIN'),
     asyncHandeler(eventController.cloneEvent)
 );
+router.get('/getActiveEvents', authenticateUser, authorizeRoles('ADMIN'), asyncHandeler(eventController.getActiveEvents));
+router.get('/getUpcomingEvents', authenticateUser, authorizeRoles('ADMIN'), asyncHandeler(eventController.getUpcomingEvents));
 
 export default router;

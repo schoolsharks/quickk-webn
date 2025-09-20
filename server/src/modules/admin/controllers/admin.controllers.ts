@@ -264,3 +264,23 @@ export const getEngagementAnalytics = async (req: Request, res: Response, next: 
         next(error);
     }
 };
+
+export const getParticipationLeaderboard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const participationData = await userservice.getParticipationLeaderboard(companyId);
+        
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Participation leaderboard retrieved successfully',
+            data: participationData
+        });
+    } catch (error) {
+        next(error);
+    }
+};

@@ -224,9 +224,21 @@ const DashBoardAnalytics: React.FC = () => {
 
               {/* Gradient for webn */}
               <linearGradient id="webnGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
-                <stop offset="50%" stopColor="#2563eb" stopOpacity={0.6} />
-                <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0.4} />
+                <stop
+                  offset="0%"
+                  stopColor={theme.palette.primary.main}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="50%"
+                  stopColor={theme.palette.primary.main}
+                  stopOpacity={0.6}
+                />
+                <stop
+                  offset="100%"
+                  stopColor={theme.palette.primary.main}
+                  stopOpacity={0.4}
+                />
               </linearGradient>
             </defs>
 
@@ -275,7 +287,7 @@ const DashBoardAnalytics: React.FC = () => {
               type="monotone"
               dataKey="webn"
               stackId="1"
-              stroke="#3b82f6"
+              stroke={theme.palette.primary.main}
               strokeWidth={2}
               fill="url(#webnGradient)"
               fillOpacity={1}

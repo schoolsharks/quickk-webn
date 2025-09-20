@@ -24,18 +24,18 @@ const DashBoardLayout: React.FC = () => {
         />
       </Grid>
       <Grid container size={12} spacing={"12px"}>
-        <Grid size={8}>
+        <Grid size={7}>
           <DashBoardAnalytics />
         </Grid>
-        <Grid size={4}>
+        <Grid size={5}>
           <ParticipationBoard />
         </Grid>
       </Grid>
       <Grid container size={12} spacing={"12px"}>
-        <Grid size={8}>
+        <Grid size={7}>
           <DashboardTables />
         </Grid>
-        <Grid size={4}>
+        <Grid size={5}>
           <DashboardEvent />
         </Grid>
       </Grid>

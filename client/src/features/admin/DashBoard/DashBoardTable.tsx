@@ -253,9 +253,9 @@ const DashboardTables: React.FC = () => {
 
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} height={"100%"}>
         {/* Learning Overview Table */}
-        <Grid size={12}>
+        <Grid size={12} height={"100%"}>
           <GlobalTable
             title="Modules Overview"
             columns={learningColumns}

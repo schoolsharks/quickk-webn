@@ -169,9 +169,9 @@ const ParticipationBoard: React.FC = () => {
                   width: 40,
                   height: 40,
                   bgcolor: "#FFFFFF",
-                  color: theme.palette.background.default,
-                  fontWeight: 600,
-                  fontSize: 18,
+                  color: theme.palette.text.primary,
+                  fontWeight: 700,
+                  fontSize: 28,
                 }}
               >
                 {!participant.businessLogo && participant.name[0]}

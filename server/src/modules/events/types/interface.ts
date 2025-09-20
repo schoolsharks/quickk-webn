@@ -7,6 +7,10 @@ export interface IEvent extends Document {
   eventImage?: string;
   status: EventStatus;
 
+  // Event Type and Audience
+  eventType: 'ONLINE' | 'OFFLINE';
+  targetAudience: ('All' | 'Gowomania Only' | 'Webn Only')[];
+
   // Date and Time
   startDate: Date;
   endDate: Date;
@@ -16,14 +20,29 @@ export interface IEvent extends Document {
   isVirtual: boolean;
   virtualMeetingLink?: string;
 
+  // Speakers
+  speakers?: {
+    name: string;
+    designation: string;
+  }[];
+
+  // Key Highlights
+  keyHighlights?: string[];
+
   // Registration and Tickets
+  ticketTypes?: ('Paid' | 'Free')[];
+  starsToBeEarned?: number;
+  registrationLink?: string;
   ticketInfo: {
     price?: number;
     currency?: string;
   };
 
   // Event Details
-  sponsors?: string[];
+  sponsors?: {
+    name: string;
+    logo?: string;
+  }[];
   highlights?: string[];
 
   // Engagement

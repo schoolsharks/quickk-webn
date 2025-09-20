@@ -27,6 +27,8 @@ import { setPreferences } from "../../features/onboarding/api/onboardingSlice";
 import { useDispatch } from "react-redux";
 import BulkUserUploadPage from "./BulkUserUploadPage";
 import GowomaniaUsers from "../../features/admin/user/GowomaniaUsers";
+import EventsAdminPage from "../../features/events/pages/EventsAdminPage";
+import EventFormPage from "./EventFormPage";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -97,7 +99,7 @@ const AdminMain: React.FC = () => {
               sx={{
                 display: "flex",
                 minHeight: "100vh",
-                backgroundColor: "#ffffff",
+                backgroundColor: "#FFFFFF",
               }}
             >
               <AdminSidebar />
@@ -105,7 +107,7 @@ const AdminMain: React.FC = () => {
                 component="main"
                 sx={{
                   flexGrow: 1,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: "#FFFFFF",
                   minHeight: "100vh",
                   overflowX: "hidden",
                   color: "black",
@@ -206,6 +208,8 @@ const AdminMain: React.FC = () => {
                       </FeatureGuard>
                     }
                   />
+                  <Route path="/events" element={<EventsAdminPage />} />
+                  <Route path="/events/:eventId" element={<EventFormPage />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route

@@ -169,9 +169,6 @@ export const adminApi = api.injectEndpoints({
             }),
         }),
 
-
-
-
     }),
 });
 
@@ -190,5 +187,5 @@ export const {
     useCreateBlankUserMutation,
     useDeleteUserByIdMutation,
     useSearchUsersQuery,
-    useGetActiveUsersStatsQuery
+    useGetActiveUsersStatsQuery,
 } = adminApi;

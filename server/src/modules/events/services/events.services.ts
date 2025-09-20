@@ -52,6 +52,8 @@ export class EventService {
     const sortOptions: any = {};
     sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
 
+    console.log("skip", skip, "limit", limit, "sortOptions", sortOptions);
+
     // Execute query
     const [events, total] = await Promise.all([
       Event.find(filter).sort(sortOptions).skip(skip).limit(limit).lean(),
@@ -154,10 +156,8 @@ export class EventService {
    * Delete event (soft delete)
    */
   async deleteEvent(eventId: string): Promise<boolean> {
-    const result = await Event.findByIdAndUpdate(
-      eventId,
-      { isActive: false },
-      { new: true }
+    const result = await Event.findByIdAndDelete(
+      eventId
     );
 
     return !!result;
@@ -172,7 +172,7 @@ export class EventService {
     limit: number = 10
   ): Promise<IEventResponse> {
     const filter = {
-      isActive: true,
+
       $or: [
         { title: new RegExp(searchTerm, "i") },
         { description: new RegExp(searchTerm, "i") },
@@ -335,10 +335,10 @@ export class EventService {
   async getEventStatistics() {
     const [totalEvents, upcomingEvents, activeEvents, pastEvents] =
       await Promise.all([
-        Event.countDocuments({ isActive: true }),
-        Event.countDocuments({ isActive: true, status: EventStatus.UPCOMING }),
-        Event.countDocuments({ isActive: true, status: EventStatus.ACTIVE }),
-        Event.countDocuments({ isActive: true, status: EventStatus.PAST }),
+        Event.countDocuments(),
+        Event.countDocuments({ status: EventStatus.UPCOMING }),
+        Event.countDocuments({ status: EventStatus.ACTIVE }),
+        Event.countDocuments({ status: EventStatus.PAST }),
       ]);
 
     return {
@@ -347,5 +347,243 @@ export class EventService {
       activeEvents,
       pastEvents,
     };
+  }
+
+  /**
+   * Get admin event statistics with more detailed breakdown
+   */
+  async getAdminEventStats() {
+    const [total, drafts, online, offline] = await Promise.all([
+      Event.countDocuments(),
+      Event.countDocuments({ status: EventStatus.DRAFT }),
+      Event.countDocuments({ isVirtual: true }),
+      Event.countDocuments({ isVirtual: false }),
+    ]);
+
+    return {
+      total,
+      drafts,
+      online,
+      offline,
+    };
+  }
+
+  /**
+   * Get all events for admin with comprehensive data
+  //  */
+  async getAllEventsAdmin(query: IEventQuery): Promise<IEventResponse> {
+    const {
+      status,
+      city,
+      startDate,
+      endDate,
+      page = 1,
+      limit = 12,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = query;
+
+    // Build filter object including inactive events for admin
+    const filter: any = {};
+
+    if (status) {
+      // Only include past events if status is explicitly 'PAST'
+      if (status === EventStatus.PAST) {
+        filter.status = status;
+      } else {
+        // Exclude past events from results unless status is 'PAST'
+        filter.status = { $ne: EventStatus.PAST };
+        if (status) {
+          filter.status = status;
+        }
+      }
+    } else {
+      // If no status is provided, exclude past events by default
+      filter.status = { $ne: EventStatus.PAST };
+    }
+
+    if (city) {
+      filter.location = new RegExp(city, "i");
+    }
+
+    // Date range filter
+    if (startDate || endDate) {
+      filter.startDate = {};
+      if (startDate) {
+        filter.startDate.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        filter.startDate.$lte = new Date(endDate);
+      }
+    }
+
+    // Calculate pagination
+    const skip = (page - 1) * limit;
+    const sortOptions: any = {};
+    sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+
+    // Execute query with all fields needed for admin
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .select("+createdBy +updatedBy +isActive")
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Event.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      events: events as IEvent[],
+      total,
+      page,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
+
+  /**
+   * Advanced search for admin with multiple criteria
+   */
+  async searchEventsAdmin(searchParams: {
+    searchTerm?: string;
+    startDate?: Date;
+    city?: string;
+    status?: EventStatus;
+    page: number;
+    limit: number;
+  }): Promise<IEventResponse> {
+    const { searchTerm, startDate, city, status, page, limit } = searchParams;
+
+    // Build search filter
+    const filter: any = {};
+
+    // Text search across multiple fields
+    if (searchTerm) {
+      filter.$or = [
+        { title: new RegExp(searchTerm, "i") },
+        { description: new RegExp(searchTerm, "i") },
+        { organizer: new RegExp(searchTerm, "i") },
+      ];
+    }
+
+    // Date filter
+    if (startDate) {
+      const searchDate = new Date(startDate);
+      const startOfDay = new Date(searchDate.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(searchDate.setHours(23, 59, 59, 999));
+      filter.startDate = {
+        $gte: startOfDay,
+        $lte: endOfDay,
+      };
+    }
+
+    // City filter
+    if (city) {
+      filter.location = new RegExp(city, "i");
+    }
+
+    // Status filter
+    if (status) {
+      filter.status = status;
+    }
+
+    const skip = (page - 1) * limit;
+
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .select("+createdBy +updatedBy +isActive")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Event.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      events: events as IEvent[],
+      total,
+      page,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
+
+  /**
+   * Clone an existing event
+   */
+  async cloneEvent(eventId: string, createdBy: string): Promise<IEvent | null> {
+    const originalEvent = await Event.findById(eventId).lean();
+
+    if (!originalEvent) {
+      return null;
+    }
+
+    // Create cloned event data
+    const clonedEventData = {
+      ...originalEvent,
+      _id: undefined, // Remove original ID
+      title: `${originalEvent.title} (Cloned)`,
+      status: EventStatus.DRAFT,
+      createdBy,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      // Reset counts
+      interestedCount: 0,
+      attendedCount: 0,
+    };
+
+    const clonedEvent = new Event(clonedEventData);
+    await clonedEvent.save();
+
+    return clonedEvent.toObject() as IEvent;
+  }
+
+  /**
+   * Create a blank event for admin editing
+   */
+  async createBlankEvent(createdBy: string): Promise<IEvent> {
+    const blankEventData = {
+      title: "New Event",
+      description: "Description goes here...",
+      status: EventStatus.DRAFT,
+      eventType: "OFFLINE" as const,
+      targetAudience: ["All"],
+      eventDateTime: new Date(),
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 2 * 60 * 60 * 1000), // 2 hours later
+      location: "",
+      address: "",
+      isVirtual: false,
+      speakers: [],
+      keyHighlights: [],
+      ticketTypes: [],
+      ticketPrice: 0,
+      starsToBeEarned: 50,
+      registrationLink: "",
+      ticketInfo: {
+        price: 0,
+        currency: "INR",
+      },
+      sponsors: [],
+      highlights: [],
+      interestedCount: 0,
+      attendedCount: 0,
+      organizer: "",
+      createdBy,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const blankEvent = new Event(blankEventData);
+    await blankEvent.save();
+
+    return blankEvent.toObject() as IEvent;
   }
 }

@@ -169,13 +169,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             }
 
-      if ("data" in p && typeof p.data === "object" && p.data !== null) {
+            if ("data" in p && typeof p.data === "object" && p.data !== null) {
               return {
                 ...defaultPulseData,
                 ...(p.data as Partial<PulseData>),
                 type: p.type?.toLowerCase() || "question",
-        pulseType,
-        qType: pulseType === "Advertisement" ? "ADVERTISEMENT" : (p as any).qType || "",
+                pulseType,
+                qType:
+                  pulseType === "Advertisement"
+                    ? "ADVERTISEMENT"
+                    : (p as any).qType || "",
               };
             }
 
@@ -184,7 +187,10 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               ...(p as Partial<PulseData>),
               type: p.type?.toLowerCase() || "question",
               pulseType,
-              qType: pulseType === "Advertisement" ? "ADVERTISEMENT" : (p as any).qType || "",
+              qType:
+                pulseType === "Advertisement"
+                  ? "ADVERTISEMENT"
+                  : (p as any).qType || "",
               questionOptions: p.questionOptions,
             };
           })
@@ -258,10 +264,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         pulse.qType = "ADVERTISEMENT";
         pulse.optionType = "text";
         pulse.options = ["Interested"];
-        return pulse.questionText.trim() !== "" &&
+        return (
+          pulse.questionText.trim() !== "" &&
           (imageInputModes[currentPulseIndex] === "file"
             ? !!uploadedImages[currentPulseIndex]
-            : (pulse.image || "").trim() !== "");
+            : (pulse.image || "").trim() !== "")
+        );
       }
       return false;
     });
@@ -519,7 +527,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             <Advertisement
               id="preview"
               questionText={currentPulse.questionText || ""}
-              image={currentPulse.image || uploadedImages[currentPulseIndex] || ""}
+              image={
+                currentPulse.image || uploadedImages[currentPulseIndex] || ""
+              }
               optionType="text"
               response={undefined}
               // onAnswer={() => {}}
@@ -991,7 +1001,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             <TextField
               fullWidth
               value={currentPulse.questionText ?? ""}
-              onChange={(e) => handleInputChange("questionText", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("questionText", e.target.value)
+              }
               sx={{
                 backgroundColor: "#333",
                 "& .MuiOutlinedInput-root": {
@@ -1311,7 +1323,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               </Typography>
               <DatePicker
                 value={publishOn || null}
-                onChange={(date) => setPublishOn(date)}
+                onChange={(date) =>
+                  setPublishOn(date ? new Date(date.valueOf()) : null)
+                }
                 slotProps={{
                   textField: {
                     fullWidth: true,
@@ -1455,7 +1469,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 <DatePicker
                   value={publishOn || null}
                   onChange={(date) => {
-                    setPublishOn(date);
+                    setPublishOn(date ? new Date(date.valueOf()) : null);
                     setConfirmDialog({
                       open: true,
                       action: "publish",

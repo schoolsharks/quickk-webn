@@ -22,6 +22,7 @@ import {
   ExpandLess,
   ExpandMore,
 } from "@mui/icons-material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/images/header/logo.webp";
 import AnimateOnState from "../../animation/AnimateOnState";
@@ -99,6 +100,13 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
+    id: "events",
+    label: "Events",
+    icon: <CalendarTodayIcon />,
+    path: "/admin/events",
+    feature: FeatureKeys.MODULES,
+  },
+  {
     id: "rewards",
     label: "Rewards",
     icon: <RewardsIcon />,
@@ -137,9 +145,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { hasFeatureAccess } = useFeatureAccess();
-  const [expandedItems, setExpandedItems] = useState<string[]>([
-    "target-audience",
-  ]);
+  const [expandedItems, setExpandedItems] = useState<string[]>([""]);
 
   const filteredMenuItems = menuItems.filter(
     (item) => hasFeatureAccess(item.feature) || !item.feature
@@ -151,7 +157,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   const handleItemClick = (item: MenuItem) => {
     // Only allow Target Audience to be clickable
-    if (item.id !== "target-audience" && item.id !== "learnings") {
+    if (
+      item.id !== "target-audience" &&
+      item.id !== "learnings" &&
+      item.id !== "events"
+    ) {
       return;
     }
 
@@ -183,13 +193,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   const isItemDisabled = (item: MenuItem) => {
     // Only Target Audience and Learnings are enabled, everything else is disabled
-    return !(item.id === "target-audience" || item.id === "learnings");
+    return !(
+      item.id === "target-audience" ||
+      item.id === "learnings" ||
+      item.id === "events"
+    );
   };
 
   const isActiveParent = (item: MenuItem) => {
     if (item.children) {
       // Only Target Audience should be active, others are disabled
-      if (item.id === "target-audience" || item.id === "learnings") {
+      if (
+        item.id === "target-audience" ||
+        item.id === "learnings" ||
+        item.id === "events"
+      ) {
         return true;
       }
       return false; // Disable all other menu items with children

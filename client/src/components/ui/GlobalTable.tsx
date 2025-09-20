@@ -7,14 +7,10 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  //   Chip,
   Box,
   Typography,
-  //   LinearProgress,
   Menu,
   MenuItem,
-  useTheme,
-  //   Tooltip,
 } from "@mui/material";
 import {
   MoreVert as MoreVertIcon,
@@ -96,14 +92,13 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
     }
     return value;
   };
-  const theme = useTheme();
 
   return (
     <Box
       sx={{
         // backgroundColor: "white",
         bgcolor: "white",
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid black`,
       }}
       p={"24px 28px"}
     >

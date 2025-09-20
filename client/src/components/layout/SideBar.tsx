@@ -347,7 +347,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               sx={{
                 // borderRadius: "8px",
                 bgcolor: isExpanded
-                  ? theme.palette.primary.main
+                  ? "#000000"
                   : "transparent",
               }}
             >
@@ -385,7 +385,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       minWidth: 0,
                       fontSize: "14px",
                       color: isExpanded
-                        ? theme.palette.primary.main
+                        ? "#000000"
                         : "#FFFFFF",
                       "& svg": {
                         fontSize: "20px",
@@ -421,7 +421,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <List
               component="div"
               disablePadding
-              sx={{ backgroundColor: theme.palette.primary.main, mb: 1 }}
+              sx={{ backgroundColor: "#000", mb: 1 }}
             >
               {accessibleChildren.map((child) => (
                 <ListItem key={child.id} disablePadding>
@@ -435,10 +435,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       pl: 6,
                       pr: 2.5,
                       height: 32,
-                      backgroundColor: theme.palette.primary.main,
+                      backgroundColor: "#000",
                       color: isActiveItem(child.path) ? "#6B21A8" : "#FFFFFF",
                       "&:hover": {
-                        backgroundColor: theme.palette.primary.main,
+                        backgroundColor: "#FFFFFF80",
                       },
                       borderRadius: 0,
                       mx: 1,
@@ -484,9 +484,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         width: DRAWER_WIDTH,
         overflowX: "hidden",
         height: "100%",
-        background: "#EACDFC",
+        // background: "#EACDFC",
         border: `1px solid ${theme.palette.primary.main}`,
-        boxShadow: "5px 0px 90px 11px #CD7BFF inset",
+        // boxShadow: "5px 0px 90px 11px #CD7BFF inset",
       }}
     >
       {/* Logo */}
@@ -553,7 +553,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         "& .MuiDrawer-paper": {
           width: DRAWER_WIDTH,
           boxSizing: "border-box",
-          backgroundColor: "background.default",
           borderRight: "1px solid rgba(160, 74, 212, 0.12)",
         },
       }}

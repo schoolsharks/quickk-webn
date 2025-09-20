@@ -2,7 +2,8 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import StatsCard from "../../../components/ui/StatsCard";
-import { Person, CalendarMonth } from "@mui/icons-material";
+import { Person } from "@mui/icons-material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 interface DashboardStatsProps {
   totalMembers: number;
@@ -42,7 +43,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
       title: "Upcoming Events",
       value: isLoading ? "..." : upcomingEvents,
       backgroundColor: "Black",
-      icons: <CalendarMonth />,
+      icons: <CalendarTodayIcon />,
       onManageClick: () => {
         navigate("/admin/events");
       },

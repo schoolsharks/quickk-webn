@@ -101,6 +101,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
         // backgroundColor: "white",
         bgcolor: "white",
         border: `1px solid ${theme.palette.primary.main}`,
+        height: "100%",
       }}
       p={"24px 28px"}
     >

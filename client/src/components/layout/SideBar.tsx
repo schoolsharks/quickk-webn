@@ -31,7 +31,7 @@ import { baseTransition } from "../../animation/transitions/baseTransition";
 import { FeatureKeys } from "../../features/onboarding/Types/features";
 import { useFeatureAccess } from "../../features/onboarding/hooks/useFeatureAccess";
 
-const DRAWER_WIDTH = 264;
+const DRAWER_WIDTH = 259;
 
 interface MenuItem {
   id: string;

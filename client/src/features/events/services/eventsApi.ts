@@ -4,7 +4,7 @@ export const eventsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getActiveEvents: builder.query({
       query: ({ type }: { type: "active" | "miscellaneous" }) => ({
-        url: "/admin/getActiveEvents",
+        url: "/user/getActiveEvents",
         method: "GET",
         params: { type },
       }),
@@ -13,7 +13,7 @@ export const eventsApi = api.injectEndpoints({
 
     getUpcomingEvents: builder.query({
       query: () => ({
-        url: "/admin/getUpcomingEvents",
+        url: "/user/getUpcomingEvents",
         method: "GET",
       }),
       transformResponse: (response: any) => response?.data.events,
@@ -21,7 +21,7 @@ export const eventsApi = api.injectEndpoints({
 
     getPastEvents: builder.query({
       query: () => ({
-        url: "/admin/getPastEvents",
+        url: "/user/getPastEvents",
         method: "GET",
       }),
       transformResponse: (response: any) => response?.data.events,
@@ -29,7 +29,7 @@ export const eventsApi = api.injectEndpoints({
 
     getEventById: builder.query({
       query: (eventId) => ({
-        url: `/admin/getEventById/${eventId}`,
+        url: `/user/getEventById/${eventId}`,
         method: "GET",
       }),
       transformResponse: (response: any) => response?.data,

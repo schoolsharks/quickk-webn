@@ -280,6 +280,7 @@ const DashBoardAnalytics: React.FC = () => {
               strokeWidth={2}
               fill="url(#gowomaniaGradient)"
               fillOpacity={1}
+              isAnimationActive={false}
             />
 
             {/* webn Area */}
@@ -291,6 +292,7 @@ const DashBoardAnalytics: React.FC = () => {
               strokeWidth={2}
               fill="url(#webnGradient)"
               fillOpacity={1}
+              isAnimationActive={false}
             />
           </AreaChart>
         </ResponsiveContainer>

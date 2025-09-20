@@ -1,17 +1,17 @@
 import { Box, Typography, Card, CardContent } from "@mui/material";
 import React from "react";
-import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import GlobalButton from "../../../components/ui/button";
 import Loader from "../../../components/ui/Loader";
 import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
-import { useGetActiveEventsQuery, useGetUpcomingEventsQuery } from "../../events/services/eventsApi";
+import { Download } from "@mui/icons-material";
+import {
+  useGetActiveEventsQuery,
+  useGetUpcomingEventsQuery,
+} from "../../events/services/eventsApi";
 
 const DashboardEvent: React.FC = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const {
     data: miscellaneousEventData,
     isError: isMiscellaneousError,
@@ -27,22 +27,14 @@ const DashboardEvent: React.FC = () => {
   });
 
   // Determine which event to display
-  const EventData = miscellaneousEventData || (upcomingEventsData && upcomingEventsData.length > 0 ? upcomingEventsData[0] : null);
+  const EventData =
+    miscellaneousEventData ||
+    (upcomingEventsData && upcomingEventsData.length > 0
+      ? upcomingEventsData[0]
+      : null);
   const isLoading = isMiscellaneousLoading || isUpcomingLoading;
   const isError = isMiscellaneousError && isUpcomingError;
   // Format today's date
-  const today = new Date();
-  const dayNumber = today.getDate();
-  const monthName = today
-    .toLocaleDateString("en-US", { month: "short" })
-    .toUpperCase();
-
-  const handleInterestedClick = () => {
-    // Navigate to event details page
-    if (EventData?._id) {
-      navigate(`/user/events/${EventData._id}`);
-    }
-  };
 
   if (isLoading) {
     return <Loader />;
@@ -51,11 +43,23 @@ const DashboardEvent: React.FC = () => {
   if (isError) {
     return <ErrorLayout />;
   }
+  //   const today = new Date();
+  const dayNumber = new Date(EventData?.startDate).getDate();
+  const monthName = new Date(EventData?.startDate)
+    .toLocaleDateString("en-US", { month: "short" })
+    .toUpperCase();
 
   // Handle case when no events are available
   if (!isLoading && !EventData) {
     return (
-      <Box mt={6}>
+      <Box
+        p="24px"
+        border={`1px solid ${theme.palette.primary.main}`}
+        height={"100%"}
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent="space-between"
+      >
         <Box
           display="flex"
           justifyContent="space-between"
@@ -63,7 +67,7 @@ const DashboardEvent: React.FC = () => {
           mb={2}
         >
           <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-            Today
+            Upcoming
           </Typography>
           <Typography
             variant="h4"
@@ -72,7 +76,7 @@ const DashboardEvent: React.FC = () => {
             sx={{ color: theme.palette.text.primary }}
           >
             10
-            <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
+            <Download sx={{ ml: 0.5, fontSize: "24px" }} />
           </Typography>
         </Box>
         <Card
@@ -90,7 +94,10 @@ const DashboardEvent: React.FC = () => {
           >
             No Events Available
           </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
+          <Typography
+            variant="body1"
+            sx={{ color: theme.palette.text.secondary }}
+          >
             There are no events scheduled for today or upcoming.
           </Typography>
         </Card>
@@ -104,15 +111,16 @@ const DashboardEvent: React.FC = () => {
       : EventData?.time || "";
 
   return (
-    <Box mt={6}>
+    <Box pt={"24px"} border={`1px solid ${theme.palette.primary.main}`}>
       <Box
         display="flex"
+        px={"24px"}
         justifyContent="space-between"
         alignItems="center"
-        mb={2}
+        // mb={1}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Today
+          Upcoming Event
         </Typography>
         <Typography
           variant="h4"
@@ -120,158 +128,150 @@ const DashboardEvent: React.FC = () => {
           alignItems="center"
           sx={{ color: theme.palette.text.primary }}
         >
-          10
-          <StarsOutlinedIcon sx={{ ml: 0.5, fontSize: "24px" }} />
+          <Download sx={{ ml: 0.5, fontSize: "24px" }} />
         </Typography>
       </Box>
 
-      <Card
-        sx={{
-          borderRadius: "0",
-          overflow: "hidden",
-          border: `2px solid ${theme.palette.primary.main}`,
-        }}
-      >
-        {/* Date Section */}
-        <Box
+      <Box px={"60px"} my={4}>
+        <Card
           sx={{
-            position: "relative",
-            height: "200px",
-            background: `linear-gradient(135deg, ${theme.palette.primary.light}40, ${theme.palette.primary.main}40)`,
-            display: "flex",
-            alignItems: "flex-start",
-            padding: 2,
+            borderRadius: "0",
+            overflow: "hidden",
+            border: `2px solid ${theme.palette.primary.main}`,
           }}
         >
-          {/* Date Badge */}
+          {/* Date Section */}
           <Box
-            zIndex={10}
             sx={{
-              backgroundColor: "black",
-              color: theme.palette.background.paper,
-              borderRadius: "0px",
-              p: "8px",
-              textAlign: "center",
-              minWidth: "50px",
+              position: "relative",
+              height: "200px",
+              background: `linear-gradient(135deg, ${theme.palette.primary.light}40, ${theme.palette.primary.main}40)`,
+              display: "flex",
+              alignItems: "flex-start",
+              padding: 2,
             }}
           >
-            <Typography
-              variant="h4"
+            {/* Date Badge */}
+            <Box
+              zIndex={10}
               sx={{
-                fontWeight: 700,
-                fontSize: "20px",
-                lineHeight: "24px",
-                margin: 0,
+                backgroundColor: "black",
+                color: theme.palette.background.paper,
+                borderRadius: "0px",
+                p: "8px",
+                textAlign: "center",
+                minWidth: "50px",
               }}
             >
-              {dayNumber}
-            </Typography>
-            <Typography
-              variant="h6"
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: "20px",
+                  lineHeight: "24px",
+                  margin: 0,
+                }}
+              >
+                {dayNumber}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  lineHeight: "14px",
+                  margin: 0,
+                }}
+              >
+                {monthName}
+              </Typography>
+            </Box>
+
+            {/* Dummy Image Placeholder */}
+            <Box
               sx={{
-                fontWeight: 600,
-                fontSize: "12px",
-                lineHeight: "14px",
-                margin: 0,
+                position: "absolute",
+                right: 0,
+                top: 0,
+                bottom: 0,
+                left: 0,
+                backgroundColor: theme.palette.background.default,
+                borderRadius: "0px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundImage: `url(${EventData?.eventImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
               }}
-            >
-              {monthName}
-            </Typography>
+            ></Box>
           </Box>
 
-          {/* Dummy Image Placeholder */}
-          <Box
-            sx={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              bottom: 0,
-              left: 0,
-              backgroundColor: theme.palette.background.default,
-              borderRadius: "0px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundImage: `url(${EventData?.eventImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          ></Box>
-        </Box>
-
-        {/* Content Section */}
-        <CardContent sx={{ padding: "16px !important" }}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="flex-start"
-            flexDirection={"column"}
-            gap={1}
-          >
-            <Box mb={1}>
+          {/* Content Section */}
+          <CardContent sx={{ padding: "16px !important" }}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="flex-start"
+              flexDirection={"column"}
+              gap={1}
+            >
+              <Box mb={1}>
+                <Typography
+                  sx={{
+                    color: theme.palette.text.primary,
+                    fontWeight: 700,
+                    fontSize: "25px",
+                  }}
+                >
+                  {EventData?.title || "Event Title"}
+                </Typography>
+              </Box>
               <Typography
+                variant="h4"
                 sx={{
                   color: theme.palette.text.primary,
-                  fontWeight: 700,
-                  fontSize: "25px",
+                  fontWeight: 600,
+                  fontSize: "20px",
                 }}
               >
-                {EventData?.title || "Event Title"}
+                {EventData?.location || "Location"}
               </Typography>
+              <Box
+                display={"flex"}
+                justifyContent="space-between"
+                width={"100%"}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                    fontSize: "14px",
+                  }}
+                >
+                  {eventTime}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.primary.light,
+                    fontSize: "14px",
+                    fontWeight: 500,
+                  }}
+                >
+                  +{EventData?.interestedCount || 0} interested
+                </Typography>
+              </Box>
             </Box>
-            <Typography
-              variant="h4"
-              sx={{
-                color: theme.palette.text.primary,
-                fontWeight: 600,
-                fontSize: "20px",
-              }}
-            >
-              {EventData?.location?.split(",")[2] || "Location"}
-            </Typography>
-            <Box display={"flex"} justifyContent="space-between" width={"100%"}>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: theme.palette.text.secondary,
-                  fontSize: "14px",
-                }}
-              >
-                {eventTime}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: theme.palette.primary.light,
-                  fontSize: "14px",
-                  fontWeight: 500,
-                }}
-              >
-                +{EventData?.interestedCount || 0} interested
-              </Typography>
-            </Box>
-          </Box>
-        </CardContent>
-        {/* Interested Button */}
-        <GlobalButton
-          onClick={handleInterestedClick}
-          fullWidth
-          sx={{
-            backgroundColor: theme.palette.text.primary,
-            color: theme.palette.background.paper,
-            textTransform: "none",
-            fontWeight: 600,
-            fontSize: "16px",
-            padding: "12px",
-            "&:hover": {
-              backgroundColor: theme.palette.text.secondary,
-            },
-          }}
-        >
-          Interested
-        </GlobalButton>
-      </Card>
+          </CardContent>
+        </Card>
+      </Box>
+      <Box bgcolor={"#404040"} p={2}>
+        <Typography variant="h4" color="white" textAlign={"center"}>
+          {EventData?.interestedCount + " Attending"}
+        </Typography>
+      </Box>
     </Box>
   );
 };

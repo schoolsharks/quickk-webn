@@ -331,7 +331,6 @@ const EventFormPage: React.FC = () => {
       );
       formDataToSend.append("sponsors", JSON.stringify(sponsorsData));
 
-      console.log("Submitting form data for event:", eventId, formDataToSend);
 
       await updateEvent({ eventId, eventData: formDataToSend }).unwrap();
 

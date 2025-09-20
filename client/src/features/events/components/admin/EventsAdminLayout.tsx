@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   Box,
@@ -98,115 +98,120 @@ const EventsAdminLayout: React.FC<EventsAdminLayoutProps> = ({
   const currentLoading = isSearching ? searchLoading : eventsLoading;
 
   // Helper function to update URL params
-  const updateSearchParams = useCallback((updates: Record<string, string | null>) => {
-    setSearchParams((prev) => {
-      const newParams = new URLSearchParams(prev);
+  const updateSearchParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
 
-      Object.entries(updates).forEach(([key, value]) => {
-        if (value === null || value === "" || value === "All") {
-          newParams.delete(key);
+        Object.entries(updates).forEach(([key, value]) => {
+          if (value === null || value === "" || value === "All") {
+            newParams.delete(key);
+          } else {
+            newParams.set(key, value);
+          }
+        });
+
+        return newParams;
+      });
+    },
+    [setSearchParams]
+  );
+
+  const handleSearch = useCallback(
+    (term: string) => {
+      updateSearchParams({
+        search: term,
+        page: "1", // Reset to page 1 when searching
+      });
+    },
+    [updateSearchParams]
+  );
+
+  const handleFilterChange = useCallback(
+    (newFilters: EventFilters) => {
+      updateSearchParams({
+        status: newFilters.status,
+        city: newFilters.city,
+        page: "1", // Reset to page 1 when filtering
+      });
+    },
+    [updateSearchParams]
+  );
+
+  const handleDateFilter = useCallback(
+    (date: string | null) => {
+      updateSearchParams({
+        date,
+        page: "1", // Reset to page 1 when date filtering
+      });
+    },
+    [updateSearchParams]
+  );
+
+  const handlePageChange = useCallback(
+    (_: React.ChangeEvent<unknown>, value: number) => {
+      updateSearchParams({
+        page: value.toString(),
+      });
+    },
+    [updateSearchParams]
+  );
+
+  const handleDeleteEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        await deleteEvent(eventId).unwrap();
+        setSnackbar({
+          open: true,
+          message: "Event deleted successfully",
+          severity: "success",
+        });
+        // Refetch data
+        if (isSearching) {
+          refetchSearch();
         } else {
-          newParams.set(key, value);
+          refetchEvents();
         }
-      });
-
-      return newParams;
-    });
-  }, [setSearchParams]);
-
-  const handleSearch = useCallback((term: string) => {
-    console.log("🔍 handleSearch called with:", term);
-    updateSearchParams({
-      search: term,
-      page: "1", // Reset to page 1 when searching
-    });
-  }, [updateSearchParams]);
-
-  const handleFilterChange = useCallback((newFilters: EventFilters) => {
-    console.log("🔧 handleFilterChange called with:", newFilters);
-    updateSearchParams({
-      status: newFilters.status,
-      city: newFilters.city,
-      page: "1", // Reset to page 1 when filtering
-    });
-  }, [updateSearchParams]);
-
-  const handleDateFilter = useCallback((date: string | null) => {
-    console.log("📅 handleDateFilter called with:", date);
-    updateSearchParams({
-      date,
-      page: "1", // Reset to page 1 when date filtering
-    });
-  }, [updateSearchParams]);
-
-  const handlePageChange = useCallback((_: React.ChangeEvent<unknown>, value: number) => {
-    console.log("📄 handlePageChange called with:", value);
-    updateSearchParams({
-      page: value.toString(),
-    });
-  }, [updateSearchParams]);
-
-  const handleDeleteEvent = useCallback(async (eventId: string) => {
-    try {
-      await deleteEvent(eventId).unwrap();
-      setSnackbar({
-        open: true,
-        message: "Event deleted successfully",
-        severity: "success",
-      });
-      // Refetch data
-      if (isSearching) {
-        refetchSearch();
-      } else {
-        refetchEvents();
+      } catch (error) {
+        setSnackbar({
+          open: true,
+          message: "Failed to delete event",
+          severity: "error",
+        });
       }
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Failed to delete event",
-        severity: "error",
-      });
-    }
-  }, [deleteEvent, isSearching, refetchSearch, refetchEvents]);
+    },
+    [deleteEvent, isSearching, refetchSearch, refetchEvents]
+  );
 
-  const handleCloneEvent = useCallback(async (eventId: string) => {
-    try {
-      await cloneEvent(eventId).unwrap();
-      setSnackbar({
-        open: true,
-        message: "Event cloned successfully",
-        severity: "success",
-      });
-      // Refetch data
-      if (isSearching) {
-        refetchSearch();
-      } else {
-        refetchEvents();
+  const handleCloneEvent = useCallback(
+    async (eventId: string) => {
+      try {
+        await cloneEvent(eventId).unwrap();
+        setSnackbar({
+          open: true,
+          message: "Event cloned successfully",
+          severity: "success",
+        });
+        // Refetch data
+        if (isSearching) {
+          refetchSearch();
+        } else {
+          refetchEvents();
+        }
+      } catch (error) {
+        setSnackbar({
+          open: true,
+          message: "Failed to clone event",
+          severity: "error",
+        });
       }
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Failed to clone event",
-        severity: "error",
-      });
-    }
-  }, [cloneEvent, isSearching, refetchSearch, refetchEvents]);
+    },
+    [cloneEvent, isSearching, refetchSearch, refetchEvents]
+  );
 
   const handleCloseSnackbar = useCallback(() => {
     setSnackbar((prev) => ({ ...prev, open: false }));
   }, []);
-
-  // Debug logging
-  useEffect(() => {
-    console.log("URL Params changed:", {
-      searchTerm,
-      selectedDate,
-      page,
-      status,
-      city,
-      isSearching,
-    });
-  }, [searchTerm, selectedDate, page, status, city, isSearching]);
 
   return (
     <Box sx={{ p: 3 }}>

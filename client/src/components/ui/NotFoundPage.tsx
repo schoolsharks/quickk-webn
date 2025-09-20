@@ -105,7 +105,7 @@ const NotFoundPage: React.FC = () => {
         <Button
           variant="contained"
           size="large"
-          onClick={() => navigate("/user/impact-dashboard")}
+          onClick={() => navigate("/user/dashboard")}
           sx={{
             background: "linear-gradient(90deg, #96FF45 0%, #4CAF50 100%)",
             color: "#222",

@@ -11,7 +11,7 @@ interface RouteGuardProps {
 const RouteGuard: React.FC<RouteGuardProps> = ({
   children,
   fallback,
-  redirectTo = '/admin/impact-dashboard'
+  redirectTo = '/admin/dashboard'
 }) => {
   const location = useLocation();
   const { hasRouteAccess } = useFeatureAccess();

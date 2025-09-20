@@ -651,6 +651,98 @@ class UserService {
     }
   }
 
+  async getEngagementAnalytics(companyId: string) {
+    try {
+      const currentYear = new Date().getFullYear();
+      const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+
+      // Get all users for the company
+      const users = await User.find({ company: companyId }).lean();
+      
+      // Import required models
+      const QuestionResponse = (await import('../../questions/model/question.response')).default;
+      const UserModule = (await import('../../learning/model/user.module.model')).default;
+      const { EventRegistration } = (await import('../../events/models/events.model'));
+
+      const analyticsData = await Promise.all(
+        months.map(async (month, index) => {
+          const monthStart = new Date(currentYear, index, 1);
+          const monthEnd = new Date(currentYear, index + 1, 0, 23, 59, 59, 999);
+
+          // Get users who had any activity in this month
+          const activeUserIds = new Set<string>();
+
+          // 1. Daily Pulse Engagement - users who responded to questions
+          const dailyPulseResponses = await QuestionResponse.find({
+            createdAt: { $gte: monthStart, $lte: monthEnd }
+          }).distinct('user');
+          dailyPulseResponses.forEach((userId) => activeUserIds.add(userId.toString()));
+
+          // 2. Learning Activity - users who completed modules or had learning activity
+          const learningActivities = await UserModule.find({
+            $or: [
+              { createdAt: { $gte: monthStart, $lte: monthEnd } },
+              { completedAt: { $gte: monthStart, $lte: monthEnd } }
+            ]
+          }).distinct('user');
+          learningActivities.forEach((userId) => activeUserIds.add(userId.toString()));
+
+          // 3. Event Participation - users who registered for events
+          if (EventRegistration) {
+            try {
+              const eventParticipations = await EventRegistration.find({
+                createdAt: { $gte: monthStart, $lte: monthEnd }
+              }).distinct('user');
+              eventParticipations.forEach((userId: any) => activeUserIds.add(userId.toString()));
+            } catch (error) {
+              console.log('Error fetching event registrations:', error);
+            }
+          }
+
+          // 4. General Activity - users with lastLearningActivity in this month
+          const generalActivity = users.filter(user => {
+            if (user.lastLearningActivity) {
+              const activityDate = new Date(user.lastLearningActivity);
+              return activityDate >= monthStart && activityDate <= monthEnd;
+            }
+            return false;
+          });
+          generalActivity.forEach(user => activeUserIds.add(user._id.toString()));
+
+          // 5. Users created in this month (new registrations)
+          const newUsers = users.filter((user: any) => {
+            if (user.createdAt) {
+              const createdDate = new Date(user.createdAt);
+              return createdDate >= monthStart && createdDate <= monthEnd;
+            }
+            return false;
+          });
+          newUsers.forEach(user => activeUserIds.add(user._id.toString()));
+
+          // Filter active users by webnClubMember status
+          const activeUsers = users.filter(user => activeUserIds.has(user._id.toString()));
+          
+          const gowomaniaCount = activeUsers.filter(user => !user.webnClubMember).length;
+          const webnCount = activeUsers.filter(user => user.webnClubMember === true).length;
+
+          return {
+            month,
+            gowomania: gowomaniaCount,
+            webn: webnCount
+          };
+        })
+      );
+
+      return analyticsData;
+    } catch (error) {
+      console.error('Error getting engagement analytics:', error);
+      throw new AppError('Failed to get engagement analytics', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }
 
 export default UserService;

@@ -61,7 +61,7 @@ const menuItems: MenuItem[] = [
     id: "dashboard",
     label: "Dashboard",
     icon: <DashboardIcon />,
-    path: "/admin/impact-dashboard",
+    path: "/admin/dashboard",
   },
   {
     id: "target-audience",
@@ -145,7 +145,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { hasFeatureAccess } = useFeatureAccess();
-  const [expandedItems, setExpandedItems] = useState<string[]>([""]);
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const filteredMenuItems = menuItems.filter(
     (item) => hasFeatureAccess(item.feature) || !item.feature
@@ -156,21 +156,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   );
 
   const handleItemClick = (item: MenuItem) => {
-    // Only allow Target Audience to be clickable
-    if (
-      item.id !== "target-audience" &&
-      item.id !== "learnings" &&
-      item.id !== "events"
-    ) {
-      return;
-    }
-
     if (item.children) {
       const isExpanded = expandedItems.includes(item.id);
       if (isExpanded) {
+        // Close the current item
         setExpandedItems(expandedItems.filter((id) => id !== item.id));
       } else {
-        setExpandedItems([...expandedItems, item.id]);
+        // Close all other expandable items and open only this one
+        setExpandedItems([item.id]);
       }
       // Don't navigate if item has children - only toggle dropdown
       return;
@@ -191,26 +184,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     );
   };
 
-  const isItemDisabled = (item: MenuItem) => {
-    // Only Target Audience and Learnings are enabled, everything else is disabled
-    return !(
-      item.id === "target-audience" ||
-      item.id === "learnings" ||
-      item.id === "events"
-    );
+  const isItemDisabled = () => {
+    // All items are now enabled
+    return false;
   };
 
   const isActiveParent = (item: MenuItem) => {
     if (item.children) {
-      // Only Target Audience should be active, others are disabled
-      if (
-        item.id === "target-audience" ||
-        item.id === "learnings" ||
-        item.id === "events"
-      ) {
-        return true;
-      }
-      return false; // Disable all other menu items with children
+      return item.children.some((child) => isActiveItem(child.path));
+    }
+    return isActiveItem(item.path);
+  };
+
+  const isExpandableItemActive = (item: MenuItem) => {
+    if (item.children) {
+      return item.children.some((child) => isActiveItem(child.path));
     }
     return false;
   };
@@ -221,7 +209,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     }
     const isExpanded = expandedItems.includes(item.id);
     const isActive = isActiveItem(item.path) || isActiveParent(item);
-    const isDisabled = isItemDisabled(item);
+    const isDisabled = isItemDisabled();
+    const shouldShowBlackBg = item.children ? isExpandableItemActive(item) : isActive;
 
     const accessibleChildren = item.children?.filter(
       (child) => !child.feature || hasFeatureAccess(child.feature)
@@ -364,20 +353,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               disablePadding
               sx={{
                 // borderRadius: "8px",
-                bgcolor: isExpanded
+                bgcolor: shouldShowBlackBg
                   ? "#000000"
                   : "transparent",
               }}
             >
               <ListItemButton
                 onClick={() => handleItemClick(item)}
-                // disabled={isDisabled}
                 sx={{
                   minHeight: 48,
                   px: 2.5,
-                  "&.Mui-disabled": {
-                    cursor: "not-allowed",
-                  },
                   ":hover": {
                     backgroundColor: "transparent",
                   },
@@ -389,7 +374,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               >
                 <Box
                   sx={{
-                    bgcolor: isExpanded ? "#FFFFFF" : "black",
+                    bgcolor: shouldShowBlackBg ? "#FFFFFF" : "black",
                     width: 40,
                     height: 40,
                     display: "flex",
@@ -402,7 +387,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: isExpanded
+                      color: shouldShowBlackBg
                         ? "#000000"
                         : "#FFFFFF",
                       "& svg": {
@@ -423,7 +408,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     "& .MuiListItemText-primary": {
                       fontWeight: 400,
                       fontSize: "14px",
-                      color: isExpanded ? "#FFFFFF" : "black",
+                      color: shouldShowBlackBg ? "#FFFFFF" : "black",
                     },
                   }}
                 />

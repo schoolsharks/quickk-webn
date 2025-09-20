@@ -8,6 +8,7 @@ import {
   Chip,
   InputAdornment,
   Tooltip,
+  Avatar,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,12 +18,14 @@ import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../../components/ui/button";
 import { useLazySearchNetworkUsersQuery } from "../../user/userApi";
+import { Person } from "@mui/icons-material";
 
 // Updated interface to match backend response
 interface NetworkProfile {
   _id: string;
   name: string;
   designation?: string;
+  businessLogo?: string;
   businessName?: string;
   businessCategory?: string;
   specialisation?: string;
@@ -75,11 +78,12 @@ const NetworkSearch: React.FC = () => {
           companyMail: user.companyMail,
           contact: user.contact,
           webnClubMember: user.webnClubMember || false,
+          businessLogo: user.businessLogo || "",
           isConnected: false,
           showIcons: false,
         })
       );
-      
+
       // Sort profiles: webnClubMember true comes first
       const sortedProfiles = transformedProfiles.sort((a, b) => {
         // If both are webn members or both are not, maintain original order
@@ -89,7 +93,7 @@ const NetworkSearch: React.FC = () => {
         // If b is webn member and a is not, b comes first
         return 1;
       });
-      
+
       setProfiles(sortedProfiles);
     } else {
       setProfiles([]);
@@ -197,39 +201,73 @@ Best regards`;
 
         <CardContent sx={{ padding: "0px !important" }}>
           <Box p={"16px"}>
-            {/* Name */}
-            <Typography
-              variant="h4"
-              sx={{
-                color: theme.palette.text.primary,
-                fontWeight: 700,
-                fontSize: "20px",
-                marginBottom: "4px",
-              }}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent={"space-between"}
+              mb={1}
             >
-              {profile.name}
-            </Typography>
-
-            {/* Company */}
-            <Box display="flex" alignItems="center" mb={2} mt={2}>
+              <Box>
+                {/* Name */}
+                <Typography
+                  variant="h4"
+                  sx={{
+                    color: theme.palette.text.primary,
+                    fontWeight: 700,
+                    fontSize: "20px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  {profile.name}
+                </Typography>
+                {/* Company */}
+                <Box display="flex" alignItems="center" mb={2} mt={1}>
+                  <Box
+                    sx={{
+                      width: "3px",
+                      height: "16px",
+                      backgroundColor: theme.palette.text.primary,
+                      marginRight: "8px",
+                    }}
+                  />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: theme.palette.text.primary,
+                      fontSize: "14px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {profile.businessName}
+                  </Typography>
+                </Box>
+              </Box>
               <Box
                 sx={{
-                  width: "3px",
-                  height: "16px",
-                  backgroundColor: theme.palette.text.primary,
-                  marginRight: "8px",
-                }}
-              />
-              <Typography
-                variant="body2"
-                sx={{
-                  color: theme.palette.text.primary,
-                  fontSize: "14px",
-                  fontWeight: 500,
+                  width: 60,
+                  height: 60,
+                  borderRadius: "50%",
+                  // background: `linear-gradient(135deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
+                  p: 0.5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                {profile.businessName}
-              </Typography>
+                <Avatar
+                  src={profile.businessLogo}
+                  alt={""}
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    bgcolor: "white",
+                  }}
+                >
+                  {!profile.businessLogo && (
+                    <Person sx={{ color: theme.palette.grey[400] }} />
+                  )}
+                </Avatar>
+              </Box>
             </Box>
 
             {/* Industries */}

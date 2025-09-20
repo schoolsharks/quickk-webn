@@ -77,9 +77,7 @@ const AdminMain: React.FC = () => {
       });
   }, [isAuthenticated]);
 
-  // if (loading) {
-  //   return <Loader />;
-  // }
+  
 
   return (
     <Routes>
@@ -99,7 +97,7 @@ const AdminMain: React.FC = () => {
               sx={{
                 display: "flex",
                 minHeight: "100vh",
-                backgroundColor: "#F7F0FB",
+                backgroundColor: "#ffffff",
               }}
             >
               <AdminSidebar />
@@ -107,7 +105,7 @@ const AdminMain: React.FC = () => {
                 component="main"
                 sx={{
                   flexGrow: 1,
-                  backgroundColor: "#F7F0FB",
+                  backgroundColor: "#ffffff",
                   minHeight: "100vh",
                   overflowX: "hidden",
                   color: "black",

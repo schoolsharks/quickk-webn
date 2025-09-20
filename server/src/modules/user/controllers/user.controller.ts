@@ -281,12 +281,20 @@ export const searchUsers = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const userId = req?.user.id;
   try {
-    const result = await SearchHelper.search(
+    const  result = await SearchHelper.search(
       searchConfigs.user,
       req.query,
       req?.user.companyId
     );
+    
+    // Filter out users where webnClubMember === false and the requesting user
+    if (result && Array.isArray(result.data)) {
+      result.data = result.data.filter(
+      (user: any) => user.webnClubMember !== false && user._id.toString() !== userId.toString()
+      );
+    }
     res.status(StatusCodes.OK).json(result);
   } catch (error) {
     res.status(500).json({ error: "Search failed" });

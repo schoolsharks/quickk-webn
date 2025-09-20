@@ -18,7 +18,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../../theme/theme";
 import ActiveLearning from "../../../components/ui/ActiveLearning";
-import GlobalButton from "../../../components/ui/button";
 import amajon from "../../../assets/images/user/amajon.png";
 import starbucks from "../../../assets/images/user/starbucks.png";
 import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
@@ -33,6 +32,7 @@ import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
 import { ArrowRight } from "lucide-react";
 import { useLogoutMutation } from "../userApi";
+import { Logout } from "@mui/icons-material";
 
 const ProfileLayout = () => {
   // const [badgesOpen, setBadgesOpen] = useState(false);
@@ -121,13 +121,35 @@ const ProfileLayout = () => {
           flexDirection={"row"}
           gap={1}
           alignItems={"center"}
+          justifyContent={"space-between"}
         >
-          <IconButton sx={{ color: "text.primary" }} onClick={navigateToHome}>
-            <ArrowBackIcon />
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            gap={1}
+            alignItems={"center"}
+          >
+            <IconButton sx={{ color: "text.primary" }} onClick={navigateToHome}>
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h1" fontSize={"25px"}>
+              Profile
+            </Typography>
+          </Box>
+          <IconButton
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            sx={{
+              p: "10px",
+              border: `2px solid ${theme.palette.primary.main}`,
+              color: theme.palette.primary.main,
+              "&:hover": {
+                bgcolor: "#F7F0FB",
+              },
+            }}
+          >
+            <Logout />
           </IconButton>
-          <Typography variant="h1" fontSize={"25px"}>
-            Profile
-          </Typography>
         </Box>
         {/* <Typography
           variant="body1"
@@ -628,25 +650,6 @@ const ProfileLayout = () => {
           </Collapse>
         </Box>
       </AnimateOnScroll> */}
-      {/* Logout Button */}
-      <Box sx={{ mt: "50px", px: "24px" }}>
-        <GlobalButton
-          onClick={handleLogout}
-          disabled={isLoggingOut}
-          fullWidth
-          sx={{
-            bgcolor: "white",
-            color: theme.palette.primary.main,
-            border: `2px solid ${theme.palette.primary.main}`,
-
-            "&:hover": {
-              bgcolor: "#F7F0FB",
-            },
-          }}
-        >
-          {isLoggingOut ? "Logging out..." : "Logout"}
-        </GlobalButton>
-      </Box>
     </Box>
   );
 };

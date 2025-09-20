@@ -2,76 +2,66 @@ import React, { useState } from "react";
 import {
   Box,
   Typography,
-  TextField,
   Avatar,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import { useGetParticipationLeaderboardQuery } from "../service/adminApi";
 
 interface Participant {
   id: string;
   rank: number;
   name: string;
   percentage: number;
-  avatar?: string;
+  businessLogo?: string;
+  businessName?: string;
 }
-
-// Mock data - replace with your actual data
-const mockParticipants: Participant[] = [
-  {
-    id: "1",
-    rank: 1,
-    name: "Ujjwal Kwatra",
-    percentage: 98,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar1.webp",
-  },
-  {
-    id: "2",
-    rank: 2,
-    name: "Vidhi Chawla",
-    percentage: 95,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar2.webp",
-  },
-  {
-    id: "3",
-    rank: 3,
-    name: "Raj Mishra",
-    percentage: 93,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar3.webp",
-  },
-  {
-    id: "4",
-    rank: 4,
-    name: "Hardik Kapoor",
-    percentage: 88,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar4.webp",
-  },
-  {
-    id: "5",
-    rank: 5,
-    name: "Mishri Sinha",
-    percentage: 80,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar5.webp",
-  },
-  {
-    id: "6",
-    rank: 6,
-    name: "Rahul Pandey",
-    percentage: 89,
-    avatar: "https://quickk.s3.ap-south-1.amazonaws.com/avatar1.webp",
-  },
-];
 
 const ParticipationBoard: React.FC = () => {
   const theme = useTheme();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [participants] = useState<Participant[]>(mockParticipants);
+  const [searchQuery, _setSearchQuery] = useState("");
 
-  const filteredParticipants = participants.filter((participant) =>
+  // Fetch real participation leaderboard data
+  const {
+    data: participationResponse,
+    isLoading,
+    error,
+  } = useGetParticipationLeaderboardQuery({});
+
+  // Fallback data in case of error
+  const fallbackParticipants: Participant[] = [
+    {
+      id: "1",
+      rank: 1,
+      name: "Ujjwal Kwatra",
+      percentage: 98,
+      businessLogo: "",
+    },
+    {
+      id: "2",
+      rank: 2,
+      name: "Vidhi Chawla",
+      percentage: 95,
+      businessLogo: "",
+    },
+    {
+      id: "3",
+      rank: 3,
+      name: "Raj Mishra",
+      percentage: 93,
+      businessLogo: "",
+    },
+  ];
+
+  // Use real data if available, otherwise use fallback
+  const participants = participationResponse?.data || fallbackParticipants;
+
+  const filteredParticipants = participants.filter((participant: Participant) =>
     participant.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -83,8 +73,9 @@ const ParticipationBoard: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: "#FFFFFF",
         p: "24px",
+        border: `1px solid ${theme.palette.primary.main}`,
         height: "100%",
         minHeight: 500,
       }}
@@ -115,41 +106,43 @@ const ParticipationBoard: React.FC = () => {
             <DownloadIcon />
           </IconButton>
         </Box>
-
-        {/* Search Bar */}
-        <TextField
-          name="Search"
-          placeholder="Search"
-          variant="standard"
-          fullWidth
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{
-            mt: 0,
-            p: 0,
-            "& .MuiInputBase-root": {
-              borderRadius: "0",
-            },
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: theme.palette.background.paper,
-              borderRadius: 0,
-              "& fieldset": {
-                borderColor: "transparent",
-              },
-              "&:hover fieldset": {
-                borderColor: theme.palette.text.secondary,
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.primary.main,
-              },
-            },
-          }}
-        />
       </Box>
 
       {/* Participants List */}
+      {isLoading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 200,
+            mt: "24px",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 200,
+            mt: "24px",
+            flexDirection: "column",
+          }}
+        >
+          <Typography variant="body1" color="error" sx={{ mb: 1 }}>
+            Failed to load participation data
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Showing fallback data
+          </Typography>
+        </Box>
+      ) : null}
+
       <List sx={{ p: 0, mt: "24px" }}>
-        {filteredParticipants.map((participant) => (
+        {filteredParticipants.map((participant: Participant) => (
           <ListItem
             key={participant.id}
             sx={{
@@ -159,8 +152,8 @@ const ParticipationBoard: React.FC = () => {
                 participant.rank === 1
                   ? theme.palette.primary.main
                   : participant.rank <= 3
-                  ? theme.palette.background.paper
-                  : "black",
+                  ? "#444444"
+                  : "#0D0D0D",
               border: participant.rank > 3 ? "1px solid #FFFFFF80" : "none",
               "&:hover": {
                 opacity: 0.9,
@@ -169,19 +162,19 @@ const ParticipationBoard: React.FC = () => {
           >
             <ListItemAvatar>
               <Avatar
-                src={participant.avatar}
+                src={participant.businessLogo}
                 alt={participant.name}
                 sx={{
                   borderRadius: 0,
                   width: 40,
                   height: 40,
-                  bgcolor: theme.palette.text.primary,
+                  bgcolor: "#FFFFFF",
                   color: theme.palette.background.default,
                   fontWeight: 600,
                   fontSize: 18,
                 }}
               >
-                {!participant.avatar && participant.name[0]}
+                {!participant.businessLogo && participant.name[0]}
               </Avatar>
             </ListItemAvatar>
 
@@ -192,7 +185,7 @@ const ParticipationBoard: React.FC = () => {
                   color:
                     participant.rank === 1
                       ? theme.palette.background.default
-                      : theme.palette.text.primary,
+                      : "white",
                   fontSize: "16px",
                   // minWidth: 40,
                 }}
@@ -206,7 +199,7 @@ const ParticipationBoard: React.FC = () => {
                   color:
                     participant.rank === 1
                       ? theme.palette.background.default
-                      : theme.palette.text.primary,
+                      : "white",
                   fontSize: "16px",
                   flex: 1,
                   ml: 2,
@@ -221,7 +214,7 @@ const ParticipationBoard: React.FC = () => {
                   color:
                     participant.rank === 1
                       ? theme.palette.background.default
-                      : theme.palette.text.primary,
+                      : "white",
                   fontSize: "16px",
                   mr: 2,
                 }}
@@ -234,7 +227,7 @@ const ParticipationBoard: React.FC = () => {
                   color:
                     participant.rank === 1
                       ? theme.palette.background.default
-                      : theme.palette.text.primary,
+                      : "white",
                 }}
               >
                 <DownloadIcon />

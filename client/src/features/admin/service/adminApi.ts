@@ -185,6 +185,14 @@ export const adminApi = api.injectEndpoints({
             providesTags: ['Admin'],
         }),
 
+        getParticipationLeaderboard: builder.query({
+            query: () => ({
+                url: '/admin/getParticipationLeaderboard',
+                method: 'GET',
+            }),
+            providesTags: ['Admin'],
+        }),
+
     }),
 });
 
@@ -206,4 +214,5 @@ export const {
     useGetActiveUsersStatsQuery,
     useGetDashboardStatsQuery,
     useGetEngagementAnalyticsQuery,
+    useGetParticipationLeaderboardQuery,
 } = adminApi;

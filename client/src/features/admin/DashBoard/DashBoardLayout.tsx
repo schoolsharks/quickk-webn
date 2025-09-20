@@ -3,13 +3,15 @@ import React from "react";
 import DashboardStats from "./DashBoardStats";
 import DashboardTables from "./DashBoardTable";
 import DashBoardAnalytics from "./DashBoardAnalytics";
-import DailyPulseDC from "./DailyPulseDC";
+// import DailyPulseDC from "./DailyPulseDC";
 import ParticipationBoard from "./ParticipationBoard";
-import TotalUserChart from "./TotalUserChart";
+// import TotalUserChart from "./TotalUserChart";
 import { useGetDashboardStatsQuery } from "../service/adminApi";
+import DashboardEvent from "./DashboardEvent";
 
 const DashBoardLayout: React.FC = () => {
-  const { data: dashboardStatsData, isLoading: statsLoading } = useGetDashboardStatsQuery({});
+  const { data: dashboardStatsData, isLoading: statsLoading } =
+    useGetDashboardStatsQuery({});
 
   return (
     <Grid container p={"24px"} spacing={"12px"}>
@@ -29,17 +31,22 @@ const DashBoardLayout: React.FC = () => {
           <ParticipationBoard />
         </Grid>
       </Grid>
-      <Grid size={12}>
-        <DashboardTables />
-      </Grid>
       <Grid container size={12} spacing={"12px"}>
+        <Grid size={8}>
+          <DashboardTables />
+        </Grid>
+        <Grid size={4}>
+          <DashboardEvent />
+        </Grid>
+      </Grid>
+      {/* <Grid container size={12} spacing={"12px"}>
         <Grid size={8}>
           <TotalUserChart />
         </Grid>
         <Grid size={4}>
           <DailyPulseDC />
         </Grid>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

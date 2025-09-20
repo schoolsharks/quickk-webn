@@ -55,6 +55,27 @@ const DashboardTables: React.FC = () => {
       averageScore: "100%",
       durationActive: "4 Months",
     },
+    {
+      module: "Entrepreneurship",
+      users: 700,
+      engagement: "62%",
+      averageScore: "60%",
+      durationActive: "2 Months",
+    },
+    {
+      module: "Scam Awareness",
+      users: 3456,
+      engagement: "48%",
+      averageScore: "10%",
+      durationActive: "1 Month",
+    },
+    {
+      module: "Soft Skills",
+      users: 1245,
+      engagement: "20%",
+      averageScore: "100%",
+      durationActive: "4 Months",
+    },
   ];
 
   // Participation Data
@@ -231,7 +252,7 @@ const DashboardTables: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", height: "100%" }}>
       <Grid container spacing={3}>
         {/* Learning Overview Table */}
         <Grid size={12}>

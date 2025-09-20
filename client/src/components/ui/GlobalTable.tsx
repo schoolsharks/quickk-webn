@@ -11,6 +11,7 @@ import {
   Typography,
   Menu,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import {
   MoreVert as MoreVertIcon,
@@ -66,6 +67,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedRow, setSelectedRow] = React.useState<any>(null);
+  const theme = useTheme();
 
   const handleActionClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -98,7 +100,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
       sx={{
         // backgroundColor: "white",
         bgcolor: "white",
-        border: `1px solid black`,
+        border: `1px solid ${theme.palette.primary.main}`,
       }}
       p={"24px 28px"}
     >

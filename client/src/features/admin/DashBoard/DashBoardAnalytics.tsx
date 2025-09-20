@@ -1,5 +1,11 @@
 import React from "react";
-import { Box, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  useTheme,
+  CircularProgress,
+} from "@mui/material";
 import {
   AreaChart,
   Area,
@@ -9,29 +15,68 @@ import {
   ResponsiveContainer,
   //   Legend,
 } from "recharts";
+import { useGetEngagementAnalyticsQuery } from "../service/adminApi";
 
 interface EngagementData {
   month: string;
-  learnings: number;
-  challenges: number;
+  gowomania: number;
+  webn: number;
 }
 
 const DashBoardAnalytics: React.FC = () => {
-  // Static data matching the chart pattern from the image
-  const engagementData: EngagementData[] = [
-    { month: "Jan", learnings: 500, challenges: 200 },
-    { month: "Feb", learnings: 250, challenges: 180 },
-    { month: "Mar", learnings: 280, challenges: 220 },
-    { month: "Apr", learnings: 260, challenges: 350 },
-    { month: "May", learnings: 240, challenges: 380 },
-    { month: "Jun", learnings: 200, challenges: 450 },
-    { month: "Jul", learnings: 180, challenges: 400 },
-    { month: "Aug", learnings: 160, challenges: 320 },
-    { month: "Sep", learnings: 140, challenges: 350 },
-    { month: "Oct", learnings: 120, challenges: 280 },
-    { month: "Nov", learnings: 150, challenges: 250 },
-    { month: "Dec", learnings: 130, challenges: 420 },
+  const theme = useTheme();
+
+  // Fetch real engagement analytics data
+  const {
+    data: analyticsResponse,
+    isLoading,
+    error,
+  } = useGetEngagementAnalyticsQuery({});
+
+  // Static fallback data in case of error
+  const fallbackData: EngagementData[] = [
+    { month: "Jan", gowomania: 500, webn: 200 },
+    { month: "Feb", gowomania: 250, webn: 180 },
+    { month: "Mar", gowomania: 280, webn: 220 },
+    { month: "Apr", gowomania: 260, webn: 350 },
+    { month: "May", gowomania: 240, webn: 380 },
+    { month: "Jun", gowomania: 200, webn: 450 },
+    { month: "Jul", gowomania: 180, webn: 400 },
+    { month: "Aug", gowomania: 160, webn: 320 },
+    { month: "Sep", gowomania: 140, webn: 350 },
+    { month: "Oct", gowomania: 120, webn: 280 },
+    { month: "Nov", gowomania: 150, webn: 250 },
+    { month: "Dec", gowomania: 130, webn: 420 },
   ];
+
+  // Use real data if available, otherwise use fallback
+  const engagementData: EngagementData[] =
+    analyticsResponse?.data || fallbackData;
+
+  // Calculate dynamic Y-axis scale based on data
+  const getOptimalYAxisScale = (data: EngagementData[]) => {
+    const allValues = data.flatMap((item) => [item.gowomania, item.webn]);
+    const maxValue = Math.max(...allValues);
+
+    if (maxValue === 0) return { domain: [0, 10], ticks: [0, 2, 4, 6, 8, 10] };
+
+    // Add 20% padding to the maximum value
+    const paddedMax = Math.ceil(maxValue * 1.2);
+
+    // Create nice round numbers for ticks
+    const tickCount = 5;
+    const tickInterval = Math.ceil(paddedMax / tickCount);
+    const roundedMax = tickInterval * tickCount;
+
+    const ticks = [];
+    for (let i = 0; i <= tickCount; i++) {
+      ticks.push(i * tickInterval);
+    }
+
+    return { domain: [0, roundedMax], ticks };
+  };
+
+  const yAxisConfig = getOptimalYAxisScale(engagementData);
 
   // Custom legend component
   const CustomLegend = () => (
@@ -52,8 +97,8 @@ const DashBoardAnalytics: React.FC = () => {
             borderRadius: 0,
           }}
         />
-        <Typography variant="body2" sx={{ color: "white", fontSize: "12px" }}>
-          Modules
+        <Typography variant="body2" sx={{ color: "black", fontSize: "12px" }}>
+          Gowomania
         </Typography>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -61,12 +106,12 @@ const DashBoardAnalytics: React.FC = () => {
           sx={{
             width: 15,
             height: 15,
-            backgroundColor: "#3b82f6",
+            backgroundColor: "primary.main",
             borderRadius: 0,
           }}
         />
-        <Typography variant="body2" sx={{ color: "white", fontSize: "12px" }}>
-          Challenges
+        <Typography variant="body2" sx={{ color: "black", fontSize: "12px" }}>
+          Webn
         </Typography>
       </Box>
     </Box>
@@ -75,11 +120,13 @@ const DashBoardAnalytics: React.FC = () => {
   return (
     <Paper
       sx={{
-        height:"100%",
+        height: "100%",
         p: 3,
-        background: "#0D0D0D",
+        background: "#FFFFFF",
         borderRadius: "0",
-        color: "white",
+        boxShadow: "none",
+        color: "black",
+        border: `1px solid ${theme.palette.primary.main}`,
         // height: "100%",
       }}
     >
@@ -97,7 +144,7 @@ const DashBoardAnalytics: React.FC = () => {
             <Typography
               variant="h4"
               sx={{
-                color: "white",
+                color: "black",
                 mb: 0.5,
               }}
             >
@@ -107,8 +154,8 @@ const DashBoardAnalytics: React.FC = () => {
               variant="body2"
               sx={{
                 color: "primary.main",
-                fontSize: "12px",
-                fontWeight: 500,
+                fontSize: "14px",
+                fontWeight: 700,
               }}
             >
               (+5) more in 2025
@@ -120,6 +167,36 @@ const DashBoardAnalytics: React.FC = () => {
 
       {/* Chart */}
       <Box sx={{ height: 350, mt: 2 }}>
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="body1" color="error" sx={{ mb: 1 }}>
+              Failed to load analytics data
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Showing fallback data
+            </Typography>
+          </Box>
+        ) : null}
+
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={engagementData}
@@ -131,9 +208,9 @@ const DashBoardAnalytics: React.FC = () => {
             }}
           >
             <defs>
-              {/* Gradient for Learnings */}
+              {/* Gradient for gowomania */}
               <linearGradient
-                id="learningsGradient"
+                id="gowomaniaGradient"
                 x1="0"
                 y1="0"
                 x2="0"
@@ -145,14 +222,8 @@ const DashBoardAnalytics: React.FC = () => {
                 <stop offset="100%" stopColor="#96FF43" stopOpacity={0.1} />
               </linearGradient>
 
-              {/* Gradient for Challenges */}
-              <linearGradient
-                id="challengesGradient"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
+              {/* Gradient for webn */}
+              <linearGradient id="webnGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
                 <stop offset="50%" stopColor="#2563eb" stopOpacity={0.6} />
                 <stop offset="100%" stopColor="#1d4ed8" stopOpacity={0.4} />
@@ -161,7 +232,7 @@ const DashBoardAnalytics: React.FC = () => {
 
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="rgba(255, 255, 255, 0.1)"
+              stroke="black"
               horizontal={true}
               vertical={false}
             />
@@ -171,7 +242,7 @@ const DashBoardAnalytics: React.FC = () => {
               axisLine={false}
               tickLine={false}
               tick={{
-                fill: "rgba(255, 255, 255, 0.7)",
+                fill: "black",
                 fontSize: 12,
               }}
               dy={10}
@@ -181,32 +252,32 @@ const DashBoardAnalytics: React.FC = () => {
               axisLine={false}
               tickLine={false}
               tick={{
-                fill: "rgba(255, 255, 255, 0.7)",
+                fill: "black",
                 fontSize: 12,
               }}
-              domain={[0, 500]}
-              ticks={[0, 100, 200, 300, 400, 500]}
+              domain={yAxisConfig.domain}
+              ticks={yAxisConfig.ticks}
             />
 
-            {/* Learnings Area */}
+            {/* gowomania Area */}
             <Area
               type="monotone"
-              dataKey="learnings"
+              dataKey="gowomania"
               stackId="1"
               stroke="#4ade80"
               strokeWidth={2}
-              fill="url(#learningsGradient)"
+              fill="url(#gowomaniaGradient)"
               fillOpacity={1}
             />
 
-            {/* Challenges Area */}
+            {/* webn Area */}
             <Area
               type="monotone"
-              dataKey="challenges"
+              dataKey="webn"
               stackId="1"
               stroke="#3b82f6"
               strokeWidth={2}
-              fill="url(#challengesGradient)"
+              fill="url(#webnGradient)"
               fillOpacity={1}
             />
           </AreaChart>

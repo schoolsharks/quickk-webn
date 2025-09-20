@@ -6,12 +6,20 @@ import DashBoardAnalytics from "./DashBoardAnalytics";
 import DailyPulseDC from "./DailyPulseDC";
 import ParticipationBoard from "./ParticipationBoard";
 import TotalUserChart from "./TotalUserChart";
+import { useGetDashboardStatsQuery } from "../service/adminApi";
 
 const DashBoardLayout: React.FC = () => {
+  const { data: dashboardStatsData, isLoading: statsLoading } = useGetDashboardStatsQuery({});
+
   return (
     <Grid container p={"24px"} spacing={"12px"}>
       <Grid size={12}>
-        <DashboardStats />
+        <DashboardStats
+          totalMembers={dashboardStatsData?.data?.totalMembers || 0}
+          totalSignups={dashboardStatsData?.data?.totalSignups || 0}
+          upcomingEvents={dashboardStatsData?.data?.upcomingEvents || 0}
+          isLoading={statsLoading}
+        />
       </Grid>
       <Grid container size={12} spacing={"12px"}>
         <Grid size={8}>

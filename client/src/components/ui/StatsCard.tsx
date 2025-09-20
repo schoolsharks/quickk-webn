@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Card, CardContent } from "@mui/material";
 
-interface StatsCardProps {
+export interface StatsCardProps {
   title: string;
   value: string | number;
   subtitle?: string;

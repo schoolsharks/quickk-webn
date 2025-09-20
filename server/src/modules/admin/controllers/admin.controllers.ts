@@ -12,11 +12,14 @@ import jwt from 'jsonwebtoken';
 import generateOtp from '../../../utils/generateOtp';
 import CompanyFeatureService from '../../adminOnboarding/services/companyFeature.service';
 import adminOtpTrigger from '../../../services/emails/triggers/admin/adminOtpTrigger';
+import { EventService } from '../../events/services/events.services';
+import { IUser } from '../../user/types/interfaces';
 
 
 const adminService = new AdminService();
 const userservice = new userService();
 const companyFeatureService = new CompanyFeatureService();
+const eventService = new EventService();
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -205,6 +208,57 @@ export const checkAdminEmailExists = async (req: Request, res: Response, next: N
         res.status(StatusCodes.OK).json({
             success: true,
             message: 'Admin email is available'
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getDashboardStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        
+        // Get total users count for this company
+        const allUsers = await userservice.getAllUsers(companyId);
+        const totalMembers = allUsers.length;
+        
+        // Get total signups (we'll consider all users as signups)
+        const totalSignups = allUsers.filter((user: IUser) => !user.webnClubMember).length;
+        
+        // Get upcoming events count
+        const upcomingEventsResult = await eventService.getUpcomingEvents(1, 1000); // Get all upcoming events
+        const upcomingEventsCount = upcomingEventsResult.total;
+        
+        const dashboardStats = {
+            totalMembers,
+            totalSignups,
+            upcomingEvents: upcomingEventsCount
+        };
+        
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Dashboard stats retrieved successfully',
+            data: dashboardStats
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getEngagementAnalytics = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const engagementData = await userservice.getEngagementAnalytics(companyId);
+        
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Engagement analytics retrieved successfully',
+            data: engagementData
         });
     } catch (error) {
         next(error);

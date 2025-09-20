@@ -1,45 +1,50 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
-import DashboardStatsCard from "../../../components/ui/DashboardStatsCard";
-import DashboardActiveUsersCard from "../../../components/ui/DashboardActiveUsersCard";
 import { useNavigate } from "react-router-dom";
+import StatsCard from "../../../components/ui/StatsCard";
+import { Person, CalendarMonth } from "@mui/icons-material";
 
-interface DashboardStatsData {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  valueColor?: string;
-  onManageClick?: () => void;
+interface DashboardStatsProps {
+  totalMembers: number;
+  totalSignups: number;
+  upcomingEvents: number;
+  isLoading?: boolean;
 }
 
-const DashboardStats: React.FC = () => {
+const DashboardStats: React.FC<DashboardStatsProps> = ({
+  totalMembers = 0,
+  totalSignups = 0,
+  upcomingEvents = 0,
+  isLoading = false,
+}) => {
   const navigate = useNavigate();
 
-  const statsData: DashboardStatsData[] = [
+  const statsData = [
     {
-      title: "Total Modules",
-      value: "35",
-      subtitle: "Manage",
+      title: "Total Members",
+      value: isLoading ? "..." : totalMembers,
       backgroundColor: "black",
-      textColor: "primary.main",
-      valueColor: "primary.main",
+      icons: <Person />,
       onManageClick: () => {
-        // Handle manage click - for now just log
-        navigate("/admin/learnings/modules");
+        navigate("/admin/members/webn");
       },
     },
     {
-      title: "Daily Interactions",
-      value: "220",
-      subtitle: "Manage",
+      title: "Total Signups",
+      value: isLoading ? "..." : totalSignups,
       backgroundColor: "#464646",
-      textColor: "primary.main",
-      valueColor: "primary.main",
+      icons: <Person />,
       onManageClick: () => {
-        // Handle manage click - for now just log
-        navigate("/admin/learnings/dailyInteraction");
+        navigate("/admin/members/gowomania");
+      },
+    },
+    {
+      title: "Upcoming Events",
+      value: isLoading ? "..." : upcomingEvents,
+      backgroundColor: "Black",
+      icons: <CalendarMonth />,
+      onManageClick: () => {
+        navigate("/admin/events");
       },
     },
   ];
@@ -49,24 +54,16 @@ const DashboardStats: React.FC = () => {
       <Grid container spacing={0}>
         {statsData.map((stat, index) => (
           <Grid size={4} key={index}>
-            <DashboardStatsCard
+            <StatsCard
+              icon={stat.icons}
               title={stat.title}
               value={stat.value}
-              subtitle={stat.subtitle}
               backgroundColor={stat.backgroundColor}
-              textColor={stat.textColor}
-              valueColor={stat.valueColor}
-              onManageClick={stat.onManageClick}
+              textColor="white"
+              iconColor="white"
             />
           </Grid>
         ))}
-        <Grid size={4}>
-          <DashboardActiveUsersCard
-            backgroundColor="black"
-            textColor="primary.main"
-            valueColor="primary.main"
-          />
-        </Grid>
       </Grid>
     </Box>
   );

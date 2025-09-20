@@ -64,6 +64,20 @@ router.post(
     asyncHandeler(adminControllers.resendAdminOtp)
 );
 
+router.get(
+    '/getDashboardStats',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getDashboardStats)
+);
+
+router.get(
+    '/getEngagementAnalytics',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getEngagementAnalytics)
+);
+
 
 // Daily Pulse Route
 router.get(

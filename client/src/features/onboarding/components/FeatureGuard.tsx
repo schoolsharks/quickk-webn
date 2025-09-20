@@ -14,7 +14,7 @@ const FeatureGuard: React.FC<FeatureGuardProps> = ({
   feature,
   children,
   fallback,
-  redirectTo = "/admin/impact-dashboard",
+  redirectTo = "/admin/dashboard",
 }) => {
   const { hasFeatureAccess } = useFeatureAccess();
 

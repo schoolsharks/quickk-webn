@@ -169,6 +169,22 @@ export const adminApi = api.injectEndpoints({
             }),
         }),
 
+        getDashboardStats: builder.query({
+            query: () => ({
+                url: '/admin/getDashboardStats',
+                method: 'GET',
+            }),
+            providesTags: ['Admin'],
+        }),
+
+        getEngagementAnalytics: builder.query({
+            query: () => ({
+                url: '/admin/getEngagementAnalytics',
+                method: 'GET',
+            }),
+            providesTags: ['Admin'],
+        }),
+
     }),
 });
 
@@ -188,4 +204,6 @@ export const {
     useDeleteUserByIdMutation,
     useSearchUsersQuery,
     useGetActiveUsersStatsQuery,
+    useGetDashboardStatsQuery,
+    useGetEngagementAnalyticsQuery,
 } = adminApi;

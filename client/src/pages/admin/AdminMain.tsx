@@ -29,6 +29,7 @@ import BulkUserUploadPage from "./BulkUserUploadPage";
 import GowomaniaUsers from "../../features/admin/user/GowomaniaUsers";
 import EventsAdminPage from "../../features/events/pages/EventsAdminPage";
 import EventFormPage from "./EventFormPage";
+import Loader from "../../components/ui/Loader";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -57,7 +58,7 @@ const Settings = () => (
 
 const AdminMain: React.FC = () => {
   const [fetchAdmin] = useLazyFetchAdminQuery();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated,loading } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
     fetchAdmin({})
@@ -79,7 +80,9 @@ const AdminMain: React.FC = () => {
       });
   }, [isAuthenticated]);
 
-  
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Routes>
@@ -116,7 +119,7 @@ const AdminMain: React.FC = () => {
                 <BreadcrumbHeader />
                 {/* <RouteGuard> */}
                 <Routes>
-                  <Route path="/impact-dashboard" element={<Dashboard />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
 
                   {/* Learning routes */}
                   <Route

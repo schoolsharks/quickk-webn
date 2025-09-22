@@ -4,7 +4,7 @@ import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
-import { useGetActiveEventsQuery } from "../services/eventsApi";
+import { useGetUpcomingEventsQuery } from "../services/eventsApi";
 import Loader from "../../../components/ui/Loader";
 import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
@@ -13,10 +13,11 @@ const InterestingEvent: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const {
-    data: EventData,
+    data: EventDataArray,
     isError,
     isLoading,
-  } = useGetActiveEventsQuery({ type: "miscellaneous" });
+  } = useGetUpcomingEventsQuery({});
+  const EventData = EventDataArray?.[0];
   // Format today's date
   // const today = new Date();
   // const dayNumber = today.getDate();

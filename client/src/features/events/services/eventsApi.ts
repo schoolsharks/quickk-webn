@@ -3,7 +3,7 @@ import { api } from "../../../app/api";
 export const eventsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getActiveEvents: builder.query({
-      query: ({ type }: { type: "active" | "miscellaneous" }) => ({
+      query: ({ type }: { type: "active" | "miscellaneous" | "upcoming" }) => ({
         url: "/user/getActiveEvents",
         method: "GET",
         params: { type },

@@ -74,21 +74,18 @@ const DashboardTables: React.FC = () => {
       users: 700,
       engagement: "62%",
       averageScore: "60%",
-      durationActive: "2 Months",
     },
     {
       module: "Scam Awareness",
       users: 3456,
       engagement: "48%",
       averageScore: "10%",
-      durationActive: "1 Month",
     },
     {
       module: "Soft Skills",
       users: 1245,
       engagement: "20%",
       averageScore: "100%",
-      durationActive: "4 Months",
     },
   ];
 

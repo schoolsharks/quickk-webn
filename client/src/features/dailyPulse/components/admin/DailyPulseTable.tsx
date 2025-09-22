@@ -1,15 +1,17 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import GlobalTable, {
   ActionButton,
   TableColumn,
 } from "../../../../components/ui/GlobalTable";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useNavigate } from "react-router-dom";
 import {
   useArchievedailyPulseByIdMutation,
   useDeleteDailyPulseByIdMutation,
+  useCloneDailyPulseByIdMutation,
 } from "../../dailyPulseApi";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
@@ -36,6 +38,27 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
 }) => {
   const [DeleteDailyPulseById] = useDeleteDailyPulseByIdMutation();
   const [ArchievedailyPulseById] = useArchievedailyPulseByIdMutation();
+  const [CloneDailyPulseById] = useCloneDailyPulseByIdMutation();
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
+
+  const handleSnackbarClose = (
+    _event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const showSnackbar = (message: string, severity: "success" | "error") => {
+    setSnackbar({ open: true, message, severity });
+  };
 
   // Transform backend data to table format
   const transformedData = data?.map((item, index) => {
@@ -51,11 +74,13 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
     }, 0);
 
     // Format date
-    const publishDate = new Date(item.publishOn).toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "2-digit",
-    });
+    const publishDate = item.publishOn 
+      ? new Date(item.publishOn).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "2-digit",
+        })
+      : "Not Set";
 
     return {
       id: index,
@@ -117,6 +142,20 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
 
   const actionButtons: ActionButton[] = [
     {
+      icon: <ContentCopyIcon />,
+      label: "Clone",
+      color: "primary",
+      onClick: async (row) => {
+        try {
+          await CloneDailyPulseById(row.originalData._id).unwrap();
+          showSnackbar("Daily pulse cloned successfully!", "success");
+        } catch (error) {
+          console.log("Error cloning daily pulse:", error);
+          showSnackbar("Failed to clone daily pulse. Please try again.", "error");
+        }
+      },
+    },
+    {
       icon: <ArchiveIcon />,
       label: "Archive",
       color: "info",
@@ -124,8 +163,10 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
         try {
           console.log(row.originalData._id);
           await ArchievedailyPulseById(row.originalData._id).unwrap();
+          showSnackbar("Daily pulse archived successfully!", "success");
         } catch (error) {
-          console.log(error);
+          console.log("Error archiving daily pulse:", error);
+          showSnackbar("Failed to archive daily pulse. Please try again.", "error");
         }
       },
     },
@@ -144,8 +185,10 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       onClick: async (row) => {
         try {
           await DeleteDailyPulseById(row?.originalData._id).unwrap();
+          showSnackbar("Daily pulse deleted successfully!", "success");
         } catch (error) {
-          console.log("Error deleting daily pulse :", error);
+          console.log("Error deleting daily pulse:", error);
+          showSnackbar("Failed to delete daily pulse. Please try again.", "error");
         }
       },
     },
@@ -160,14 +203,32 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
   }
 
   return (
-    <GlobalTable
-      title="Daily Pulse"
-      columns={columns}
-      data={transformedData}
-      showActions={true}
-      maxHeight={600}
-      actionButtons={actionButtons}
-    />
+    <>
+      <GlobalTable
+        title="Daily Pulse"
+        columns={columns}
+        data={transformedData}
+        showActions={true}
+        maxHeight={600}
+        actionButtons={actionButtons}
+      />
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

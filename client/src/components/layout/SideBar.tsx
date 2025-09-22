@@ -157,6 +157,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
   const handleItemClick = (item: MenuItem) => {
     if (item.children) {
+      navigate(item.children[0].path);
       const isExpanded = expandedItems.includes(item.id);
       if (isExpanded) {
         // Close the current item
@@ -168,6 +169,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       // Don't navigate if item has children - only toggle dropdown
       return;
     } else if (item.path) {
+      setExpandedItems([]); // Close all expandable items when navigating to a direct link
       navigate(item.path);
     }
   };
@@ -210,7 +212,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
     const isExpanded = expandedItems.includes(item.id);
     const isActive = isActiveItem(item.path) || isActiveParent(item);
     const isDisabled = isItemDisabled();
-    const shouldShowBlackBg = item.children ? isExpandableItemActive(item) : isActive;
+    const shouldShowBlackBg = item.children
+      ? isExpandableItemActive(item)
+      : isActive;
 
     const accessibleChildren = item.children?.filter(
       (child) => !child.feature || hasFeatureAccess(child.feature)
@@ -353,9 +357,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               disablePadding
               sx={{
                 // borderRadius: "8px",
-                bgcolor: shouldShowBlackBg
-                  ? "#000000"
-                  : "transparent",
+                bgcolor: shouldShowBlackBg ? "#000000" : "transparent",
               }}
             >
               <ListItemButton
@@ -387,9 +389,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: shouldShowBlackBg
-                        ? "#000000"
-                        : "#FFFFFF",
+                      color: shouldShowBlackBg ? "#000000" : "#FFFFFF",
                       "& svg": {
                         fontSize: "20px",
                       },

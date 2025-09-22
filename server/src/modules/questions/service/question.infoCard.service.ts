@@ -97,6 +97,24 @@ class InfoCardService {
     //         throw new AppError('Error deleting info card', StatusCodes.INTERNAL_SERVER_ERROR);
     //     }
     // }
+
+    async cloneInfoCard(infoCardId: mongoose.Types.ObjectId): Promise<IInfoCard> {
+        try {
+            const originalInfoCard = await InfoCardModel.findById(infoCardId);
+            if (!originalInfoCard) {
+                throw new AppError('Info card not found', StatusCodes.NOT_FOUND);
+            }
+
+            // Create a copy of the info card without the _id and __v
+            const infoCardData = originalInfoCard.toObject();
+            const { _id, __v, ...cloneData } = infoCardData;
+
+            const clonedInfoCard = await InfoCardModel.create(cloneData);
+            return clonedInfoCard;
+        } catch (error) {
+            throw new AppError('Error cloning info card', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 
 export default InfoCardService ;

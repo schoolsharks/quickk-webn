@@ -99,6 +99,24 @@ class QuestionService {
     //             throw new AppError('Error deleting question', StatusCodes.INTERNAL_SERVER_ERROR);
     //         }
     //     }
+
+    async cloneQuestion(questionId: mongoose.Types.ObjectId): Promise<IQuestion> {
+        try {
+            const originalQuestion = await QuestionModel.findById(questionId);
+            if (!originalQuestion) {
+                throw new AppError('Question not found', StatusCodes.NOT_FOUND);
+            }
+
+            // Create a copy of the question without the _id and __v
+            const questionData = originalQuestion.toObject();
+            const { _id, __v, ...cloneData } = questionData;
+
+            const clonedQuestion = await QuestionModel.create(cloneData);
+            return clonedQuestion;
+        } catch (error) {
+            throw new AppError('Error cloning question', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 
 export default QuestionService;

@@ -246,9 +246,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         pulse.qType = "TWO_CHOICE";
         pulse.type = "question";
         return (
-          pulse.questionText.trim() !== "" &&
-          pulse.optionA.trim() !== "" &&
-          pulse.optionB.trim() !== ""
+          pulse.questionText.trim() !== ""
+          // pulse.optionA.trim() !== "" &&
+          // pulse.optionB.trim() !== ""
         );
       } else if (pulse.pulseType === "Image (Right / Wrong)") {
         pulse.qType = "TWO_CHOICE";
@@ -494,7 +494,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
               optionType="text"
               options={
-                currentPulse.optionA && currentPulse.optionB ? ["A", "B"] : []
+                currentPulse.optionA && currentPulse.optionB
+                  ? ["A", "B"]
+                  : currentPulse.options
+                  ? currentPulse.options
+                  : []
               }
               correctAnswer={currentPulse.correctAnswer || ""}
               onAnswer={() => {}}
@@ -1482,6 +1486,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     return disabledDates.includes(dateStr);
                   }}
                   sx={{
+                    borderRadius: "0",
                     "& .MuiInputBase-root": {
                       color: "white",
                     },
@@ -1489,7 +1494,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       color: "white",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "black",
+                      borderColor: "white",
                     },
                     "& .MuiPickersSectionList-section ": {
                       color: "white",
@@ -1503,7 +1508,8 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       fullWidth: true,
                       variant: "outlined",
                       sx: {
-                        backgroundColor: "#1e1e1e",
+                        borderRadius: "0",
+                        backgroundColor: "white",
                         color: "white",
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "0px",
@@ -1575,7 +1581,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 color: confirmDialog.action === "publish" ? "black" : "white",
                 "&:hover": {
                   backgroundColor:
-                    confirmDialog.action === "publish" ? "#7BD932" : "#555",
+                    confirmDialog.action === "publish"
+                      ? "primary.main"
+                      : "#555",
                 },
               }}
             >

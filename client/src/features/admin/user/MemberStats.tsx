@@ -1,10 +1,6 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
-import {
-  Whatshot as PopularIcon,
-  EditNote as DraftsIcon,
-  Archive as ArchiveIcon,
-} from "@mui/icons-material";
+import { Whatshot as PopularIcon } from "@mui/icons-material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import StatsCard from "../../../components/ui/StatsCard";
 
@@ -47,15 +43,35 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
     {
       title: "Active",
       value: Stats.Active,
-      icon: <DraftsIcon />,
+      icon: (
+        <Box
+          sx={{
+            width: 18,
+            height: 18,
+            borderRadius: "50%",
+            backgroundColor: "#10B981",
+            margin: "0 auto",
+          }}
+        />
+      ),
       backgroundColor: "#000000",
       iconColor: "white",
     },
     {
       title: "Not Active",
       value: Stats.NotActive,
-      icon: <ArchiveIcon />,
-      backgroundColor:"#404040",
+      icon: (
+        <Box
+          sx={{
+            width: 18,
+            height: 18,
+            borderRadius: "50%",
+            backgroundColor: "#EF4444",
+            margin: "0 auto",
+          }}
+        />
+      ),
+      backgroundColor: "#404040",
       iconColor: "white",
     },
   ];

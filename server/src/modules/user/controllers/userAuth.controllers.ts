@@ -314,7 +314,9 @@ export const signup = async (
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ companyMail });
+    const existingUser = await User.findOne({
+      companyMail: { $regex: new RegExp(`^${companyMail}$`, "i") },
+    });
     if (existingUser) {
       return next(
         new AppError(

@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IInfoCard {
+export interface IInfoCard extends Document {
     title: string;
     content: string; 
     wantFeedback: boolean;

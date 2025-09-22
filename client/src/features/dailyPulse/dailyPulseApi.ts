@@ -69,6 +69,14 @@ export const dailyPulseApi = api.injectEndpoints({
             invalidatesTags: ['DailyPulseAdmin'],
         }),
 
+        cloneDailyPulseById: builder.mutation({
+            query: (dailyPulseId) => ({
+                url: `/admin/cloneDailyPulseById/${dailyPulseId}`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['DailyPulseAdmin'],
+        }),
+
         createAIDailyPulse: builder.mutation({
             query: (dailyPulseData) => ({
                 url: '/admin/createAIDailyPulse',
@@ -117,6 +125,7 @@ export const {
     useCreateAIDailyPulseMutation,
     useGetDailyPulseStatsQuery,
     useArchievedailyPulseByIdMutation,
+    useCloneDailyPulseByIdMutation,
     useSearchDailyPulseQuery,
     useGetTodayDailyPulseEngagementQuery
 } = dailyPulseApi;

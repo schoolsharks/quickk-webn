@@ -16,7 +16,6 @@ interface LearningOverviewData {
   users: number;
   engagement: string;
   averageScore: string;
-  durationActive: string;
 }
 
 // interface ParticipationData {
@@ -36,45 +35,39 @@ const DashboardTables: React.FC = () => {
   const learningData: LearningOverviewData[] = [
     {
       module: "POSH",
-      users: 700,
-      engagement: "62%",
-      averageScore: "60%",
-      durationActive: "2 Months",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
     {
       module: "Digital Literacy",
-      users: 3456,
-      engagement: "48%",
-      averageScore: "10%",
-      durationActive: "1 Month",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
     {
       module: "Module 5",
-      users: 1245,
-      engagement: "20%",
-      averageScore: "100%",
-      durationActive: "4 Months",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
     {
       module: "Entrepreneurship",
-      users: 700,
-      engagement: "62%",
-      averageScore: "60%",
-      durationActive: "2 Months",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
     {
       module: "Scam Awareness",
-      users: 3456,
-      engagement: "48%",
-      averageScore: "10%",
-      durationActive: "1 Month",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
     {
       module: "Soft Skills",
-      users: 1245,
-      engagement: "20%",
-      averageScore: "100%",
-      durationActive: "4 Months",
+      users: 0,
+      engagement: "0%",
+      averageScore: "0%",
     },
   ];
 
@@ -174,12 +167,6 @@ const DashboardTables: React.FC = () => {
           </Box>
         </Box>
       ),
-    },
-    {
-      id: "durationActive",
-      label: "ACTIVE DURATION",
-      minWidth: 140,
-      align: "center",
     },
   ];
 

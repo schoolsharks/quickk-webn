@@ -3,7 +3,7 @@ import { generateTodayDate } from '../../../utils/generateTodayDate';
 import { PulseType, Status } from '../types/enum';
 
 // Define the Pulse interface
-interface Pulse {
+export interface Pulse {
     refId: mongoose.Types.ObjectId;
     type: PulseType;
 }

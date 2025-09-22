@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { generateTodayDate } from "../../../utils/generateTodayDate";
 import QuestionService from "../../questions/service/question.service";
 import InfoCardService from "../../questions/service/question.infoCard.service";
-import DailyPulse from "../model/dailyPulse.model";
+import DailyPulse, { Pulse } from "../model/dailyPulse.model";
 import AppError from "../../../utils/appError";
 import { StatusCodes } from "http-status-codes";
 import UserService from "../../user/service/user.service";
@@ -61,7 +61,7 @@ export const getDailyPulses = async (
       ]);
 
     // Create a map for quick lookup by ID
-    const infoCardMap = new Map(infoCards.map((i) => [i._id.toString(), i]));
+    const infoCardMap = new Map(infoCards.map((i: any) => [i._id.toString(), i]));
     const questionMap = new Map(questions.map((q) => [q._id.toString(), q]));
     const questionResponseMap = new Map(
       questionResponses.map((r) => [r.question.toString(), r.response])
@@ -243,10 +243,18 @@ export const getAllDailyPulsesWithStatus = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Fetch all daily pulses sorted by publishOn descending
+    // Fetch all daily pulses with custom sorting (null dates first, then by publishOn descending)
     const companyId = req.user?.companyId;
     const dailyPulses = await DailyPulse.find({ company: companyId }).sort({
-      publishOn: -1,
+      publishOn: 1, // First sort ascending to put null values first
+    });
+
+    // Custom sort to put null dates first, then sort others by date descending
+    dailyPulses.sort((a, b) => {
+      if (!a.publishOn && !b.publishOn) return 0;
+      if (!a.publishOn) return -1; // a (null) comes first
+      if (!b.publishOn) return 1;  // b (null) comes first
+      return new Date(b.publishOn).getTime() - new Date(a.publishOn).getTime(); // Descending order for dates
     });
     // For each daily pulse, build the response array
     const result = await Promise.all(
@@ -393,7 +401,7 @@ export const updateDailyPulse = async (
 
     const dailyPulse = await dailyPulseService.updateDailyPulse(dailyPulseId, {
       publishOn,
-      pulses: createdPulses,
+      pulses: createdPulses as Pulse[],
       stars,
       status,
     });
@@ -532,7 +540,7 @@ export const getDailyPulseById = async (
     ]);
 
     const questionMap = new Map(questions.map((q) => [q._id.toString(), q]));
-    const infoCardMap = new Map(infoCards.map((c) => [c._id.toString(), c]));
+    const infoCardMap = new Map(infoCards.map((c: any) => [c._id.toString(), c]));
 
     // Construct enriched pulse objects
     const pulseItems = dailyPulse.pulses.map((p) => {
@@ -780,6 +788,45 @@ export const getTodayDailyPulseEngagement = async (
     res.status(StatusCodes.OK).json({
       performedCount,
       engagementRatio,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const cloneDailyPulseById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { dailyPulseId } = req.params;
+    const companyId = req.user?.companyId;
+
+    if (!dailyPulseId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: 'Daily pulse ID is required'
+      });
+      return;
+    }
+
+    if (!companyId) {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        message: 'Company ID not found'
+      });
+      return;
+    }
+
+    const clonedDailyPulseId = await dailyPulseService.cloneDailyPulseById(dailyPulseId, companyId);
+
+    res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: 'Daily pulse cloned successfully',
+      data: {
+        clonedDailyPulseId
+      }
     });
   } catch (error) {
     next(error);

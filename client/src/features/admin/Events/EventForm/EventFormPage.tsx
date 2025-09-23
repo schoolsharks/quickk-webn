@@ -24,6 +24,7 @@ import {
   useCreateBlankEventMutation,
   useUpdateEventMutation,
   useGetEventQuery,
+  useImproveEventDescriptionMutation,
 } from "../../../events/services/eventsApi";
 import GreenButton from "../../../../components/ui/GreenButton";
 
@@ -80,9 +81,12 @@ const EventFormPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [isImprovingDescription, setIsImprovingDescription] = useState(false);
+  const [originalDescription, setOriginalDescription] = useState<string>("");
 
   const [createBlankEvent] = useCreateBlankEventMutation();
   const [updateEvent] = useUpdateEventMutation();
+  const [improveEventDescription] = useImproveEventDescriptionMutation();
 
   // Only fetch event data if we have a valid eventId (not 'new')
   const {
@@ -255,6 +259,55 @@ const EventFormPage: React.FC = () => {
       const reader = new FileReader();
       reader.onload = (e) => setBannerPreview(e.target?.result as string);
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImproveDescription = async () => {
+    if (!formData.description || formData.description.trim().length < 10) {
+      setError("Description must be at least 10 characters long to improve with AI");
+      return;
+    }
+
+    if (!formData.title || formData.title.trim().length === 0) {
+      setError("Event title is required to improve description");
+      return;
+    }
+
+    setIsImprovingDescription(true);
+    setError(null);
+
+    try {
+      // Store original description for potential undo
+      setOriginalDescription(formData.description);
+
+      const result = await improveEventDescription({
+        originalDescription: formData.description,
+        eventTitle: formData.title,
+        eventType: formData.eventType,
+      }).unwrap();
+
+      setFormData((prev) => ({
+        ...prev,
+        description: result.improvedDescription,
+      }));
+
+      // Optional: Show success message
+      console.log("Description improved successfully!");
+    } catch (error: any) {
+      console.error("Failed to improve description:", error);
+      setError(error?.data?.message || "Failed to improve description with AI");
+    } finally {
+      setIsImprovingDescription(false);
+    }
+  };
+
+  const handleUndoImprovement = () => {
+    if (originalDescription) {
+      setFormData((prev) => ({
+        ...prev,
+        description: originalDescription,
+      }));
+      setOriginalDescription("");
     }
   };
 
@@ -736,43 +789,92 @@ const EventFormPage: React.FC = () => {
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "flex-start",
+                  justifyContent: "space-between",
                   alignItems: "center",
                   mb: 1,
                 }}
               >
-                <Typography variant="body1" sx={{ fontSize: "12px" }}>
-                  Description
-                </Typography>
-                {/* <Typography
-                  variant="caption"
-                  sx={{ color: "#999", fontSize: "10px" }}
-                >
-                  Improvise with AI
-                </Typography> */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Typography variant="body1" sx={{ fontSize: "12px" }}>
+                    Description
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ 
+                      color: formData.description.length > 500 ? "#ff6b6b" : "#999", 
+                      fontSize: "10px" 
+                    }}
+                  >
+                    {formData.description.length}/500 characters
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  {originalDescription && (
+                    <Button
+                      size="small"
+                      onClick={handleUndoImprovement}
+                      sx={{
+                        color: "#999",
+                        textTransform: "none",
+                        fontSize: "10px",
+                        minWidth: "auto",
+                        p: "4px 8px",
+                      }}
+                    >
+                      Undo
+                    </Button>
+                  )}
+                  <Button
+                    size="small"
+                    onClick={handleImproveDescription}
+                    disabled={isImprovingDescription || !formData.description?.trim() || formData.description.trim().length < 10}
+                    sx={{
+                      color: isImprovingDescription ? "#666" : "white",
+                      textTransform: "none",
+                      fontSize: "14px",
+                      minWidth: "auto",
+                      p: "4px 8px",
+                      "&:disabled": {
+                        color: "#666",
+                      },
+                    }}
+                  >
+                    {isImprovingDescription ? (
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <CircularProgress size={12} sx={{ color: "#666" }} />
+                        Improving...
+                      </Box>
+                    ) : (
+                      "✨ Improve with AI"
+                    )}
+                  </Button>
+                </Box>
               </Box>
               <TextField
                 fullWidth
                 multiline
-                rows={3}
-                placeholder="..."
+                rows={4}
+                placeholder="Enter event description (min 10 characters to use AI improvement)..."
                 value={formData.description}
-                onChange={(e) =>
-                  handleInputChange("description", e.target.value)
-                }
+                onChange={(e) => {
+                  // Character limit of 500
+                  if (e.target.value.length <= 500) {
+                    handleInputChange("description", e.target.value);
+                  }
+                }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "0px",
                     color: "white",
                     bgcolor: "#333",
                     "& fieldset": {
-                      borderColor: "#555",
+                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#555",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#777",
+                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#777",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#999",
+                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#999",
                     },
                   },
                   "& .MuiInputBase-input::placeholder": {

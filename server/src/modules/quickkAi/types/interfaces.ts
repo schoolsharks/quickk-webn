@@ -67,3 +67,15 @@ export interface GeminiDailyPulseResponse {
     infoCards: GeminiInfoCardResponse[];
     questions: GeminiQuestionResponse[];
 }
+
+export interface DescriptionImprovementRequest {
+    originalDescription: string;
+    eventTitle: string;
+    eventType: 'ONLINE' | 'OFFLINE';
+}
+
+export interface DescriptionImprovementResponse {
+    improvedDescription: string;
+    originalLength: number;
+    improvedLength: number;
+}

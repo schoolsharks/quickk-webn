@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
-import { AIModuleService, AIDailyPulseService, ChatService } from '../services/quickkAi.service';
+import { AIModuleService, AIDailyPulseService, ChatService, AIDescriptionService } from '../services/quickkAi.service';
 import ModuleService from '../../learning/services/module.service';
 import QuestionService from '../../questions/service/question.service';
 import { ModuleType } from '../../learning/types/enums';
 import AppError from '../../../utils/appError';
-import { DailyPulseCreationRequest, ModuleCreationRequest } from '../types/interfaces';
+import { DailyPulseCreationRequest, ModuleCreationRequest, DescriptionImprovementRequest } from '../types/interfaces';
 import DailyPulseService from '../../dailyPulse/services/dailyPulse.Service';
 import InfoCardService from '../../questions/service/question.infoCard.service';
 import { PulseType, Status } from '../../dailyPulse/types/enum';
@@ -18,6 +18,7 @@ const aiDailyPulseService = new AIDailyPulseService();
 const dailyPulseService = new DailyPulseService();
 const infoCardService = new InfoCardService();
 const chatService = new ChatService();
+const aiDescriptionService = new AIDescriptionService();
 
 
 const validateModuleData = (moduleData: ModuleCreationRequest): void => {
@@ -656,6 +657,92 @@ export const createNewChat = async (req: Request, res: Response) => {
             success: false,
             message: 'Failed to create new chat',
             error: error instanceof Error ? error.message : 'Unknown error',
+        });
+    }
+};
+
+export const improveEventDescription = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const adminId = req.user?.id;
+        const companyId = req.user?.companyId;
+
+        if (!adminId || !companyId) {
+            res.status(401).json({
+                success: false,
+                message: 'Admin authentication required',
+            });
+            return;
+        }
+
+        const { originalDescription, eventTitle, eventType }: DescriptionImprovementRequest = req.body;
+
+        // Validate request body
+        if (!originalDescription || !eventTitle || !eventType) {
+            res.status(400).json({
+                success: false,
+                message: 'originalDescription, eventTitle, and eventType are required',
+            });
+            return;
+        }
+
+        // Validate event type
+        if (!['ONLINE', 'OFFLINE'].includes(eventType)) {
+            res.status(400).json({
+                success: false,
+                message: 'eventType must be either ONLINE or OFFLINE',
+            });
+            return;
+        }
+
+        // Validate description length
+        if (originalDescription.trim().length < 10) {
+            res.status(400).json({
+                success: false,
+                message: 'Description must be at least 10 characters long',
+            });
+            return;
+        }
+
+        if (originalDescription.length > 1000) {
+            res.status(400).json({
+                success: false,
+                message: 'Description must be less than 1000 characters long',
+            });
+            return;
+        }
+
+        // Improve the description using AI
+        const improvedDescription = await aiDescriptionService.improveEventDescription({
+            originalDescription,
+            eventTitle,
+            eventType
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Description improved successfully',
+            data: {
+                improvedDescription,
+                originalLength: originalDescription.length,
+                improvedLength: improvedDescription.length,
+            },
+        });
+    } catch (error: any) {
+        console.error('Error improving event description:', error);
+        
+        // Handle specific AI service errors
+        if (error instanceof AppError) {
+            res.status(error.statusCode).json({
+                success: false,
+                message: error.message,
+            });
+            return;
+        }
+
+        res.status(500).json({
+            success: false,
+            message: 'Failed to improve description',
+            error: error.message || 'Unknown error',
         });
     }
 };

@@ -6,6 +6,7 @@ import AppError from '../../../utils/appError';
 import { DailyPulseData, GeminiDailyPulseResponse, GeminiModuleResponse, ModuleData } from '../types/interfaces';
 import buildPrompt from '../prompts/buildPrompt.module';
 import buildDailyPulsePrompt from '../prompts/buildPrompt.dailyPulse';
+import buildEventDescriptionPrompt from '../prompts/buildPrompt.eventDescription';
 import mongoose, { Types } from 'mongoose';
 import { Chat, IChat, IMessage } from '../model/chat.model';
 
@@ -563,4 +564,83 @@ export class ChatService {
             throw error;
         }
     };
+}
+
+export class AIDescriptionService {
+    private genAI: GoogleGenerativeAI;
+    private model: any;
+    private maxRetries = 3;
+
+    constructor() {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            throw new AppError('Gemini API key not found', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+        this.genAI = new GoogleGenerativeAI(apiKey);
+        this.model = this.genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    }
+
+    async improveEventDescription(data: {
+        originalDescription: string;
+        eventTitle: string;
+        eventType: 'ONLINE' | 'OFFLINE';
+    }): Promise<string> {
+        const { originalDescription, eventTitle, eventType } = data;
+
+        // Validate input
+        if (!originalDescription || originalDescription.trim().length < 10) {
+            throw new AppError('Description must be at least 10 characters long', StatusCodes.BAD_REQUEST);
+        }
+
+        if (!eventTitle || eventTitle.trim().length === 0) {
+            throw new AppError('Event title is required', StatusCodes.BAD_REQUEST);
+        }
+
+        const prompt = buildEventDescriptionPrompt({
+            originalDescription: originalDescription.trim(),
+            eventTitle: eventTitle.trim(),
+            eventType
+        });
+
+        for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
+            try {
+                const result = await this.model.generateContent(prompt);
+                const response = await result.response;
+                const improvedDescription = response.text().trim();
+
+                // Validate the improved description
+                if (!improvedDescription || improvedDescription.length < 10) {
+                    throw new Error('AI generated an invalid description');
+                }
+
+                // Ensure the improved description is not too long (500 character limit)
+                if (improvedDescription.length > 500) {
+                    // Truncate to 500 characters and ensure it ends with a complete word
+                    const truncated = improvedDescription.substring(0, 500);
+                    const lastSpaceIndex = truncated.lastIndexOf(' ');
+                    return lastSpaceIndex > 400 ? truncated.substring(0, lastSpaceIndex) + '...' : truncated;
+                }
+
+                return improvedDescription;
+            } catch (error) {
+                console.error(`Attempt ${attempt} failed:`, error);
+
+                if (attempt === this.maxRetries) {
+                    throw new AppError(
+                        `Failed to improve description after ${this.maxRetries} attempts`,
+                        StatusCodes.INTERNAL_SERVER_ERROR
+                    );
+                }
+
+                // Wait before retry (exponential backoff)
+                await this.delay(1000 * attempt);
+            }
+        }
+
+        throw new AppError('Failed to improve description', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+
+    private delay(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }

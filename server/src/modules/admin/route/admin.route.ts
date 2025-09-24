@@ -435,5 +435,12 @@ router.post(
     asyncHandeler(eventController.cloneEvent)
 );
 
+router.get(
+    '/searchAddresses',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.searchAddresses)
+);
+
 
 export default router;

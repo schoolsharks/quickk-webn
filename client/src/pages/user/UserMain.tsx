@@ -32,6 +32,7 @@ import PurchaseSuccess from "../../features/events/pages/PurchaseSuccess";
 import Referral from "./Referral";
 import WebnMembershipPage from "./WebnMembershipPage";
 import RewardsAndResources from "./RewardsAndResources";
+import GetListed from "../../features/events/components/GetListed";
 
 // Component to handle dashboard redirection based on event mode
 const DashboardRedirect = () => {
@@ -136,6 +137,7 @@ const UserMain = () => {
           <Route path="referral" element={<Referral />} />
           <Route path="rewards" element={<RewardsAndResources />} />
           <Route path="webn-membership" element={<WebnMembershipPage />} />
+          <Route path="get-listed" element={<GetListed />} />
         </Route>
         <Route path="*" element={<Navigate to="/user/login" />} />
       </Routes>

@@ -23,6 +23,10 @@ const MyNetworks = () => {
     navigate("/user/complete-profile");
   };
 
+  const handleGetListedClick = () => {
+    navigate("/user/get-listed");
+  };
+
   return (
     <Box pt={"8px"} pb={8} display={"flex"} flexDirection={"column"} gap={8}>
       {/* Conditionally render Complete Profile section only if profile is incomplete */}
@@ -60,7 +64,29 @@ const MyNetworks = () => {
 
       {profileComplete && <Box mt={"40px"} />}
       <NetworkSearch />
-      <Recommendation/>
+      <Recommendation />
+      <Box
+        mt="60px"
+        display="flex"
+        borderTop={`2px solid ${theme.palette.primary.main}`}
+        borderBottom={`2px solid ${theme.palette.primary.main}`}
+        bgcolor={"#CD7BFF4D"}
+        justifyContent="space-between"
+        alignItems="center"
+        onClick={handleGetListedClick}
+        p={"38px 24px"}
+        sx={{ cursor: "pointer" }}
+      >
+        <Box>
+          <Typography variant="h2" fontSize={"20px"} color="#000">
+            Want to Get Listed on Our Platform?
+          </Typography>
+        </Box>
+        <Box>
+          {/* <ArrowRight size={36} strokeWidth={1.75} rotate={"45deg"} /> */}
+          <CallMadeOutlined sx={{ fontSize: 35, marginRight: "24px" }} />
+        </Box>
+      </Box>
       <BottomNavigation />
     </Box>
   );

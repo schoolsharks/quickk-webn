@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { EventService } from "../services/events.services";
+import { AddressSearchService } from "../services/addressSearch.service";
 import { IEventQuery, IRegisterEventRequest } from "../types/interface";
 import { EventStatus } from "../types/enum";
 import AppError from "../../../utils/appError";
 
 const eventService = new EventService();
+const addressSearchService = new AddressSearchService();
 
 export class EventController {
   /**
@@ -634,6 +636,46 @@ export class EventController {
       });
     } catch (error) {
       next(error);
+    }
+  }
+
+  /**
+   * Search addresses for event location autocomplete
+   */
+  async searchAddresses(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { q: query } = req.query;
+
+      if (!query || typeof query !== 'string') {
+        res.status(400).json({
+          success: false,
+          message: "Search query is required",
+        });
+        return;
+      }
+
+      if (query.trim().length < 3) {
+        res.status(400).json({
+          success: false,
+          message: "Search query must be at least 3 characters long",
+        });
+        return;
+      }
+
+      const addresses = await addressSearchService.searchAddresses(query);
+
+      res.status(200).json({
+        success: true,
+        message: "Address suggestions retrieved successfully",
+        data: addresses,
+      });
+    } catch (error: any) {
+      console.error('Address search error:', error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to fetch address suggestions",
+        error: error.message,
+      });
     }
   }
 }

@@ -729,7 +729,7 @@ export const improveEventDescription = async (req: Request, res: Response): Prom
         });
     } catch (error: any) {
         console.error('Error improving event description:', error);
-        
+
         // Handle specific AI service errors
         if (error instanceof AppError) {
             res.status(error.statusCode).json({

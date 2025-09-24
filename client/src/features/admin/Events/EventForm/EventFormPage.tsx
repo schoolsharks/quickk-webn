@@ -27,6 +27,8 @@ import {
   useImproveEventDescriptionMutation,
 } from "../../../events/services/eventsApi";
 import GreenButton from "../../../../components/ui/GreenButton";
+import AddressAutocomplete from "../../../../components/ui/AddressAutocomplete";
+import { AddressOption } from "../../../../types/address";
 
 interface Speaker {
   name: string;
@@ -83,6 +85,7 @@ const EventFormPage: React.FC = () => {
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [isImprovingDescription, setIsImprovingDescription] = useState(false);
   const [originalDescription, setOriginalDescription] = useState<string>("");
+  const [_selectedAddressData, setSelectedAddressData] = useState<AddressOption | null>(null);
 
   const [createBlankEvent] = useCreateBlankEventMutation();
   const [updateEvent] = useUpdateEventMutation();
@@ -308,6 +311,18 @@ const EventFormPage: React.FC = () => {
         description: originalDescription,
       }));
       setOriginalDescription("");
+    }
+  };
+
+  const handleAddressChange = (address: string, addressData?: AddressOption) => {
+    handleInputChange("address", address);
+    
+    // Store the complete address data for potential future use (coordinates, etc.)
+    if (addressData) {
+      setSelectedAddressData(addressData);
+      console.log('Selected address coordinates:', addressData.coordinates);
+    } else {
+      setSelectedAddressData(null);
     }
   };
 
@@ -746,27 +761,11 @@ const EventFormPage: React.FC = () => {
                 <Typography variant="body1" sx={{ mb: 1, fontSize: "12px" }}>
                   Address
                 </Typography>
-                <TextField
-                  fullWidth
-                  size="medium"
+                <AddressAutocomplete
                   value={formData.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      color: "white",
-                      borderRadius: "0px",
-                      bgcolor: "#333",
-                      "& fieldset": {
-                        borderColor: "#555",
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "#777",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#999",
-                      },
-                    },
-                  }}
+                  onChange={handleAddressChange}
+                  placeholder="Start typing address..."
+                  size="medium"
                 />
               </Grid>
             </Grid>
@@ -816,7 +815,7 @@ const EventFormPage: React.FC = () => {
                       sx={{
                         color: "#999",
                         textTransform: "none",
-                        fontSize: "10px",
+                        fontSize: "12px",
                         minWidth: "auto",
                         p: "4px 8px",
                       }}

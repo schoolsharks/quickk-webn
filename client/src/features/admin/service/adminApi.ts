@@ -193,6 +193,14 @@ export const adminApi = api.injectEndpoints({
             providesTags: ['Admin'],
         }),
 
+        searchAddresses: builder.query({
+            query: (param) => ({
+                url: '/admin/searchAddresses',
+                method: 'GET',
+                params: param
+            }),
+        }),
+
     }),
 });
 
@@ -215,4 +223,5 @@ export const {
     useGetDashboardStatsQuery,
     useGetEngagementAnalyticsQuery,
     useGetParticipationLeaderboardQuery,
+    useLazySearchAddressesQuery
 } = adminApi;

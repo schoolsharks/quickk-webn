@@ -1,19 +1,24 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 const StatsCards: React.FC = () => {
+  const { totalStars, redeemedStars } = useSelector((state: RootState) => state.user);
+
   const cards = [
     {
-      value: 160,
+      value: totalStars,
       name: "Total Stars",
       background: "#464646",
     },
     {
-      value: 60,
+      value: redeemedStars,
       name: "Stars Used",
       background: "#252525",
     },
   ];
+
   return (
     <Box
       sx={{

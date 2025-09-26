@@ -139,6 +139,19 @@ export const eventsApi = api.injectEndpoints({
       ],
     }),
 
+    improveEventDescription: builder.mutation({
+      query: (data: {
+        originalDescription: string;
+        eventTitle: string;
+        eventType: 'ONLINE' | 'OFFLINE';
+      }) => ({
+        url: '/admin/improveEventDescription',
+        method: 'POST',
+        body: data,
+      }),
+      transformResponse: (response: any) => response?.data,
+    }),
+
 
   }),
 });
@@ -158,4 +171,5 @@ export const {
   useCloneEventMutation,
   useCreateBlankEventMutation,
   useGetEventQuery,
+  useImproveEventDescriptionMutation,
 } = eventsApi;

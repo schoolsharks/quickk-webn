@@ -346,6 +346,13 @@ router.post('/chat/createNewChat',
     asyncHandeler(QuickkAiControllers.createNewChat)
 );
 
+router.post(
+    '/improveEventDescription',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(QuickkAiControllers.improveEventDescription)
+);
+
 // Search endpoints 
 router.get('/search/users',
     authenticateUser,
@@ -426,6 +433,13 @@ router.post(
     authenticateUser,
     authorizeRoles('ADMIN'),
     asyncHandeler(eventController.cloneEvent)
+);
+
+router.get(
+    '/searchAddresses',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(eventController.searchAddresses)
 );
 
 

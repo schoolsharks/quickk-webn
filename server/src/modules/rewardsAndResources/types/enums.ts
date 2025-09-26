@@ -1,5 +1,6 @@
 
 
 export enum RewardTypes { 
-    "ADVERTISEMENT"="ADVERTISEMENT"
+    "ADVERTISEMENT"="ADVERTISEMENT",
+    "RESOURCES"="RESOURCES"
 }

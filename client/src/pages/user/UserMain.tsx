@@ -31,7 +31,6 @@ import TicketPurchase from "../../features/events/pages/TicketPurchase";
 import PurchaseSuccess from "../../features/events/pages/PurchaseSuccess";
 import Referral from "./Referral";
 import WebnMembershipPage from "./WebnMembershipPage";
-import RewaredsAndResources from "./RewardsAndResources";
 import RewardsAndResources from "./RewardsAndResources";
 
 // Component to handle dashboard redirection based on event mode
@@ -41,7 +40,7 @@ const DashboardRedirect = () => {
 
   // Preserve query parameters when redirecting
   const queryString = searchParams.toString();
-  const redirectPath = queryString ? `?${queryString}` : '';
+  const redirectPath = queryString ? `?${queryString}` : "";
 
   if (eventMode) {
     return <Navigate to={`/user/event-mode${redirectPath}`} replace />;
@@ -60,7 +59,7 @@ const InitialRedirect = () => {
 
   // Preserve query parameters when redirecting
   const queryString = searchParams.toString();
-  const redirectPath = queryString ? `?${queryString}` : '';
+  const redirectPath = queryString ? `?${queryString}` : "";
 
   if (!hasSelectedMode) {
     return <Navigate to={`/user/mode-selection${redirectPath}`} replace />;

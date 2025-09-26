@@ -9,6 +9,8 @@ import * as userControllers from "../controllers/user.controller";
 import * as rewardControllers from "../../reward/controllers/reward.controller";
 import { eventController } from "../../events/controllers/events.controllers";
 import * as UserControllers from "../../user/controllers/user.controller";
+import userRewardClaimsRoutes from "../../rewardsAndResources/routes/userRewardClaims.routes";
+import resourcesRoutes from "../../rewardsAndResources/routes/resources.routes";
 
 const router = express.Router();
 
@@ -64,6 +66,12 @@ router.get('/search/users', authenticateUser, asyncHandeler(UserControllers.sear
 
 // route for getting user recommendations
 router.get('/getRecommendations', authenticateUser, asyncHandeler(UserControllers.getUserRecommendations));
+
+// Routes for user reward claims
+router.use('/reward-claims', userRewardClaimsRoutes);
+
+// Routes for resources
+router.use('/resources', resourcesRoutes);
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));
 // router.post('/resetPassword', asyncHandeler(authControllers.resetPassword));

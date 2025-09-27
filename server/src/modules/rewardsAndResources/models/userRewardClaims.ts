@@ -27,6 +27,10 @@ const UserRewardsClaimsSchema = new Schema<IUserRewardsClaims>(
       type: String,
       required: false,
     },
+    advertised: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

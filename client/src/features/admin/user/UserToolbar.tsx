@@ -15,11 +15,13 @@ interface UserToolbarProps {
   onSearchChange: (value: string) => void;
   searchValue: string;
   onFilterClick: () => void;
+  button?: boolean;
 }
 
 const UserToolbar: React.FC<UserToolbarProps> = ({
   onSearchChange,
   onFilterClick,
+  button = true,
   // searchValue,
 }) => {
   const theme = useTheme();
@@ -76,16 +78,17 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
             Filters
           </Typography>
         </IconButton>
-
-        <GreenButton
-          onClick={handleBulkUpload}
-          sx={{
-            borderRadius: "2px",
-          }}
-          startIcon={<Upload />}
-        >
-          Upload New Members
-        </GreenButton>
+        {button && (
+          <GreenButton
+            onClick={handleBulkUpload}
+            sx={{
+              borderRadius: "2px",
+            }}
+            startIcon={<Upload />}
+          >
+            Upload New Members
+          </GreenButton>
+        )}
       </Box>
     </Box>
   );

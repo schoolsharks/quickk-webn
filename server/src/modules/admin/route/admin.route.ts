@@ -85,6 +85,27 @@ router.get(
     asyncHandeler(adminControllers.getParticipationLeaderboard)
 );
 
+router.get(
+    '/referral/stats',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getReferralStats)
+);
+
+router.get(
+    '/referral/users',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getReferralUsers)
+);
+
+router.patch(
+    '/referral/:claimId/advertised',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.markReferralAdvertisementDisplayed)
+);
+
 
 // Daily Pulse Route
 router.get(

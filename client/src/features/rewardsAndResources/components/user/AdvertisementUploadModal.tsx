@@ -8,7 +8,7 @@ import {
   Alert,
 } from "@mui/material";
 import { Close, CloudUpload } from "@mui/icons-material";
-import { useApplyForRewardMutation } from "../rewardsAndResourcesApi";
+import { useApplyForRewardMutation } from "../../rewardsAndResourcesApi";
 
 interface AdvertisementUploadModalProps {
   open: boolean;

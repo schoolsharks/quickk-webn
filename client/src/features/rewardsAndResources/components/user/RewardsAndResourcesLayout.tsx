@@ -1,10 +1,10 @@
 import { Box, Stack } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import TopBar from "./components/TopBar";
-import StatsCards from "./components/StatsCards";
-import AdvertiseBanner from "./components/AdvertiseBanner";
-import Resources from "./components/Resources";
-import ResourceClaim from "./components/ResourceClaim";
+import TopBar from "./TopBar";
+import StatsCards from "./StatsCards";
+import ResourceClaim from "./ResourceClaim";
+import AdvertiseBanner from "./AdvertiseBanner";
+import Resources from "./Resources";
 
 const RewardsAndResourcesLayout = () => {
   const [searchParams] = useSearchParams();

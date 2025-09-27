@@ -153,6 +153,48 @@ class UserRewardClaimsService {
       );
     }
   }
+
+  async markAdvertisementAsDisplayed(
+    claimId: string,
+    companyId: string
+  ): Promise<IUserRewardsClaims> {
+    if (!mongoose.Types.ObjectId.isValid(claimId)) {
+      throw new AppError("Invalid claim id", StatusCodes.BAD_REQUEST);
+    }
+
+    const claim = await UserRewardsClaims.findById(claimId);
+
+    if (!claim) {
+      throw new AppError("Advertisement claim not found", StatusCodes.NOT_FOUND);
+    }
+
+    if (claim.rewardType !== RewardTypes.ADVERTISEMENT) {
+      throw new AppError(
+        "Claim is not an advertisement reward",
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    const user = await this.userService.getUserById(
+      claim.user as mongoose.Types.ObjectId
+    );
+
+    if (!user || user.company?.toString() !== companyId) {
+      throw new AppError(
+        "You do not have access to update this claim",
+        StatusCodes.FORBIDDEN
+      );
+    }
+
+    if (claim.advertised) {
+      return claim;
+    }
+
+    claim.advertised = true;
+    await claim.save();
+
+    return claim;
+  }
 }
 
 export default UserRewardClaimsService;

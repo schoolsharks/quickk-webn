@@ -14,12 +14,14 @@ import CompanyFeatureService from '../../adminOnboarding/services/companyFeature
 import adminOtpTrigger from '../../../services/emails/triggers/admin/adminOtpTrigger';
 import { EventService } from '../../events/services/events.services';
 import { IUser } from '../../user/types/interfaces';
+import UserRewardClaimsService from '../../rewardsAndResources/services/userRewardClaims.service';
 
 
 const adminService = new AdminService();
 const userservice = new userService();
 const companyFeatureService = new CompanyFeatureService();
 const eventService = new EventService();
+const userRewardClaimsService = new UserRewardClaimsService();
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -279,6 +281,85 @@ export const getParticipationLeaderboard = async (req: Request, res: Response, n
             success: true,
             message: 'Participation leaderboard retrieved successfully',
             data: participationData
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getReferralStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const stats = await userservice.getReferralStats(companyId.toString());
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Referral stats retrieved successfully',
+            data: stats
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getReferralUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const search = typeof req.query.search === 'string' ? req.query.search : undefined;
+        const sortBy = typeof req.query.sortBy === 'string' ? req.query.sortBy : undefined;
+        const page = req.query.page ? Number(req.query.page) : 1;
+        const limit = req.query.limit ? Number(req.query.limit) : 20;
+
+        const referralUsers = await userservice.getReferralUsers({
+            companyId: companyId.toString(),
+            search,
+            page,
+            limit,
+            sortBy,
+        });
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Referral users retrieved successfully',
+            data: referralUsers,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const markReferralAdvertisementDisplayed = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        const { claimId } = req.params;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        if (!claimId) {
+            throw new AppError('Claim ID is required', StatusCodes.BAD_REQUEST);
+        }
+
+        const updatedClaim = await userRewardClaimsService.markAdvertisementAsDisplayed(claimId, companyId.toString());
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Advertisement marked as displayed successfully',
+            data: {
+                claimId: updatedClaim._id,
+                advertised: updatedClaim.advertised,
+            },
         });
     } catch (error) {
         next(error);

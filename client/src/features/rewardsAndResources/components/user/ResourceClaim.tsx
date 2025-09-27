@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { StarsOutlined } from "@mui/icons-material";
 import {
-  useGetResourceByIdQuery,
-  useCheckResourceClaimedQuery,
   useApplyForRewardMutation,
-} from "../rewardsAndResourcesApi";
+  useCheckResourceClaimedQuery,
+  useGetResourceByIdQuery,
+} from "../../rewardsAndResourcesApi";
 
 interface ResourceClaimProps {
   resourceId: string;
@@ -28,10 +28,14 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
     isLoading: isResourceLoading,
     error: resourceError,
   } = useGetResourceByIdQuery(resourceId);
-  const { data: claimData, isLoading: isClaimLoading, refetch: refetchClaimStatus } =
-    useCheckResourceClaimedQuery(resourceId);
-  
-  const [applyForReward, { isLoading: isApplying }] = useApplyForRewardMutation();
+  const {
+    data: claimData,
+    isLoading: isClaimLoading,
+    refetch: refetchClaimStatus,
+  } = useCheckResourceClaimedQuery(resourceId);
+
+  const [applyForReward, { isLoading: isApplying }] =
+    useApplyForRewardMutation();
 
   if (isResourceLoading || isClaimLoading) {
     return (
@@ -66,10 +70,10 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
         resourceId: resourceId,
         userInput: userInput.trim(),
       }).unwrap();
-      
+
       // Refetch claim status to update UI
       refetchClaimStatus();
-      
+
       // Reset form
       setUserInput("");
       setIsConfirmed(false);
@@ -165,11 +169,11 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
             sx={{
               backgroundColor: "#f8f9fa",
               "& .MuiOutlinedinput-root": {
-            backgroundColor: "#f8f9fa",
-            borderRadius: "0px",
+                backgroundColor: "#f8f9fa",
+                borderRadius: "0px",
               },
               "& .MuiOutlinedInput-root": {
-            borderRadius: "0px",
+                borderRadius: "0px",
               },
             }}
           />

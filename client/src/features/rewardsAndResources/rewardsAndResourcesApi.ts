@@ -68,6 +68,48 @@ export interface CheckResourceClaimedResponse {
   resourceId: string;
 }
 
+export interface ReferralStatsResponse {
+  success: boolean;
+  data: {
+    totalReferrals: number;
+    signedUp: number;
+    converted: number;
+    advertised: number;
+  };
+}
+
+export interface ReferralUser {
+  _id: string;
+  name: string;
+  companyMail: string;
+  contact?: string;
+  totalStars: number;
+  webnClubMember: boolean;
+  hasAdvertisementClaim: boolean;
+  advertisementClaimId?: string;
+  advertised?: boolean;
+  lastUpdated?: string;
+}
+
+export interface ReferralUsersResponse {
+  success: boolean;
+  data: {
+    users: ReferralUser[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export interface MarkReferralAdvertisedResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    claimId: string;
+  };
+}
+
 export const rewardsAndResourcesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     applyForReward: builder.mutation<RewardClaimResponse, FormData | RewardClaimRequest>({
@@ -125,6 +167,49 @@ export const rewardsAndResourcesApi = api.injectEndpoints({
         { type: "Rewards", id: `claimed-${resourceId}` },
       ],
     }),
+
+    getReferralStats: builder.query<ReferralStatsResponse, void>({
+      query: () => ({
+        url: "/admin/referral/stats",
+        method: "GET",
+      }),
+      providesTags: [{ type: "AdminReferralStats", id: "STATS" }],
+    }),
+
+    getReferralUsers: builder.query<
+      ReferralUsersResponse,
+      { search?: string; page?: number; limit?: number; sortBy?: string }
+    >({
+      query: (params) => ({
+        url: "/admin/referral/users",
+        method: "GET",
+        params,
+      }),
+      providesTags: (result) =>
+        result?.data?.users
+          ? [
+              ...result.data.users.map((user) => ({
+                type: "AdminReferralUsers" as const,
+                id: user._id,
+              })),
+              { type: "AdminReferralUsers" as const, id: "LIST" },
+            ]
+          : [{ type: "AdminReferralUsers" as const, id: "LIST" }],
+    }),
+
+    markReferralAdvertised: builder.mutation<
+      MarkReferralAdvertisedResponse,
+      { claimId: string }
+    >({
+      query: ({ claimId }) => ({
+        url: `/admin/referral/${claimId}/advertised`,
+        method: "PATCH",
+      }),
+      invalidatesTags: [
+        { type: "AdminReferralUsers", id: "LIST" },
+        { type: "AdminReferralStats", id: "STATS" },
+      ],
+    }),
   }),
 });
 
@@ -135,4 +220,7 @@ export const {
   useGetAllResourcesQuery,
   useGetResourceByIdQuery,
   useCheckResourceClaimedQuery,
+  useGetReferralStatsQuery,
+  useGetReferralUsersQuery,
+  useMarkReferralAdvertisedMutation,
 } = rewardsAndResourcesApi;

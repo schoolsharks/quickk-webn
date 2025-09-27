@@ -23,6 +23,7 @@ import {
   ExpandMore,
 } from "@mui/icons-material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/images/header/logo.webp";
 import AnimateOnState from "../../animation/AnimateOnState";
@@ -116,6 +117,13 @@ const menuItems: MenuItem[] = [
 ];
 
 const otherMenuItems: MenuItem[] = [
+  {
+    id: "referral",
+    label: "Referral",
+    icon: <GroupAddIcon />,
+    path: "/admin/referral",
+    feature: FeatureKeys.MODULES,
+  },
   {
     id: "analytics",
     label: "Analytics",

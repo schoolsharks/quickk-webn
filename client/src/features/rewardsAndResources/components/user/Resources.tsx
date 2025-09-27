@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Grid, Button, useTheme } from "@mui/material";
 import { StarsOutlined } from "@mui/icons-material";
 import { useSearchParams } from "react-router-dom";
-import { useGetAllResourcesQuery } from "../rewardsAndResourcesApi";
+import { useGetAllResourcesQuery } from "../../rewardsAndResourcesApi";
 
 const Resources: React.FC = () => {
   const { data: resourcesData, isLoading } = useGetAllResourcesQuery();

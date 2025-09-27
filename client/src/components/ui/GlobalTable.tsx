@@ -27,8 +27,9 @@ export interface TableColumn {
   label: string;
   minWidth?: number;
   align?: "right" | "left" | "center";
-  format?: (value: any) => string | React.ReactNode;
+  format?: (value: any, row?: any) => string | React.ReactNode;
   sortable?: boolean;
+  render?: (value: any, row: any) => React.ReactNode;
 }
 
 // Define the structure for action buttons
@@ -88,9 +89,13 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
   };
 
   // Format cell value based on column configuration
-  const formatCellValue = (column: TableColumn, value: any) => {
+  const renderCellValue = (column: TableColumn, row: any) => {
+    const value = row[column.id];
+    if (column.render) {
+      return column.render(value, row);
+    }
     if (column.format) {
-      return column.format(value);
+      return column.format(value, row);
     }
     return value;
   };
@@ -184,7 +189,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                         borderBottom: "1px solid black",
                       }}
                     >
-                      {formatCellValue(column, row[column.id])}
+                      {renderCellValue(column, row)}
                     </TableCell>
                   ))}
                   {showActions && (

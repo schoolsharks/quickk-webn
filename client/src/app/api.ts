@@ -131,31 +131,23 @@ export const api = createApi({
     baseQuery: baseQueryWithReauth,
 
     tagTypes: [
-
         "User",
-
         "Auth",
-
         "DailyPulse",
-
         "Learning",
-
         "Tickets",
-
         "Rewards",
-
         "LearningAdmin",
-
         "DailyPulseAdmin",
-
         "Admin",
-
         "CompanyFeatures",
         "Features",
         "Company",
         "AdminUser",
         "QuickkAi",
-        "AdminEvents"
+        "AdminEvents",
+        "AdminReferralStats",
+        "AdminReferralUsers"
 
     ],
 

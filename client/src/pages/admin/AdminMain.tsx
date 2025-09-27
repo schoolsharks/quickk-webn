@@ -30,6 +30,7 @@ import GowomaniaUsers from "../../features/admin/user/GowomaniaUsers";
 import EventsAdminPage from "../../features/events/pages/EventsAdminPage";
 import EventFormPage from "./EventFormPage";
 import Loader from "../../components/ui/Loader";
+import ReferralPage from "./ReferralPage.tsx";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -58,7 +59,9 @@ const Settings = () => (
 
 const AdminMain: React.FC = () => {
   const [fetchAdmin] = useLazyFetchAdminQuery();
-  const { isAuthenticated,loading } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, loading } = useSelector(
+    (state: RootState) => state.auth
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     fetchAdmin({})
@@ -208,6 +211,14 @@ const AdminMain: React.FC = () => {
                     element={
                       <FeatureGuard feature={FeatureKeys.REWARDS}>
                         <Rewards />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/referral"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ReferralPage />
                       </FeatureGuard>
                     }
                   />

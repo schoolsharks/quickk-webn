@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
+import { RootState } from "../../../../app/store";
 
 const StatsCards: React.FC = () => {
   const { totalStars, redeemedStars } = useSelector((state: RootState) => state.user);

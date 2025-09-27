@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { StarsOutlined } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
-import { useCheckRewardClaimedQuery } from "../rewardsAndResourcesApi";
+import { RootState } from "../../../../app/store";
+import { useCheckRewardClaimedQuery } from "../../rewardsAndResourcesApi";
 import AdvertisementUploadModal from "./AdvertisementUploadModal";
 
 const AdvertiseBanner: React.FC = () => {

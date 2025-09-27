@@ -10,8 +10,12 @@ import QuestionResponse from "../../questions/model/question.response";
 import UserModule from "../../learning/model/user.module.model";
 import { EventRegistration } from "../../events/models/events.model";
 import DailyPulse from "../../dailyPulse/model/dailyPulse.model";
+import UserRewardsClaims from "../../rewardsAndResources/models/userRewardClaims";
+import { RewardTypes } from "../../rewardsAndResources/types/enums";
 
 class UserService {
+  private readonly ADVERTISEMENT_REWARD_TYPE = RewardTypes.ADVERTISEMENT;
+  private readonly ADVERTISEMENT_STARS_THRESHOLD = 1000;
   async getUserByIdWithCompany(userId: mongoose.Types.ObjectId) {
     const user = await User.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
@@ -490,6 +494,260 @@ class UserService {
         message: error.message || "Failed to process bulk upload"
       };
     }
+  }
+
+  async getReferralStats(companyId: string) {
+    try {
+      const companyObjectId = new Types.ObjectId(companyId);
+
+      const [totalReferrals, signedUp, advertised] = await Promise.all([
+        User.countDocuments({
+          company: companyObjectId,
+          referredBy: { $ne: null },
+        }),
+        User.countDocuments({
+          company: companyObjectId,
+          webnClubMember: false,
+        }),
+        this.countAdvertisedClaims(companyObjectId),
+      ]);
+
+      return {
+        totalReferrals,
+        signedUp,
+        converted: 0,
+        advertised,
+      };
+    } catch (error) {
+      console.error("Error fetching referral stats:", error);
+      throw new AppError(
+        "Failed to fetch referral stats",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async getReferralUsers({
+    companyId,
+    search,
+    page = 1,
+    limit = 20,
+    sortBy = "mostStars",
+  }: {
+    companyId: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+  }) {
+    try {
+      const companyObjectId = new Types.ObjectId(companyId);
+      const advertisementType = this.ADVERTISEMENT_REWARD_TYPE;
+      const safePage = Math.max(Number(page) || 1, 1);
+      const safeLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
+      const skip = (safePage - 1) * safeLimit;
+
+      const pipeline: mongoose.PipelineStage[] = [
+        { $match: { company: companyObjectId } },
+        {
+          $lookup: {
+            from: "userrewardsclaims",
+            let: { userId: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$user", "$$userId"] },
+                      { $eq: ["$rewardType", advertisementType] },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "advertisementClaims",
+          },
+        },
+        {
+          $addFields: {
+            advertisementClaim: { $arrayElemAt: ["$advertisementClaims", 0] },
+            hasAdvertisementClaim: {
+              $gt: [{ $size: "$advertisementClaims" }, 0],
+            },
+          },
+        },
+        {
+          $addFields: {
+            advertisementClaimId: "$advertisementClaim._id",
+            advertised: {
+              $cond: [
+                { $ifNull: ["$advertisementClaim.advertised", false] },
+                true,
+                false,
+              ],
+            },
+            hasValidAdvertisementClaim: {
+              $cond: [
+                {
+                  $and: [
+                    { $gt: [{ $size: "$advertisementClaims" }, 0] },
+                    {
+                      $ne: ["$advertisementClaim.advertised", true],
+                    },
+                  ],
+                },
+                true,
+                false,
+              ],
+            },
+          },
+        },
+        {
+          $match: {
+            $or: [
+              { hasValidAdvertisementClaim: true },
+              {
+                $and: [
+                  { totalStars: { $gte: this.ADVERTISEMENT_STARS_THRESHOLD } },
+                  { hasAdvertisementClaim: false },
+                ],
+              },
+            ],
+          },
+        },
+      ];
+
+      if (search && search.trim()) {
+        const regex = new RegExp(search.trim(), "i");
+        pipeline.push({
+          $match: {
+            $or: [
+              { name: { $regex: regex } },
+              { companyMail: { $regex: regex } },
+              { contact: { $regex: regex } },
+            ],
+          },
+        });
+      }
+
+      pipeline.push({
+        $addFields: {
+          hasValidAdvertisementClaimNumeric: {
+            $cond: ["$hasValidAdvertisementClaim", 1, 0],
+          },
+        },
+      });
+
+      let sortCriteria: Record<string, 1 | -1> = {
+        hasValidAdvertisementClaimNumeric: -1,
+        totalStars: -1,
+        updatedAt: -1,
+      };
+
+      switch (sortBy) {
+        case "mostStars":
+          sortCriteria = { totalStars: -1, updatedAt: -1 };
+          break;
+        case "leastStars":
+          sortCriteria = { totalStars: 1, updatedAt: -1 };
+          break;
+        case "recent":
+          sortCriteria = { updatedAt: -1 };
+          break;
+        case "hasClaim":
+          sortCriteria = {
+            hasValidAdvertisementClaimNumeric: -1,
+            totalStars: -1,
+            updatedAt: -1,
+          };
+          break;
+        default:
+          break;
+      }
+
+      pipeline.push({ $sort: sortCriteria });
+
+      pipeline.push({
+        $project: {
+          advertisementClaims: 0,
+          advertisementClaim: 0,
+        },
+      });
+
+      pipeline.push({
+        $facet: {
+          data: [
+            { $skip: skip },
+            { $limit: safeLimit },
+          ],
+          totalCount: [{ $count: "count" }],
+        },
+      });
+
+      const result = await User.aggregate(pipeline);
+      const facetData = result[0] ?? { data: [], totalCount: [] };
+      const users = (facetData.data as Record<string, any>[]) ?? [];
+      const total = facetData.totalCount?.[0]?.count ?? 0;
+      const totalPages =
+        safeLimit > 0 ? Math.max(Math.ceil(total / safeLimit), 1) : 1;
+
+      const formattedUsers = users.map((user) => ({
+        _id: user._id.toString(),
+        name: user.name,
+        companyMail: user.companyMail,
+        contact: user.contact,
+        totalStars: user.totalStars ?? 0,
+        webnClubMember: Boolean(user.webnClubMember),
+        hasAdvertisementClaim: Boolean(user.hasAdvertisementClaim),
+        advertisementClaimId: user.advertisementClaimId
+          ? user.advertisementClaimId.toString()
+          : undefined,
+        advertised: Boolean(user.advertised),
+        lastUpdated: user.updatedAt
+          ? new Date(user.updatedAt).toISOString()
+          : null,
+      }));
+
+      return {
+        users: formattedUsers,
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages,
+      };
+    } catch (error) {
+      console.error("Error fetching referral users:", error);
+      throw new AppError(
+        "Failed to fetch referral users",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  private async countAdvertisedClaims(
+    companyObjectId: Types.ObjectId
+  ): Promise<number> {
+    const result = await UserRewardsClaims.aggregate([
+      {
+        $match: {
+          rewardType: this.ADVERTISEMENT_REWARD_TYPE,
+          advertised: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },
+      { $match: { "user.company": companyObjectId } },
+      { $count: "count" },
+    ]);
+
+    return result[0]?.count ?? 0;
   }
 
   async getUserRecommendations(

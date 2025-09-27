@@ -1,5 +1,5 @@
 import React from "react";
-import RewardsAndResourcesLayout from "../../features/rewardsAndResources/RewardsAndResourcesLayout";
+import RewardsAndResourcesLayout from "../../features/rewardsAndResources/components/user/RewardsAndResourcesLayout";
 
 const RewardsAndResources: React.FC = () => {
   return <RewardsAndResourcesLayout />;

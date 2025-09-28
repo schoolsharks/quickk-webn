@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Paper, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { ResourceCard, ResourceDetails } from "../../shared";
 import { Eye } from "lucide-react";
 

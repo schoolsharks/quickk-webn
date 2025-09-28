@@ -1,40 +1,80 @@
 import mongoose from "mongoose";
 import { IResources } from "../types/interface";
+import { ResourceStatus, ResourceType } from "../types/enums";
 
 const ResourcesSchema = new mongoose.Schema<IResources>(
   {
     image: {
       type: String,
-      required: true,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
     },
     heading: {
       type: String,
-      required: true,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
     },
     companyName: {
       type: String,
-      required: true,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
     },
     subHeading: {
       type: String,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
+    },
+    status: {
+      type: String,
+      enum: Object.values(ResourceStatus),
+      default: ResourceStatus.DRAFT,
       required: true,
+    },
+    type: {
+      type: String,
+      enum: Object.values(ResourceType),
+      required: true,
+    },
+    targetAudience: [
+      {
+        type: String,
+        enum: ["All", "Gowomania Only", "Webn Only"],
+      },
+    ],
+    quantity: {
+      type: Number,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
+      default: 1,
+    },
+    expiryDate: {
+      type: Date,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
     },
     description: [
       {
         title: {
           type: String,
-          required: true,
         },
         points: [
           {
             type: String,
-            required: true,
           },
         ],
       },
     ],
     stars: {
       type: Number,
+      required: function (this: IResources) {
+        return this.status === ResourceStatus.ACTIVE;
+      },
       default: 0,
     },
   },

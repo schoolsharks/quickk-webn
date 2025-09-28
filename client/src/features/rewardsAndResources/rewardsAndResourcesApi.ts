@@ -210,8 +210,140 @@ export const rewardsAndResourcesApi = api.injectEndpoints({
         { type: "AdminReferralStats", id: "STATS" },
       ],
     }),
+
+    // Admin Resources endpoints
+    getResourcesStats: builder.query<
+      { success: boolean; data: ResourcesStatsData },
+      void
+    >({
+      query: () => ({
+        url: "/resources/admin/stats",
+        method: "GET",
+      }),
+      providesTags: [{ type: "AdminResourcesStats", id: "STATS" }],
+    }),
+
+    searchResourcesAdmin: builder.query<
+      { success: boolean; data: ResourcesSearchResponse },
+      ResourcesSearchParams
+    >({
+      query: (params) => ({
+        url: "/resources/admin/search",
+        method: "GET",
+        params,
+      }),
+      providesTags: [{ type: "AdminResources", id: "LIST" }],
+    }),
+
+    createResource: builder.mutation<
+      { success: boolean; data: ResourceData },
+      Partial<ResourceData> | FormData
+    >({
+      query: (resourceData) => ({
+        url: "/resources/admin/create",
+        method: "POST",
+        body: resourceData,
+      }),
+      invalidatesTags: [
+        { type: "AdminResources", id: "LIST" },
+        { type: "AdminResourcesStats", id: "STATS" },
+      ],
+    }),
+
+    updateResource: builder.mutation<
+      { success: boolean; data: ResourceData },
+      { resourceId: string; resourceData: Partial<ResourceData> | FormData }
+    >({
+      query: ({ resourceId, resourceData }) => ({
+        url: `/resources/admin/${resourceId}`,
+        method: "PUT",
+        body: resourceData,
+      }),
+      invalidatesTags: [
+        { type: "AdminResources", id: "LIST" },
+        { type: "AdminResourcesStats", id: "STATS" },
+      ],
+    }),
+
+    deleteResource: builder.mutation<
+      { success: boolean; message: string },
+      string
+    >({
+      query: (resourceId) => ({
+        url: `/resources/admin/${resourceId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [
+        { type: "AdminResources", id: "LIST" },
+        { type: "AdminResourcesStats", id: "STATS" },
+      ],
+    }),
+
+    searchCompanies: builder.query<
+      { success: boolean; data: CompanySearchResult[] },
+      string
+    >({
+      query: (search) => ({
+        url: "/resources/admin/companies/search",
+        method: "GET",
+        params: { search },
+      }),
+    }),
   }),
 });
+
+// Add interfaces for the new endpoints
+export interface ResourcesStatsData {
+  total: number;
+  active: number;
+  drafts: number;
+  totalRedeemed: number;
+}
+
+export interface ResourceData {
+  _id: string;
+  heading: string;
+  subHeading: string;
+  image: string;
+  companyName: string;
+  companyLogo?: string;
+  companyEmail?: string;
+  companyContact?: string;
+  type: "SERVICE" | "PRODUCT";
+  targetAudience: string[];
+  status: "ACTIVE" | "DRAFT";
+  quantity: number;
+  expiryDate: string;
+  stars: number;
+  totalRedeemed: number;
+  description: {
+    title: string;
+    points: string[];
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ResourcesSearchResponse {
+  resources: ResourceData[];
+  totalCount: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ResourcesSearchParams {
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface CompanySearchResult {
+  businessName: string;
+  businessLogo: string;
+  companyMail: string;
+  contact: string;
+}
 
 export const {
   useApplyForRewardMutation,
@@ -223,4 +355,11 @@ export const {
   useGetReferralStatsQuery,
   useGetReferralUsersQuery,
   useMarkReferralAdvertisedMutation,
+  useGetResourcesStatsQuery,
+  useSearchResourcesAdminQuery,
+  useCreateResourceMutation,
+  useUpdateResourceMutation,
+  useDeleteResourceMutation,
+  useSearchCompaniesQuery,
+  useLazySearchCompaniesQuery,
 } = rewardsAndResourcesApi;

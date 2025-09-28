@@ -3,7 +3,7 @@ import userRoutes from "../../modules/user/route/user.routes";
 import adminRoutes from "../../modules/admin/route/admin.route";
 import questionRoutes from "../../modules/questions/route/question.routes";
 import onboardingRoutes from "../../modules/adminOnboarding/routes/onboarding.routes";
-
+import resourcesRoutes from "../../modules/rewardsAndResources/routes/resources.routes";
 
 const router = express.Router();
 
@@ -12,7 +12,6 @@ router.use("/admin", adminRoutes);
 router.use("/onboarding", onboardingRoutes);
 router.use("/question", questionRoutes);
 router.use("/infoCard", questionRoutes);
-
-
+router.use("/resources", resourcesRoutes);
 
 export default router;

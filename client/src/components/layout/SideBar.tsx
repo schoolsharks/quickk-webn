@@ -114,6 +114,13 @@ const menuItems: MenuItem[] = [
     path: "/admin/rewards",
     feature: FeatureKeys.REWARDS,
   },
+  {
+    id: "resources",
+    label: "Resources",
+    icon: <RewardsIcon />,
+    path: "/admin/resources",
+    feature: FeatureKeys.MODULES,
+  },
 ];
 
 const otherMenuItems: MenuItem[] = [

@@ -1,0 +1,12 @@
+export { default as ResourceBasicDetails } from "./ResourceBasicDetails";
+export { default as ResourceCompanyDetails } from "./ResourceCompanyDetails";
+export { default as ResourceRewardDetails } from "./ResourceRewardDetails";
+export { default as ResourceCriteria } from "./ResourceCriteria";
+export { default as ResourceReminders } from "./ResourceReminders";
+export { default as ResourceEditPage } from "./ResourceEditPage";
+export { default as ResourcePreview } from "./ResourcePreview";
+export { default as ResourcesAdminLayout } from "./ResourcesAdminLayout";
+export { default as ResourcesLayout } from "./ResourcesLayout";
+export { default as ResourcesSearchBar } from "./ResourcesSearchBar";
+export { default as ResourcesStats } from "./ResourcesStats";
+export { default as ResourcesTable } from "./ResourcesTable";

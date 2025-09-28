@@ -31,6 +31,8 @@ import EventsAdminPage from "../../features/events/pages/EventsAdminPage";
 import EventFormPage from "./EventFormPage";
 import Loader from "../../components/ui/Loader";
 import ReferralPage from "./ReferralPage.tsx";
+import ResourcesPage from "./ResourcesPage.tsx";
+import { ResourceEditPage } from "../../features/rewardsAndResources/components/admin/resources";
 
 const Rewards = () => (
   <FeatureGuard feature={FeatureKeys.REWARDS}>
@@ -211,6 +213,30 @@ const AdminMain: React.FC = () => {
                     element={
                       <FeatureGuard feature={FeatureKeys.REWARDS}>
                         <Rewards />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/resources"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourcesPage />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/resources/create"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourceEditPage />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/resources/edit/:resourceId"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourceEditPage />
                       </FeatureGuard>
                     }
                   />

@@ -14,6 +14,7 @@ import {
   useCheckResourceClaimedQuery,
   useGetResourceByIdQuery,
 } from "../../rewardsAndResourcesApi";
+import { ResourceDetails } from "../shared";
 
 interface ResourceClaimProps {
   resourceId: string;
@@ -85,69 +86,13 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
 
   return (
     <Box>
-      <Box
-        sx={{
-          padding: "24px 16px",
-          borderRadius: "8px 8px 0 0",
-        }}
-      >
-        <Typography fontWeight={"400"} fontSize={"16px"} color="primary.main">
-          Prime reward
-        </Typography>
-        <Box
-          component="img"
-          src={resource.image}
-          alt={resource.heading}
-          sx={{
-            objectFit: "contain",
-            marginBottom: "16px",
-            width: "100%",
-          }}
-        />
-        <Typography
-          fontWeight="700"
-          fontSize="24px"
-          lineHeight="120%"
-          marginBottom="8px"
-        >
-          {resource.heading}
-        </Typography>
-        <Typography fontWeight="600" fontSize="16px" color="text.secondary">
-          {resource.subHeading}
-        </Typography>
-      </Box>
+      <ResourceDetails
+        resource={resource}
+        showHeader={true}
+        isPreview={false}
+      />
 
       <Box padding="16px">
-        {/* Description Sections */}
-        {resource.description.map((section, index) => (
-          <Box key={index} marginBottom="24px">
-            <Typography
-              fontWeight="600"
-              fontSize="16px"
-              color="#8B46FF"
-              marginBottom="12px"
-            >
-              {section.title}
-            </Typography>
-            <Box component="ul" sx={{ paddingLeft: "16px", margin: 0 }}>
-              {section.points.map((point, pointIndex) => (
-                <Box
-                  key={pointIndex}
-                  component="li"
-                  sx={{
-                    marginBottom: "8px",
-                    fontSize: "14px",
-                    lineHeight: "150%",
-                    color: "text.primary",
-                  }}
-                >
-                  {point}
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        ))}
-
         {/* User Input Section */}
         <Box marginBottom="16px">
           <Typography

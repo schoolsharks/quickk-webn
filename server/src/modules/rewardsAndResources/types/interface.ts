@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { RewardTypes } from "./enums";
+import { RewardTypes, ResourceStatus, ResourceType } from "./enums";
 
 export interface IUserRewardsClaims {
   _id?: mongoose.Types.ObjectId;
@@ -14,13 +14,21 @@ export interface IUserRewardsClaims {
 }
 
 export interface IResources {
+  _id?: mongoose.Types.ObjectId;
   image: string;
   heading: string;
   subHeading: string;
   stars: number;
-  companyName:string;
+  companyName: string;
+  status: ResourceStatus;
+  type: ResourceType;
+  targetAudience: string[];
+  quantity: number;
+  expiryDate: Date;
   description: {
     title: string;
     points: string[];
   }[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

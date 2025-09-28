@@ -147,8 +147,9 @@ export const api = createApi({
         "QuickkAi",
         "AdminEvents",
         "AdminReferralStats",
-        "AdminReferralUsers"
-
+        "AdminReferralUsers",
+        "AdminResources",
+        "AdminResourcesStats"
     ],
 
     endpoints: () => ({}),

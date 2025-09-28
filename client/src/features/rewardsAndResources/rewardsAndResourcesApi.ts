@@ -231,6 +231,24 @@ export const rewardsAndResourcesApi = api.injectEndpoints({
       ],
     }),
 
+    getAvailableAdvertisementDates: builder.query<AvailableAdvertisementDatesResponse, void>({
+      query: () => ({
+        url: "/admin/referral/advertisement/available-dates",
+        method: "GET",
+      }),
+    }),
+
+    addAdvertisementToPulse: builder.mutation<
+      AddAdvertisementToPulseResponse,
+      AddAdvertisementToPulseRequest
+    >({
+      query: (data) => ({
+        url: "/admin/referral/advertisement/add-to-pulse",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     // Admin Resources endpoints
     getResourcesStats: builder.query<
       { success: boolean; data: ResourcesStatsData },
@@ -365,6 +383,7 @@ export interface CompanySearchResult {
   contact: string;
 }
 
+
 export const {
   useApplyForRewardMutation,
   useCheckRewardClaimedQuery,
@@ -375,6 +394,8 @@ export const {
   useGetReferralStatsQuery,
   useGetReferralUsersQuery,
   useMarkReferralAdvertisedMutation,
+  useGetAvailableAdvertisementDatesQuery,
+  useAddAdvertisementToPulseMutation,
   useGetResourcesStatsQuery,
   useSearchResourcesAdminQuery,
   useCreateResourceMutation,

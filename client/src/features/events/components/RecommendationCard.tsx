@@ -20,6 +20,7 @@ interface RecommendationUser {
   chapter?: string;
   instagram?: string;
   facebook?: string;
+  contact?: string;
   companyMail: string;
   avatar?: string;
   matchScore: number;

@@ -201,6 +201,29 @@ export const adminApi = api.injectEndpoints({
             }),
         }),
 
+        // Connection Analytics endpoints
+        getConnectionStats: builder.query({
+            query: (params: { period?: string } = {}) => ({
+                url: '/admin/getConnectionStats',
+                method: 'GET',
+                params,
+            }),
+            providesTags: ['Admin'],
+            transformResponse: (response: any) => response?.data,
+        }),
+
+        exportConnections: builder.query({
+            query: (params: { 
+                limit?: number;
+                period?: string; 
+            } = {}) => ({
+                url: '/admin/exportConnections',
+                method: 'GET',
+                params,
+                responseHandler: (response) => response.blob(),
+            }),
+        }),
+
     }),
 });
 
@@ -223,5 +246,8 @@ export const {
     useGetDashboardStatsQuery,
     useGetEngagementAnalyticsQuery,
     useGetParticipationLeaderboardQuery,
-    useLazySearchAddressesQuery
+    useLazySearchAddressesQuery,
+    // Connection analytics hooks
+    useGetConnectionStatsQuery,
+    useLazyExportConnectionsQuery,
 } = adminApi;

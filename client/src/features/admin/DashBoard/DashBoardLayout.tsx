@@ -8,6 +8,7 @@ import ParticipationBoard from "./ParticipationBoard";
 // import TotalUserChart from "./TotalUserChart";
 import { useGetDashboardStatsQuery } from "../service/adminApi";
 import DashboardEvent from "./DashboardEvent";
+import AdminConnectionStats from "./ConnectionStats";
 
 const DashBoardLayout: React.FC = () => {
   const { data: dashboardStatsData, isLoading: statsLoading } =
@@ -30,6 +31,9 @@ const DashBoardLayout: React.FC = () => {
         <Grid size={5}>
           <ParticipationBoard />
         </Grid>
+      </Grid>
+      <Grid container size={12}>
+        <AdminConnectionStats />
       </Grid>
       <Grid container size={12} spacing={"12px"}>
         <Grid size={7}>

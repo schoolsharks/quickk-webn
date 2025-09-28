@@ -477,5 +477,20 @@ router.get(
     asyncHandeler(eventController.searchAddresses)
 );
 
+// Connection Analytics Routes for Admin Dashboard
+router.get(
+    '/getConnectionStats',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getConnectionStats)
+);
+
+router.get(
+    '/exportConnections',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.exportConnections)
+);
+
 
 export default router;

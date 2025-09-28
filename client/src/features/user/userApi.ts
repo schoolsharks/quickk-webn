@@ -164,6 +164,25 @@ export const usersApi = api.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+
+    // Connection endpoints - only the ones implemented in backend
+    addConnection: builder.mutation({
+      query: (data: { connectionId: string; platform: string }) => ({
+        url: "/user/addConnection",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    getUserConnections: builder.query({
+      query: ({ page = 1, limit = 10 }: { page?: number; limit?: number } = {}) => ({
+        url: "/user/getConnections",
+        method: "GET",
+        params: { page, limit },
+      }),
+      providesTags: ["User"],
+    }),
   }),
 });
 
@@ -184,4 +203,7 @@ export const {
   useLazySearchNetworkUsersQuery,
   useGetUserRecommendationsQuery,
   useLazyGetUserRecommendationsQuery,
+  // Connection hooks
+  useAddConnectionMutation,
+  useGetUserConnectionsQuery,
 } = usersApi;

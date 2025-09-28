@@ -9,6 +9,7 @@ import * as userControllers from "../controllers/user.controller";
 import * as rewardControllers from "../../reward/controllers/reward.controller";
 import { eventController } from "../../events/controllers/events.controllers";
 import * as UserControllers from "../../user/controllers/user.controller";
+import * as userConnectionControllers from "../controllers/user.connection.controller";
 import userRewardClaimsRoutes from "../../rewardsAndResources/routes/userRewardClaims.routes";
 import resourcesRoutes from "../../rewardsAndResources/routes/resources.routes";
 
@@ -66,6 +67,10 @@ router.get('/search/users', authenticateUser, asyncHandeler(UserControllers.sear
 
 // route for getting user recommendations
 router.get('/getRecommendations', authenticateUser, asyncHandeler(UserControllers.getUserRecommendations));
+
+// Connection routes
+router.post('/addConnection', authenticateUser, asyncHandeler(userConnectionControllers.addConnection));
+router.get('/getConnections', authenticateUser, asyncHandeler(userConnectionControllers.getUserConnections));
 
 // Routes for user reward claims
 router.use('/reward-claims', userRewardClaimsRoutes);

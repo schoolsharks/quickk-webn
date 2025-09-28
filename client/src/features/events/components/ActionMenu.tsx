@@ -12,7 +12,17 @@ import {
   Box
 } from '@mui/material';
 import { Instagram, Facebook, Email, Close } from '@mui/icons-material';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { useTheme } from '@mui/material/styles';
+import { useAddConnectionMutation } from '../../user/userApi';
+
+// Platform enum to match backend
+enum ConnectionPlatform {
+  WHATSAPP = 'whatsapp',
+  INSTAGRAM = 'instagram',
+  FACEBOOK = 'facebook',
+  MAIL = 'mail'
+}
 
 interface RecommendationUser {
   _id: string;
@@ -24,6 +34,7 @@ interface RecommendationUser {
   chapter?: string;
   instagram?: string;
   facebook?: string;
+  contact?: string;
   companyMail: string;
   avatar?: string;
   matchScore: number;
@@ -37,6 +48,38 @@ interface ActionMenuProps {
 
 const ActionMenu: React.FC<ActionMenuProps> = ({ user, anchorEl, onClose }) => {
   const theme = useTheme();
+  const [addConnection] = useAddConnectionMutation();
+
+  // Handler for platform connection tracking
+  const handlePlatformConnect = async (platform: ConnectionPlatform, action: () => void) => {
+    try {
+      // Execute the platform action first
+      action();
+      
+      // Track the connection in database
+      await addConnection({
+        connectionId: user._id,
+        platform
+      }).unwrap();
+      
+      console.log(`Connection tracked for platform: ${platform}`);
+    } catch (error) {
+      console.error('Failed to track connection:', error);
+      // Action was already executed, so no need to show error to user
+    }
+  };
+
+  const generateWhatsAppMessage = (user: RecommendationUser) => {
+    return `Hi ${user.name}! 👋
+
+I found your profile through our community network and I'm impressed by your work${user.businessCategory ? ` in ${user.businessCategory}` : ''}.
+
+${user.businessName ? `Your business "${user.businessName}" looks amazing and ` : ''}I'd love to connect and explore potential collaboration opportunities!
+
+${user.specialisation ? `I see we both have interests in ${user.specialisation}, which makes me even more excited about connecting.` : ''}
+
+Looking forward to hearing from you! 🚀`;
+  };
 
   const generateInstagramMessage = (user: RecommendationUser) => {
     return `Hi ${user.name}! 👋 I found your profile through our community network and I'm impressed by your work in ${user.businessCategory || 'your field'}. I'd love to connect and explore potential collaborations! ${user.businessName ? `Your business "${user.businessName}" looks amazing.` : ''} Looking forward to hearing from you! 🚀`;
@@ -55,43 +98,66 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ user, anchorEl, onClose }) => {
 
   const handleInstagramClick = () => {
     if (user.instagram) {
-      const instagramHandle = user.instagram.replace('@', '').replace('https://instagram.com/', '').replace('https://www.instagram.com/', '');
-      const message = generateInstagramMessage(user);
-      
-      // Copy message to clipboard
-      navigator.clipboard.writeText(message);
-      
-      // Open Instagram profile
-      const instagramWebUrl = `https://www.instagram.com/${instagramHandle}`;
-      window.open(instagramWebUrl, '_blank');
+      handlePlatformConnect(ConnectionPlatform.INSTAGRAM, () => {
+        const instagramHandle = user.instagram!.replace('@', '').replace('https://instagram.com/', '').replace('https://www.instagram.com/', '');
+        const message = generateInstagramMessage(user);
+        
+        // Copy message to clipboard
+        navigator.clipboard.writeText(message);
+        
+        // Open Instagram profile
+        const instagramWebUrl = `https://www.instagram.com/${instagramHandle}`;
+        window.open(instagramWebUrl, '_blank');
+      });
     }
     onClose();
   };
 
   const handleFacebookClick = () => {
     if (user.facebook) {
-      const message = generateFacebookMessage(user);
-      
-      // Extract Facebook username/ID from URL
-      let facebookId = user.facebook;
-      if (user.facebook.includes('facebook.com/')) {
-        facebookId = user.facebook.split('facebook.com/')[1].split('/')[0];
-      }
-      
-      // Copy message to clipboard
-      navigator.clipboard.writeText(message);
-      
-      // Open Facebook profile
-      const facebookUrl = `https://www.facebook.com/${facebookId}`;
-      window.open(facebookUrl, '_blank');
+      handlePlatformConnect(ConnectionPlatform.FACEBOOK, () => {
+        const message = generateFacebookMessage(user);
+        
+        // Extract Facebook username/ID from URL
+        let facebookId = user.facebook!;
+        if (user.facebook!.includes('facebook.com/')) {
+          facebookId = user.facebook!.split('facebook.com/')[1].split('/')[0];
+        }
+        
+        // Copy message to clipboard
+        navigator.clipboard.writeText(message);
+        
+        // Open Facebook profile
+        const facebookUrl = `https://www.facebook.com/${facebookId}`;
+        window.open(facebookUrl, '_blank');
+      });
+    }
+    onClose();
+  };
+
+  const handleWhatsAppClick = () => {
+    if (user.contact) {
+      handlePlatformConnect(ConnectionPlatform.WHATSAPP, () => {
+        const message = generateWhatsAppMessage(user);
+        // Format the phone number (remove any non-digits and add country code if needed)
+        let phoneNumber = user.contact!.replace(/\D/g, "");
+        // If the number doesn't start with country code, assume it's Indian (+91)
+        if (phoneNumber.length === 10) {
+          phoneNumber = "91" + phoneNumber;
+        }
+        const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, "_blank");
+      });
     }
     onClose();
   };
 
   const handleEmailClick = () => {
-    const { subject, body } = generateEmailMessage(user);
-    const mailtoUrl = `mailto:${user.companyMail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoUrl;
+    handlePlatformConnect(ConnectionPlatform.MAIL, () => {
+      const { subject, body } = generateEmailMessage(user);
+      const mailtoUrl = `mailto:${user.companyMail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoUrl;
+    });
     onClose();
   };
 
@@ -138,6 +204,26 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ user, anchorEl, onClose }) => {
 
         {/* Menu Items */}
         <MenuList sx={{ py: 1 }}>
+          <MenuItem 
+            onClick={handleWhatsAppClick}
+            disabled={!user.contact}
+            sx={{
+              '&:hover': user.contact ? {
+                bgcolor: '#25D366' + '10',
+                '& .MuiListItemIcon-root': { color: '#25D366' },
+                '& .MuiListItemText-primary': { color: '#25D366' }
+              } : {}
+            }}
+          >
+            <ListItemIcon>
+              <WhatsAppIcon sx={{ color: user.contact ? 'inherit' : theme.palette.text.disabled }} />
+            </ListItemIcon>
+            <ListItemText 
+              primary="WhatsApp" 
+              secondary={!user.contact ? "(Not available)" : undefined}
+            />
+          </MenuItem>
+
           <MenuItem 
             onClick={handleInstagramClick}
             disabled={!user.instagram}
@@ -199,7 +285,7 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ user, anchorEl, onClose }) => {
         <Divider />
         <Box p={2}>
           <Typography variant="caption" color={theme.palette.text.secondary}>
-            Messages will be copied to clipboard for your convenience
+            Messages will be copied to clipboard and connections will be tracked automatically
           </Typography>
         </Box>
       </Paper>

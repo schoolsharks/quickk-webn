@@ -35,3 +35,32 @@ export interface IUser {
 export interface IAvatar {
   src: string;
 }
+
+export enum ConnectionPlatform {
+  WHATSAPP = 'whatsapp',
+  INSTAGRAM = 'instagram', 
+  FACEBOOK = 'facebook',
+  MAIL = 'mail'
+}
+
+export interface IUserConnection {
+  userId: Schema.Types.ObjectId;
+  connectionId: Schema.Types.ObjectId;
+  platforms: ConnectionPlatform[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IAddConnectionRequest {
+  connectionId: string;
+  platform: ConnectionPlatform;
+}
+
+export interface IConnectionResponse {
+  _id: string;
+  userId: string;
+  connectionId: string;
+  platforms: ConnectionPlatform[];
+  createdAt: Date;
+  updatedAt: Date;
+}

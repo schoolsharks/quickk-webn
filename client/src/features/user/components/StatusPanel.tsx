@@ -17,7 +17,7 @@ const StatusPanel: React.FC = () => {
       value: null,
       bgColor: "#D9D9D9",
       onClick: () => {
-        navigate("/user/reward");
+        navigate("/user/rewards");
       },
     },
     {

@@ -17,6 +17,8 @@ import { IUser } from '../../user/types/interfaces';
 import UserRewardClaimsService from '../../rewardsAndResources/services/userRewardClaims.service';
 import DailyPulseService from '../../dailyPulse/services/dailyPulse.Service';
 import { RewardTypes } from '../../rewardsAndResources/types/enums';
+import UserConnectionService from '../../user/service/user.connection.service';
+import * as XLSX from 'xlsx';
 
 
 const adminService = new AdminService();
@@ -24,6 +26,7 @@ const userservice = new userService();
 const companyFeatureService = new CompanyFeatureService();
 const eventService = new EventService();
 const userRewardClaimsService = new UserRewardClaimsService();
+const userConnectionService = new UserConnectionService();
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -430,6 +433,97 @@ export const addAdvertisementToDailyPulse = async (req: Request, res: Response, 
                 publishOn: dailyPulse.publishOn,
             },
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Connection Analytics Functions
+export const getConnectionStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        const { period } = req.query;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const stats = await userConnectionService.getCompanyConnectionStats(
+            companyId.toString(),
+            period as string
+        );
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            data: stats
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const exportConnections = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        const { limit = 1000, period } = req.query;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        // Helper method to get date range based on period
+        const getDateRange = (period?: string) => {
+            const now = new Date();
+            const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            
+            switch(period) {
+                case "current":
+                    return { startDate: currentMonth, endDate: now };
+                case "3months":
+                    return { 
+                        startDate: new Date(now.getFullYear(), now.getMonth() - 2, 1), 
+                        endDate: now 
+                    };
+                case "6months":
+                    return { 
+                        startDate: new Date(now.getFullYear(), now.getMonth() - 5, 1), 
+                        endDate: now 
+                    };
+                default:
+                    return { startDate: currentMonth, endDate: now };
+            }
+        };
+
+        const { startDate, endDate } = getDateRange(period as string);
+
+        // Get connections data with date filtering
+        const connectionsResult = await userConnectionService.getConnectionsForExport(
+            companyId.toString(),
+            {
+                limit: Number(limit),
+                startDate,
+                endDate
+            }
+        );
+
+        // Create workbook and worksheet
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(connectionsResult.connections);
+
+        // Add the worksheet to the workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Connections');
+
+        // Generate buffer
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+
+        // Set response headers for file download
+        const filename = `connections_${new Date().toISOString().split('T')[0]}.xlsx`;
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Length', excelBuffer.length);
+
+        // Send the buffer
+        res.send(excelBuffer);
     } catch (error) {
         next(error);
     }

@@ -851,6 +851,7 @@ class UserService {
             chapter: 1,
             instagram: 1,
             facebook: 1,
+            contact: 1,
             companyMail: 1,
             avatar: { $arrayElemAt: ['$avatarDetails.src', 0] },
             matchScore: 1

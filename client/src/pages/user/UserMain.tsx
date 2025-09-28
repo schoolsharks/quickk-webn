@@ -12,7 +12,7 @@ import TimeToPracticePage from "./TimeToPracticePage";
 import ModuleComplete from "./ModuleComplete";
 import AssessmentPage from "./AssessmentPage";
 import ProfilePage from "./ProfilePage";
-import Reward from "./Reward";
+// import Reward from "./Reward";
 import BuyRewardPage from "./BuyRewardPage";
 import ResultPage from "./ResultPage";
 import MyTicketsPage from "./MyTicketsPage";
@@ -116,7 +116,7 @@ const UserMain = () => {
           />
           <Route path="assessment/:moduleId" element={<AssessmentPage />} />
           <Route path="profile" element={<ProfilePage />} />
-          <Route path="reward" element={<Reward />} />
+          {/* <Route path="reward" element={<Reward />} /> */}
           <Route path="mytickets" element={<MyTicketsPage />} />
           <Route path="buyReward/:rewardId" element={<BuyRewardPage />} />
           <Route path="ticket-confirmation" element={<BuyConfiramtionPage />} />

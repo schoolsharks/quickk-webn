@@ -12,13 +12,22 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../../components/ui/button";
-import { useLazySearchNetworkUsersQuery } from "../../user/userApi";
+import { useLazySearchNetworkUsersQuery, useAddConnectionMutation } from "../../user/userApi";
 import { Person } from "@mui/icons-material";
+
+// Platform enum to match backend
+enum ConnectionPlatform {
+  WHATSAPP = 'whatsapp',
+  INSTAGRAM = 'instagram',
+  FACEBOOK = 'facebook',
+  MAIL = 'mail'
+}
 
 // Updated interface to match backend response
 interface NetworkProfile {
@@ -31,6 +40,8 @@ interface NetworkProfile {
   specialisation?: string;
   companyMail?: string;
   contact?: string;
+  instagram?: string;
+  facebook?: string;
   isConnected?: boolean;
   showIcons?: boolean;
   webnClubMember?: boolean;
@@ -42,9 +53,11 @@ const NetworkSearch: React.FC = () => {
   const [profiles, setProfiles] = useState<NetworkProfile[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // RTK Query hook for searching users
+  // RTK Query hooks
   const [searchUsers, { data: searchData, isLoading }] =
     useLazySearchNetworkUsersQuery();
+  
+  const [addConnection] = useAddConnectionMutation();
 
   // Handle search with debouncing
   useEffect(() => {
@@ -77,6 +90,8 @@ const NetworkSearch: React.FC = () => {
           specialisation: user.specialisation || "",
           companyMail: user.companyMail,
           contact: user.contact,
+          instagram: user.instagram,
+          facebook: user.facebook,
           webnClubMember: user.webnClubMember || false,
           businessLogo: user.businessLogo || "",
           isConnected: false,
@@ -114,6 +129,26 @@ const NetworkSearch: React.FC = () => {
           : profile
       )
     );
+  };
+
+  // Handler for platform connection
+  const handlePlatformConnect = async (connectionId: string, platform: ConnectionPlatform, action: () => void) => {
+    try {
+      // Execute the platform action (open WhatsApp, email, etc.)
+      action();
+      
+      // Track the connection in database
+      await addConnection({
+        connectionId,
+        platform
+      }).unwrap();
+      
+      console.log(`Connection tracked for platform: ${platform}`);
+    } catch (error) {
+      console.error('Failed to track connection:', error);
+      // Still execute the action even if tracking fails
+      action();
+    }
   };
 
   // Helper function to create email message
@@ -378,35 +413,86 @@ Best regards`;
                   width="100%"
                   gap={2}
                 >
-                  {/* LinkedIn Icon */}
-                  <Tooltip title="Share about connecting on LinkedIn">
+                  {/* Instagram Icon */}
+                  <Tooltip title={profile.instagram ? `Connect on Instagram` : "Instagram not available"}>
                     <Box
                       sx={{
                         width: 40,
                         height: 40,
                         borderRadius: "50%",
-                        backgroundColor: "#0077B5", // LinkedIn blue
+                        background: profile.instagram 
+                          ? "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)"
+                          : "#CCCCCC",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        cursor: "pointer",
+                        cursor: profile.instagram ? "pointer" : "not-allowed",
                         transition: "transform 0.2s ease",
+                        opacity: profile.instagram ? 1 : 0.5,
                         "&:hover": {
-                          transform: "scale(1.1)",
+                          transform: profile.instagram ? "scale(1.1)" : "none",
                         },
                       }}
-                      onClick={
-                        () => {}
-                        //   (e) => {
-                        //   e.stopPropagation();
-                        //   // Create a LinkedIn share post about wanting to connect
-                        //   const shareText = `I found ${profile.name} on Webn and would love to connect! They specialize in ${profile.specialisation || profile.businessCategory} and work at ${profile.businessName}. Great to see professionals connecting through Webn! #Networking #Webn`;
-                        //   const linkedinShareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://webn.in')}&text=${encodeURIComponent(shareText)}`;
-                        //   window.open(linkedinShareLink, "_blank");
-                        // }
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (profile.instagram) {
+                          handlePlatformConnect(
+                            profile._id,
+                            ConnectionPlatform.INSTAGRAM,
+                            () => {
+                              const instagramUrl = profile.instagram?.startsWith('http') 
+                                ? profile.instagram 
+                                : `https://instagram.com/${profile.instagram?.replace('@', '')}`;
+                              window.open(instagramUrl, "_blank");
+                            }
+                          );
+                        }
+                      }}
                     >
-                      <LinkedInIcon
+                      <InstagramIcon
+                        sx={{
+                          color: "white",
+                          fontSize: "20px",
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
+
+                  {/* Facebook Icon */}
+                  <Tooltip title={profile.facebook ? `Connect on Facebook` : "Facebook not available"}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: profile.facebook ? "#1877F2" : "#CCCCCC", // Facebook blue
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: profile.facebook ? "pointer" : "not-allowed",
+                        transition: "transform 0.2s ease",
+                        opacity: profile.facebook ? 1 : 0.5,
+                        "&:hover": {
+                          transform: profile.facebook ? "scale(1.1)" : "none",
+                        },
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (profile.facebook) {
+                          handlePlatformConnect(
+                            profile._id,
+                            ConnectionPlatform.FACEBOOK,
+                            () => {
+                              const facebookUrl = profile.facebook?.startsWith('http') 
+                                ? profile.facebook 
+                                : `https://facebook.com/${profile.facebook}`;
+                              window.open(facebookUrl, "_blank");
+                            }
+                          );
+                        }
+                      }}
+                    >
+                      <FacebookIcon
                         sx={{
                           color: "white",
                           fontSize: "20px",
@@ -446,13 +532,19 @@ Best regards`;
                       onClick={(e) => {
                         e.stopPropagation();
                         if (profile.companyMail) {
-                          const emailData = createEmailMessage(profile.name);
-                          const mailtoLink = `mailto:${
-                            profile.companyMail
-                          }?subject=${encodeURIComponent(
-                            emailData.subject
-                          )}&body=${encodeURIComponent(emailData.body)}`;
-                          window.open(mailtoLink, "_blank");
+                          handlePlatformConnect(
+                            profile._id,
+                            ConnectionPlatform.MAIL,
+                            () => {
+                              const emailData = createEmailMessage(profile.name);
+                              const mailtoLink = `mailto:${
+                                profile.companyMail
+                              }?subject=${encodeURIComponent(
+                                emailData.subject
+                              )}&body=${encodeURIComponent(emailData.body)}`;
+                              window.open(mailtoLink, "_blank");
+                            }
+                          );
                         }
                       }}
                     >
@@ -494,17 +586,23 @@ Best regards`;
                       onClick={(e) => {
                         e.stopPropagation();
                         if (profile.contact) {
-                          const message = createWhatsAppMessage(profile.name);
-                          // Format the phone number (remove any non-digits and add country code if needed)
-                          let phoneNumber = profile.contact.replace(/\D/g, "");
-                          // If the number doesn't start with country code, assume it's Indian (+91)
-                          if (phoneNumber.length === 10) {
-                            phoneNumber = "91" + phoneNumber;
-                          }
-                          const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-                            message
-                          )}`;
-                          window.open(whatsappLink, "_blank");
+                          handlePlatformConnect(
+                            profile._id,
+                            ConnectionPlatform.WHATSAPP,
+                            () => {
+                              const message = createWhatsAppMessage(profile.name);
+                              // Format the phone number (remove any non-digits and add country code if needed)
+                              let phoneNumber = profile.contact!.replace(/\D/g, "");
+                              // If the number doesn't start with country code, assume it's Indian (+91)
+                              if (phoneNumber.length === 10) {
+                                phoneNumber = "91" + phoneNumber;
+                              }
+                              const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+                                message
+                              )}`;
+                              window.open(whatsappLink, "_blank");
+                            }
+                          );
                         }
                       }}
                     >

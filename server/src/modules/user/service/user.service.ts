@@ -697,7 +697,7 @@ class UserService {
         companyMail: user.companyMail,
         contact: user.contact,
         totalStars: user.totalStars ?? 0,
-        webnClubMember: Boolean(user.webnClubMember),
+        addReady: Boolean(user.advertisementClaimId ? true : false),
         hasAdvertisementClaim: Boolean(user.hasAdvertisementClaim),
         advertisementClaimId: user.advertisementClaimId
           ? user.advertisementClaimId.toString()

@@ -9,7 +9,6 @@ import ReferralFilterDrawer, {
 import {
   useGetReferralStatsQuery,
   useGetReferralUsersQuery,
-  useMarkReferralAdvertisedMutation,
 } from "../../../rewardsAndResourcesApi";
 
 const ReferralLayout: React.FC = () => {
@@ -49,9 +48,6 @@ const ReferralLayout: React.FC = () => {
     sortBy,
     limit: PAGE_SIZE,
   });
-
-  const [markAdvertised, { isLoading: markingAdvertised }] =
-    useMarkReferralAdvertisedMutation();
 
   const stats = statsData?.data;
   const totalPages = referralData?.data?.totalPages ?? 1;
@@ -104,22 +100,7 @@ const ReferralLayout: React.FC = () => {
     setCurrentPage(value);
   };
 
-  const handleAdvertise = async (user: ReferralUserRow) => {
-    if (!user.advertisementClaimId) return;
-
-    try {
-      await markAdvertised({ claimId: user.advertisementClaimId }).unwrap();
-      setSnackbar({
-        open: true,
-        message: `${user.name}'s advertisement marked as live.`,
-      });
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Failed to update advertisement status.",
-      });
-    }
-  };
+  
 
   const handleSnackbarClose = () => setSnackbar({ open: false, message: "" });
 
@@ -143,8 +124,7 @@ const ReferralLayout: React.FC = () => {
         <Grid size={12}>
           <ReferralTable
             data={tableData}
-            isLoading={tableLoading || tableFetching || markingAdvertised}
-            onAdvertiseClick={handleAdvertise}
+            isLoading={tableLoading || tableFetching}
           />
           {totalPages > 1 && (
             <Box display="flex" justifyContent="center" mt={2}>

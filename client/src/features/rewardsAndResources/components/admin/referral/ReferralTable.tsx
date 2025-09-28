@@ -1,9 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import GlobalTable, {
   TableColumn,
 } from "../../../../../components/ui/GlobalTable";
-import { ReferralUser } from "../../../rewardsAndResourcesApi";
+import {
+  ReferralUser,
+  useAddAdvertisementToPulseMutation,
+} from "../../../rewardsAndResourcesApi";
+import DatePickerModal from "./DatePickerModal";
 
 export type ReferralUserRow = ReferralUser & {
   advertise?: null;
@@ -12,14 +17,62 @@ export type ReferralUserRow = ReferralUser & {
 interface ReferralTableProps {
   data?: ReferralUserRow[];
   isLoading?: boolean;
-  onAdvertiseClick: (user: ReferralUserRow) => void;
 }
 
 const ReferralTable: React.FC<ReferralTableProps> = ({
   data = [],
   isLoading,
-  onAdvertiseClick,
 }) => {
+  const navigate = useNavigate();
+  const [selectedUser, setSelectedUser] = useState<ReferralUserRow | null>(
+    null
+  );
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const [addAdvertisementToPulse, { isLoading: isAddingToPulse }] =
+    useAddAdvertisementToPulseMutation();
+
+  const handleAdvertiseClick = (user: ReferralUserRow) => {
+    setSelectedUser(user);
+    setIsDatePickerOpen(true);
+  };
+
+  const handleDateSelect = async (selectedDate: Date) => {
+    if (!selectedUser) return;
+
+    // Format date as YYYY-MM-DD to avoid timezone issues
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+    const day = String(selectedDate.getDate()).padStart(2, "0");
+    const dateString = `${year}-${month}-${day}`;
+
+    console.log("Selected Date in Table ::", selectedDate);
+    console.log("Formatted Date String ::", dateString);
+
+    try {
+      const result = await addAdvertisementToPulse({
+        userId: selectedUser._id,
+        selectedDate: dateString,
+      }).unwrap();
+
+      // Close the date picker
+      setIsDatePickerOpen(false);
+      setSelectedUser(null);
+
+      // Navigate to the daily pulse edit page
+      navigate(
+        `/admin/learnings/dailyPulse/review/${result.data.dailyPulseId}`
+      );
+    } catch (error) {
+      console.error("Failed to add advertisement to pulse:", error);
+      // You might want to show an error toast here
+    }
+  };
+
+  const handleDatePickerClose = () => {
+    setIsDatePickerOpen(false);
+    setSelectedUser(null);
+  };
   const columns: TableColumn[] = useMemo(
     () => [
       {
@@ -65,8 +118,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         ),
       },
       {
-        id: "webnClubMember",
-        label: "Signed Up",
+        id: "addReady",
+        label: "Add Ready",
         align: "center",
         minWidth: 120,
         render: (value: boolean) => (
@@ -100,7 +153,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
               variant="contained"
               size="small"
               disabled={!isEligible}
-              onClick={() => isEligible && onAdvertiseClick(row)}
+              onClick={() => isEligible && handleAdvertiseClick(row)}
               sx={{
                 backgroundColor: isEligible ? "#A04AD4" : "#D1D5DB",
                 color: isEligible ? "#FFFFFF" : "#6B7280",
@@ -115,7 +168,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         },
       },
     ],
-    [onAdvertiseClick]
+    [handleAdvertiseClick]
   );
 
   const tableData = useMemo(
@@ -146,12 +199,23 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   }
 
   return (
-    <GlobalTable
-      columns={columns}
-      data={tableData}
-      stickyHeader
-      maxHeight={520}
-    />
+    <>
+      <GlobalTable
+        columns={columns}
+        data={tableData}
+        stickyHeader
+        maxHeight={520}
+        title="List"
+      />
+
+      <DatePickerModal
+        open={isDatePickerOpen}
+        onClose={handleDatePickerClose}
+        onDateSelect={handleDateSelect}
+        userName={selectedUser?.name || ""}
+        isLoading={isAddingToPulse}
+      />
+    </>
   );
 };
 

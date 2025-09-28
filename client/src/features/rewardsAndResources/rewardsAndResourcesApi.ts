@@ -84,7 +84,7 @@ export interface ReferralUser {
   companyMail: string;
   contact?: string;
   totalStars: number;
-  webnClubMember: boolean;
+  addReady: boolean;
   hasAdvertisementClaim: boolean;
   advertisementClaimId?: string;
   advertised?: boolean;
@@ -107,6 +107,26 @@ export interface MarkReferralAdvertisedResponse {
   message: string;
   data?: {
     claimId: string;
+  };
+}
+
+export interface AvailableAdvertisementDatesResponse {
+  success: boolean;
+  message: string;
+  data: string[];
+}
+
+export interface AddAdvertisementToPulseRequest {
+  userId: string;
+  selectedDate: string;
+}
+
+export interface AddAdvertisementToPulseResponse {
+  success: boolean;
+  message: string;
+  data: {
+    dailyPulseId: string;
+    publishOn: string;
   };
 }
 
@@ -188,12 +208,12 @@ export const rewardsAndResourcesApi = api.injectEndpoints({
       providesTags: (result) =>
         result?.data?.users
           ? [
-              ...result.data.users.map((user) => ({
-                type: "AdminReferralUsers" as const,
-                id: user._id,
-              })),
-              { type: "AdminReferralUsers" as const, id: "LIST" },
-            ]
+            ...result.data.users.map((user) => ({
+              type: "AdminReferralUsers" as const,
+              id: user._id,
+            })),
+            { type: "AdminReferralUsers" as const, id: "LIST" },
+          ]
           : [{ type: "AdminReferralUsers" as const, id: "LIST" }],
     }),
 

@@ -106,6 +106,20 @@ router.patch(
     asyncHandeler(adminControllers.markReferralAdvertisementDisplayed)
 );
 
+router.get(
+    '/referral/advertisement/available-dates',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.getAvailableAdvertisementDates)
+);
+
+router.post(
+    '/referral/advertisement/add-to-pulse',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(adminControllers.addAdvertisementToDailyPulse)
+);
+
 
 // Daily Pulse Route
 router.get(

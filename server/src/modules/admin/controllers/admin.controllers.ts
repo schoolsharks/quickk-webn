@@ -7,7 +7,7 @@ import { setCookieOptions } from '../../../utils/cookieOptions';
 import { generateAccessToken, generateRefreshToken } from '../../../utils/jwtUtils';
 import Company from '../../company/model/company.model';
 import AppError from '../../../utils/appError';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import jwt from 'jsonwebtoken';
 import generateOtp from '../../../utils/generateOtp';
 import CompanyFeatureService from '../../adminOnboarding/services/companyFeature.service';
@@ -15,6 +15,8 @@ import adminOtpTrigger from '../../../services/emails/triggers/admin/adminOtpTri
 import { EventService } from '../../events/services/events.services';
 import { IUser } from '../../user/types/interfaces';
 import UserRewardClaimsService from '../../rewardsAndResources/services/userRewardClaims.service';
+import DailyPulseService from '../../dailyPulse/services/dailyPulse.Service';
+import { RewardTypes } from '../../rewardsAndResources/types/enums';
 
 
 const adminService = new AdminService();
@@ -219,24 +221,24 @@ export const checkAdminEmailExists = async (req: Request, res: Response, next: N
 export const getDashboardStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const companyId = req.user?.companyId;
-        
+
         // Get total users count for this company
         const allUsers = await userservice.getAllUsers(companyId);
         const totalMembers = allUsers.length;
-        
+
         // Get total signups (we'll consider all users as signups)
         const totalSignups = allUsers.filter((user: IUser) => !user.webnClubMember).length;
-        
+
         // Get upcoming events count
         const upcomingEventsResult = await eventService.getUpcomingEvents(1, 1000); // Get all upcoming events
         const upcomingEventsCount = upcomingEventsResult.total;
-        
+
         const dashboardStats = {
             totalMembers,
             totalSignups,
             upcomingEvents: upcomingEventsCount
         };
-        
+
         res.status(StatusCodes.OK).json({
             success: true,
             message: 'Dashboard stats retrieved successfully',
@@ -250,13 +252,13 @@ export const getDashboardStats = async (req: Request, res: Response, next: NextF
 export const getEngagementAnalytics = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const companyId = req.user?.companyId;
-        
+
         if (!companyId) {
             throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
         }
 
         const engagementData = await userservice.getEngagementAnalytics(companyId);
-        
+
         res.status(StatusCodes.OK).json({
             success: true,
             message: 'Engagement analytics retrieved successfully',
@@ -270,13 +272,13 @@ export const getEngagementAnalytics = async (req: Request, res: Response, next: 
 export const getParticipationLeaderboard = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const companyId = req.user?.companyId;
-        
+
         if (!companyId) {
             throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
         }
 
         const participationData = await userservice.getParticipationLeaderboard(companyId);
-        
+
         res.status(StatusCodes.OK).json({
             success: true,
             message: 'Participation leaderboard retrieved successfully',
@@ -359,6 +361,73 @@ export const markReferralAdvertisementDisplayed = async (req: Request, res: Resp
             data: {
                 claimId: updatedClaim._id,
                 advertised: updatedClaim.advertised,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getAvailableAdvertisementDates = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        const dailyPulseService = new DailyPulseService();
+        const availableDates = await dailyPulseService.getAvailableAdvertisementDates(companyId.toString());
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Available advertisement dates retrieved successfully',
+            data: availableDates,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const addAdvertisementToDailyPulse = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const companyId = req.user?.companyId;
+        const { userId, selectedDate } = req.body;
+
+        if (!companyId) {
+            throw new AppError('Company ID not found', StatusCodes.BAD_REQUEST);
+        }
+
+        if (!userId || !selectedDate) {
+            throw new AppError('User ID and selected date are required', StatusCodes.BAD_REQUEST);
+        }
+
+        // Parse the date string (YYYY-MM-DD) and create date at start of day in UTC
+        const [year, month, day] = selectedDate.split('-').map(Number);
+        const targetDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0)); // Use UTC to avoid timezone issues
+
+        const dailyPulseService = new DailyPulseService();
+        const dailyPulse = await dailyPulseService.addAdvertisementToDailyPulse(
+            companyId.toString(),
+            userId,
+            targetDate
+        );
+        const advertisementClaim = await userRewardClaimsService.getUserRewardClaim(
+            new Types.ObjectId(userId),
+            RewardTypes.ADVERTISEMENT
+        );
+        const claimId = advertisementClaim?._id?.toString();
+        if (claimId) {
+            userRewardClaimsService.markAdvertisementAsDisplayed(claimId, companyId.toString());
+        }
+
+
+        res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Advertisement added to daily pulse successfully',
+            data: {
+                dailyPulseId: dailyPulse._id,
+                publishOn: dailyPulse.publishOn,
             },
         });
     } catch (error) {

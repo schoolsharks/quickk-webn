@@ -195,6 +195,25 @@ class UserRewardClaimsService {
 
     return claim;
   }
+
+  async getUserRewardClaim(
+    userId: mongoose.Types.ObjectId,
+    rewardType: RewardTypes
+  ): Promise<IUserRewardsClaims | null> {
+    try {
+      const claim = await UserRewardsClaims.findOne({
+        user: userId,
+        rewardType
+      });
+
+      return claim;
+    } catch (error) {
+      throw new AppError(
+        "Failed to get user reward claim",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 export default UserRewardClaimsService;

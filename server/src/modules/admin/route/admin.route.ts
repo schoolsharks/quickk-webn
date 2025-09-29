@@ -327,6 +327,13 @@ router.delete(
     asyncHandeler(UserControllers.deleteUserById)
 );
 
+router.put(
+    '/moveUserToWebn:userId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(UserControllers.moveUserToWebn)
+);
+
 router.get(
     '/getActiveUsersStats',
     authenticateUser,

@@ -141,14 +141,20 @@ const ProfileLayout = () => {
             disabled={isLoggingOut}
             sx={{
               p: "10px",
-              border: `2px solid ${theme.palette.primary.main}`,
               color: theme.palette.primary.main,
               "&:hover": {
-                bgcolor: "#F7F0FB",
+                bgcolor: "transparent",
               },
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <Logout />
+            <Typography variant="h6" color={"#00000040"}>
+              Logout
+            </Typography>
           </IconButton>
         </Box>
         {/* <Typography

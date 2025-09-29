@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Box, Typography, Snackbar, Alert } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { useNavigate } from "react-router-dom";
 import GlobalTable, {
   ActionButton,
   TableColumn,
 } from "../../../components/ui/GlobalTable";
-import { useDeleteUserByIdMutation } from "../service/adminApi";
+import {
+  useDeleteUserByIdMutation,
+  useMoveUserToWebnMutation,
+} from "../service/adminApi";
 
 // User Data Interface
 export interface UserData {
@@ -37,9 +41,10 @@ const UserTable: React.FC<UserTableProps> = ({
   webnClubMember = true,
 }) => {
   const [DeleteUserById] = useDeleteUserByIdMutation();
+  const [MoveUserToWebn] = useMoveUserToWebnMutation();
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [deletedUserName, setDeletedUserName] = useState("");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleSnackbarClose = (
     _event?: React.SyntheticEvent | Event,
@@ -191,6 +196,17 @@ const UserTable: React.FC<UserTableProps> = ({
         />
       ),
     },
+    {
+      id: "listed",
+      label: "Listed",
+      minWidth: 80,
+      align: "center",
+      format: (value: boolean) => (
+        <Typography sx={{ color: "black", fontSize: "14px" }}>
+          {value ? "Yes" : "No"}
+        </Typography>
+      ),
+    },
   ];
 
   const actionButtons: ActionButton[] = [
@@ -202,6 +218,32 @@ const UserTable: React.FC<UserTableProps> = ({
         navigate(`/admin/member/${row.originalData._id}`);
       },
     },
+    ...(webnClubMember
+      ? []
+      : [
+          {
+            icon: <TrendingUpIcon />,
+            label: "Move to Webn",
+            color: "success" as const,
+            onClick: async (row: any) => {
+              try {
+                await MoveUserToWebn(row?.originalData._id).unwrap();
+                setSnackbarMessage(
+                  `${
+                    row?.originalData.name || "User"
+                  } moved to Webn successfully!`
+                );
+                setSnackbarOpen(true);
+              } catch (error) {
+                console.log("Error moving user to Webn:", error);
+                setSnackbarMessage(
+                  `Failed to move ${row?.originalData.name || "User"} to Webn.`
+                );
+                setSnackbarOpen(true);
+              }
+            },
+          },
+        ]),
     {
       icon: <DeleteIcon />,
       label: "Delete",
@@ -209,7 +251,9 @@ const UserTable: React.FC<UserTableProps> = ({
       onClick: async (row) => {
         try {
           await DeleteUserById(row?.originalData._id).unwrap();
-          setDeletedUserName(row?.originalData.name || "User");
+          setSnackbarMessage(
+            `${row?.originalData.name || "User"} has been deleted successfully!`
+          );
           setSnackbarOpen(true);
         } catch (error) {
           console.log("Error deleting user:", error);
@@ -232,7 +276,7 @@ const UserTable: React.FC<UserTableProps> = ({
         title={webnClubMember ? "Webn Members Directory" : "Gowomania Members"}
         columns={
           webnClubMember
-            ? columns
+            ? columns.filter((col) => col.id !== "listed")
             : columns.filter((col) => col.id !== "chapter")
         }
         data={transformedData}
@@ -253,7 +297,7 @@ const UserTable: React.FC<UserTableProps> = ({
           variant="filled"
           sx={{ width: "100%" }}
         >
-          {deletedUserName} has been deleted successfully!
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </>

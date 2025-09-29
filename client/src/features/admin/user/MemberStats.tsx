@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Grid } from "@mui/material";
 import { Whatshot as PopularIcon } from "@mui/icons-material";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import StatsCard from "../../../components/ui/StatsCard";
+import { List } from "lucide-react";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 interface StatsData {
   title: string;
@@ -16,7 +17,7 @@ export interface Stats {
   total: number;
   moved: number;
   Active: number;
-  NotActive: number;
+  Listed: number;
 }
 
 export interface MemberStatsProps {
@@ -58,19 +59,9 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
       iconColor: "white",
     },
     {
-      title: "Not Active",
-      value: Stats.NotActive,
-      icon: (
-        <Box
-          sx={{
-            width: 18,
-            height: 18,
-            borderRadius: "50%",
-            backgroundColor: "#EF4444",
-            margin: "0 auto",
-          }}
-        />
-      ),
+      title: "Listed",
+      value: Stats.Listed,
+      icon: <List />,
       backgroundColor: "#404040",
       iconColor: "white",
     },

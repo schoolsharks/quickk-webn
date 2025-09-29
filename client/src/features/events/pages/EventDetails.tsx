@@ -63,8 +63,6 @@ const EventDetails: React.FC = () => {
     return <ErrorLayout />;
   }
 
-  console.log(EventData);
-
   const eventTime =
     EventData?.startDate && EventData?.endDate
       ? formatEventTime(EventData.startDate, EventData.endDate)
@@ -150,7 +148,10 @@ const EventDetails: React.FC = () => {
               color: theme.palette.text.secondary,
             }}
           >
-            By {typeof EventData?.organizer === 'object' ? EventData?.organizer?.name : EventData?.organizer}
+            By{" "}
+            {typeof EventData?.organizer === "object"
+              ? EventData?.organizer?.name
+              : EventData?.organizer}
           </Typography>
         )}
 
@@ -260,7 +261,7 @@ const EventDetails: React.FC = () => {
                   },
                 }}
               >
-                {typeof sponsor === 'object' ? sponsor?.name : sponsor}
+                {typeof sponsor === "object" ? sponsor?.name : sponsor}
               </Typography>
             ))}
           </Box>
@@ -291,7 +292,9 @@ const EventDetails: React.FC = () => {
                 },
               }}
             >
-              {typeof highlight === 'object' ? highlight?.name || highlight?.title : highlight}
+              {typeof highlight === "object"
+                ? highlight?.name || highlight?.title
+                : highlight}
             </Typography>
           ))}
         </Box>

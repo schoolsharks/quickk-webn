@@ -5,7 +5,7 @@ import {
   Typography,
   IconButton,
   // Collapse,
-  Grid,
+  // Grid,
   Collapse,
 } from "@mui/material";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
@@ -18,10 +18,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../../theme/theme";
 import ActiveLearning from "../../../components/ui/ActiveLearning";
-import amajon from "../../../assets/images/user/amajon.png";
-import starbucks from "../../../assets/images/user/starbucks.png";
+// import amajon from "../../../assets/images/user/amajon.png";
+// import starbucks from "../../../assets/images/user/starbucks.png";
 import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
-import watch from "../../../assets/images/user/watch.png";
+// import watch from "../../../assets/images/user/watch.png";
 // import Badge from "../../../components/ui/badge";
 // import Certificate from "../../../components/ui/certificate";
 import { useDispatch, useSelector } from "react-redux";
@@ -78,36 +78,36 @@ const ProfileLayout = () => {
     }
   };
 
-  const offers = [
-    {
-      title: "Logo Designing",
-      text: "Your brand deserves a face. Get a custom logo designed.",
-      subtitle: "5000 INR",
-      img: amajon,
-      bgcolor: "#FFF",
-    },
-    {
-      title: "Social Media Management",
-      text: "Grow your audience with engaging content and consistent strategy.",
-      subtitle: "12000 INR",
-      img: starbucks,
-      bgcolor: "#FFF",
-    },
-    {
-      title: "E-commerce Store Setup",
-      text: "Launch your online store with seamless checkout and product management.",
-      subtitle: "Offer Flat 15% off",
-      img: foundation,
-      bgcolor: "#FFF",
-    },
-    {
-      title: "UI/UX Design",
-      text: "Modern, user-friendly design that makes customers stay and convert.",
-      subtitle: "20% off",
-      img: watch,
-      bgcolor: "#FFF",
-    },
-  ];
+  // const offers = [
+  //   {
+  //     title: "Logo Designing",
+  //     text: "Your brand deserves a face. Get a custom logo designed.",
+  //     subtitle: "5000 INR",
+  //     img: amajon,
+  //     bgcolor: "#FFF",
+  //   },
+  //   {
+  //     title: "Social Media Management",
+  //     text: "Grow your audience with engaging content and consistent strategy.",
+  //     subtitle: "12000 INR",
+  //     img: starbucks,
+  //     bgcolor: "#FFF",
+  //   },
+  //   {
+  //     title: "E-commerce Store Setup",
+  //     text: "Launch your online store with seamless checkout and product management.",
+  //     subtitle: "Offer Flat 15% off",
+  //     img: foundation,
+  //     bgcolor: "#FFF",
+  //   },
+  //   {
+  //     title: "UI/UX Design",
+  //     text: "Modern, user-friendly design that makes customers stay and convert.",
+  //     subtitle: "20% off",
+  //     img: watch,
+  //     bgcolor: "#FFF",
+  //   },
+  // ];
 
   // Check if profile is complete
   // const profileComplete = isProfileComplete(user);
@@ -485,7 +485,7 @@ const ProfileLayout = () => {
       </Box>
 
       {/* Offers Section */}
-      <AnimateOnScroll
+      {/* <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
         amount={0.3}
@@ -581,7 +581,7 @@ const ProfileLayout = () => {
             </Grid>
           </Box>
         </Stack>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* Badges Section */}
       {/* <AnimateOnScroll

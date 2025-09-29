@@ -62,7 +62,6 @@ const ActionMenu: React.FC<ActionMenuProps> = ({ user, anchorEl, onClose }) => {
         platform
       }).unwrap();
       
-      console.log(`Connection tracked for platform: ${platform}`);
     } catch (error) {
       console.error('Failed to track connection:', error);
       // Action was already executed, so no need to show error to user

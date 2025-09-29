@@ -102,16 +102,6 @@ const Recommendation: React.FC = () => {
             (user) => user._id !== currentUser.userId
           );
 
-          // Log for debugging
-          if (process.env.NODE_ENV === "development") {
-            console.log(
-              `Filtered ${
-                result.data.recommendations.length - newRecommendations.length
-              } current user entries from recommendations`
-            );
-            console.log(`Current user ID: ${currentUser.userId}`);
-          }
-
           if (reset) {
             setRecommendations(newRecommendations);
             setRefreshToken(result.data.meta.refreshToken);

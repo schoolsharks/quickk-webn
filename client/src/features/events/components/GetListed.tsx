@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ArrowBack, FiberManualRecord } from "@mui/icons-material";
 import GlobalButton from "../../../components/ui/button";
+import GetListedImg from "../../../assets/images/Events/GetListed.webp";
 
 const GetListed = () => {
   const navigate = useNavigate();
@@ -40,7 +41,6 @@ const GetListed = () => {
         minHeight: "100vh",
         backgroundColor: "#FFFFFF",
         position: "relative",
-        padding: "0 24px",
       }}
     >
       {/* Header */}
@@ -50,6 +50,7 @@ const GetListed = () => {
           alignItems: "center",
           padding: "16px 0",
           marginBottom: "32px",
+          px: "24px",
         }}
       >
         <IconButton
@@ -72,8 +73,21 @@ const GetListed = () => {
         </Typography>
       </Box>
 
+      <Box
+        component="img"
+        src={GetListedImg}
+        alt="Get Listed"
+        sx={{
+          width: "100%",
+          // height: "180px",
+          objectFit: "cover",
+          borderRadius: "0px",
+          marginBottom: "60px",
+        }}
+      />
+
       {/* Main Content */}
-      <Box sx={{ marginBottom: "40px" }}>
+      <Box sx={{ marginBottom: "40px", px: "24px" }}>
         <Typography
           variant="h1"
           sx={{
@@ -81,6 +95,7 @@ const GetListed = () => {
             fontWeight: 700,
             color: "#000",
             lineHeight: 1.2,
+            marginBottom: "16px",
           }}
         >
           Want to Get Listed on Our Platform?
@@ -101,7 +116,7 @@ const GetListed = () => {
       </Box>
 
       {/* Benefits Section */}
-      <Box sx={{ marginBottom: "40px" }}>
+      <Box sx={{ marginBottom: "40px", px: "24px" }}>
         <Typography
           sx={{
             fontSize: "20px",
@@ -147,7 +162,7 @@ const GetListed = () => {
       </Box>
 
       {/* Listing Fee Section */}
-      <Box sx={{ marginBottom: "60px" }}>
+      <Box sx={{ marginBottom: "60px", px: "24px" }}>
         <Typography
           sx={{
             fontSize: "20px",
@@ -166,7 +181,7 @@ const GetListed = () => {
             color: "#000",
           }}
         >
-          ₹200 only
+          ₹299 only
         </Typography>
       </Box>
 
@@ -183,20 +198,22 @@ const GetListed = () => {
           backgroundColor: "#FFFFFF",
         }}
       > */}
-      <GlobalButton
-        onClick={handlePayClick}
-        fullWidth={true}
-        sx={{
-          backgroundColor: "#4A4A4A",
-          color: "#FFFFFF",
-          marginBottom: "30px",
-          "&:hover": {
-            backgroundColor: "#3A3A3A",
-          },
-        }}
-      >
-        Pay
-      </GlobalButton>
+      <Box px={"24px"}>
+        <GlobalButton
+          onClick={handlePayClick}
+          fullWidth={true}
+          sx={{
+            backgroundColor: "#4A4A4A",
+            color: "#FFFFFF",
+            marginBottom: "30px",
+            "&:hover": {
+              backgroundColor: "#3A3A3A",
+            },
+          }}
+        >
+          Pay
+        </GlobalButton>
+      </Box>
       {/* </Box> */}
     </Box>
   );

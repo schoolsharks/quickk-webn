@@ -18,15 +18,18 @@ import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 import GlobalButton from "../../../components/ui/button";
-import { useLazySearchNetworkUsersQuery, useAddConnectionMutation } from "../../user/userApi";
+import {
+  useLazySearchNetworkUsersQuery,
+  useAddConnectionMutation,
+} from "../../user/userApi";
 import { Person } from "@mui/icons-material";
 
 // Platform enum to match backend
 enum ConnectionPlatform {
-  WHATSAPP = 'whatsapp',
-  INSTAGRAM = 'instagram',
-  FACEBOOK = 'facebook',
-  MAIL = 'mail'
+  WHATSAPP = "whatsapp",
+  INSTAGRAM = "instagram",
+  FACEBOOK = "facebook",
+  MAIL = "mail",
 }
 
 // Updated interface to match backend response
@@ -56,7 +59,7 @@ const NetworkSearch: React.FC = () => {
   // RTK Query hooks
   const [searchUsers, { data: searchData, isLoading }] =
     useLazySearchNetworkUsersQuery();
-  
+
   const [addConnection] = useAddConnectionMutation();
 
   // Handle search with debouncing
@@ -132,20 +135,22 @@ const NetworkSearch: React.FC = () => {
   };
 
   // Handler for platform connection
-  const handlePlatformConnect = async (connectionId: string, platform: ConnectionPlatform, action: () => void) => {
+  const handlePlatformConnect = async (
+    connectionId: string,
+    platform: ConnectionPlatform,
+    action: () => void
+  ) => {
     try {
       // Execute the platform action (open WhatsApp, email, etc.)
       action();
-      
+
       // Track the connection in database
       await addConnection({
         connectionId,
-        platform
+        platform,
       }).unwrap();
-      
-      console.log(`Connection tracked for platform: ${platform}`);
     } catch (error) {
-      console.error('Failed to track connection:', error);
+      console.error("Failed to track connection:", error);
       // Still execute the action even if tracking fails
       action();
     }
@@ -414,13 +419,19 @@ Best regards`;
                   gap={2}
                 >
                   {/* Instagram Icon */}
-                  <Tooltip title={profile.instagram ? `Connect on Instagram` : "Instagram not available"}>
+                  <Tooltip
+                    title={
+                      profile.instagram
+                        ? `Connect on Instagram`
+                        : "Instagram not available"
+                    }
+                  >
                     <Box
                       sx={{
                         width: 40,
                         height: 40,
                         borderRadius: "50%",
-                        background: profile.instagram 
+                        background: profile.instagram
                           ? "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)"
                           : "#CCCCCC",
                         display: "flex",
@@ -440,9 +451,13 @@ Best regards`;
                             profile._id,
                             ConnectionPlatform.INSTAGRAM,
                             () => {
-                              const instagramUrl = profile.instagram?.startsWith('http') 
-                                ? profile.instagram 
-                                : `https://instagram.com/${profile.instagram?.replace('@', '')}`;
+                              const instagramUrl =
+                                profile.instagram?.startsWith("http")
+                                  ? profile.instagram
+                                  : `https://instagram.com/${profile.instagram?.replace(
+                                      "@",
+                                      ""
+                                    )}`;
                               window.open(instagramUrl, "_blank");
                             }
                           );
@@ -459,13 +474,21 @@ Best regards`;
                   </Tooltip>
 
                   {/* Facebook Icon */}
-                  <Tooltip title={profile.facebook ? `Connect on Facebook` : "Facebook not available"}>
+                  <Tooltip
+                    title={
+                      profile.facebook
+                        ? `Connect on Facebook`
+                        : "Facebook not available"
+                    }
+                  >
                     <Box
                       sx={{
                         width: 40,
                         height: 40,
                         borderRadius: "50%",
-                        backgroundColor: profile.facebook ? "#1877F2" : "#CCCCCC", // Facebook blue
+                        backgroundColor: profile.facebook
+                          ? "#1877F2"
+                          : "#CCCCCC", // Facebook blue
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -483,8 +506,10 @@ Best regards`;
                             profile._id,
                             ConnectionPlatform.FACEBOOK,
                             () => {
-                              const facebookUrl = profile.facebook?.startsWith('http') 
-                                ? profile.facebook 
+                              const facebookUrl = profile.facebook?.startsWith(
+                                "http"
+                              )
+                                ? profile.facebook
                                 : `https://facebook.com/${profile.facebook}`;
                               window.open(facebookUrl, "_blank");
                             }
@@ -536,7 +561,9 @@ Best regards`;
                             profile._id,
                             ConnectionPlatform.MAIL,
                             () => {
-                              const emailData = createEmailMessage(profile.name);
+                              const emailData = createEmailMessage(
+                                profile.name
+                              );
                               const mailtoLink = `mailto:${
                                 profile.companyMail
                               }?subject=${encodeURIComponent(
@@ -590,9 +617,14 @@ Best regards`;
                             profile._id,
                             ConnectionPlatform.WHATSAPP,
                             () => {
-                              const message = createWhatsAppMessage(profile.name);
+                              const message = createWhatsAppMessage(
+                                profile.name
+                              );
                               // Format the phone number (remove any non-digits and add country code if needed)
-                              let phoneNumber = profile.contact!.replace(/\D/g, "");
+                              let phoneNumber = profile.contact!.replace(
+                                /\D/g,
+                                ""
+                              );
                               // If the number doesn't start with country code, assume it's Indian (+91)
                               if (phoneNumber.length === 10) {
                                 phoneNumber = "91" + phoneNumber;

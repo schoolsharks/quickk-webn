@@ -98,8 +98,9 @@ const GowomaniaUsers: React.FC = () => {
           new Date(user.updatedAt || "").getTime() >
           Date.now() - 7 * 24 * 60 * 60 * 1000
       ).length || 0,
-    NotActive:
-      regularData?.filter((user: any) => user.learningStreak === 0).length || 0,
+    // NotActive:
+    //   regularData?.filter((user: any) => user.learningStreak === 0).length || 0,
+    Listed: regularData?.filter((user: any) => user.listed).length || 0,
   };
 
   return (

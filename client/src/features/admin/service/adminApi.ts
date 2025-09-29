@@ -154,6 +154,14 @@ export const adminApi = api.injectEndpoints({
             invalidatesTags: ['AdminUser'],
         }),
 
+        moveUserToWebn: builder.mutation({
+            query: (userId) => ({
+                url: `/admin/moveUserToWebn${userId}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: ['AdminUser'],
+        }),
+
         searchUsers: builder.query({
             query: (params) => ({
                 url: "/admin/search/users",
@@ -241,6 +249,7 @@ export const {
     useGetUserByIdQuery,
     useCreateBlankUserMutation,
     useDeleteUserByIdMutation,
+    useMoveUserToWebnMutation,
     useSearchUsersQuery,
     useGetActiveUsersStatsQuery,
     useGetDashboardStatsQuery,

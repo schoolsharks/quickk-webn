@@ -12,7 +12,7 @@ import Quickk from "../../components/ui/Quickk";
 import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
 
 const EventDashboard = () => {
-  const { name, webnClubMember } = useSelector(
+  const { name, webnClubMember, connectionCount } = useSelector(
     (state: RootState) => state.user
   );
   const theme = useTheme();
@@ -151,7 +151,7 @@ const EventDashboard = () => {
           onClick={() => handleTabChange("networks")}
         >
           <Typography variant="h1" fontSize={25}>
-            <AnimateNumber target={1}></AnimateNumber>
+            <AnimateNumber target={connectionCount ?? 0}></AnimateNumber>
           </Typography>
           <Typography fontSize={20} fontWeight="500">
             My Networks

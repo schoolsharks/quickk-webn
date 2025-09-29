@@ -30,6 +30,7 @@ export interface IUser {
   interestedEvents?: string;
   webnClubMember?: boolean;
   referredBy?: mongoose.Types.ObjectId;
+  listed?: boolean;
 }
 
 export interface IAvatar {
@@ -38,7 +39,7 @@ export interface IAvatar {
 
 export enum ConnectionPlatform {
   WHATSAPP = 'whatsapp',
-  INSTAGRAM = 'instagram', 
+  INSTAGRAM = 'instagram',
   FACEBOOK = 'facebook',
   MAIL = 'mail'
 }

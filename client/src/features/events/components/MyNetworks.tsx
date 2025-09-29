@@ -65,28 +65,31 @@ const MyNetworks = () => {
       {profileComplete && <Box mt={"40px"} />}
       <NetworkSearch />
       <Recommendation />
-      <Box
-        mt="60px"
-        display="flex"
-        borderTop={`2px solid ${theme.palette.primary.main}`}
-        borderBottom={`2px solid ${theme.palette.primary.main}`}
-        bgcolor={"#CD7BFF4D"}
-        justifyContent="space-between"
-        alignItems="center"
-        onClick={handleGetListedClick}
-        p={"38px 24px"}
-        sx={{ cursor: "pointer" }}
-      >
-        <Box>
-          <Typography variant="h2" fontSize={"20px"} color="#000">
-            Want to Get Listed on Our Platform?
-          </Typography>
+      {user.listed === false && user.webnClubMember === false && (
+        <Box
+          mt="60px"
+          display="flex"
+          borderTop={`2px solid ${theme.palette.primary.main}`}
+          borderBottom={`2px solid ${theme.palette.primary.main}`}
+          bgcolor={"#CD7BFF4D"}
+          justifyContent="space-between"
+          alignItems="center"
+          onClick={handleGetListedClick}
+          p={"38px 24px"}
+          sx={{ cursor: "pointer" }}
+        >
+          <Box>
+            <Typography variant="h2" fontSize={"20px"} color="#000">
+              Want to Get Listed on Our Platform?
+            </Typography>
+          </Box>
+          <Box>
+            {/* <ArrowRight size={36} strokeWidth={1.75} rotate={"45deg"} /> */}
+            <CallMadeOutlined sx={{ fontSize: 35, marginRight: "24px" }} />
+          </Box>
         </Box>
-        <Box>
-          {/* <ArrowRight size={36} strokeWidth={1.75} rotate={"45deg"} /> */}
-          <CallMadeOutlined sx={{ fontSize: 35, marginRight: "24px" }} />
-        </Box>
-      </Box>
+      )}
+
       <BottomNavigation />
     </Box>
   );

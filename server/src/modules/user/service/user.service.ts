@@ -377,6 +377,26 @@ class UserService {
     }
   }
 
+  async moveUserToWebn(userId: string): Promise<IUser> {
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { webnClubMember: true },
+        { new: true }
+      );
+      if (!updatedUser) {
+        throw new AppError("User not found", StatusCodes.NOT_FOUND);
+      }
+
+      return updatedUser;
+    } catch (error) {
+      throw new AppError(
+        `Error moving user to Webn.${error}`,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   async bulkCreateUsers(users: any[], companyId: string) {
     try {
       const results = {

@@ -91,6 +91,9 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
       ref: "User",
       default: null,
     },
+    listed: {
+      type: Boolean, default: false
+    }
   },
   {
     timestamps: true,

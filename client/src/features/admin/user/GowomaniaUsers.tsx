@@ -68,6 +68,11 @@ const GowomaniaUsers: React.FC = () => {
         case "notActive":
           return a.learningStreak - b.learningStreak; // Not active members first
 
+        case "listed":
+          // Listed members first (true before false)
+          if (a.listed === b.listed) return 0;
+          return a.listed ? -1 : 1;
+
         case "recentActivity":
         default:
           const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;

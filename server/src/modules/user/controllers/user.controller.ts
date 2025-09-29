@@ -277,22 +277,50 @@ export const deleteUserById = async (
   }
 };
 
+export const moveUserToWebn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return next(new AppError("userId is required", StatusCodes.BAD_REQUEST));
+    }
+    const updatedUser = await userService.moveUserToWebn(userId);
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "User moved to Webn successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      res.status(error.statusCode).json({ message: error.message });
+    } else {
+      console.error("Error moving user to Webn:", error);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        message: "Internal Server Error",
+      });
+    }
+  }
+};
+
 export const searchUsers = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const userId = req?.user.id;
   try {
-    const  result = await SearchHelper.search(
+    const result = await SearchHelper.search(
       searchConfigs.user,
       req.query,
       req?.user.companyId
     );
-    
+
     // Filter out users where webnClubMember === false and the requesting user
     if (result && Array.isArray(result.data)) {
       result.data = result.data.filter(
-      (user: any) => user.webnClubMember !== false && user._id.toString() !== userId.toString()
+        (user: any) => user.webnClubMember !== false && user._id.toString() !== userId.toString()
       );
     }
     res.status(StatusCodes.OK).json(result);

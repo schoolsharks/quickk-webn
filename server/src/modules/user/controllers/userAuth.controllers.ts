@@ -15,7 +15,9 @@ const jwt = require("jsonwebtoken");
 import LearningService from "../../learning/services/learning.service";
 import mongoose from "mongoose";
 import userOtpTrigger from "../../../services/emails/triggers/user/userOtpTrigger";
+import UserConnectionService from "../service/user.connection.service";
 const learningService = new LearningService();
+const userConnectionService = new UserConnectionService();
 
 export const getUser = async (
   req: Request,
@@ -28,9 +30,11 @@ export const getUser = async (
     const user = await userservice.getUserByIdWithCompany(userId);
     const { rank } = await userservice.getUserRankByStars(userId);
     const { progress } = await learningService.getLearningProgress(userId);
+    const connectionCount = await userConnectionService.getTotalConnectionCount(userId);
+
     res
       .status(StatusCodes.OK)
-      .json({ success: true, data: { ...user, rank, progress } });
+      .json({ success: true, data: { ...user, rank, progress, connectionCount } });
   } catch (error) {
     next(error);
   }

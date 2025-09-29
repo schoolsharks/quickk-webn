@@ -34,6 +34,8 @@ interface UserState {
     facebook: string | null;
     currentMonth: string | null;
     currentYear: number | null;
+    connectionCount: number | null;
+    listed?: boolean | null;
     isLoading: boolean;
     error: SerializedError | null;
 }
@@ -74,8 +76,10 @@ const initialState: UserState = {
     facebook: null,
     eventMode: JSON.parse(localStorage.getItem('eventMode') || 'false'),
     users: null,
+    connectionCount: 0,
     currentMonth: null,
     currentYear: null,
+    listed: null,
     isLoading: false,
     error: null,
 };
@@ -128,6 +132,8 @@ const userSlice = createSlice({
                             chapter: string;
                             instagram: string;
                             facebook: string;
+                            connectionCount: number;
+                            listed?: boolean;
                         }
                     };
                     state.name = user.data.name;
@@ -152,6 +158,8 @@ const userSlice = createSlice({
                     state.chapter = user.data.chapter || null;
                     state.instagram = user.data.instagram || null;
                     state.facebook = user.data.facebook || null;
+                    state.connectionCount = user.data.connectionCount || 0;
+                    state.listed = user.data.listed || false;
                     state.isLoading = false;
                 }
             )

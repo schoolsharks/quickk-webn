@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId, Types } from "mongoose";
 import { UserConnection } from "../model/user.connection.model";
 import User from "../model/user.model";
 import { ConnectionPlatform, IUserConnection } from "../types/interfaces";
@@ -437,6 +437,13 @@ class UserConnectionService {
 
         const result = await UserConnection.aggregate(pipeline);
         return result[0]?.total || 0;
+    }
+
+    async getTotalConnectionCount(userId: Types.ObjectId): Promise<number> {
+
+        // Count the number of UserConnection documents for the user
+        const count = await UserConnection.countDocuments({ userId: userId });
+        return count;
     }
 }
 

@@ -18,7 +18,8 @@ export type SortOption =
   | "alphabetical"
   | "category"
   | "active"
-  | "notActive";
+  | "notActive"
+  | "listed";
 
 interface UserFilterDrawerProps {
   open: boolean;
@@ -45,6 +46,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
     { value: "category", label: "Business Category" },
     { value: "active", label: "Active Members" },
     { value: "notActive", label: "Not Active Members" },
+    { value: "listed", label: "Listed Members" },
   ];
 
   return (

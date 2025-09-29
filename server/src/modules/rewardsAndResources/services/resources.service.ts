@@ -21,8 +21,31 @@ interface SearchResourcesParams {
 }
 
 class ResourcesService {
-  async getAllResources(): Promise<IResources[]> {
-    return await Resources.find();
+  async getAllResources(userId?: mongoose.Types.ObjectId): Promise<(IResources & { isClaimed?: boolean })[]> {
+    const resources = await Resources.find();
+    
+    // If no userId provided, return resources without isClaimed field
+    if (!userId) {
+      return resources;
+    }
+
+    // Add isClaimed field for each resource
+    const resourcesWithClaimedStatus = await Promise.all(
+      resources.map(async (resource) => {
+        const claimedRecord = await UserRewardsClaims.findOne({
+          user: userId,
+          resourceId: resource._id,
+          rewardType: RewardTypes.RESOURCES
+        });
+        
+        return {
+          ...resource.toObject(),
+          isClaimed: !!claimedRecord
+        };
+      })
+    );
+
+    return resourcesWithClaimedStatus;
   }
 
   async getResourceById(resourceId: string): Promise<IResources> {
@@ -124,7 +147,7 @@ class ResourcesService {
 
   async createResource(resourceData: Partial<IResources>): Promise<IResources> {
     const newResource = new Resources({
-      heading: resourceData.heading || 'New Resource',
+      heading: resourceData.heading || '',
       subHeading: resourceData.subHeading || '',
       companyName: resourceData.companyName || '',
       image: resourceData.image || '',

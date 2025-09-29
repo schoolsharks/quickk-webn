@@ -30,16 +30,8 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
   formData,
   onFormDataChange,
 }) => {
-  const handleTargetAudienceChange = (audience: string, checked: boolean) => {
-    if (checked) {
-      onFormDataChange({
-        targetAudience: [...formData.targetAudience, audience],
-      });
-    } else {
-      onFormDataChange({
-        targetAudience: formData.targetAudience.filter((a) => a !== audience),
-      });
-    }
+  const handleInputChange = (field: string, value: any) => {
+    onFormDataChange({ [field]: value });
   };
 
   return (
@@ -66,6 +58,7 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                 <TextField
                   fullWidth
                   value={formData.heading}
+                  placeholder="New Resource"
                   onChange={(e) => onFormDataChange({ heading: e.target.value })}
                   sx={{
                     backgroundColor: "#2A2A2A",
@@ -83,6 +76,7 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                 </Typography>
                 <TextField
                   fullWidth
+                  placeholder="eg. 20% off"
                   value={formData.subHeading}
                   onChange={(e) => onFormDataChange({ subHeading: e.target.value })}
                   sx={{
@@ -131,24 +125,40 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
               <Typography color="white" mb={1} fontSize="14px">
                 Target Audience
               </Typography>
-              <Stack direction="row" spacing={2}>
+              <Box display="flex" gap={2}>
                 {["All", "Gowomania Only", "Webn Only"].map((audience) => (
-                  <FormControlLabel
-                    key={audience}
-                    control={
-                      <Checkbox
-                        checked={formData.targetAudience.includes(audience)}
-                        onChange={(e) =>
-                          handleTargetAudienceChange(audience, e.target.checked)
-                        }
-                        sx={{ color: "white" }}
-                      />
-                    }
-                    label={audience}
-                    sx={{ color: "white" }}
-                  />
+                  <Box bgcolor={"#252525"} padding={"4px"} key={audience}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formData.targetAudience[0] === audience}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "targetAudience",
+                              e.target.checked ? [audience] : []
+                            )
+                          }
+                          size="medium"
+                          sx={{
+                            color: "white",
+                            "&.Mui-checked": {
+                              color: "white",
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Typography
+                          variant="caption"
+                          sx={{ fontSize: "16px",color:"white" }}
+                        >
+                          {audience}
+                        </Typography>
+                      }
+                    />
+                  </Box>
                 ))}
-              </Stack>
+              </Box>
             </Box>
           </Stack>
         </Grid>

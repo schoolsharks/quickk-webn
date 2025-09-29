@@ -42,12 +42,12 @@ const ResourceDetails: React.FC<ResourceDetailsProps> = ({
       {showHeader && (
         <Box
           sx={{
-            padding: isPreview ? "16px" : "24px 16px",
+            padding: isPreview ? "16px" : "24px 16px 16px",
             borderRadius: isPreview ? "4px 4px 0 0" : "8px 8px 0 0",
           }}
         >
           <Typography 
-            fontWeight={"400"} 
+            fontWeight={"600"} 
             fontSize={"16px"} 
             color="primary.main"
             sx={{ marginBottom: "8px" }}
@@ -112,11 +112,11 @@ const ResourceDetails: React.FC<ResourceDetailsProps> = ({
         {resource.description?.filter(section => 
           section.title && section.points?.some(point => point.trim())
         ).map((section, index) => (
-          <Box key={index} marginBottom={isPreview ? "16px" : "24px"}>
+          <Box key={index} marginBottom={isPreview ? "16px" : "36px"}>
             <Typography
-              fontWeight="600"
-              fontSize={isPreview ? "14px" : "16px"}
-              color="#8B46FF"
+              fontWeight="700"
+              fontSize={isPreview ? "14px" : "20px"}
+              color="primary.main"
               marginBottom={isPreview ? "8px" : "12px"}
             >
               {section.title}
@@ -127,10 +127,11 @@ const ResourceDetails: React.FC<ResourceDetailsProps> = ({
                   key={pointIndex}
                   component="li"
                   sx={{
-                    marginBottom: isPreview ? "4px" : "8px",
-                    fontSize: isPreview ? "12px" : "14px",
-                    lineHeight: "150%",
+                    marginBottom: isPreview ? "4px" : "4px",
+                    fontSize: isPreview ? "12px" : "18px",
+                    lineHeight: "120%",
                     color: "text.primary",
+                    fontWeight:"600"
                   }}
                 >
                   {point}

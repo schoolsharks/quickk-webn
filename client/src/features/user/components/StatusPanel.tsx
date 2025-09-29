@@ -4,7 +4,7 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
 import { useNavigate } from "react-router-dom";
-import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
+import { Leaderboard } from "@mui/icons-material";
 
 const StatusPanel: React.FC = () => {
   const navigate = useNavigate();
@@ -21,12 +21,12 @@ const StatusPanel: React.FC = () => {
       },
     },
     {
-      icon: <LocalMallOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
-      title: "Resources",
+      icon: <Leaderboard sx={{ fontSize: 24, color: "white" }} />,
+      title: "Leaderboard",
       value: null,
       bgColor: theme.palette.text.secondary,
       onClick: () => {
-        //  navigate("/user/profile")
+        navigate("/user/leaderboard");
       },
     },
     {

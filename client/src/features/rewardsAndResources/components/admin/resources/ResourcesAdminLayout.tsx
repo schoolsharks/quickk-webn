@@ -74,7 +74,7 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
       defaultExpiryDate.setDate(defaultExpiryDate.getDate() + 30); // 30 days from now
 
       const result = await createResource({
-        heading: "New Resource",
+        heading: "",
         subHeading: "",
         image: "",
         type: "SERVICE",
@@ -87,6 +87,7 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
           { title: "What's included", points: [""] },
           { title: "Perfect For", points: [""] },
           { title: "Add ons (at extra cost)", points: [""] },
+          { title: "Note", points: [""] },
         ],
         stars: 0,
         quantity: 150,

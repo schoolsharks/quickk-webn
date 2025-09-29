@@ -9,6 +9,7 @@ interface ResourceData {
   image: string | File;
   stars: number;
   companyName: string;
+  isClaimed?: boolean;
 }
 
 interface ResourceCardProps {
@@ -103,18 +104,18 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         )}
 
         {/* Content */}
-        <Box sx={{ marginTop: "20px" }}>
+        <Box sx={{ marginTop: "14px" }}>
           <Typography
             fontWeight={"700"}
             fontSize={"16px"}
-            lineHeight={"120%"}
+            lineHeight={"110%"}
           >
             {resource.heading || 'Resource Title'}
           </Typography>
           <Typography
             fontWeight={"600"}
             fontSize={"12px"}
-            marginTop={"4px"}
+            lineHeight={"200%"}
           >
             {resource.subHeading || 'Resource description'}
           </Typography>
@@ -126,23 +127,33 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
         <Button
           fullWidth
           onClick={handleClick}
+          disabled={resource.isClaimed}
           sx={{
             borderRadius: "0",
-            backgroundColor: "#404040",
-            color: "#fff",
+            backgroundColor: resource.isClaimed ? "#ccc" : "#404040",
+            color: resource.isClaimed ? "#666" : "#fff",
             fontSize: "14px",
             fontWeight: "500",
-            padding: "12px",
+            padding: "8px 12px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: "8px",
             "&:hover": {
-              backgroundColor: "#555",
+              backgroundColor: resource.isClaimed ? "#ccc" : "#555",
+            },
+            "&:disabled": {
+              cursor: "not-allowed",
             },
           }}
         >
-          Use {resource.stars || 0} <StarsOutlined sx={{ fontSize: "18px" }} />
+          {resource.isClaimed ? (
+            "Already claimed"
+          ) : (
+            <>
+              Use {resource.stars || 0} <StarsOutlined sx={{ fontSize: "18px" }} />
+            </>
+          )}
         </Button>
       )}
 

@@ -1,13 +1,11 @@
 import React from "react";
-import { Typography, Stack, Button, useTheme } from "@mui/material";
+import { Typography, Stack, useTheme, Box } from "@mui/material";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import { useSelector } from "react-redux";
 
 const TopStatusPanel: React.FC = () => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const { totalStars, rank } = useSelector((state: RootState) => state.user);
 
@@ -29,7 +27,6 @@ const TopStatusPanel: React.FC = () => {
       icon: <LeaderboardIcon sx={{ fontSize: 34, color: "black" }} />,
       value: getOrdinal(rank),
       bgColor: "#D9D9D9",
-      onClick: () => navigate("/user/leaderboard"),
     },
   ];
 
@@ -43,9 +40,9 @@ const TopStatusPanel: React.FC = () => {
       }}
     >
       {topCardData.map((item, idx) => (
-        <Button
+        <Box
           key={idx}
-          onClick={item.onClick || (() => {})}
+          // onClick={item.onClick || (() => {})}
           sx={{
             flex: 1,
             backgroundColor: item.bgColor,
@@ -74,7 +71,7 @@ const TopStatusPanel: React.FC = () => {
           >
             {item.value}
           </Typography>
-        </Button>
+        </Box>
       ))}
     </Stack>
   );

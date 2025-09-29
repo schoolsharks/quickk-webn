@@ -253,8 +253,8 @@ Best regards`;
                   variant="h4"
                   sx={{
                     color: theme.palette.text.primary,
-                    fontWeight: 700,
-                    fontSize: "20px",
+                    fontWeight: 600,
+                    fontSize: "25px",
                     marginBottom: "4px",
                   }}
                 >
@@ -275,7 +275,7 @@ Best regards`;
                     sx={{
                       color: theme.palette.text.primary,
                       fontSize: "14px",
-                      fontWeight: 500,
+                      fontWeight: 700,
                     }}
                   >
                     {profile.businessName}
@@ -314,12 +314,12 @@ Best regards`;
             <Typography
               variant="body2"
               sx={{
-                color: theme.palette.text.secondary,
-                fontSize: "12px",
+                fontSize: "14px",
+                fontWeight:"700",
                 marginBottom: "8px",
               }}
             >
-              Specializes in
+              Belongs to industries like
             </Typography>
 
             <Box display="flex" flexWrap="wrap" gap={1} mb={6}>
@@ -331,7 +331,7 @@ Best regards`;
                       key={index}
                       label={category}
                       sx={{
-                        flex: 1,
+                        // flex: 1,
                         borderRadius: "0px",
                         backgroundColor: "transparent",
                         border: `1px solid ${theme.palette.text.secondary}`,
@@ -348,7 +348,7 @@ Best regards`;
                 <Chip
                   label={profile.specialisation}
                   sx={{
-                    flex: 1,
+                    // flex: 1,
                     borderRadius: "0px",
                     backgroundColor: "transparent",
                     border: `1px solid ${theme.palette.text.secondary}`,
@@ -368,26 +368,24 @@ Best regards`;
               display="flex"
               justifyContent="space-between"
               alignItems="center"
-              mb={2}
             >
               <Typography
-                variant="body2"
                 sx={{
-                  color: theme.palette.text.secondary,
-                  fontSize: "12px",
+                  fontSize: "14px",
+                  fontWeight:"700"
+
                 }}
               >
                 Request to connect
               </Typography>
-              <Typography
-                variant="body2"
+              {/* <Typography
                 sx={{
-                  color: theme.palette.text.secondary,
-                  fontSize: "12px",
+                  fontSize: "14px",
+                  fontWeight:"700"
                 }}
               >
                 Community Member
-              </Typography>
+              </Typography> */}
             </Box>
           </Box>
 
@@ -403,7 +401,7 @@ Best regards`;
                 textTransform: "none",
                 fontWeight: 600,
                 fontSize: "16px",
-                padding: "12px",
+                padding: "16px 12px",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   backgroundColor: theme.palette.text.secondary,

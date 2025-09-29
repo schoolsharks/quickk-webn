@@ -94,11 +94,11 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
 
       <Box padding="16px">
         {/* User Input Section */}
-        <Box marginBottom="16px">
+        <Box marginBottom="36px">
           <Typography
-            fontWeight="600"
-            fontSize="16px"
-            color="#8B46FF"
+            fontWeight="700"
+            fontSize="20px"
+            color="primary.main"
             marginBottom="12px"
           >
             Tell us what you need.
@@ -127,10 +127,9 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
         {/* Confirmation Checkbox */}
         <Box marginBottom="24px">
           <Typography
-            fontWeight="600"
-            fontSize="16px"
-            color="#8B46FF"
-            marginBottom="8px"
+            fontWeight="700"
+            fontSize="20px"
+            color="primary.main"
           >
             Please Confirm:
           </Typography>
@@ -140,9 +139,9 @@ const ResourceClaim: React.FC<ResourceClaimProps> = ({ resourceId }) => {
                 checked={isConfirmed}
                 onChange={(e) => setIsConfirmed(e.target.checked)}
                 sx={{
-                  color: "#8B46FF",
+                  color: "primary.main",
                   "&.Mui-checked": {
-                    color: "#8B46FF",
+                    color: "primary.main",
                   },
                 }}
               />

@@ -48,6 +48,7 @@ interface EventFormData {
   startDate: Dayjs | null;
   endDate: Dayjs | null;
   address: string;
+  virtualMeetingLink: string;
   speakers: Speaker[];
   keyHighlights: string[];
   sponsors: Sponsor[];
@@ -70,6 +71,7 @@ const EventFormPage: React.FC = () => {
     startDate: null,
     endDate: null,
     address: "",
+    virtualMeetingLink: "",
     speakers: [{ name: "", designation: "" }],
     keyHighlights: [""],
     sponsors: [{ name: "", logo: null }],
@@ -145,6 +147,7 @@ const EventFormPage: React.FC = () => {
       startDate: event.startDate ? dayjs(event.startDate) : null,
       endDate: event.endDate ? dayjs(event.endDate) : null,
       address: event.location || "",
+      virtualMeetingLink: event.virtualMeetingLink || "",
       speakers:
         event.speakers?.length > 0
           ? event.speakers
@@ -351,7 +354,14 @@ const EventFormPage: React.FC = () => {
         "targetAudience",
         JSON.stringify(formData.targetAudience)
       );
-      formDataToSend.append("location", formData.address);
+      
+      // Send location or virtualMeetingLink based on event type
+      if (formData.eventType === "ONLINE") {
+        formDataToSend.append("virtualMeetingLink", formData.virtualMeetingLink);
+      } else {
+        formDataToSend.append("location", formData.address);
+      }
+      
       formDataToSend.append("speakers", JSON.stringify(formData.speakers));
       formDataToSend.append(
         "keyHighlights",
@@ -759,14 +769,46 @@ const EventFormPage: React.FC = () => {
 
               <Grid size={6}>
                 <Typography variant="body1" sx={{ mb: 1, fontSize: "12px" }}>
-                  Address
+                  {formData.eventType === "ONLINE" ? "Meeting URL" : "Address"}
                 </Typography>
-                <AddressAutocomplete
-                  value={formData.address}
-                  onChange={handleAddressChange}
-                  placeholder="Start typing address..."
-                  size="medium"
-                />
+                {formData.eventType === "ONLINE" ? (
+                  <TextField
+                    fullWidth
+                    size="medium"
+                    placeholder="Enter meeting URL (e.g., Zoom, Teams, etc.)"
+                    value={formData.virtualMeetingLink}
+                    onChange={(e) =>
+                      handleInputChange("virtualMeetingLink", e.target.value)
+                    }
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        color: "white",
+                        borderRadius: "0px",
+                        bgcolor: "#333",
+                        "& fieldset": {
+                          borderColor: "#555",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#777",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#999",
+                        },
+                      },
+                      "& .MuiInputBase-input::placeholder": {
+                        color: "#999",
+                        opacity: 1,
+                      },
+                    }}
+                  />
+                ) : (
+                  <AddressAutocomplete
+                    value={formData.address}
+                    onChange={handleAddressChange}
+                    placeholder="Start typing address..."
+                    size="medium"
+                  />
+                )}
               </Grid>
             </Grid>
           </Box>

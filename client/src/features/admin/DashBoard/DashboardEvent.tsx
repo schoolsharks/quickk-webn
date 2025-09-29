@@ -1,4 +1,4 @@
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Box, Typography, Card, CardContent, Stack } from "@mui/material";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import Loader from "../../../components/ui/Loader";
@@ -111,7 +111,11 @@ const DashboardEvent: React.FC = () => {
       : EventData?.time || "";
 
   return (
-    <Box pt={"24px"} border={`1px solid ${theme.palette.primary.main}`}>
+    <Stack
+      pt={"24px"}
+      height={"100%"}
+      border={`1px solid ${theme.palette.primary.main}`}
+    >
       <Box
         display="flex"
         px={"24px"}
@@ -132,7 +136,7 @@ const DashboardEvent: React.FC = () => {
         </Typography>
       </Box>
 
-      <Box px={"60px"} my={4}>
+      <Stack flex={1} px={"60px"} my={4}>
         <Card
           sx={{
             borderRadius: "0",
@@ -266,13 +270,13 @@ const DashboardEvent: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
-      </Box>
+      </Stack>
       <Box bgcolor={"#404040"} p={2}>
         <Typography variant="h4" color="white" textAlign={"center"}>
           {EventData?.interestedCount + " Attending"}
         </Typography>
       </Box>
-    </Box>
+    </Stack>
   );
 };
 

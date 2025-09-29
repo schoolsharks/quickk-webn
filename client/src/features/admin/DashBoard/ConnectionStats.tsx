@@ -36,8 +36,10 @@ const AdminConnectionStats: React.FC<AdminConnectionStatsProps> = ({
   className,
 }) => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("current");
-  
-  const { data: connectionStats, isLoading } = useGetConnectionStatsQuery({ period: selectedPeriod });
+
+  const { data: connectionStats, isLoading } = useGetConnectionStatsQuery({
+    period: selectedPeriod,
+  });
   const [exportConnections, { isLoading: isExporting }] =
     useLazyExportConnectionsQuery();
 
@@ -53,22 +55,32 @@ const AdminConnectionStats: React.FC<AdminConnectionStatsProps> = ({
   // Helper functions for labels
   function getCurrentMonthLabel() {
     const now = new Date();
-    return now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    return now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   }
 
   function getLast3MonthsLabel() {
     const now = new Date();
     const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, 1);
-    const startMonth = threeMonthsAgo.toLocaleDateString('en-US', { month: 'short' });
-    const endMonth = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    const startMonth = threeMonthsAgo.toLocaleDateString("en-US", {
+      month: "short",
+    });
+    const endMonth = now.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
     return `${startMonth}-${endMonth}`;
   }
 
   function getLast6MonthsLabel() {
     const now = new Date();
     const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
-    const startMonth = sixMonthsAgo.toLocaleDateString('en-US', { month: 'short' });
-    const endMonth = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    const startMonth = sixMonthsAgo.toLocaleDateString("en-US", {
+      month: "short",
+    });
+    const endMonth = now.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
     return `${startMonth}-${endMonth}`;
   }
 
@@ -193,6 +205,7 @@ const AdminConnectionStats: React.FC<AdminConnectionStatsProps> = ({
                 sx={{
                   backgroundColor: "#ffffff",
                   minWidth: 120,
+                  borderRadius: 0,
                   "& .MuiOutlinedInput-notchedOutline": {
                     border: "none",
                   },
@@ -203,6 +216,9 @@ const AdminConnectionStats: React.FC<AdminConnectionStatsProps> = ({
                     py: 1,
                     px: 2,
                   },
+                  "& .MuiInputBase-root":{
+                    borderRadius:"0"
+                  }
                 }}
               >
                 {periodOptions.map((option) => (
@@ -251,7 +267,7 @@ const AdminConnectionStats: React.FC<AdminConnectionStatsProps> = ({
                   >
                     <Typography
                       sx={{
-                        fontSize: "16px",
+                        fontSize: "18px",
                         fontWeight: 500,
                         color: "#000000",
                       }}

@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import AppError from '../../../utils/appError';
-import ResourcesService from '../services/resources.service';
+import { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
+import AppError from "../../../utils/appError";
+import ResourcesService from "../services/resources.service";
 
 const resourcesService = new ResourcesService();
 
@@ -11,22 +11,19 @@ export const fetchAllResources = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const resources = await resourcesService.getAllResources();
-
+    const userId = req.user?.id;
+    const resources = await resourcesService.getAllResources(userId);
     res.status(StatusCodes.OK).json({
       success: true,
-      data: resources
+      data: resources,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in fetchAllResources controller:', error);
+    console.error("Error in fetchAllResources controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -38,10 +35,10 @@ export const fetchResourceById = async (
 ): Promise<void> => {
   try {
     const { resourceId } = req.params;
-    
+
     if (!resourceId) {
       return next(
-        new AppError('Resource ID is required', StatusCodes.BAD_REQUEST)
+        new AppError("Resource ID is required", StatusCodes.BAD_REQUEST)
       );
     }
 
@@ -49,18 +46,15 @@ export const fetchResourceById = async (
 
     res.status(StatusCodes.OK).json({
       success: true,
-      data: resource
+      data: resource,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in fetchResourceById controller:', error);
+    console.error("Error in fetchResourceById controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -75,19 +69,16 @@ export const getResourcesStats = async (
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Resources stats retrieved successfully',
-      data: stats
+      message: "Resources stats retrieved successfully",
+      data: stats,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in getResourcesStats controller:', error);
+    console.error("Error in getResourcesStats controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -99,30 +90,27 @@ export const searchResources = async (
 ): Promise<void> => {
   try {
     const { search, page, limit } = req.query;
-    
+
     const searchParams = {
-      search: typeof search === 'string' ? search : undefined,
+      search: typeof search === "string" ? search : undefined,
       page: page ? Number(page) : 1,
-      limit: limit ? Number(limit) : 10
+      limit: limit ? Number(limit) : 10,
     };
 
     const result = await resourcesService.searchResources(searchParams);
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Resources retrieved successfully',
-      data: result
+      message: "Resources retrieved successfully",
+      data: result,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in searchResources controller:', error);
+    console.error("Error in searchResources controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -139,8 +127,10 @@ export const createResource = async (
 
     // Handle file uploads
     if (files && files.length > 0) {
-      const imageFile = files.find(file => file.fieldname === 'image');
-      const companyLogoFile = files.find(file => file.fieldname === 'companyLogo');
+      const imageFile = files.find((file) => file.fieldname === "image");
+      const companyLogoFile = files.find(
+        (file) => file.fieldname === "companyLogo"
+      );
 
       if (imageFile) {
         resourceData.image = imageFile.location; // S3 URL
@@ -152,10 +142,16 @@ export const createResource = async (
     }
 
     // Parse JSON fields if they exist
-    if (resourceData.targetAudience && typeof resourceData.targetAudience === 'string') {
+    if (
+      resourceData.targetAudience &&
+      typeof resourceData.targetAudience === "string"
+    ) {
       resourceData.targetAudience = JSON.parse(resourceData.targetAudience);
     }
-    if (resourceData.description && typeof resourceData.description === 'string') {
+    if (
+      resourceData.description &&
+      typeof resourceData.description === "string"
+    ) {
       resourceData.description = JSON.parse(resourceData.description);
     }
 
@@ -163,19 +159,16 @@ export const createResource = async (
 
     res.status(StatusCodes.CREATED).json({
       success: true,
-      message: 'Resource created successfully',
-      data: resource
+      message: "Resource created successfully",
+      data: resource,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in createResource controller:', error);
+    console.error("Error in createResource controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -187,10 +180,10 @@ export const updateResource = async (
 ): Promise<void> => {
   try {
     const { resourceId } = req.params;
-    
+
     if (!resourceId) {
       return next(
-        new AppError('Resource ID is required', StatusCodes.BAD_REQUEST)
+        new AppError("Resource ID is required", StatusCodes.BAD_REQUEST)
       );
     }
 
@@ -200,8 +193,10 @@ export const updateResource = async (
 
     // Handle file uploads
     if (files && files.length > 0) {
-      const imageFile = files.find(file => file.fieldname === 'image');
-      const companyLogoFile = files.find(file => file.fieldname === 'companyLogo');
+      const imageFile = files.find((file) => file.fieldname === "image");
+      const companyLogoFile = files.find(
+        (file) => file.fieldname === "companyLogo"
+      );
 
       if (imageFile) {
         resourceData.image = imageFile.location; // S3 URL
@@ -213,30 +208,36 @@ export const updateResource = async (
     }
 
     // Parse JSON fields if they exist
-    if (resourceData.targetAudience && typeof resourceData.targetAudience === 'string') {
+    if (
+      resourceData.targetAudience &&
+      typeof resourceData.targetAudience === "string"
+    ) {
       resourceData.targetAudience = JSON.parse(resourceData.targetAudience);
     }
-    if (resourceData.description && typeof resourceData.description === 'string') {
+    if (
+      resourceData.description &&
+      typeof resourceData.description === "string"
+    ) {
       resourceData.description = JSON.parse(resourceData.description);
     }
 
-    const resource = await resourcesService.updateResource(resourceId, resourceData);
+    const resource = await resourcesService.updateResource(
+      resourceId,
+      resourceData
+    );
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Resource updated successfully',
-      data: resource
+      message: "Resource updated successfully",
+      data: resource,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in updateResource controller:', error);
+    console.error("Error in updateResource controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -248,10 +249,10 @@ export const deleteResource = async (
 ): Promise<void> => {
   try {
     const { resourceId } = req.params;
-    
+
     if (!resourceId) {
       return next(
-        new AppError('Resource ID is required', StatusCodes.BAD_REQUEST)
+        new AppError("Resource ID is required", StatusCodes.BAD_REQUEST)
       );
     }
 
@@ -259,18 +260,15 @@ export const deleteResource = async (
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Resource deleted successfully'
+      message: "Resource deleted successfully",
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in deleteResource controller:', error);
+    console.error("Error in deleteResource controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };
@@ -282,10 +280,10 @@ export const searchCompanies = async (
 ): Promise<void> => {
   try {
     const { search } = req.query;
-    
-    if (!search || typeof search !== 'string') {
+
+    if (!search || typeof search !== "string") {
       return next(
-        new AppError('Search term is required', StatusCodes.BAD_REQUEST)
+        new AppError("Search term is required", StatusCodes.BAD_REQUEST)
       );
     }
 
@@ -293,19 +291,16 @@ export const searchCompanies = async (
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: 'Companies retrieved successfully',
-      data: companies
+      message: "Companies retrieved successfully",
+      data: companies,
     });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
     }
-    console.error('Error in searchCompanies controller:', error);
+    console.error("Error in searchCompanies controller:", error);
     return next(
-      new AppError(
-        'Internal Server Error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      new AppError("Internal Server Error", StatusCodes.INTERNAL_SERVER_ERROR)
     );
   }
 };

@@ -66,6 +66,18 @@ const DailyPulse: React.FC = () => {
           createdAt: item.createdAt,
           expiresAt: item.expiresAt,
         };
+      } else if (item.type === "resourceRating") {
+        return {
+          type: "resourceRating" as const,
+          id: item.id,
+          score: item.score,
+          response: item.response,
+          resourceId: item.resourceId,
+          resourceName: item.resourceName,
+          companyName: item.companyName,
+          claimedAt: item.claimedAt,
+          expiresAt: item.expiresAt,
+        };
       } else if (item.type === "infoCard") {
         return {
           type: "infoCard" as const,

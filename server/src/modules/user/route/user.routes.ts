@@ -10,6 +10,7 @@ import * as rewardControllers from "../../reward/controllers/reward.controller";
 import { eventController } from "../../events/controllers/events.controllers";
 import * as UserControllers from "../../user/controllers/user.controller";
 import * as userConnectionControllers from "../controllers/user.connection.controller";
+import * as userResourceRatingControllers from "../controllers/user.resource.rating.controller";
 import userRewardClaimsRoutes from "../../rewardsAndResources/routes/userRewardClaims.routes";
 import resourcesRoutes from "../../rewardsAndResources/routes/resources.routes";
 import userConnectionFeedbackRoutes from "./user.connection.feedback.routes";
@@ -31,6 +32,7 @@ router.post('/selectAvatar', authenticateUser, asyncHandeler(userControllers.sel
 
 router.get('/getDailyPulse', authenticateUser, asyncHandeler(dailyPulseControllers.getDailyPulses));
 router.post('/submitPulseResponse', authenticateUser, asyncHandeler(dailyPulseControllers.submitPulseResponse));
+router.get('/getResourceRatingPulse', authenticateUser, asyncHandeler(dailyPulseControllers.getResourceRatingPulse));
 
 router.get('/getLearning', authenticateUser, asyncHandeler(learningControllers.getLearningByWeek));
 router.get('/getModule/:id', authenticateUser, asyncHandeler(moduleControllers.getModuleById));
@@ -81,6 +83,11 @@ router.use('/resources', resourcesRoutes);
 
 // Routes for connection feedback
 router.use('/connection-feedback', userConnectionFeedbackRoutes);
+
+// Routes for resource rating
+router.post('/resource-rating/submit', authenticateUser, asyncHandeler(userResourceRatingControllers.submitResourceRating));
+router.get('/resource-rating/history', authenticateUser, asyncHandeler(userResourceRatingControllers.getUserResourceRatings));
+router.get('/resource-rating/stats/:resourceId', authenticateUser, asyncHandeler(userResourceRatingControllers.getResourceRatingStats));
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));
 // router.post('/resetPassword', asyncHandeler(authControllers.resetPassword));

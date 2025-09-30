@@ -13,6 +13,7 @@ import { SearchHelper } from "../../../utils/search/searchHelper";
 import { searchConfigs } from "../../../utils/search/searchConfigs";
 import mongoose from "mongoose";
 import UserConnectionFeedbackService from "../../user/service/user.connection.feedback.service";
+import UserResourceRatingService from "../../user/service/user.resource.rating.service";
 // import AdminService from '../../admin/service/admin.service';
 
 // const imageUploadService = new AdminService();
@@ -21,6 +22,50 @@ const infoCardService = new InfoCardService();
 const userService = new UserService();
 const dailyPulseService = new DailyPulseService();
 const pulseStatsService = new PulseStatsService();
+const userResourceRatingService = new UserResourceRatingService();
+
+export const getResourceRatingPulse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      return next(new AppError("User is required", StatusCodes.BAD_REQUEST));
+    }
+
+    const resourceRating = await userResourceRatingService.getPendingResourceRatingsForPulse(userId);
+
+    if (!resourceRating) {
+      res.status(StatusCodes.OK).json({
+        success: true,
+        message: "No pending resource ratings found",
+        data: null,
+      });
+      return;
+    }
+
+    // Get resource details
+    const resourceDetails = resourceRating.resourceId as any;
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      data: {
+        id: resourceRating._id,
+        resourceId: resourceRating.resourceId,
+        resourceName: resourceDetails?.heading || "Resource",
+        companyName: resourceDetails?.companyName || "Unknown Company",
+        claimedAt: resourceRating.claimedAt,
+        expiresAt: resourceRating.expiresAt,
+        score: 5, // Default score for resource rating
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getDailyPulses = async (
   req: Request,

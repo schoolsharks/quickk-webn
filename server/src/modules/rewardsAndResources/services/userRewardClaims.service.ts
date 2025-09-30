@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import UserRewardsClaims from "../models/userRewardClaims";
 import UserService from "../../user/service/user.service";
+import UserResourceRatingService from "../../user/service/user.resource.rating.service";
 import AppError from "../../../utils/appError";
 import { StatusCodes } from "http-status-codes";
 import { RewardTypes } from "../types/enums";
@@ -8,6 +9,7 @@ import { IUserRewardsClaims } from "../types/interface";
 
 class UserRewardClaimsService {
   private userService = new UserService();
+  private userResourceRatingService = new UserResourceRatingService();
   private readonly ADVERTISEMENT_STARS_REQUIRED = 1000;
 
   async applyForReward(
@@ -92,6 +94,20 @@ class UserRewardClaimsService {
       const rewardClaim = new UserRewardsClaims(rewardClaimData);
 
       const savedClaim = await rewardClaim.save({ session });
+
+      // Create resource rating request if this is a resource claim
+      if (rewardType === RewardTypes.RESOURCES && resourceId) {
+        try {
+          await this.userResourceRatingService.createResourceRating(
+            userId,
+            new mongoose.Types.ObjectId(resourceId),
+            new Date()
+          );
+        } catch (ratingError) {
+          // Log the error but don't fail the entire transaction
+          console.error("Failed to create resource rating:", ratingError);
+        }
+      }
 
       await session.commitTransaction();
 

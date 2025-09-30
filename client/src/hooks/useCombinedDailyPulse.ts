@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { 
   useGetDailyPulseQuery, 
-  useGetConnectionFeedbackPulseQuery 
+  useGetConnectionFeedbackPulseQuery,
+  useGetResourceRatingPulseQuery
 } from '../features/dailyPulse/dailyPulseApi';
 
 export interface ExtendedPulseItem {
@@ -25,12 +26,18 @@ export interface ExtendedPulseItem {
   connectionUserName?: string;
   createdAt?: string;
   expiresAt?: string;
+  // Resource rating properties
+  resourceId?: string;
+  resourceName?: string;
+  companyName?: string;
+  claimedAt?: string;
 }
 
 export interface CombinedDailyPulseData {
   date?: string;
   pulseItems: ExtendedPulseItem[];
   hasConnectionFeedback: boolean;
+  hasResourceRating: boolean;
   isLoading: boolean;
   error: any;
 }
@@ -51,9 +58,16 @@ export const useCombinedDailyPulse = (): CombinedDailyPulseData => {
     error: connectionFeedbackError,
   } = useGetConnectionFeedbackPulseQuery({});
 
+  const {
+    data: resourceRatingData,
+    isLoading: isResourceRatingLoading,
+    error: resourceRatingError,
+  } = useGetResourceRatingPulseQuery({});
+
   const combinedData = useMemo(() => {
     const pulseItems: ExtendedPulseItem[] = [];
     let hasConnectionFeedback = false;
+    let hasResourceRating = false;
 
     // Add regular daily pulse items
     if (dailyPulseData?.pulseItems) {
@@ -79,20 +93,42 @@ export const useCombinedDailyPulse = (): CombinedDailyPulseData => {
       pulseItems.unshift(connectionPulse);
     }
 
+    // Add resource rating pulse if available
+    if (resourceRatingData?.data) {
+      hasResourceRating = true;
+      const resourceRatingPulse: ExtendedPulseItem = {
+        id: resourceRatingData.data.id,
+        type: 'resourceRating',
+        score: resourceRatingData.data.score,
+        resourceId: resourceRatingData.data.resourceId,
+        resourceName: resourceRatingData.data.resourceName,
+        companyName: resourceRatingData.data.companyName,
+        claimedAt: resourceRatingData.data.claimedAt,
+        expiresAt: resourceRatingData.data.expiresAt,
+      };
+      
+      // Add resource rating at the beginning (or after connection feedback)
+      pulseItems.unshift(resourceRatingPulse);
+    }
+
     return {
       date: dailyPulseData?.date,
       pulseItems,
       hasConnectionFeedback,
-      isLoading: isDailyPulseLoading || isConnectionFeedbackLoading,
-      error: dailyPulseError || connectionFeedbackError,
+      hasResourceRating,
+      isLoading: isDailyPulseLoading || isConnectionFeedbackLoading || isResourceRatingLoading,
+      error: dailyPulseError || connectionFeedbackError || resourceRatingError,
     };
   }, [
     dailyPulseData,
     connectionFeedbackData,
+    resourceRatingData,
     isDailyPulseLoading,
     isConnectionFeedbackLoading,
+    isResourceRatingLoading,
     dailyPulseError,
     connectionFeedbackError,
+    resourceRatingError,
   ]);
 
   return combinedData;

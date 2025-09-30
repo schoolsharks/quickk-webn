@@ -16,14 +16,19 @@ import { carouselSlide } from "../../../../animation/variants/slideCarousel";
 import Upcoming_Event from "../../../user/components/Upcoming_Event";
 import StarsEarnedPopup from "../../../../components/ui/StarsEarnedPopup";
 import ConnectionFeedbackPulse from "../../../user/components/ConnectionFeedbackPulse";
-import { useSubmitConnectionFeedbackResponseMutation } from "../../dailyPulseApi";
+import ResourceRatingPulse from "../../../question/components/ResourceRatingPulse";
+import {
+  useSubmitConnectionFeedbackResponseMutation,
+  useSubmitResourceRatingResponseMutation,
+} from "../../dailyPulseApi";
 
 type PulseItemType =
   | "infoCard"
   | "QuestionTwoOption"
   | "bidCard"
   | "eventCard"
-  | "connectionFeedback";
+  | "connectionFeedback"
+  | "resourceRating";
 
 interface BasePulseItem {
   type: PulseItemType;
@@ -75,12 +80,22 @@ interface ConnectionFeedbackPulseItem extends BasePulseItem {
   expiresAt: string;
 }
 
+interface ResourceRatingPulseItem extends BasePulseItem {
+  type: "resourceRating";
+  resourceId: string;
+  resourceName: string;
+  companyName: string;
+  claimedAt: string;
+  expiresAt: string;
+}
+
 export type PulseItem =
   | InfoPulseItem
   | QuestionTwoOptionPulseItem
   | BidCardPulseItem
   | EventCardPulseItem
-  | ConnectionFeedbackPulseItem;
+  | ConnectionFeedbackPulseItem
+  | ResourceRatingPulseItem;
 
 interface DailyPulseProps {
   pulseItems: PulseItem[];
@@ -99,6 +114,8 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   const [submitPulseResponse] = useSubmitPulseResponseMutation();
   const [submitConnectionFeedbackResponse] =
     useSubmitConnectionFeedbackResponseMutation();
+  const [submitResourceRatingResponse] =
+    useSubmitResourceRatingResponseMutation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number>(1);
   const [showStarsPopup, setShowStarsPopup] = useState(false);
@@ -242,6 +259,26 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         );
       } catch (error) {
         console.error("Failed to submit connection feedback:", error);
+      }
+      return;
+    }
+
+    // Handle resource rating separately
+    if (pulseItem.type === "resourceRating") {
+      try {
+        await submitResourceRatingResponse({
+          ratingId: itemId,
+          rating: answer,
+        }).unwrap();
+
+        // Update local state to show response
+        setLocalPulseItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === itemId ? { ...item, response: answer } : item
+          )
+        );
+      } catch (error) {
+        console.error("Failed to submit resource rating:", error);
       }
       return;
     }
@@ -411,6 +448,37 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
               expiresAt={(item as any).expiresAt}
               onAnswer={readOnly ? undefined : handleAnswer}
               response={item.response}
+              smallSize={smallSize}
+            />
+          </Box>
+        );
+      case "resourceRating":
+        return (
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <ResourceRatingPulse
+              id={item.id}
+              resourceId={(item as any).resourceId}
+              resourceName={(item as any).resourceName}
+              companyName={(item as any).companyName}
+              score={item.score}
+              claimedAt={(item as any).claimedAt}
+              expiresAt={(item as any).expiresAt}
+              onAnswer={
+                readOnly
+                  ? undefined
+                  : (itemId: string, rating: number) =>
+                      handleAnswer(rating, itemId)
+              }
+              response={
+                typeof item.response === "string"
+                  ? parseInt(item.response)
+                  : item.response
+              }
               smallSize={smallSize}
             />
           </Box>

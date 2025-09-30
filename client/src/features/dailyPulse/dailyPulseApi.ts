@@ -134,6 +134,41 @@ export const dailyPulseApi = api.injectEndpoints({
             providesTags: ['DailyPulse'],
         }),
 
+        // Resource Rating Endpoints
+        getResourceRatingPulse: builder.query({
+            query: () => ({
+                url: '/user/getResourceRatingPulse',
+                method: 'GET',
+            }),
+            providesTags: ['DailyPulse'],
+        }),
+
+        submitResourceRatingResponse: builder.mutation({
+            query: (response) => ({
+                url: '/user/resource-rating/submit',
+                method: 'POST',
+                body: response,
+            }),
+            invalidatesTags: ['DailyPulse'],
+        }),
+
+        getUserResourceRatings: builder.query({
+            query: (params) => ({
+                url: '/user/resource-rating/history',
+                method: 'GET',
+                params,
+            }),
+            providesTags: ['DailyPulse'],
+        }),
+
+        getResourceRatingStats: builder.query({
+            query: (resourceId) => ({
+                url: `/user/resource-rating/stats/${resourceId}`,
+                method: 'GET',
+            }),
+            providesTags: ['DailyPulse'],
+        }),
+
     }),
 });
 
@@ -157,5 +192,11 @@ export const {
     useGetConnectionFeedbackPulseQuery,
     useLazyGetConnectionFeedbackPulseQuery,
     useSubmitConnectionFeedbackResponseMutation,
-    useGetConnectionFeedbacksQuery
+    useGetConnectionFeedbacksQuery,
+    // Resource Rating hooks
+    useGetResourceRatingPulseQuery,
+    useLazyGetResourceRatingPulseQuery,
+    useSubmitResourceRatingResponseMutation,
+    useGetUserResourceRatingsQuery,
+    useGetResourceRatingStatsQuery
 } = dailyPulseApi;

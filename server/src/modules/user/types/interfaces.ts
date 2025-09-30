@@ -44,10 +44,17 @@ export enum ConnectionPlatform {
   MAIL = 'mail'
 }
 
+export enum ConnectionStatus {
+  PENDING = 'pending',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected'
+}
+
 export interface IUserConnection {
   userId: Schema.Types.ObjectId;
   connectionId: Schema.Types.ObjectId;
   platforms: ConnectionPlatform[];
+  status?: ConnectionStatus;
   createdAt: Date;
   updatedAt: Date;
 }

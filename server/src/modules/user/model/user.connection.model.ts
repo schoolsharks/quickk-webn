@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IUserConnection, ConnectionPlatform } from "../types/interfaces";
+import { IUserConnection, ConnectionPlatform, ConnectionStatus } from "../types/interfaces";
 
 const userConnectionSchema: Schema<IUserConnection> = new Schema<IUserConnection>(
   {
@@ -10,7 +10,7 @@ const userConnectionSchema: Schema<IUserConnection> = new Schema<IUserConnection
     },
     connectionId: {
       type: Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "User",
       required: true,
     },
     platforms: [{
@@ -18,6 +18,11 @@ const userConnectionSchema: Schema<IUserConnection> = new Schema<IUserConnection
       enum: Object.values(ConnectionPlatform),
       required: true,
     }],
+    status: {
+      type: String,
+      enum: Object.values(ConnectionStatus),
+      default: ConnectionStatus.PENDING,
+    },
   },
   {
     timestamps: true,

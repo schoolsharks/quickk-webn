@@ -1,11 +1,16 @@
 import React from "react";
 import DailyPulseLayout from "../../features/dailyPulse/components/user/DailyPulseLayout";
-import { useGetDailyPulseQuery } from "../../features/dailyPulse/dailyPulseApi";
 import { PulseItem } from "../../features/dailyPulse/components/user/DailyPulseLayout";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { useCombinedDailyPulse } from "../../hooks/useCombinedDailyPulse";
 
 const DailyPulse: React.FC = () => {
-  const { data, isLoading, error } = useGetDailyPulseQuery({});
+  const {
+    pulseItems: combinedPulseItems,
+    isLoading,
+    error,
+    // hasConnectionFeedback,
+  } = useCombinedDailyPulse();
 
   if (isLoading) {
     return (
@@ -45,57 +50,64 @@ const DailyPulse: React.FC = () => {
     );
   }
 
-  // Transform the API data to match the required props structure
-  // Separate infoCards and other items
-  const infoCards =
-    data?.pulseItems
-      .filter((item: any) => item.type === "infoCard")
-      .map((item: any) => ({
-        type: "infoCard",
-        response: item.feedback,
-        id: item.id,
-        title: item.title,
-        content: item.content,
-        wantFeedback: item.wantFeedback,
-        score: item.score,
-      })) || [];
+  // Transform the combined pulse items to match the DailyPulseLayout expected format
+  const transformedPulseItems: PulseItem[] = combinedPulseItems.map(
+    (item: any) => {
+      if (item.type === "connectionFeedback") {
+        return {
+          type: "connectionFeedback" as const,
+          id: item.id,
+          score: item.score,
+          response: item.response,
+          connectionUserId: item.connectionUserId,
+          connectionUserName: item.connectionUserName,
+          questionText: item.questionText,
+          options: item.options,
+          createdAt: item.createdAt,
+          expiresAt: item.expiresAt,
+        };
+      } else if (item.type === "infoCard") {
+        return {
+          type: "infoCard" as const,
+          id: item.id,
+          score: item.score,
+          response: item.feedback,
+          title: item.title,
+          content: item.content,
+          wantFeedback: item.wantFeedback,
+        };
+      } else {
+        // QuestionTwoOption or other types
+        return {
+          type: "QuestionTwoOption" as const,
+          id: item.id,
+          score: item.score,
+          response: item.response,
+          questionText: item.questionText,
+          image: item.image,
+          optionType: item.optionType,
+          options: item.options,
+          questionOptions: item.questionOptions,
+          pulseStats: item.pulseStats,
+        };
+      }
+    }
+  );
 
-  const otherItems =
-    data?.pulseItems
-      .filter((item: any) => item.type !== "infoCard")
-      .map((item: any) => ({
-        type: "QuestionTwoOption",
-        response: item.response,
-        id: item.id,
-        questionText: item.questionText,
-        image: item.image,
-        optionType: item.optionType,
-        options: item.options,
-        questionOptions: item.questionOptions,
-        score: item.score,
-        pulseStats: item.pulseStats,
-      })) || [];
-
-  // Add BidCard as the first item in the pulse
-  // const bidCardItem = {
-  //   type: "bidCard" as const,
+  // Add additional items if needed (uncomment if you want them)
+  // const bidCardItem: PulseItem = {
+  //   type: "bidCard",
   //   id: "bid-card",
   //   score: 10,
   // };
-  // const eventCardItem = {
-  //   type: "eventCard" as const,
+  // const eventCardItem: PulseItem = {
+  //   type: "eventCard",
   //   id: "event-card",
   //   score: 10,
   // };
+  // transformedPulseItems.push(eventCardItem, bidCardItem);
 
-  const pulseItems: PulseItem[] = [
-    ...infoCards,
-    ...otherItems,
-    // eventCardItem,
-    // bidCardItem,
-  ];
-
-  return <DailyPulseLayout pulseItems={pulseItems} />;
+  return <DailyPulseLayout pulseItems={transformedPulseItems} />;
 };
 
 export default DailyPulse;

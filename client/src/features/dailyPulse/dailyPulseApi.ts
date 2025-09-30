@@ -107,7 +107,32 @@ export const dailyPulseApi = api.injectEndpoints({
             }),
         }),
 
+        // Connection Feedback endpoints
+        getConnectionFeedbackPulse: builder.query({
+            query: () => ({
+                url: '/user/connection-feedback/getConnectionFeedbackPulse',
+                method: 'GET',
+            }),
+            providesTags: ['DailyPulse'],
+        }),
 
+        submitConnectionFeedbackResponse: builder.mutation({
+            query: (response) => ({
+                url: '/user/connection-feedback/submitConnectionFeedbackResponse',
+                method: 'POST',
+                body: response,
+            }),
+            invalidatesTags: ['DailyPulse'],
+        }),
+
+        getConnectionFeedbacks: builder.query({
+            query: (params) => ({
+                url: '/user/connection-feedback/getConnectionFeedbacks',
+                method: 'GET',
+                params,
+            }),
+            providesTags: ['DailyPulse'],
+        }),
 
     }),
 });
@@ -127,5 +152,10 @@ export const {
     useArchievedailyPulseByIdMutation,
     useCloneDailyPulseByIdMutation,
     useSearchDailyPulseQuery,
-    useGetTodayDailyPulseEngagementQuery
+    useGetTodayDailyPulseEngagementQuery,
+    // Connection Feedback hooks
+    useGetConnectionFeedbackPulseQuery,
+    useLazyGetConnectionFeedbackPulseQuery,
+    useSubmitConnectionFeedbackResponseMutation,
+    useGetConnectionFeedbacksQuery
 } = dailyPulseApi;

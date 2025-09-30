@@ -1,11 +1,13 @@
 import mongoose, { ObjectId, Types } from "mongoose";
 import { UserConnection } from "../model/user.connection.model";
 import User from "../model/user.model";
-import { ConnectionPlatform, IUserConnection } from "../types/interfaces";
+import { ConnectionPlatform, ConnectionStatus, IUserConnection } from "../types/interfaces";
 import AppError from "../../../utils/appError";
 import { StatusCodes } from "http-status-codes";
+import UserConnectionFeedbackService from "./user.connection.feedback.service";
 
 class UserConnectionService {
+    private userConnectionFeedbackService = new UserConnectionFeedbackService();
 
     async addConnection(userId: string, connectionId: string, platform: ConnectionPlatform): Promise<IUserConnection> {
         // Validate user IDs
@@ -56,6 +58,18 @@ class UserConnectionService {
                 // Add new platform to existing connection
                 existingConnection.platforms.push(platform);
                 await existingConnection.save();
+
+                // Create feedback entry for new platform connection
+                try {
+                    await this.userConnectionFeedbackService.createConnectionFeedback(
+                        userId,
+                        existingConnection._id.toString()
+                    );
+                } catch (error) {
+                    // Log error but don't fail the connection process
+                    console.error('Error creating connection feedback:', error);
+                }
+
                 return existingConnection;
             }
 
@@ -67,6 +81,18 @@ class UserConnectionService {
             });
 
             await newConnection.save();
+
+            // Create feedback entry for new connection
+            try {
+                await this.userConnectionFeedbackService.createConnectionFeedback(
+                    userId,
+                    newConnection._id.toString()
+                );
+            } catch (error) {
+                // Log error but don't fail the connection process
+                console.error('Error creating connection feedback:', error);
+            }
+
             return newConnection;
 
         } catch (error: any) {
@@ -216,7 +242,8 @@ class UserConnectionService {
                     createdAt: {
                         $gte: startDate,
                         $lte: endDate
-                    }
+                    },
+                    status: { $ne: ConnectionStatus.REJECTED }
                 }
             },
             {
@@ -345,6 +372,7 @@ class UserConnectionService {
                     connectedUserEmail: "$connectedUser.companyMail",
                     connectedUserBusinessName: "$connectedUser.businessName",
                     platform: "$platforms", // Single platform per record after unwind
+                    status: 1,
                     connectionDate: "$createdAt",
                     lastUpdated: "$updatedAt"
                 }
@@ -442,7 +470,7 @@ class UserConnectionService {
     async getTotalConnectionCount(userId: Types.ObjectId): Promise<number> {
 
         // Count the number of UserConnection documents for the user
-        const count = await UserConnection.countDocuments({ userId: userId });
+        const count = await UserConnection.countDocuments({ userId: userId, status: { $ne: ConnectionStatus.REJECTED } });
         return count;
     }
 }

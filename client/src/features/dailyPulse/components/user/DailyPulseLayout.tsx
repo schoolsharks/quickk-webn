@@ -15,8 +15,15 @@ import { handleHaptic } from "../../../../utils/haptics";
 import { carouselSlide } from "../../../../animation/variants/slideCarousel";
 import Upcoming_Event from "../../../user/components/Upcoming_Event";
 import StarsEarnedPopup from "../../../../components/ui/StarsEarnedPopup";
+import ConnectionFeedbackPulse from "../../../user/components/ConnectionFeedbackPulse";
+import { useSubmitConnectionFeedbackResponseMutation } from "../../dailyPulseApi";
 
-type PulseItemType = "infoCard" | "QuestionTwoOption" | "bidCard" | "eventCard";
+type PulseItemType =
+  | "infoCard"
+  | "QuestionTwoOption"
+  | "bidCard"
+  | "eventCard"
+  | "connectionFeedback";
 
 interface BasePulseItem {
   type: PulseItemType;
@@ -58,11 +65,22 @@ interface EventCardPulseItem extends BasePulseItem {
   type: "eventCard";
 }
 
+interface ConnectionFeedbackPulseItem extends BasePulseItem {
+  type: "connectionFeedback";
+  connectionUserId: string;
+  connectionUserName: string;
+  questionText: string;
+  options: string[];
+  createdAt: string;
+  expiresAt: string;
+}
+
 export type PulseItem =
   | InfoPulseItem
   | QuestionTwoOptionPulseItem
   | BidCardPulseItem
-  | EventCardPulseItem;
+  | EventCardPulseItem
+  | ConnectionFeedbackPulseItem;
 
 interface DailyPulseProps {
   pulseItems: PulseItem[];
@@ -79,6 +97,8 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   smallSize = false,
 }) => {
   const [submitPulseResponse] = useSubmitPulseResponseMutation();
+  const [submitConnectionFeedbackResponse] =
+    useSubmitConnectionFeedbackResponseMutation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [maxHeight, setMaxHeight] = useState<number>(1);
   const [showStarsPopup, setShowStarsPopup] = useState(false);
@@ -206,6 +226,26 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
     setEarnedStars(pulseItem.score || 0);
     setShowStarsPopup(true);
 
+    // Handle connection feedback separately
+    if (pulseItem.type === "connectionFeedback") {
+      try {
+        await submitConnectionFeedbackResponse({
+          feedbackId: itemId,
+          response: answer,
+        }).unwrap();
+
+        // Update local state to show response
+        setLocalPulseItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === itemId ? { ...item, response: answer } : item
+          )
+        );
+      } catch (error) {
+        console.error("Failed to submit connection feedback:", error);
+      }
+      return;
+    }
+
     const payload = {
       refId: itemId,
       type: pulseItem.type,
@@ -235,7 +275,11 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
         setLocalPulseItems((prevItems) =>
           prevItems.map((item) =>
             item.id === itemId
-              ? { ...item, pulseStats: response.pulseStats, response: response.data?.response }
+              ? {
+                  ...item,
+                  pulseStats: response.pulseStats,
+                  response: response.data?.response,
+                }
               : item
           )
         );
@@ -255,7 +299,6 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   const handleCloseStarsPopup = () => {
     setShowStarsPopup(false);
   };
- 
 
   const renderPulseItem = (item: PulseItem, index: number) => {
     const cardStyle = {
@@ -347,6 +390,29 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
             sx={cardStyle}
           >
             <BidCard />
+          </Box>
+        );
+      case "connectionFeedback":
+        return (
+          <Box
+            ref={(el: HTMLDivElement | null) => {
+              cardRefs.current[index] = el;
+            }}
+            sx={cardStyle}
+          >
+            <ConnectionFeedbackPulse
+              id={item.id}
+              connectionUserId={(item as any).connectionUserId}
+              connectionUserName={(item as any).connectionUserName}
+              questionText={(item as any).questionText}
+              options={(item as any).options}
+              score={item.score}
+              createdAt={(item as any).createdAt}
+              expiresAt={(item as any).expiresAt}
+              onAnswer={readOnly ? undefined : handleAnswer}
+              response={item.response}
+              smallSize={smallSize}
+            />
           </Box>
         );
       default:

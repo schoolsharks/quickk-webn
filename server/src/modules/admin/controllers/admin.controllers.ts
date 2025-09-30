@@ -475,19 +475,19 @@ export const exportConnections = async (req: Request, res: Response, next: NextF
         const getDateRange = (period?: string) => {
             const now = new Date();
             const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            
-            switch(period) {
+
+            switch (period) {
                 case "current":
                     return { startDate: currentMonth, endDate: now };
                 case "3months":
-                    return { 
-                        startDate: new Date(now.getFullYear(), now.getMonth() - 2, 1), 
-                        endDate: now 
+                    return {
+                        startDate: new Date(now.getFullYear(), now.getMonth() - 2, 1),
+                        endDate: now
                     };
                 case "6months":
-                    return { 
-                        startDate: new Date(now.getFullYear(), now.getMonth() - 5, 1), 
-                        endDate: now 
+                    return {
+                        startDate: new Date(now.getFullYear(), now.getMonth() - 5, 1),
+                        endDate: now
                     };
                 default:
                     return { startDate: currentMonth, endDate: now };

@@ -12,6 +12,7 @@ import * as UserControllers from "../../user/controllers/user.controller";
 import * as userConnectionControllers from "../controllers/user.connection.controller";
 import userRewardClaimsRoutes from "../../rewardsAndResources/routes/userRewardClaims.routes";
 import resourcesRoutes from "../../rewardsAndResources/routes/resources.routes";
+import userConnectionFeedbackRoutes from "./user.connection.feedback.routes";
 
 const router = express.Router();
 
@@ -77,6 +78,9 @@ router.use('/reward-claims', userRewardClaimsRoutes);
 
 // Routes for resources
 router.use('/resources', resourcesRoutes);
+
+// Routes for connection feedback
+router.use('/connection-feedback', userConnectionFeedbackRoutes);
 
 // router.post('/requestPasswordReset', asyncHandeler(authControllers.requestPasswordReset));
 // router.post('/resetPassword', asyncHandeler(authControllers.resetPassword));

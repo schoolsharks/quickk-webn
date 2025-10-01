@@ -176,7 +176,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               ...defaultPulseData,
               ...(p as Partial<PulseData>),
               type: p.type?.toLowerCase() || "question",
-              pulseType,
+              pulseType, 
               qType:
                 pulseType === "Advertisement"
                   ? "ADVERTISEMENT"

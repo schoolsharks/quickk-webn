@@ -117,7 +117,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   const [submitResourceRatingResponse] =
     useSubmitResourceRatingResponseMutation();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [maxHeight, setMaxHeight] = useState<number>(1);
+  const [maxHeight, setMaxHeight] = useState<number>(0);
   const [showStarsPopup, setShowStarsPopup] = useState(false);
   const [earnedStars, setEarnedStars] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
@@ -128,12 +128,6 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
   useEffect(() => {
     setLocalPulseItems(pulseItems);
   }, [pulseItems]);
-
-  // Initialize cardRefs array when pulseItems change
-  useEffect(() => {
-    cardRefs.current = new Array(localPulseItems.length).fill(null);
-    setMaxHeight(0); // Reset max height when items change
-  }, [localPulseItems.length]);
 
   // Effect to calculate maximum height of all cards
   useEffect(() => {
@@ -184,7 +178,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
       clearTimeout(resizeTimeout);
       window.removeEventListener("resize", handleResize);
     };
-  }, [localPulseItems, smallSize, maxHeight]);
+  }, [localPulseItems, smallSize]);
 
   // Effect to apply calculated height to all cards
   useEffect(() => {

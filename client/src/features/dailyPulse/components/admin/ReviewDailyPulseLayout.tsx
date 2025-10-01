@@ -64,27 +64,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 }) => {
   const [UpdateDailyPulse] = useUpdateDailyPulseMutation();
   const navigate = useNavigate();
-  const [GetDailyPulseTable, { data: DailyPulseDatesData }] =
-    useLazyGetDailyPulseTableQuery();
+  const [GetDailyPulseTable] = useLazyGetDailyPulseTableQuery();
 
-  const [disabledDates, setDisabledDates] = useState<string[]>([]);
+  const [publishOn, setPublishOn] = useState<Date | null>(null);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-  useEffect(() => {
-    if (DailyPulseDatesData) {
-      const dates = DailyPulseDatesData.filter((dailyPulse: any) => {
-        return (
-          dailyPulse.status === "published" &&
-          !(dailyPulse._id === PulseData?._id)
-        );
-      }).map((dailyPulse: any) => {
-        return formatDate(new Date(dailyPulse?.publishOn));
-      });
-      setDisabledDates(dates);
-    }
-  }, [DailyPulseDatesData]);
-
-  // State for managing multiple pulses
+  const [disabledDates, setDisabledDates] = useState<string[]>([]);
 
   const [pulses, setPulses] = useState<PulseData[]>([
     {
@@ -206,7 +191,6 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
     window.scrollTo(0, 0);
   }, []);
 
-  const [publishOn, setPublishOn] = useState<Date | null>(null);
   const [stars, setStars] = useState<Number | 0>(0);
 
   const [currentPulseIndex, setCurrentPulseIndex] = useState(0);
@@ -384,16 +368,50 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
   const handlePublishClick = () => {
     GetDailyPulseTable({})
       .unwrap()
-      .then(() => {
-        setShowDatePicker(true);
-      });
+      .then((apiData) => {
+        // Calculate disabled dates directly from API response
+        const freshDisabledDates = apiData
+          .filter((dailyPulse: any) => {
+            return (
+              dailyPulse.status === "published" &&
+              !(dailyPulse._id === PulseData?._id)
+            );
+          })
+          .map((dailyPulse: any) => {
+            return formatDate(new Date(dailyPulse?.publishOn));
+          });
 
-    // setConfirmDialog({
-    //   open: true,
-    //   action: "publish",
-    //   title: "Publish Daily Pulse",
-    //   message: `Are you sure you want to publish this daily pulse with ${pulses.length} pulse(s)?`,
-    // });
+        // Store the current disabled dates for use in date picker
+        setDisabledDates(freshDisabledDates);
+
+        // Check if a date is selected
+        if (!publishOn) {
+          // No date selected, show date picker
+          setShowDatePicker(true);
+          return;
+        }
+
+        // Check if the selected date conflicts with existing pulses
+        const currentDateStr = formatDate(publishOn);
+        const hasConflict = freshDisabledDates.includes(currentDateStr);
+
+        if (hasConflict) {
+          // Date conflicts, show date picker to select a different date
+          setShowDatePicker(true);
+        } else {
+          // No conflict, proceed with confirmation
+          setConfirmDialog({
+            open: true,
+            action: "publish",
+            title: "Publish Daily Pulse",
+            message: `Are you sure you want to publish this daily pulse with ${pulses.length} pulse(s) on ${currentDateStr}?`,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch daily pulse data:", error);
+        alert("Failed to fetch existing daily pulse data. Please try again.");
+      });
   };
 
   const handleInputChange = (field: keyof PulseData, value: any) => {
@@ -1485,20 +1503,53 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   boxShadow: "0px 4px 12px rgba(0,0,0,0.5)",
                 }}
               >
-                <Typography variant="h6" sx={{ mb: 1 }}>
-                  Publish On
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 1,
+                  }}
+                >
+                  <Typography variant="h6">Publish On</Typography>
+                  <Button
+                    onClick={() => setShowDatePicker(false)}
+                    sx={{
+                      color: "#888",
+                      minWidth: "auto",
+                      px: 1,
+                      "&:hover": { color: "white" },
+                    }}
+                  >
+                    ✕
+                  </Button>
+                </Box>
 
                 <DatePicker
                   value={publishOn || null}
                   onChange={(date) => {
-                    setPublishOn(date ? new Date(date.valueOf()) : null);
-                    setConfirmDialog({
-                      open: true,
-                      action: "publish",
-                      title: "Publish Daily Pulse",
-                      message: `Are you sure you want to publish this daily pulse with ${pulses.length} pulse(s)?`,
-                    });
+                    if (date) {
+                      const selectedDate = new Date(date.valueOf());
+                      const selectedDateStr = formatDate(selectedDate);
+
+                      // Check if the selected date is disabled using current disabled dates
+                      if (disabledDates.includes(selectedDateStr)) {
+                        alert(
+                          "This date already has a published daily pulse. Please select a different date."
+                        );
+                        return;
+                      }
+
+                      // Valid date selected, update state, close picker, and show confirmation
+                      setPublishOn(selectedDate);
+                      setShowDatePicker(false);
+                      setConfirmDialog({
+                        open: true,
+                        action: "publish",
+                        title: "Publish Daily Pulse",
+                        message: `Are you sure you want to publish this daily pulse with ${pulses.length} pulse(s) on ${selectedDateStr}?`,
+                      });
+                    }
                   }}
                   shouldDisableDate={(day) => {
                     const dateStr = formatDate(day as Date);

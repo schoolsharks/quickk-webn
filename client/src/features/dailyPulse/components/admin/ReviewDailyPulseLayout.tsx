@@ -309,7 +309,15 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       dailyPulseId: PulseData?._id,
       pulses: formattedPulses,
       status: action === "draft" ? "drafts" : "published",
-      publishOn: publishOn,
+      publishOn: publishOn
+        ? new Date(
+            Date.UTC(
+              publishOn.getFullYear(),
+              publishOn.getMonth(),
+              publishOn.getDate()
+            )
+          ).toISOString()
+        : "",
       stars: stars,
     };
 
@@ -319,7 +327,18 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       formData = new FormData();
       formData.append("dailyPulseId", PulseData?._id || "");
       formData.append("status", action === "draft" ? "drafts" : "published");
-      formData.append("publishOn", publishOn ? publishOn.toISOString() : "");
+      formData.append(
+        "publishOn",
+        publishOn
+          ? new Date(
+              Date.UTC(
+                publishOn.getFullYear(),
+                publishOn.getMonth(),
+                publishOn.getDate()
+              )
+            ).toISOString()
+          : ""
+      );
       formData.append("stars", String(stars));
       formData.append("pulses", JSON.stringify(formattedPulses));
 

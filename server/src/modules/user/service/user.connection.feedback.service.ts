@@ -66,8 +66,8 @@ class UserConnectionFeedbackService {
         return await UserConnectionFeedback.find({
             userId: new mongoose.Types.ObjectId(userId),
             status: ConnectionFeedbackStatus.PENDING,
-            nextPulseAt: { $lte: now },
-            expiresAt: { $gt: now } // Not expired yet
+            // nextPulseAt: { $lte: now },
+            // expiresAt: { $gt: now } // Not expired yet
         })
             .populate('connectionId', 'name businessName')
             .sort({ nextPulseAt: 1 }) // Oldest first

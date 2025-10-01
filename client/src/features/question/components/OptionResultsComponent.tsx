@@ -93,13 +93,16 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
     if (!selectedResult) return null;
 
     const isCorrect = selectedResult.option === "right";
+    // Determine if this is option 1 (right/correct) or option 2 (wrong/incorrect)
+    const isOption1 = isCorrect;
+    const backgroundColor = isOption1 ? "#464646" : "#D9D9D9";
 
     return (
       <Box
         display="flex"
         flexDirection="column"
         height="85px"
-        bgcolor="#CD7BFF4D"
+        bgcolor={backgroundColor}
         py="18px"
         borderTop={`1px solid ${theme.palette.primary.main}`}
       >
@@ -108,6 +111,7 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
           justifyContent="space-between"
           alignItems="center"
           px={4}
+          flexDirection={isOption1 ? "row" : "row-reverse"}
         >
           <Box display="flex" flexDirection="column" alignItems="center">
             <Typography
@@ -121,12 +125,12 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
               {isCorrect ? (
                 <DoneOutlinedIcon
                   fontSize={smallSize ? "small" : "medium"}
-                  sx={{ color: "black" }}
+                  sx={{ color: isOption1 ? "white" : "black" }}
                 />
               ) : (
                 <ClearOutlinedIcon
                   fontSize={smallSize ? "small" : "medium"}
-                  sx={{ color: "black" }}
+                  sx={{ color: isOption1 ? "white" : "black" }}
                 />
               )}
             </Box>
@@ -140,7 +144,11 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
             >
               Selected by
             </Typography>
-            <Typography variant="h4" fontWeight="bold" color="black">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              color={isOption1 ? "white" : "black"}
+            >
               {pulseStats ? `${selectedResult.percentage}%` : "Loading..."}
             </Typography>
           </Box>
@@ -153,18 +161,19 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
     // console.log("Selected result for text option:", selectedResult);
     if (!selectedResult) return null;
 
-    // Find the option letter/index
-    // const selectedOptionIndex = (options as string[]).indexOf(
-    //   selectedResult.option
-    // );
-    // const optionLetter = selectedOptionIndex === 0 ? "A" : "B";
+    // Find the option index to determine if it's option 1 or option 2
+    const selectedOptionIndex = (options as string[]).indexOf(
+      selectedResult.option
+    );
+    const isOption1 = selectedOptionIndex === 0;
+    const backgroundColor = isOption1 ? "#464646" : "#D9D9D9";
 
     return (
       <Box
         display="flex"
         flexDirection="column"
         height="85px"
-        bgcolor="#CD7BFF4D"
+        bgcolor={backgroundColor}
         py="18px"
         borderTop={`1px solid ${theme.palette.primary.main}`}
       >
@@ -173,16 +182,21 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
           justifyContent="space-between"
           alignItems="center"
           px={4}
+          flexDirection={isOption1 ? "row" : "row-reverse"}
         >
           <Box display="flex" flexDirection="column" alignItems="center">
             <Typography
               variant="body2"
-              color="textSecondary"
+              color={isOption1 ? "white" : "black"}
               sx={{ fontSize: smallSize ? "10px" : "12px" }}
             >
               Your choice
             </Typography>
-            <Typography variant="h4" fontWeight="bold" color="black">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              color={isOption1 ? "white" : "black"}
+            >
               {selectedOption}
             </Typography>
           </Box>
@@ -190,12 +204,16 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
           <Box display="flex" flexDirection="column" alignItems="center">
             <Typography
               variant="body2"
-              color="textSecondary"
+              color={isOption1 ? "white" : "black"}
               sx={{ fontSize: smallSize ? "10px" : "12px" }}
             >
               Selected by
             </Typography>
-            <Typography variant="h4" fontWeight="bold" color="black">
+            <Typography
+              variant="h4"
+              fontWeight="bold"
+              color={isOption1 ? "white" : "black"}
+            >
               {pulseStats ? `${selectedResult.percentage}%` : "Loading..."}
             </Typography>
           </Box>

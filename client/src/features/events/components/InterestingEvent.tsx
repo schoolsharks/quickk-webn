@@ -4,20 +4,16 @@ import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
-import { useGetUpcomingEventsQuery } from "../services/eventsApi";
-import Loader from "../../../components/ui/Loader";
-import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
 
-const InterestingEvent: React.FC = () => {
+interface InterestingEventProps {
+  eventData: any;
+}
+
+const InterestingEvent: React.FC<InterestingEventProps> = ({ eventData }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const {
-    data: EventDataArray,
-    isError,
-    isLoading,
-  } = useGetUpcomingEventsQuery({});
-  const EventData = EventDataArray?.[0];
+  const EventData = eventData;
   // Format today's date
   // const today = new Date();
   // const dayNumber = today.getDate();
@@ -35,12 +31,8 @@ const InterestingEvent: React.FC = () => {
     navigate(`/user/events/${EventData._id}`);
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <ErrorLayout />;
+  if (!EventData) {
+    return null; // No upcoming events, component won't be shown
   }
 
   const eventTime =
@@ -57,7 +49,7 @@ const InterestingEvent: React.FC = () => {
         mb={2}
       >
         <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-          Upcoming Event
+          Recent Event
         </Typography>
         <Typography
           variant="h4"

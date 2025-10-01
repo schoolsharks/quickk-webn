@@ -106,6 +106,83 @@ export class EventController {
   }
 
   /**
+   * Get today's events based on date
+   */
+  async getTodaysEvents(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = req.query.page ? parseInt(req.query.page as string) : 1;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+
+      const result = await eventService.getTodaysEvents(page, limit);
+
+      res.status(200).json({
+        success: true,
+        message: "Today's events retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get upcoming events based on date
+   */
+  async getUpcomingEventsByDate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = req.query.page ? parseInt(req.query.page as string) : 1;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+
+      const result = await eventService.getUpcomingEventsByDate(page, limit);
+
+      res.status(200).json({
+        success: true,
+        message: "Upcoming events retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get past events based on date
+   */
+  async getPastEventsByDate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const page = req.query.page ? parseInt(req.query.page as string) : 1;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+
+      const result = await eventService.getPastEventsByDate(page, limit);
+
+      res.status(200).json({
+        success: true,
+        message: "Past events retrieved successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get latest upcoming event (for fallback)
+   */
+  async getLatestUpcomingEvent(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await eventService.getLatestUpcomingEvent();
+
+      res.status(200).json({
+        success: true,
+        message: result ? "Latest upcoming event retrieved successfully" : "No upcoming events found",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Get event by ID
    */
   async getEventById(req: Request, res: Response, next: NextFunction) {

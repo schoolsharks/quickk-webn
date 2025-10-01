@@ -62,6 +62,12 @@ router.get('/getUpcomingEvents', authenticateUser, asyncHandeler(eventController
 router.get('/getPastEvents', authenticateUser, asyncHandeler(eventController.getPastEvents));
 router.get('/getEventById/:eventId', authenticateUser, asyncHandeler(eventController.getEventById));
 
+// New date-based routes
+router.get('/getTodaysEvents', authenticateUser, asyncHandeler(eventController.getTodaysEvents));
+router.get('/getUpcomingEventsByDate', authenticateUser, asyncHandeler(eventController.getUpcomingEventsByDate));
+router.get('/getPastEventsByDate', authenticateUser, asyncHandeler(eventController.getPastEventsByDate));
+router.get('/getLatestUpcomingEvent', authenticateUser, asyncHandeler(eventController.getLatestUpcomingEvent));
+
 // route for user profile
 router.post('/updateUserProfile', authenticateUser, asyncHandeler(UserControllers.addEditUser));
 

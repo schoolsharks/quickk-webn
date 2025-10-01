@@ -27,6 +27,42 @@ export const eventsApi = api.injectEndpoints({
       transformResponse: (response: any) => response?.data.events,
     }),
 
+    // New date-based endpoints
+    getTodaysEvents: builder.query({
+      query: (params: { page?: number; limit?: number } = {}) => ({
+        url: "/user/getTodaysEvents",
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response: any) => response?.data,
+    }),
+
+    getUpcomingEventsByDate: builder.query({
+      query: (params: { page?: number; limit?: number } = {}) => ({
+        url: "/user/getUpcomingEventsByDate",
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response: any) => response?.data,
+    }),
+
+    getPastEventsByDate: builder.query({
+      query: (params: { page?: number; limit?: number } = {}) => ({
+        url: "/user/getPastEventsByDate",
+        method: "GET",
+        params,
+      }),
+      transformResponse: (response: any) => response?.data,
+    }),
+
+    getLatestUpcomingEvent: builder.query({
+      query: () => ({
+        url: "/user/getLatestUpcomingEvent",
+        method: "GET",
+      }),
+      transformResponse: (response: any) => response?.data,
+    }),
+
     getEventById: builder.query({
       query: (eventId) => ({
         url: `/user/getEventById/${eventId}`,
@@ -161,6 +197,11 @@ export const {
   useGetUpcomingEventsQuery,
   useGetPastEventsQuery,
   useGetEventByIdQuery,
+  // New date-based hooks
+  useGetTodaysEventsQuery,
+  useGetUpcomingEventsByDateQuery,
+  useGetPastEventsByDateQuery,
+  useGetLatestUpcomingEventQuery,
   // Admin hooks
   useGetAdminEventStatsQuery,
   useGetAllEventsAdminQuery,

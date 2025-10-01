@@ -4,19 +4,16 @@ import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
-import { useGetActiveEventsQuery } from "../services/eventsApi";
-import Loader from "../../../components/ui/Loader";
-import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
 
-const EventsToday: React.FC = () => {
+interface EventsTodayProps {
+  eventData: any;
+}
+
+const EventsToday: React.FC<EventsTodayProps> = ({ eventData }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const {
-    data: EventData,
-    isError,
-    isLoading,
-  } = useGetActiveEventsQuery({ type: "active" });
+  const EventData = eventData;
   // Format today's date
   const today = new Date();
   const dayNumber = today.getDate();
@@ -29,12 +26,8 @@ const EventsToday: React.FC = () => {
     navigate(`/user/events/${EventData._id}`);
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError) {
-    return <ErrorLayout />;
+  if (!EventData) {
+    return null; // No today's events, component won't be shown
   }
 
   const eventTime =

@@ -150,10 +150,10 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
-            bgcolor={"#CD7BFF4D"}
+            bgcolor={"#464646"}
             borderTop={`1px solid ${theme.palette.primary.main}`}
             borderRight={`1px solid ${theme.palette.primary.main}`}
-            color={"black"}
+            color={"white"}
             onClick={() => handleClick(options[0])}
             fontSize={smallSize ? "15px" : "30px"}
           >
@@ -171,7 +171,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             borderTop={`1px solid ${theme.palette.primary.main}`}
             py="18px"
             color={"black"}
-            bgcolor="#CD7BFF4D"
+            bgcolor="#D9D9D9"
             onClick={() => handleClick(options[1])}
             fontSize={smallSize ? "15px" : "30px"}
           >

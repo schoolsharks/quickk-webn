@@ -88,8 +88,8 @@ const ConnectionFeedbackPulse: React.FC<ConnectionFeedbackPulseProps> = ({
           sx={{
             flex: 1,
             height: "100%",
-            backgroundColor: selectedOption === "Yes" ? "#C8A2C8" : "#CD7BFF4D",
-            color: "#000000",
+            backgroundColor: "#464646",
+            color: "white",
             fontSize: "30px",
             fontWeight: 600,
             borderRadius: 0,
@@ -107,8 +107,8 @@ const ConnectionFeedbackPulse: React.FC<ConnectionFeedbackPulseProps> = ({
           sx={{
             flex: 1,
             height: "100%",
-            backgroundColor: selectedOption === "No" ? "#C8A2C8" : "#CD7BFF4D",
-            color: "#000000",
+            backgroundColor: "#D9D9D9",
+            color: "black",
             fontSize: "30px",
             fontWeight: 600,
             borderRadius: 0,

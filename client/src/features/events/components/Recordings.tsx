@@ -8,9 +8,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { carouselSlide } from "../../../animation/variants/slideCarousel";
 import GlobalButton from "../../../components/ui/button";
-import Loader from "../../../components/ui/Loader";
-import ErrorLayout from "../../../components/ui/Error";
-import { useGetPastEventsQuery } from "../services/eventsApi";
 import formatEventTime from "../../../utils/formatEventTime";
 
 // API Response types (same as UpcomingEvents)
@@ -51,12 +48,16 @@ interface Recording {
 
 interface RecordingsProps {
   showScore?: boolean;
+  eventsData: any[];
 }
 
-const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
+const Recordings: React.FC<RecordingsProps> = ({
+  showScore = true,
+  eventsData,
+}) => {
   const theme = useTheme();
   const sliderRef = React.useRef<Slider | null>(null);
-  const { data: pastEvents, isError, isLoading } = useGetPastEventsQuery({});
+  const pastEvents = eventsData || [];
 
   // Transform API data to component format
   const transformedRecordings = React.useMemo(() => {
@@ -121,12 +122,8 @@ const Recordings: React.FC<RecordingsProps> = ({ showScore = true }) => {
     ),
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError || !pastEvents) {
-    return <ErrorLayout />;
+  if (!pastEvents || pastEvents.length === 0) {
+    return null;
   }
 
   if (transformedRecordings.length === 0) {

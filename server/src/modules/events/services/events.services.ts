@@ -329,6 +329,154 @@ export class EventService {
   }
 
   /**
+   * Get today's events based on date (not status)
+   */
+  async getTodaysEvents(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+
+    const filter = {
+      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      $or: [
+        // Events that start today
+        {
+          startDate: {
+            $gte: startOfDay,
+            $lte: endOfDay
+          }
+        },
+        // Events that are ongoing today (started before today but end today or later)
+        {
+          startDate: { $lt: startOfDay },
+          endDate: { $gte: startOfDay }
+        }
+      ]
+    };
+
+    const skip = (page - 1) * limit;
+    const sortOptions = { startDate: 1 as const };
+
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Event.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      events: events as IEvent[],
+      total,
+      page,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
+
+  /**
+   * Get upcoming events based on date (not status) - events that start after today
+   */
+  async getUpcomingEventsByDate(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
+    const today = new Date();
+    const startOfTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const filter = {
+      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      startDate: { $gte: startOfTomorrow }
+    };
+
+    const skip = (page - 1) * limit;
+    const sortOptions = { startDate: 1 as const };
+
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Event.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      events: events as IEvent[],
+      total,
+      page,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
+
+  /**
+   * Get past events based on date (not status) - events that ended before today
+   */
+  async getPastEventsByDate(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<IEventResponse> {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const filter = {
+      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      endDate: { $lt: startOfToday }
+    };
+
+    const skip = (page - 1) * limit;
+    const sortOptions = { startDate: -1 as const }; // Latest first for past events
+
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Event.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      events: events as IEvent[],
+      total,
+      page,
+      totalPages,
+      hasNext: page < totalPages,
+      hasPrev: page > 1,
+    };
+  }
+
+  /**
+   * Get the latest upcoming event (for fallback when no today's events)
+   */
+  async getLatestUpcomingEvent(): Promise<IEvent | null> {
+    const today = new Date();
+    const startOfTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const event = await Event.findOne({
+      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      startDate: { $gte: startOfTomorrow }
+    })
+    .sort({ startDate: 1 })
+    .lean();
+
+    return event as IEvent | null;
+  }
+
+  /**
    * Get event statistics
    */
   async getEventStatistics() {

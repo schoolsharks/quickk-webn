@@ -22,7 +22,6 @@ class PulseStatsService {
   ): Promise<PulseStatsResult | null> {
     try {
       // Get question details first
-      console.log("Calculating pulse stats for questionId:", questionId, "and companyId:", companyId);
       const question = await this.questionService.getQuestionById(questionId);
       if (!question) {
         return null;

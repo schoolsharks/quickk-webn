@@ -13,7 +13,7 @@ const StatusPanel: React.FC = () => {
   const cardData = [
     {
       icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "black" }} />,
-      title: "Rewards",
+      title: "Rewards & Resources",
       value: null,
       bgColor: "#D9D9D9",
       onClick: () => {
@@ -68,7 +68,7 @@ const StatusPanel: React.FC = () => {
             },
           }}
         >
-          <Box display="flex" alignItems="center" gap={1}>
+          <Box display="flex" gap={1}>
             {item.icon}
             {item.value && <Typography variant="h5">{item.value}</Typography>}
           </Box>

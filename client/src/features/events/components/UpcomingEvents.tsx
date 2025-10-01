@@ -16,9 +16,8 @@ import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { carouselSlide } from "../../../animation/variants/slideCarousel";
-import Loader from "../../../components/ui/Loader";
-import ErrorLayout from "../../../components/ui/Error";
-import { useGetUpcomingEventsQuery } from "../services/eventsApi";
+
+
 import formatEventTime from "../../../utils/formatEventTime";
 
 // API Response types
@@ -63,15 +62,17 @@ interface MonthEvents {
 
 interface UpcomingEventsProps {
   showScore?: boolean;
+  eventsData: any[];
 }
 
 const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   showScore = true,
+  eventsData,
 }) => {
   const theme = useTheme();
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const sliderRef = React.useRef<Slider | null>(null);
-  const { data: EventData, isError, isLoading } = useGetUpcomingEventsQuery({});
+  const EventData = eventsData || [];
 
   // Helper function to get ordinal suffix (1st, 2nd, 3rd, etc.)
   const getOrdinalSuffix = (day: number): string => {
@@ -182,12 +183,8 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       />
     ),
   };
-  if (isLoading) {
-    return <Loader />;
-  }
-
-  if (isError || !EventData) {
-    return <ErrorLayout />;
+  if (!EventData || EventData.length === 0) {
+    return null;
   }
 
   if (groupedEvents.length === 0) {

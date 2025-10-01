@@ -10,6 +10,7 @@ export enum QuestionType {
 export enum OptionType {
     TEXT = "text",
     IMAGE = "image",
+    YES_NO = "yes-no",
     CORRECT_INCORRECT = "correct-incorrect",
     MCQ = "mcq",
     DRAG_ORDER = "drag-order",

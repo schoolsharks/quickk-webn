@@ -31,12 +31,13 @@ export const getResourceRatingPulse = async (
 ): Promise<void> => {
   try {
     const userId = req.user?.id;
-    
+
     if (!userId) {
       return next(new AppError("User is required", StatusCodes.BAD_REQUEST));
     }
 
-    const resourceRating = await userResourceRatingService.getPendingResourceRatingsForPulse(userId);
+    const resourceRating =
+      await userResourceRatingService.getPendingResourceRatingsForPulse(userId);
 
     if (!resourceRating) {
       res.status(StatusCodes.OK).json({
@@ -107,7 +108,9 @@ export const getDailyPulses = async (
       ]);
 
     // Create a map for quick lookup by ID
-    const infoCardMap = new Map(infoCards.map((i: any) => [i._id.toString(), i]));
+    const infoCardMap = new Map(
+      infoCards.map((i: any) => [i._id.toString(), i])
+    );
     const questionMap = new Map(questions.map((q) => [q._id.toString(), q]));
     const questionResponseMap = new Map(
       questionResponses.map((r) => [r.question.toString(), r.response])
@@ -299,7 +302,7 @@ export const getAllDailyPulsesWithStatus = async (
     dailyPulses.sort((a, b) => {
       if (!a.publishOn && !b.publishOn) return 0;
       if (!a.publishOn) return -1; // a (null) comes first
-      if (!b.publishOn) return 1;  // b (null) comes first
+      if (!b.publishOn) return 1; // b (null) comes first
       return new Date(b.publishOn).getTime() - new Date(a.publishOn).getTime(); // Descending order for dates
     });
     // For each daily pulse, build the response array
@@ -463,6 +466,7 @@ export const updateDailyPulse = async (
       })),
     });
   } catch (error) {
+    console.log("Error", error);
     // Clean up uploaded images on error (existing cleanup logic)
     next(error);
   }
@@ -586,7 +590,9 @@ export const getDailyPulseById = async (
     ]);
 
     const questionMap = new Map(questions.map((q) => [q._id.toString(), q]));
-    const infoCardMap = new Map(infoCards.map((c: any) => [c._id.toString(), c]));
+    const infoCardMap = new Map(
+      infoCards.map((c: any) => [c._id.toString(), c])
+    );
 
     // Construct enriched pulse objects
     const pulseItems = dailyPulse.pulses.map((p) => {
@@ -612,7 +618,6 @@ export const getDailyPulseById = async (
         };
       }
     });
-
     // Attach enriched pulses to the response
     res.status(StatusCodes.OK).json({
       success: true,
@@ -852,7 +857,7 @@ export const cloneDailyPulseById = async (
     if (!dailyPulseId) {
       res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
-        message: 'Daily pulse ID is required'
+        message: "Daily pulse ID is required",
       });
       return;
     }
@@ -860,19 +865,22 @@ export const cloneDailyPulseById = async (
     if (!companyId) {
       res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
-        message: 'Company ID not found'
+        message: "Company ID not found",
       });
       return;
     }
 
-    const clonedDailyPulseId = await dailyPulseService.cloneDailyPulseById(dailyPulseId, companyId);
+    const clonedDailyPulseId = await dailyPulseService.cloneDailyPulseById(
+      dailyPulseId,
+      companyId
+    );
 
     res.status(StatusCodes.CREATED).json({
       success: true,
-      message: 'Daily pulse cloned successfully',
+      message: "Daily pulse cloned successfully",
       data: {
-        clonedDailyPulseId
-      }
+        clonedDailyPulseId,
+      },
     });
   } catch (error) {
     next(error);

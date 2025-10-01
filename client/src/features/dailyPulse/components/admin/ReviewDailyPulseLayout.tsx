@@ -130,6 +130,10 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 case "image":
                   pulseType = "Multiple Images";
                   break;
+
+                case "yes-no":
+                  pulseType = "Yes / No";
+                  break;
                 case "text":
                   // Detect Advertisement when it's a single 'Interested' option
                   if (
@@ -167,6 +171,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               };
             }
 
+
             return {
               ...defaultPulseData,
               ...(p as Partial<PulseData>),
@@ -177,6 +182,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   ? "ADVERTISEMENT"
                   : (p as any).qType || "",
               questionOptions: p.questionOptions,
+              correctAnswer: p.correctAnswer || "",
             };
           })
         : [defaultPulseData];
@@ -234,6 +240,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
           // pulse.optionA.trim() !== "" &&
           // pulse.optionB.trim() !== ""
         );
+      } else if (pulse.pulseType === "Yes / No") {
+        pulse.qType = "TWO_CHOICE";
+        pulse.type = "question";
+        pulse.optionType = "yes-no";
+        pulse.options = ["YES", "NO"];
+        return pulse.questionText.trim() !== "";
       } else if (pulse.pulseType === "Image (Right / Wrong)") {
         pulse.qType = "TWO_CHOICE";
         pulse.type = "question";
@@ -543,6 +555,20 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
           </Box>
         );
 
+      case "Yes / No":
+        return (
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={currentPulse.questionText || ""}
+              optionType="text"
+              options={["Yes", "No"]}
+              correctAnswer={currentPulse.correctAnswer || ""}
+              onAnswer={() => {}}
+            />
+          </Box>
+        );
+
       case "Image (Right / Wrong)":
         return (
           <Box sx={{ minHeight: "400px" }}>
@@ -741,14 +767,96 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             >
               <FormControlLabel
-                value="A"
+                value="YES"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Option A</Typography>}
               />
               <FormControlLabel
-                value="B"
+                value="NO"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Option B</Typography>}
+              />
+            </RadioGroup>
+          </Box>
+        );
+
+      case "Yes / No":
+        return (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <Typography variant="h6" color="white">
+              Question
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.questionText}
+              onChange={(e) =>
+                handleInputChange("questionText", e.target.value)
+              }
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            />
+
+            {/* <Typography variant="h6" color="white">
+              Option A
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.optionA}
+              onChange={(e) => handleInputChange("optionA", e.target.value)}
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            />
+
+            <Typography variant="h6" color="white">
+              Option B
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.optionB}
+              onChange={(e) => handleInputChange("optionB", e.target.value)}
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            /> */}
+
+            <Typography variant="h6" color="white">
+              Correct Answer
+            </Typography>
+            <RadioGroup
+              value={currentPulse.correctAnswer}
+              onChange={(e) =>
+                handleInputChange("correctAnswer", e.target.value)
+              }
+            >
+              <FormControlLabel
+                value="A"
+                control={<Radio sx={{ color: "white" }} />}
+                label={<Typography color="white">Yes</Typography>}
+              />
+              <FormControlLabel
+                value="B"
+                control={<Radio sx={{ color: "white" }} />}
+                label={<Typography color="white">No</Typography>}
               />
             </RadioGroup>
           </Box>
@@ -1325,6 +1433,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   <MenuItem value="Multiple Choice Question">
                     Multiple Choice Question
                   </MenuItem>
+                  <MenuItem value="Yes / No">Yes / No</MenuItem>
                   <MenuItem value="Image (Right / Wrong)">
                     Image (Right / Wrong)
                   </MenuItem>

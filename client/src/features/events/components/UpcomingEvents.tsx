@@ -9,6 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -16,7 +17,6 @@ import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { carouselSlide } from "../../../animation/variants/slideCarousel";
-
 
 import formatEventTime from "../../../utils/formatEventTime";
 
@@ -70,6 +70,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   eventsData,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
   const sliderRef = React.useRef<Slider | null>(null);
   const EventData = eventsData || [];
@@ -150,6 +151,11 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       newExpanded.add(eventId);
     }
     setExpandedEvents(newExpanded);
+  };
+
+  const handleEventClick = (eventId: string) => {
+    // Navigate to event details page
+    navigate(`/user/events/${eventId}`);
   };
 
   const settings = {
@@ -248,6 +254,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       >
         {/* Date Box */}
         <Box
+          onClick={() => handleEventClick(event.id)}
           sx={{
             height: "100%",
             backgroundColor: theme.palette.background.paper,
@@ -256,6 +263,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
             textAlign: "left",
             minWidth: "70px",
             marginRight: 0.5,
+            cursor: "pointer",
           }}
         >
           <Typography
@@ -277,7 +285,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
             // backgroundColor: "#E7CEF3",
             flex: 1,
           }}
-          onClick={() => toggleEventExpansion(event.id)}
+          onClick={() => handleEventClick(event.id)}
         >
           <Box
             display="flex"
@@ -305,6 +313,10 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
               sx={{
                 color: theme.palette.text.primary,
                 padding: "4px",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleEventExpansion(event.id);
               }}
             >
               {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}

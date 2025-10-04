@@ -23,7 +23,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
   type,
   onSelect,
   selectedOption,
-  correctAnswer = "",
+  // correctAnswer = "",
   smallSize = false,
 }) => {
   const theme = useTheme();
@@ -272,22 +272,22 @@ const OptionItem: React.FC<OptionItemProps> = ({
         }}
       >
         {options.map((option, index) => {
-          const isSelected = selectedOption === option;
-          // const isAnswerRevealed = !!selectedOption;
-          const isCorrect = selectedOption === correctAnswer;
+          // const isSelected = selectedOption === option;
+          // // const isAnswerRevealed = !!selectedOption;
+          // const isCorrect = selectedOption === correctAnswer;
 
           let bgColor = "white";
-          let textColor = "white";
+          // let textColor = "white";
 
-          if (isSelected) {
-            if (isCorrect) {
-              bgColor = theme.palette.primary.main;
-              textColor = "black";
-            } else {
-              bgColor = theme.palette.primary.main;
-              textColor = "black";
-            }
-          }
+          // if (isSelected) {
+          //   if (isCorrect) {
+          //     bgColor = theme.palette.primary.main;
+          //     textColor = "black";
+          //   } else {
+          //     bgColor = theme.palette.primary.main;
+          //     textColor = "black";
+          //   }
+          // }
 
           return (
             <Box

@@ -83,7 +83,7 @@ const LearningDetail: React.FC = () => {
             </Typography>
             <DatePicker
               value={validTill}
-              onChange={(date) => setValidTill(date)}
+              onChange={(date) => setValidTill(date ? new Date(date.valueOf()) : null)}
               slotProps={{
                 textField: {
                   fullWidth: true,
@@ -128,7 +128,7 @@ const LearningDetail: React.FC = () => {
             </Typography>
             <DatePicker
               value={publishOn}
-              onChange={(date) => setPublishOn(date)}
+              onChange={(date) => setPublishOn(date ? new Date(date.valueOf()) : null)}
               slotProps={{
                 textField: {
                   fullWidth: true,

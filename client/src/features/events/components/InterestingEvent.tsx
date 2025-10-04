@@ -5,6 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import GlobalButton from "../../../components/ui/button";
 import formatEventTime from "../../../utils/formatEventTime";
+import eventFallback from "../../../assets/images/Events/Events_fallback_img.png";
 
 interface InterestingEventProps {
   eventData: any;
@@ -129,7 +130,7 @@ const InterestingEvent: React.FC<InterestingEventProps> = ({ eventData }) => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundImage: `url(${EventData.eventImage})`,
+              backgroundImage: `url(${EventData.eventImage || eventFallback})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",

@@ -72,7 +72,7 @@ const StatusPanel: React.FC = () => {
             {item.icon}
             {item.value && <Typography variant="h5">{item.value}</Typography>}
           </Box>
-          <Typography variant="h5" mt={"18px"}>
+          <Typography variant="h5" mt={"18px"} textAlign={"left"}>
             {item.title}
           </Typography>
         </Button>

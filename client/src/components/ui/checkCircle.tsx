@@ -12,7 +12,7 @@ const CheckCircle: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
       cx="12"
       cy="12"
       r="10"
-      stroke="#96FF43"
+      stroke="primary.main"
       strokeWidth="2"
       fill="none"
       style={{
@@ -24,7 +24,7 @@ const CheckCircle: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <polyline
       points="9 12.5 11.5 15 16 10"
       fill="none"
-      stroke="#96FF43"
+      stroke="primary.main"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

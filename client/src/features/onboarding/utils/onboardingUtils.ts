@@ -97,7 +97,7 @@ export const getFeatureColor = (featureName: string): string => {
         'Rewards': '#FFD93D',
         'Quickk AI': '#6C5CE7'
     };
-    return colors[featureName] || '#96FF43';
+    return colors[featureName] || 'primary.main';
 };
 
 // Local storage utilities for onboarding state persistence

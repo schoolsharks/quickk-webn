@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useState } from "react";
 // import { v4 as uuid } from "uuid";
@@ -25,6 +25,7 @@ const QuestionMemoryMatch: React.FC<Props> = ({
   memoryPairs,
   onAnswer,
 }) => {
+  const theme=useTheme()
   const shuffled = useMemo(
     () => [...memoryPairs].sort(() => Math.random() - 0.5),
     []
@@ -94,8 +95,8 @@ const QuestionMemoryMatch: React.FC<Props> = ({
                 display:"flex",
                 width: "100%",
                 height:"100%",
-                backgroundColor: isMatched ? "#96FF43" : "#FFFFFF",
-                color: "black",
+                backgroundColor: isMatched ? theme.palette.primary.main : "#D9D9D9",
+                color: isMatched ? "white":"black",
                 cursor: "pointer",
                 textAlign: "center",
                 alignItems:"center",

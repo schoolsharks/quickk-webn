@@ -93,7 +93,7 @@ const DashBoardAnalytics: React.FC = () => {
           sx={{
             width: 15,
             height: 15,
-            backgroundColor: "#96FF43",
+            backgroundColor: "primary.main",
             borderRadius: 0,
           }}
         />
@@ -216,10 +216,10 @@ const DashBoardAnalytics: React.FC = () => {
                 x2="0"
                 y2="1"
               >
-                <stop offset="0%" stopColor="#96FF43" stopOpacity={0.9} />
-                <stop offset="30%" stopColor="#96FF43" stopOpacity={0.6} />
-                <stop offset="70%" stopColor="#96FF43" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#96FF43" stopOpacity={0.1} />
+                <stop offset="0%" stopColor="primary.main" stopOpacity={0.9} />
+                <stop offset="30%" stopColor="primary.main" stopOpacity={0.6} />
+                <stop offset="70%" stopColor="primary.main" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="primary.main" stopOpacity={0.1} />
               </linearGradient>
 
               {/* Gradient for webn */}

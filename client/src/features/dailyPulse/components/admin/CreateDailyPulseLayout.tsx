@@ -159,7 +159,7 @@ const CreateDailyPulseLayout: React.FC = () => {
                 backgroundColor: "black",
                 border:
                   selectedTemplate === template.id
-                    ? "2px solid #96FF43"
+                    ? "2px solid primary.main"
                     : "1px solid #444",
                 cursor: "pointer",
                 transition: "all 0.2s ease",

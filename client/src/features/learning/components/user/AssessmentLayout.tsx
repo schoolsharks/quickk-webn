@@ -8,11 +8,13 @@ import { AssessmentProps } from "../../Types/types";
 import {
   useCheckQuestionResponseMutation,
   useSubmitLearningResponseMutation,
+  useGetModuleQuery,
 } from "../../service/learningApi";
 import { theme } from "../../../../theme/theme";
 import QuestionDragOrder from "../../../question/components/QuestionDragOrder";
-import QuetionMCQ from "../../../question/components/QuetionMCQ";
+import QuestionMCQ from "../../../question/components/QuestionMCQ";
 import QuestionMemoryMatch from "../../../question/components/QuestionMemoryMatch";
+import TrueFalseQuestion from "../../../question/components/TrueFalseQuestion";
 
 const AssessmentLayout: React.FC<AssessmentProps> = ({
   title,
@@ -24,7 +26,8 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
   const sliderRef = React.useRef<Slider | null>(null);
   const [submitLearningResponse] = useSubmitLearningResponseMutation();
   const [CheckQuestionResponse] = useCheckQuestionResponseMutation();
-  // Add state to track current correct answer for each question
+  const { data: module } = useGetModuleQuery(moduleId as string);
+
   const [currentCorrectAnswers, setCurrentCorrectAnswers] = useState<{
     [key: string]: string;
   }>({});
@@ -48,10 +51,6 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
       .catch((error) => console.log("Error in selecting option : ", error));
   };
 
-  useEffect(() => {
-    console.log("Current Correct answer", currentCorrectAnswers);
-  }, [currentCorrectAnswers]);
-
   const handleAnswer = async (
     answer: string | string[],
     questionId: string
@@ -62,7 +61,12 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
     };
 
     if (currentIndex === (questions?.length || 0) - 1) {
-      navigate(`/user/moduleComplete/${moduleId}`);
+      // Check if it's a video module with flashcards
+      if (module?.flashcards?.length > 0) {
+        navigate(`/user/flashcards/${moduleId}`);
+      } else {
+        navigate(`/user/moduleComplete/${moduleId}`);
+      }
     }
 
     sliderRef.current?.slickNext();
@@ -74,7 +78,6 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
       console.error("Failed to submit response:", error);
     }
   };
-
   const settings = {
     dots: false,
     infinite: false,
@@ -98,7 +101,7 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
   }, [currentIndex]);
 
   return (
-    <Box pt={"32px"} bgcolor={"black"}>
+    <Box pt={"32px"}>
       {/* Header */}
       <Box p={"0px 30px 0px 32px"}>
         <Box>
@@ -129,16 +132,16 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
                 height: "9px",
                 mx: "3px",
                 width: `${(currentIndex / questions.length) * 100}%`,
-                backgroundColor: "black",
+                backgroundColor: "primary.main",
                 transition: "width 0.3s ease-in-out",
               }}
             />
           </Box>
         )}
 
-        <Typography fontSize={"18px"} fontWeight={400} mt={"32px"}>
+        {/* <Typography fontSize={"18px"} fontWeight={400} mt={"32px"}>
           Quiz Time!
-        </Typography>
+        </Typography> */}
       </Box>
 
       {/* Content Area */}
@@ -160,7 +163,7 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
                       onAnswer={handleAnswer}
                     />
                   ) : question.qType === "MULTIPLE_CHOICE" ? (
-                    <QuetionMCQ
+                    <QuestionMCQ
                       id={question._id}
                       questionText={question.questionText}
                       optionType={"mcq"}
@@ -169,6 +172,22 @@ const AssessmentLayout: React.FC<AssessmentProps> = ({
                       correctAnswer={currentCorrectAnswers[question._id]}
                       onAnswer={handleAnswer}
                       onOptionClick={handleOptionClick}
+                    />
+                  ) : question.qType === "TWO_CHOICE" ? (
+                    <TrueFalseQuestion
+                      id={question._id}
+                      questionSubText={question.questionSubText}
+                      questionSubHeading={question.questionSubHeading}
+                      questionText={question.questionText}
+                      image={question.image}
+                      optionType={question.optionType}
+                      questionOptions={question.questionOptions}
+                      explanation={question.explanation}
+                      options={question.options}
+                      onAnswer={handleAnswer}
+                      sx={{
+                        minHeight: "250px",
+                      }}
                     />
                   ) : question.qType === "MEMORY_MATCH" ? (
                     <QuestionMemoryMatch

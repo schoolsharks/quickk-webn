@@ -22,11 +22,14 @@ import {
   useCreateBlankModuleMutation,
   useDeleteModuleByIdMutation,
 } from "../../service/learningApi";
+import { extractYouTubeId } from "../utils/youtubeUtils";
+import { theme } from "../../../../theme/theme";
 
 // ------------------- Types ----------------------
 export interface Learning {
   _id?: string;
   title?: string;
+  videoUrl?: string;
   modules?: (
     | string
     | { _id: string; title: string; completionStatus: string }
@@ -58,6 +61,9 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
 
   // ------------------- Controlled State Initialization ----------------------
   const [courseName, setCourseName] = useState(Learning?.title || "");
+  const [videoUrl, setVideoUrl] = useState(
+    `https://www.youtube.com/watch?v=${Learning?.videoUrl}` || ""
+  );
   const [validTill, setValidTill] = useState<Date | null>(
     Learning?.validTill ? new Date(Learning.validTill) : null
   );
@@ -108,9 +114,11 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
   // ------------------- Handlers ----------------------
 
   const handleDraft = () => {
+    const youtubeId = videoUrl ? extractYouTubeId(videoUrl) : "";
     const payload = {
       learningId: Learning?._id,
       title: courseName,
+      videoUrl: youtubeId, // Add this line
       moduleIds: modules.map((m) => m.moduleId),
       validTill,
       publishOn,
@@ -139,6 +147,9 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
   const addModule = async () => {
     try {
       const response = await CreateBlankModule({}).unwrap();
+
+      const youtubeId = videoUrl ? extractYouTubeId(videoUrl) : "";
+
       setModules((prev) => [
         ...prev,
         { title: "New Module", moduleId: response.data },
@@ -147,6 +158,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
       const payload = {
         learningId: Learning?._id,
         title: courseName,
+        videoUrl: youtubeId,
         moduleIds: moduleIds,
         validTill,
         publishOn,
@@ -168,9 +180,11 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
         let updatesModules = [
           ...modules.filter((mod) => mod.moduleId !== moduleId),
         ];
+        const youtubeId = videoUrl ? extractYouTubeId(videoUrl) : "";
         const payload = {
           learningId: Learning?._id,
           title: courseName,
+          videoUrl: youtubeId,
           moduleIds: updatesModules.map((m) => m.moduleId),
           validTill,
           publishOn,
@@ -189,15 +203,15 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
 
   // ------------------- JSX ----------------------
   return (
-    <Box display="flex" flexDirection="column" p="20px">
+    <Box display="flex" flexDirection="column" p="20px" color={"white"}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Box sx={{ backgroundColor: "black", color: "white", p: 4 }}>
           <Typography variant="h4" gutterBottom>
             Course Details
           </Typography>
-          <Grid container spacing={1} mb={4} flexDirection="column">
-            <Typography variant="h6">Course Name</Typography>
+          <Grid container spacing={2} mb={4}>
             <Grid size={6}>
+              <Typography variant="h6">Course Name</Typography>
               <TextField
                 fullWidth
                 value={courseName}
@@ -208,6 +222,24 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
                   color: "white",
                   "& .MuiInputBase-root": {
                     borderRadius: "0",
+                    color: "white",
+                  },
+                }}
+              />
+            </Grid>
+            <Grid size={6}>
+              <Typography variant="h6">Video URL</Typography>
+              <TextField
+                fullWidth
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                variant="outlined"
+                sx={{
+                  backgroundColor: "#1e1e1e",
+                  color: "white",
+                  "& .MuiInputBase-root": {
+                    borderRadius: "0",
+                    color: "white",
                   },
                 }}
               />
@@ -224,7 +256,9 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
               </Typography>
               <DatePicker
                 value={publishOn}
-                onChange={(date) => setPublishOn(date ? new Date(date.valueOf()) : null)}
+                onChange={(date) =>
+                  setPublishOn(date ? new Date(date.valueOf()) : null)
+                }
                 minDate={new Date(new Date().setHours(0, 0, 0, 0))}
                 slotProps={{
                   textField: {
@@ -235,6 +269,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
                       color: "white",
                       "& .MuiPickersInputBase-root": {
                         borderRadius: "0",
+                        color: "white",
                       },
                     },
                   },
@@ -247,7 +282,9 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
               </Typography>
               <DatePicker
                 value={validTill}
-                onChange={(date) => setValidTill(date ? new Date(date.valueOf()) : null)}
+                onChange={(date) =>
+                  setValidTill(date ? new Date(date.valueOf()) : null)
+                }
                 minDate={
                   publishOn
                     ? new Date(
@@ -267,6 +304,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
                       color: "white",
                       "& .MuiPickersInputBase-root": {
                         borderRadius: "0",
+                        color: "white",
                       },
                     },
                   },
@@ -290,11 +328,11 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
           <IconButton
             onClick={addModule}
             sx={{
-              background: "#96FF43",
+              background: theme.palette.primary.main,
               color: "black",
               borderRadius: "0px",
               p: "12px",
-              "&:hover": { background: "#7be634" },
+              "&:hover": { background: theme.palette.primary.dark },
             }}
           >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -340,6 +378,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
                 mr: 2,
                 "& .MuiInputBase-root": {
                   borderRadius: "0",
+                  color: "white",
                 },
               }}
             />

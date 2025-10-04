@@ -94,7 +94,7 @@ const FeatureSelectionPage: React.FC = () => {
         }}
       >
         <Box sx={{ textAlign: "center" }}>
-          <CircularProgress sx={{ color: "#96FF43", mb: 2 }} />
+          <CircularProgress sx={{ color: "primary.main", mb: 2 }} />
           <Typography color="white">Loading features...</Typography>
         </Box>
       </Box>
@@ -137,7 +137,7 @@ const FeatureSelectionPage: React.FC = () => {
         <Box sx={{ mb: 1 }} textAlign={"center"}>
           {/* <Typography
             variant="h3"
-            color="#96FF43"
+            color="primary.main"
             sx={{ fontWeight: "bold", mb: 2 }}
           >
             Choose Your Features
@@ -185,7 +185,7 @@ const FeatureSelectionPage: React.FC = () => {
               color: "white",
               borderRadius: 0,
               "& .MuiAlert-icon": {
-                color: "#96FF43",
+                color: "primary.main",
               },
             }}
           >

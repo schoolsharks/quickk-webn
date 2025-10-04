@@ -122,14 +122,14 @@ const DailyPulseDC: React.FC = () => {
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
               <Typography
                 variant="body2"
-                sx={{ color: "#96FF43", cursor: "pointer" }}
+                sx={{ color: "primary.main", cursor: "pointer" }}
                 onClick={() => navigate("/admin/learnings/dailyInteraction")}
               >
                 Manage
               </Typography>
               <ArrowForwardIcon
                 sx={{
-                  color: "#96FF43",
+                  color: "primary.main",
                   fontSize: 20,
                   transform: "rotate(-45deg)",
                 }}
@@ -183,7 +183,7 @@ const DailyPulseDC: React.FC = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: 1,
-            border: "1px solid #96FF43",
+            border: "1px solid primary.main",
           }}
         >
           <Typography variant="h6" fontSize={"18px"} color="white">

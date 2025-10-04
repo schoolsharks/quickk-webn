@@ -66,7 +66,7 @@ const OnboardingSuccess: React.FC = () => {
           <CardContent sx={{ p: 3 }}>
             <Typography
               variant="h5"
-              color="#96FF43"
+              color="primary.main"
               sx={{ mb: 2, fontWeight: "bold" }}
             >
               Account Summary

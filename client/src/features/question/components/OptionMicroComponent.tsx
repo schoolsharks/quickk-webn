@@ -276,7 +276,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
           // const isAnswerRevealed = !!selectedOption;
           const isCorrect = selectedOption === correctAnswer;
 
-          let bgColor = "black";
+          let bgColor = "white";
           let textColor = "white";
 
           if (isSelected) {
@@ -284,7 +284,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
               bgColor = theme.palette.primary.main;
               textColor = "black";
             } else {
-              bgColor = "white";
+              bgColor = theme.palette.primary.main;
               textColor = "black";
             }
           }
@@ -294,17 +294,13 @@ const OptionItem: React.FC<OptionItemProps> = ({
               key={index}
               display="flex"
               alignItems="center"
-              border="1px solid white"
+              // border="1px solid white"
               p={"10px"}
               bgcolor={bgColor}
-              color={textColor}
+              color={"black"}
+              border={`2px solid ${theme.palette.primary.main}`}
+              boxShadow="0px 4px 19px 0px #CD7BFF4D inset"
               sx={{
-                "&:hover, &:focus": {
-                  bgcolor: !selectedOption
-                    ? theme.palette.primary.main
-                    : bgColor,
-                  color: !selectedOption ? "black" : textColor,
-                },
                 cursor: !selectedOption ? "pointer" : "default",
               }}
               onClick={() => {

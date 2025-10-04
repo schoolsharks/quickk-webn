@@ -33,6 +33,9 @@ import Referral from "./Referral";
 import WebnMembershipPage from "./WebnMembershipPage";
 import RewardsAndResources from "./RewardsAndResources";
 import GetListed from "../../features/events/components/GetListed";
+import { Stack } from "@mui/material";
+import PodcastPlayer from "../../features/learning/components/user/PodcastPlayer";
+import FlashcardPage from "./FlashcardPage";
 
 // Component to handle dashboard redirection based on event mode
 const DashboardRedirect = () => {
@@ -88,7 +91,7 @@ const UserMain = () => {
   }
 
   return (
-    <div
+    <Stack
       style={{
         maxWidth: "480px",
         margin: "0 auto",
@@ -114,7 +117,11 @@ const UserMain = () => {
             path="moduleComplete/:currentModuleId"
             element={<ModuleComplete />}
           />
+          <Route path="flashcards/:moduleId" element={<FlashcardPage />} />
+
           <Route path="assessment/:moduleId" element={<AssessmentPage />} />
+          <Route path="podcast/:moduleId" element={<PodcastPlayer />} />
+
           <Route path="profile" element={<ProfilePage />} />
           {/* <Route path="reward" element={<Reward />} /> */}
           <Route path="mytickets" element={<MyTicketsPage />} />
@@ -141,7 +148,7 @@ const UserMain = () => {
         </Route>
         <Route path="*" element={<Navigate to="/user/login" />} />
       </Routes>
-    </div>
+    </Stack>
   );
 };
 

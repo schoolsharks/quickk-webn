@@ -67,8 +67,9 @@ const LearningStats: React.FC<LearningStatsProps> = ({ Stats }) => {
               title={stat.title}
               value={stat.value}
               icon={stat.icon}
+              textColor="white"
               backgroundColor={stat.backgroundColor}
-              iconColor={stat.iconColor}
+              iconColor={"white"}
             />
           </Grid>
         ))}

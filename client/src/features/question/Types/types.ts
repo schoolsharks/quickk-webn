@@ -14,6 +14,10 @@ export interface QuestionProps {
   id: string;
   onOptionClick?: (answer: string | string[], id: string) => void;
   smallSize?: boolean;
+  questions?: any[];
+  slideType?: "main" | "explanation";
+  isLastSlide?: boolean;
+  explanationNumber?: number;
   pulseStats?: {
     pulseItemId: string;
     optionType: string;
@@ -26,5 +30,9 @@ export interface QuestionProps {
   };
 }
 
-
-export type OptionType = "text" | "image" | "correct-incorrect" | "mcq" | "drag-order";
+export type OptionType =
+  | "text"
+  | "image"
+  | "correct-incorrect"
+  | "mcq"
+  | "drag-order";

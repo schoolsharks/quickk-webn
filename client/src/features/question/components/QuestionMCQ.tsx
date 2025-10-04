@@ -4,7 +4,7 @@ import { QuestionProps } from "../Types/types";
 import OptionItem from "./OptionMicroComponent";
 import GlobalButton from "../../../components/ui/button";
 
-const QuetionMCQ: React.FC<QuestionProps> = ({
+const QuestionMCQ: React.FC<QuestionProps> = ({
   id,
   questionText,
   options = [],
@@ -37,9 +37,9 @@ const QuetionMCQ: React.FC<QuestionProps> = ({
   return (
     <Box
       sx={{
-        background: "black",
         minHeight: "400px",
         minWidth: "300px",
+        color:"black",
         p: "1",
       }}
     >
@@ -119,4 +119,4 @@ const QuetionMCQ: React.FC<QuestionProps> = ({
   );
 };
 
-export default QuetionMCQ;
+export default QuestionMCQ;

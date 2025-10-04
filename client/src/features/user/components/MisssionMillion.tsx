@@ -62,7 +62,7 @@ const MissionMillion: React.FC = () => {
             left: -36,
             height: "36px",
             width: `${progress * 4}%`,
-            bgcolor: "#96FF43",
+            bgcolor: "primary.main",
             transition: "width 0.7s ease",
           }}
         />

@@ -84,8 +84,8 @@ const darkFieldStyle = {
     color: "white",
     borderRadius: 0,
     "& fieldset": { borderColor: "#555" },
-    "&:hover fieldset": { borderColor: "#96FF43" },
-    "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+    "&:hover fieldset": { borderColor: "primary.main" },
+    "&.Mui-focused fieldset": { borderColor: "primary.main" },
   },
   "& .MuiInputLabel-root": { color: "#ccc" },
   "& .MuiSelect-icon": { color: "#ccc", borderRadius: "0" },
@@ -560,17 +560,17 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
               alignItems="center"
               mb={2}
             >
-              <Typography variant="h6" color="#96FF43">
+              <Typography variant="h6" color="primary.main">
                 Memory Pairs ({memoryPairs.length})
               </Typography>
               <Button
                 onClick={addMemoryPair}
                 startIcon={<Add />}
                 sx={{
-                  backgroundColor: "#96FF43",
+                  backgroundColor: "primary.main",
                   borderRadius: 0,
                   color: "black",
-                  "&:hover": { backgroundColor: "#7BD932" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                 }}
               >
                 Add Pair
@@ -583,7 +583,7 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
                 mb: 3,
                 backgroundColor: "#1a3a4a",
                 color: "white",
-                "& .MuiAlert-icon": { color: "#96FF43" },
+                "& .MuiAlert-icon": { color: "primary.main" },
               }}
             >
               Create pairs of items that players need to match. Each pair can
@@ -608,7 +608,7 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
                     alignItems="center"
                     mb={2}
                   >
-                    <Typography variant="subtitle1" color="#96FF43">
+                    <Typography variant="subtitle1" color="primary.main">
                       Pair {pairIndex + 1}
                     </Typography>
                     {memoryPairs.length > 1 && (
@@ -740,7 +740,7 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
                     >
                       <Typography
                         variant="caption"
-                        color="#96FF43"
+                        color="primary.main"
                         mb={1}
                         display="block"
                       >
@@ -839,13 +839,13 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
                 onClick={addQuestion}
                 startIcon={<Add />}
                 sx={{
-                  bgcolor: "#96FF43",
+                  bgcolor: "primary.main",
                   color: "black",
                   minWidth: 0,
                   px: 2,
                   borderRadius: 0,
                   "&:hover": {
-                    bgcolor: "#7BD932",
+                    bgcolor: "primary.dark",
                   },
                 }}
               >
@@ -892,10 +892,10 @@ const AddAssessment: React.FC<AddAssessmentProps> = ({ data, setData }) => {
                   backgroundColor: "#333",
                 },
                 "&.Mui-selected": {
-                  backgroundColor: "#96FF43",
+                  backgroundColor: "primary.main",
                   color: "black",
                   "&:hover": {
-                    backgroundColor: "#7BD932",
+                    backgroundColor: "primary.dark",
                   },
                 },
               },

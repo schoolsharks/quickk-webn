@@ -17,14 +17,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   return (
     <Card
       sx={{
-        backgroundColor: isSelected ? "#96FF43" : "#333",
+        backgroundColor: isSelected ? "primary.main" : "#333",
         color: isSelected ? "black" : "white",
         cursor: "pointer",
-        border: isSelected ? "2px solid #96FF43" : "2px solid #444",
+        border: isSelected ? "2px solid primary.main" : "2px solid #444",
         borderRadius: 0,
         transition: "all 0.2s ease",
         "&:hover": {
-          backgroundColor: isSelected ? "#7BD932" : "#444",
+          backgroundColor: isSelected ? "primary.dark" : "#444",
           transform: "translateY(-2px)",
         },
         height: "100%",
@@ -51,7 +51,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
                 objectFit: "contain",
                 borderRadius: "50%",
                 background: isSelected ? "#eaffd6" : "#222",
-                border: isSelected ? "2px solid #96FF43" : "2px solid #444",
+                border: isSelected ? "2px solid primary.main" : "2px solid #444",
                 p: 0.5,
               }}
             />

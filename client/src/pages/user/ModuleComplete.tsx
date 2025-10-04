@@ -66,11 +66,7 @@ const ModuleComplete: React.FC = () => {
     <ModuleCompleteLayout
       points={data.totalStarsAwarded || 0}
       duration={data.duration}
-      recommendations={[
-        { type: "video", title: "Introduction to POSH" },
-        { type: "blog", title: "Blog", author: "Anil" },
-        { type: "book", title: "Book", author: "Rahul garg" },
-      ]}
+      recommendations={data.resources || []}
       onNextModule={() => handleNextModule()}
       onHomeClick={() => navigateToHome()}
     />

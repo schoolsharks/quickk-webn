@@ -272,9 +272,9 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                   onChange(field.name, newArray);
                 }}
                 sx={{
-                  backgroundColor: "#96FF43",
+                  backgroundColor: "primary.main",
                   color: "black",
-                  "&:hover": { backgroundColor: "#7BD932" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                   alignSelf: "flex-start",
                   borderRadius: "0",
                 }}
@@ -442,7 +442,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               <button
                 onClick={() => editor?.chain().focus().toggleBold().run()}
                 style={{
-                  background: editor?.isActive("bold") ? "#96FF43" : "#444",
+                  background: editor?.isActive("bold") ? "primary.main" : "#444",
                   color: editor?.isActive("bold") ? "black" : "white",
                   marginRight: 4,
                   border: "none",
@@ -455,7 +455,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               <button
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
                 style={{
-                  background: editor?.isActive("italic") ? "#96FF43" : "#444",
+                  background: editor?.isActive("italic") ? "primary.main" : "#444",
                   color: editor?.isActive("italic") ? "black" : "white",
                   marginRight: 4,
                   border: "none",
@@ -469,7 +469,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 onClick={() => editor?.chain().focus().toggleBulletList().run()}
                 style={{
                   background: editor?.isActive("bulletList")
-                    ? "#96FF43"
+                    ? "primary.main"
                     : "#444",
                   color: editor?.isActive("bulletList") ? "black" : "white",
                   marginRight: 4,

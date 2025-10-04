@@ -148,11 +148,11 @@ const Content: React.FC<ContentProps> = ({ type, data, setData }) => {
                   onClick={addEntry}
                   startIcon={<Add />}
                   sx={{
-                    bgcolor: "#96FF43",
+                    bgcolor: "primary.main",
                     color: "black",
                     px: 2,
                     borderRadius: 0,
-                    "&:hover": { bgcolor: "#7BD932" },
+                    "&:hover": { bgcolor: "primary.dark" },
                   }}
                 >
                   Add
@@ -200,9 +200,9 @@ const Content: React.FC<ContentProps> = ({ type, data, setData }) => {
                 borderColor: "#444",
                 "&:hover": { backgroundColor: "#333" },
                 "&.Mui-selected": {
-                  backgroundColor: "#96FF43",
+                  backgroundColor: "primary.main",
                   color: "black",
-                  "&:hover": { backgroundColor: "#7BD932" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                 },
               },
               "& .MuiButtonBase-root": {

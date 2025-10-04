@@ -17,7 +17,7 @@ const DashboardStatsCard: React.FC<DashboardStatsCardProps> = ({
   value,
   subtitle = "Manage",
   backgroundColor = "#252525",
-  textColor = "#96FF43",
+  textColor = "primary.main",
   valueColor = "primary.main",
   onManageClick,
 }) => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {  Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,6 +8,7 @@ import VideoModuleLayout from "./VideoModuleLayout";
 import { ModuleProps } from "../../Types/types";
 import LearningQuestionTwoOption from "../../../question/components/LearningQuestionTwoOption";
 import BottomNavigation from "../../../../components/ui/BottomNavigation";
+import AudioModuleLayout from "./AudioModuleLayout";
 
 const ModuleLayout: React.FC<ModuleProps> = ({
   moduleId,
@@ -17,11 +18,11 @@ const ModuleLayout: React.FC<ModuleProps> = ({
   title,
 }) => {
   const navigate = useNavigate();
-  
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const sliderRef = React.useRef<Slider | null>(null); 
 
-  const handleAnswer = (selectedOption: string|string[],_:string) => {
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const sliderRef = React.useRef<Slider | null>(null);
+
+  const handleAnswer = (selectedOption: string | string[], _: string) => {
     if (currentIndex === questions.length - 1) {
       navigate(`/user/practice/${moduleId}`);
     }
@@ -31,8 +32,8 @@ const ModuleLayout: React.FC<ModuleProps> = ({
     }
   };
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, []);
+    window.scrollTo(0, 0);
+  }, []);
 
   const questions = type === "question" ? (content as string[]) : [];
 
@@ -64,10 +65,23 @@ const ModuleLayout: React.FC<ModuleProps> = ({
       />
     ),
   };
+  //question: flashcard - quiz - reward
+  //video: video - quiz - flashcard - reward
 
   if (type === "video") {
     return (
-      <VideoModuleLayout url={content as string} moduleId={moduleId as string} isVideoWatched={isVideoWatched ?? false}/>
+      <VideoModuleLayout
+        url={content as string}
+        moduleId={moduleId as string}
+        isVideoWatched={isVideoWatched ?? false}
+      />
+    );
+  } else if (type === "audio") {
+    return (
+      <AudioModuleLayout
+        moduleId={moduleId as string}
+        isVideoWatched={isVideoWatched ?? false}
+      />
     );
   } else if (type === "question") {
     return (
@@ -100,7 +114,7 @@ const ModuleLayout: React.FC<ModuleProps> = ({
                     options={question.options}
                     onAnswer={handleAnswer}
                     sx={{
-                      minHeight : "350px",
+                      minHeight: "350px",
                     }}
                   />
                 </Box>

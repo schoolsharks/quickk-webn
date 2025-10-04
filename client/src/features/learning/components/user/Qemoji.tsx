@@ -15,6 +15,7 @@ const QemojiImage: React.FC<QemojiImageProps> = ({ width, height ,sx}) => (
                 ...sx,
                 width,
                 height,
+                opacity:0,
                 filter: "drop-shadow(0px 4px 4px rgba(235, 235, 245, 0.3))",
             }}
             alt="Q Image"

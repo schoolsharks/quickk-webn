@@ -22,14 +22,14 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
                 width: 40,
                 height: 40,
                 borderRadius: "50%",
-                backgroundColor: index + 1 <= currentStep ? "#96FF43" : "#333",
+                backgroundColor: index + 1 <= currentStep ? "primary.main" : "#333",
                 color: index + 1 <= currentStep ? "black" : "white",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: "bold",
                 border:
-                  index + 1 === currentStep ? "2px solid #96FF43" : "none",
+                  index + 1 === currentStep ? "2px solid primary.main" : "none",
               }}
             >
               {index + 1}
@@ -39,7 +39,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
                 sx={{
                   width: 60,
                   height: 2,
-                  backgroundColor: index + 1 < currentStep ? "#96FF43" : "#333",
+                  backgroundColor: index + 1 < currentStep ? "primary.main" : "#333",
                   mx: 1,
                 }}
               />

@@ -334,7 +334,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                               ml: 2,
                               px: 1,
                               py: 0.2,
-                              bgcolor: "#96FF43",
+                              bgcolor: "primary.main",
                               color: "#222",
                               borderRadius: "6px",
                               fontSize: "10px",
@@ -445,9 +445,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 <ListItem key={child.id} disablePadding>
                   <ListItemButton
                     onClick={() => {
-                      child.id == "modules"
-                        ? null
-                        : handleChildClick(child.path);
+                      handleChildClick(child.path);
                     }}
                     sx={{
                       pl: 6,

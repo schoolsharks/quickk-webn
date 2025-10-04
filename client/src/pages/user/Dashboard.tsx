@@ -19,6 +19,7 @@ import { fadeInUp } from "../../animation/variants/fadeInUp";
 import Quickk from "../../components/ui/Quickk";
 import TopStatusPanel from "../../features/user/components/TopStatusPanel";
 import StarsEarnedPopup from "../../components/ui/StarsEarnedPopup";
+import ContinueLearning from "../../features/user/components/ContinueLearning";
 
 const Dashboard = () => {
   const { name, webnClubMember } = useSelector(
@@ -79,7 +80,7 @@ const Dashboard = () => {
               px={1}
               mt={1}
               sx={{ cursor: "pointer" }}
-              onClick={() => window.location.href = "/user/webn-membership"}
+              onClick={() => (window.location.href = "/user/webn-membership")}
             >
               <Typography color={"black"} fontSize={14}>
                 Become Webn Member
@@ -150,11 +151,11 @@ const Dashboard = () => {
       </AnimateOnScroll> */}
 
       {/* Continue Learning */}
-      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"48px"}>
           <ContinueLearning />
         </Box>
-      </AnimateOnScroll> */}
+      </AnimateOnScroll>
 
       {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"4px"}>

@@ -8,7 +8,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { QuestionProps } from "../Types/types";
 import GlobalButton from "../../../components/ui/button";
 
@@ -21,17 +21,19 @@ const SortableItem = ({
   index: number;
   color: string;
 }) => {
+  const theme = useTheme();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
-    color: color === "#96FF43" ? "black" : "white",
+    color: "black",
     transition,
     padding: "12px 20px",
     backgroundColor: color || "rgba(14, 14, 14, 1)",
     marginBottom: "12px",
+    border: `2px solid ${theme.palette.primary.main}`,
+    boxShadow: "0px 4px 19px 0px #CD7BFF4D inset",
     cursor: "grab",
-    border: "1px solid rgba(255, 255, 255, 1)",
   };
 
   return (
@@ -66,7 +68,7 @@ const QuestionDragOrder: React.FC<QuestionProps> = ({
   const [showResult, setShowResult] = useState(false);
   const [showExplation, setShowExplation] = useState(false);
   const [resultColors, setResultColors] = useState<string[]>(
-    options.map(() => "rgba(14, 14, 14, 1)")
+    options.map(() => "white")
   );
 
   const handleDragEnd = (event: any) => {
@@ -80,7 +82,7 @@ const QuestionDragOrder: React.FC<QuestionProps> = ({
 
   const handleSubmit = () => {
     const colors = items.map((item, index) =>
-      item === correctOrder[index] ? "#96FF43" : "#FF6666"
+      item === correctOrder[index] ? "primary.main" : "#FF6666"
     );
     setResultColors(colors);
     setShowExplation(true);

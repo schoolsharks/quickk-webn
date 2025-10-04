@@ -33,6 +33,7 @@ export interface ModuleProps {
 export interface LearningProps {
     title: string;
     week: string;
+    videoUrl?: string; // Add this - Heading Video
     expanded?: boolean;
     items?: ModuleProps[];
     onToggle?: () => void;
@@ -42,4 +43,10 @@ export interface AssessmentProps {
     title:string;
     questions: QuestionProps[];
     moduleId: string;
+}
+
+export interface FlashcardProps {
+  title: string;
+  flashcards: any[];
+  moduleId: string;
 }

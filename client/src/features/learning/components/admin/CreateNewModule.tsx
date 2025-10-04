@@ -169,6 +169,7 @@ const CreateNewModule: React.FC<CreateNewModuleProps> = ({ module }) => {
                 backgroundColor: "#1e1e1e",
                 color: "white",
                 "& .MuiInputBase-root": {
+                  color: "white",
                   borderRadius: "0",
                 },
               }}
@@ -194,7 +195,7 @@ const CreateNewModule: React.FC<CreateNewModuleProps> = ({ module }) => {
                     color: "white",
                     "& fieldset": { borderColor: "#444", borderRadius: "0" },
                     "&:hover fieldset": { borderColor: "#666" },
-                    "&.Mui-focused fieldset": { borderColor: "#96FF43" },
+                    "&.Mui-focused fieldset": { borderColor: "primary.main" },
                   },
                   "& .MuiInputLabel-root": { color: "white" },
                   "& .MuiSelect-icon": { color: "white" },
@@ -219,8 +220,8 @@ const CreateNewModule: React.FC<CreateNewModuleProps> = ({ module }) => {
               variant="outlined"
               sx={{
                 backgroundColor: "#1e1e1e",
-                color: "white",
                 "& .MuiInputBase-root": {
+                  color: "white",
                   borderRadius: "0",
                 },
               }}

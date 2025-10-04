@@ -2,6 +2,7 @@
 export enum ModuleType {
     VIDEO = 'video',
     QUESTION = 'question',
+    AUDIO = 'audio' 
 }
 
 export enum Status {
@@ -13,4 +14,16 @@ export enum Status {
 export enum CompletionStatus{
     INCOMPLETE = "INCOMPLETE",
     COMPLETE = "COMPLETE"
+}
+
+export enum Languages{
+    ENGLISH = "ENGLISH",
+    HINGLISH = "HINGLISH"
+}
+
+export enum ResourceType{
+    VIDEO="video",
+    PODCAST="podcast",
+    BOOK="book",
+    ARTICLE="article",
 }

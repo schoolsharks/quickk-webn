@@ -159,18 +159,18 @@ const ChatHistoryDrawer: React.FC<ChatHistoryDrawerProps> = ({
   const getChatTypeIcon = (chatType: string) => {
     switch (chatType) {
       case "module":
-        return <ModuleIcon sx={{ color: "#96FF43" }} />;
+        return <ModuleIcon sx={{ color: "primary.main" }} />;
       case "dailyPulse":
-        return <PulseIcon sx={{ color: "#96FF43" }} />;
+        return <PulseIcon sx={{ color: "primary.main" }} />;
       default:
-        return <ChatIcon sx={{ color: "#96FF43" }} />;
+        return <ChatIcon sx={{ color: "primary.main" }} />;
     }
   };
 
   const getChatTypeColor = (chatType: string) => {
     switch (chatType) {
       case "module":
-        return "#96FF43";
+        return "primary.main";
       case "dailyPulse":
         return "#4FC3F7";
       default:
@@ -301,7 +301,7 @@ const ChatHistoryDrawer: React.FC<ChatHistoryDrawerProps> = ({
                   height: "200px",
                 }}
               >
-                <CircularProgress size={40} sx={{ color: "#96FF43" }} />
+                <CircularProgress size={40} sx={{ color: "primary.main" }} />
               </Box>
             ) : (
               <List sx={{ height: "100%", overflow: "auto", p: 0 }}>
@@ -332,7 +332,7 @@ const ChatHistoryDrawer: React.FC<ChatHistoryDrawerProps> = ({
                             py: 1.5,
                             px: 2,
                             "&.Mui-selected": {
-                              borderRight: `3px solid #96FF43`,
+                              borderRight: `3px solid primary.main`,
                             },
                           }}
                         >

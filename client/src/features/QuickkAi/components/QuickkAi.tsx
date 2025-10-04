@@ -703,7 +703,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
           alignItems: "center",
         }}
       >
-        <CircularProgress sx={{ color: "#96FF43" }} />
+        <CircularProgress sx={{ color: "primary.main" }} />
       </Box>
     );
   }
@@ -750,9 +750,9 @@ You'll receive a notification once it's complete and ready for deployment. Thank
           <IconButton
             onClick={() => setIsChatDrawerOpen(true)}
             sx={{
-              color: "#96FF43",
+              color: "primary.main",
               "&:hover": {
-                bgcolor: "#96FF4320",
+                bgcolor: "primary.main20",
               },
             }}
           >
@@ -760,12 +760,12 @@ You'll receive a notification once it's complete and ready for deployment. Thank
           </IconButton>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <BotIcon sx={{ color: "#96FF43", fontSize: 28 }} />
+            <BotIcon sx={{ color: "primary.main", fontSize: 28 }} />
             <Typography
               variant="h5"
               sx={{
                 fontWeight: "bold",
-                color: "#96FF43",
+                color: "primary.main",
               }}
             >
               Quickk AI
@@ -818,7 +818,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
             >
               <Avatar
                 sx={{
-                  bgcolor: message.sender === "bot" ? "#96FF43" : "#238636",
+                  bgcolor: message.sender === "bot" ? "primary.main" : "#238636",
                   width: 32,
                   height: 32,
                 }}
@@ -857,8 +857,8 @@ You'll receive a notification once it's complete and ready for deployment. Thank
                           border: "1px solid #30363d",
                           cursor: "pointer",
                           "&:hover": {
-                            bgcolor: "#96FF4320",
-                            borderColor: "#96FF43",
+                            bgcolor: "primary.main20",
+                            borderColor: "primary.main",
                           },
                         }}
                       />
@@ -873,7 +873,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
         {isTyping && (
           <Fade in timeout={300}>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-              <Avatar sx={{ bgcolor: "#96FF43", width: 32, height: 32 }}>
+              <Avatar sx={{ bgcolor: "primary.main", width: 32, height: 32 }}>
                 <BotIcon fontSize="small" sx={{ color: "#000" }} />
               </Avatar>
               <Box
@@ -884,7 +884,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
                   color: "#8b949e",
                 }}
               >
-                <CircularProgress size={16} sx={{ color: "#96FF43" }} />
+                <CircularProgress size={16} sx={{ color: "primary.main" }} />
                 <Typography variant="body2">AI is thinking...</Typography>
               </Box>
             </Box>
@@ -933,10 +933,10 @@ You'll receive a notification once it's complete and ready for deployment. Thank
                   borderColor: hasActiveOptions ? "#374151" : "#30363d",
                 },
                 "&:hover fieldset": {
-                  borderColor: hasActiveOptions ? "#374151" : "#96FF43",
+                  borderColor: hasActiveOptions ? "#374151" : "primary.main",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: hasActiveOptions ? "#374151" : "#96FF43",
+                  borderColor: hasActiveOptions ? "#374151" : "primary.main",
                 },
               },
               "& .MuiInputBase-input::placeholder": {
@@ -964,7 +964,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
             onClick={handleTextSubmit}
             disabled={!currentInput.trim() || hasActiveOptions}
             sx={{
-              bgcolor: "#96FF43",
+              bgcolor: "primary.main",
               color: "#000",
               minWidth: "auto",
               px: 2,
@@ -1009,15 +1009,15 @@ You'll receive a notification once it's complete and ready for deployment. Thank
                 onClick={() => handleFeatureClick(feature)}
                 sx={{
                   p: 1,
-                  bgcolor: feature.active ? "#96FF4320" : "#21262d",
+                  bgcolor: feature.active ? "primary.main20" : "#21262d",
                   border: feature.active
-                    ? "1px solid #96FF43"
+                    ? "1px solid primary.main"
                     : "1px solid #30363d",
                   cursor: "pointer",
                   transition: "all 0.2s",
                   opacity: feature.active ? 1 : 0.6,
                   "&:hover": {
-                    bgcolor: feature.active ? "#96FF4330" : "#30363d",
+                    bgcolor: feature.active ? "primary.main30" : "#30363d",
                     transform: "translateY(-1px)",
                   },
                 }}
@@ -1030,7 +1030,7 @@ You'll receive a notification once it's complete and ready for deployment. Thank
                 >
                   <Box
                     sx={{
-                      color: feature.active ? "#96FF43" : "#8b949e",
+                      color: feature.active ? "primary.main" : "#8b949e",
                       mb: 1,
                       display: "flex",
                       justifyContent: "center",

@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import InfoCard from "../../features/question/components/InfoCard";
 import QuestionTwoOption from "../../features/question/components/QuestionTwoOption";
 import { OptionType } from "../../features/question/Types/types";
 import QuestionMemoryMatch from "../../features/question/components/QuestionMemoryMatch";
 import QuestionDragOrder from "../../features/question/components/QuestionDragOrder";
 import LearningQuestionTwoOption from "../../features/question/components/LearningQuestionTwoOption";
-import QuetionMCQ from "../../features/question/components/QuetionMCQ";
+import QuestionMCQ from "../../features/question/components/QuestionMCQ";
 
 export interface QuetionData {
   type: string;
@@ -49,6 +49,8 @@ const Preview: React.FC<PreviewProps> = ({
   onFeedbackClick = () => {},
   onAnswerSelect = () => {},
 }) => {
+
+  const theme=useTheme()
   const defaultData = {
     flashCard: {
       title: "Did you know?",
@@ -172,8 +174,9 @@ const Preview: React.FC<PreviewProps> = ({
 
       case "MULTIPLE_CHOICE":
         return (
-          <Box bgcolor="black" p={"40px"}>
-            <QuetionMCQ
+          <Box bgcolor="white" p={"40px"} border={`2px solid ${theme.palette.primary.main}`}
+          boxShadow="0px 4px 19px 0px #CD7BFF4D inset">
+            <QuestionMCQ
               id="preview"
               questionText={quetionData?.questionText || ""}
               optionType="mcq"
@@ -211,7 +214,8 @@ const Preview: React.FC<PreviewProps> = ({
 
       case "DRAG_ORDER":
         return (
-          <Box bgcolor="black" p={"15px"}>
+          <Box bgcolor="white" p={"15px"} border={`2px solid ${theme.palette.primary.main}`}
+          boxShadow="0px 4px 19px 0px #CD7BFF4D inset">
             <QuestionDragOrder
               id="preview"
               questionText={quetionData?.questionText || ""}

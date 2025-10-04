@@ -43,9 +43,7 @@ const LearningTable: React.FC<LearningTableProps> = ({
       minWidth: 150,
       align: "left",
       format: (value: string) => (
-        <Typography
-          sx={{ color: "white", fontSize: "14px", textDecoration: "underline" }}
-        >
+        <Typography sx={{ fontSize: "14px", textDecoration: "underline" }}>
           {value}
         </Typography>
       ),
@@ -61,7 +59,7 @@ const LearningTable: React.FC<LearningTableProps> = ({
           sx={{
             bgcolor:
               value === "published"
-                ? "#96FF43"
+                ? "primary.main"
                 : value === "drafts"
                 ? "#64748b"
                 : "#FFF",
@@ -80,9 +78,7 @@ const LearningTable: React.FC<LearningTableProps> = ({
       minWidth: 100,
       align: "left",
       format: (value: number) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
-          {value}
-        </Typography>
+        <Typography sx={{ fontSize: "14px" }}>{value}</Typography>
       ),
     },
     {
@@ -92,9 +88,7 @@ const LearningTable: React.FC<LearningTableProps> = ({
       sortable: true,
       align: "left",
       format: (value: number) => (
-        <Typography sx={{ color: "white", fontSize: "14px" }}>
-          {value}
-        </Typography>
+        <Typography sx={{ fontSize: "14px" }}>{value}</Typography>
       ),
     },
   ];

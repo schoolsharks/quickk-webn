@@ -9,7 +9,7 @@ const DarkModeToggle: React.FC<{ active: boolean }> = ({ active }) => {
         sx={{
           width: 60,
           height: 24,
-          bgcolor: active ? "#96FF43" : "#464646",
+          bgcolor: active ? "primary.main" : "#464646",
           display: "flex",
           alignItems: "center",
           p: "2px",

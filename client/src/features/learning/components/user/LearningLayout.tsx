@@ -6,7 +6,6 @@ import {
   IconButton,
   Checkbox,
   Button,
-  useTheme,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
@@ -16,30 +15,24 @@ import AnimateOnScroll from "../../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../../animation";
 import { baseTransition } from "../../../../animation/transitions/baseTransition";
 import ActiveLearning from "../../../../components/ui/ActiveLearning";
-import { RootState } from "../../../../app/store";
-import { useSelector } from "react-redux";
+import { theme } from "../../../../theme/theme";
 
 const Module: React.FC<ModuleProps> = ({
-  // moduleId,
+  moduleId,
   title,
   isCompleted = false,
   duration,
 }) => {
-  // const navigate = useNavigate();
-
+  const navigate = useNavigate();
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between">
       <Stack direction="row" alignItems="center">
         <Checkbox
           checked={isCompleted}
           sx={{
-            width: "24px",
-            height: "24px",
-            borderRadius: "0",
-            color: "transparent",
-            bgcolor: "#CD7BFF80",
+            color: "#A6A6A6",
             "&.Mui-checked": {
-              color: "#96FF43",
+              color: "primary.main",
             },
           }}
         />
@@ -48,7 +41,7 @@ const Module: React.FC<ModuleProps> = ({
           disableRipple
           disabled={isCompleted}
           onClick={() => {
-            // navigate(`/user/module/${moduleId}`);
+            navigate(`/user/module/${moduleId}`);
           }}
           sx={{
             backgroundColor: "transparent",
@@ -68,7 +61,7 @@ const Module: React.FC<ModuleProps> = ({
             variant="h6"
             fontSize={"14px"}
             sx={{
-              color: isCompleted ? "#96FF43" : "text.primary",
+              color: isCompleted ? "primary.main" : "text.primary",
               cursor: "pointer",
               textAlign: "left",
             }}
@@ -84,7 +77,7 @@ const Module: React.FC<ModuleProps> = ({
           fontSize={"14px"}
           sx={{
             textDecoration: isCompleted ? "underline" : "none",
-            color: isCompleted ? "#96FF43" : "text.primary",
+            color: isCompleted ? "primary.main" : "text.primary",
             textWrap: "nowrap",
           }}
         >
@@ -98,11 +91,25 @@ const Module: React.FC<ModuleProps> = ({
 const Learning: React.FC<LearningProps> = ({
   title,
   week,
+  videoUrl,
   expanded = false,
   items = [],
   onToggle,
 }) => {
-  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onToggle) onToggle();
+  };
+
+  const handleTitleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoUrl) {
+      navigate(`/user/video/${videoUrl}`);
+    }
+  };
+
   return (
     <AnimateOnScroll variants={fadeInUp} transition={baseTransition}>
       <Box>
@@ -110,37 +117,86 @@ const Learning: React.FC<LearningProps> = ({
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ cursor: "pointer" }}
-          onClick={onToggle}
+          onClick={handleCheckboxClick}
         >
           <Stack direction="row" alignItems="center" spacing={1}>
             <Checkbox
               checked={expanded}
+              onClick={handleCheckboxClick}
               sx={{
                 "&.Mui-checked": {
-                  color: theme.palette.primary.main,
+                  color: "primary.main",
                 },
               }}
             />
             <Typography
               variant="h5"
-              fontSize={"16px"}
-              color={expanded ? theme.palette.primary.main : "text.primary"}
+              lineHeight={"24px"}
+              // sx={{
+              //   flexGrow: 1, // Makes the entire text area clickable
+              // }}
             >
               {title}
             </Typography>
           </Stack>
-          <Typography
-            variant="body1"
-            sx={{ textWrap: "nowrap" }}
-            color={expanded ? theme.palette.primary.main : "text.primary"}
-          >
+          <Typography variant="h5" sx={{ textWrap: "nowrap" }}>
             {week}
           </Typography>
         </Stack>
-        <Box px={1.5}>
-          {expanded &&
-            items.map((item, index) => (
+
+        {expanded && (
+          <>
+            {videoUrl && (
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Stack direction="row" alignItems="center">
+                  <Checkbox
+                    // checked={isCompleted}
+                    sx={{
+                      color: "#A6A6A6",
+                      "&.Mui-checked": {
+                        color: theme.palette.primary.main,
+                      },
+                    }}
+                  />
+
+                  <Button
+                    disableRipple
+                    // disabled={isCompleted}
+                    onClick={handleTitleClick}
+                    sx={{
+                      backgroundColor: "transparent",
+                      boxShadow: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                      "&:active": {
+                        backgroundColor: "transparent",
+                      },
+                      "&:focus": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontSize={"14px"}
+                      sx={{
+                        color: "text.primary",
+                        textAlign: "left",
+                        cursor: videoUrl ? "pointer" : "default",
+                      }}
+                    >
+                      Introduction
+                    </Typography>
+                  </Button>
+                </Stack>
+              </Stack>
+            )}
+            {items.map((item, index) => (
               <Module
                 moduleId={item.moduleId}
                 key={index}
@@ -149,23 +205,31 @@ const Learning: React.FC<LearningProps> = ({
                 duration={item.duration}
               />
             ))}
-        </Box>
+          </>
+        )}
       </Box>
     </AnimateOnScroll>
   );
 };
 
 interface LearningLayoutProps {
-  LearningData: LearningProps[];
+  LearningData: Array<{
+    week: number;
+    title: string;
+    videoUrl?: string; // Add this
+    items: Array<{
+      moduleId: string;
+      title: string;
+      duration: string;
+      isCompleted: boolean;
+    }>;
+  }>;
 }
 
 const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
   const navigate = useNavigate();
 
-  const { totalStars, progress } = useSelector(
-    (state: RootState) => state.user
-  );
   const navigateToHome = () => {
     navigate("/user/dashboard");
   };
@@ -174,20 +238,40 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
     setExpandedIndex((prev) => (prev === index ? null : index));
   };
 
+  // Sort learning data: expanded learning first, then by week in ascending order
+  const sortedLearningData = [...LearningData].sort((a, b) => {
+    const aIndex = LearningData.findIndex((item) => item.week === a.week);
+    const bIndex = LearningData.findIndex((item) => item.week === b.week);
+    const aExpanded = expandedIndex === aIndex;
+    const bExpanded = expandedIndex === bIndex;
+
+    // Priority 1: Expanded learning goes to top
+    if (aExpanded && !bExpanded) return -1;
+    if (!aExpanded && bExpanded) return 1;
+
+    // Priority 2: If neither is expanded, sort by week
+    if (!aExpanded && !bExpanded) {
+      return a.week - b.week;
+    }
+
+    // If both are expanded (shouldn't happen), sort by week
+    return a.week - b.week;
+  });
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
-    <Box sx={{ pt: "36px" }}>
+    <Box sx={{ p: "66px 24px 16px 14px" }}>
       {/* Header UI */}
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: "28px" }}
+        sx={{ mb: "44px" }}
       >
-        <Stack direction="row" alignItems="center" px={"12px"}>
+        <Stack direction="row" alignItems="center">
           <IconButton sx={{ color: "text.primary" }} onClick={navigateToHome}>
             <ArrowBackIcon />
           </IconButton>
@@ -198,97 +282,51 @@ const LearningLayout: React.FC<LearningLayoutProps> = ({ LearningData }) => {
         {/* <QemojiImage width="81px" height="81px" /> */}
       </Stack>
 
-      <Box flexDirection={"row"} display={"flex"} mb={4} flex={1}>
-        <Box
-          color="white"
-          bgcolor={"#464646"}
-          p={"16px"}
-          flex={1}
-          textAlign={"center"}
-        >
-          <Typography variant="h4">{totalStars}</Typography>
-          <Typography fontSize={"16px"} fontWeight={500}>
-            Active Points
-          </Typography>
-        </Box>
-        <Box
-          color="white"
-          bgcolor={"#252525"}
-          p={"16px"}
-          flex={1}
-          textAlign={"center"}
-        >
-          <Typography variant="h4">
-            {progress}
-            {"%"}
-          </Typography>
-          <Typography fontSize={"16px"} fontWeight={500}>
-            Completion
-          </Typography>
-        </Box>
-      </Box>
-
       {/* Main Learnings */}
-      <Box sx={{ mb: 3, px: "16px" }}>
-        {LearningData.map((learning, idx) => (
-          <React.Fragment key={idx}>
-            <Box>
-              <Learning
-                title={learning.title}
-                week={`Week ${idx + 1}`}
-                // week={`Week ${learning.week}`}
-                expanded={expandedIndex === idx}
-                items={learning.items}
-                onToggle={() => toggleExpand(idx)} // pass toggle function
-              />
-            </Box>
-            {idx === 0 && (
-              <Box sx={{ mt: "22px", ml: "11px", mb: "18px" }}>
-                <ActiveLearning />
+      <Box sx={{ mb: 3 }}>
+        {sortedLearningData.map((learning, idx) => {
+          const originalIndex = LearningData.findIndex(
+            (item) => item.week === learning.week
+          );
+          return (
+            <React.Fragment key={learning.week}>
+              <Box>
+                <Learning
+                  title={learning.title}
+                  week={`Week ${learning.week}`}
+                  videoUrl={learning.videoUrl} // Add this line
+                  expanded={expandedIndex === originalIndex}
+                  items={learning.items}
+                  onToggle={() => toggleExpand(originalIndex)}
+                />
               </Box>
-            )}
-          </React.Fragment>
-        ))}
+              {idx === 0 && (
+                <Box sx={{ mt: "22px", ml: "11px", mb: "18px" }}>
+                  <ActiveLearning />
+                </Box>
+              )}
+            </React.Fragment>
+          );
+        })}
 
         {/* Static Learnings */}
-        <Stack mt={"12px"}>
-          <Learning
-            title="Government Schemes to Support Startups"
-            week="Week 3"
-            expanded={false}
-            items={[]}
-          />
-          <Learning
-            title="Seed Funding and Grants Explained"
-            week="Week 4"
-            expanded={false}
-            items={[]}
-          />
-          <Learning
-            title="Finding Mentors & Business Guidance"
-            week="Week 5"
-            expanded={false}
-            items={[]}
-          />
-          <Learning
-            title="Boosting Your Social Media Presence"
-            week="Week 6"
-            expanded={false}
-            items={[]}
-          />
-        </Stack>
+        {/* <Stack mt={"18px"}>
+          <Learning title="Topic 3" week="Week 3" expanded={false} items={[]} />
+          <Learning title="Topic 4" week="Week 4" expanded={false} items={[]} />
+          <Learning title="Topic 5" week="Week 5" expanded={false} items={[]} />
+        </Stack> */}
       </Box>
 
       {/* Footer */}
       <Box
         sx={{
-          bgcolor: "#404040",
-          mx: "25px",
-          p: "12px",
-          my: "20px",
+          bgcolor: theme.palette.primary.main,
+          ml: "11px",
+          p: "14px",
+          mt: "20px",
         }}
       >
-        <Typography fontWeight={600} fontSize={"16px"} color="white">
+        <Typography variant="body1" fontSize={"18px"} color="black">
           Upcoming Challenge{" "}
           {(() => {
             const today = new Date();

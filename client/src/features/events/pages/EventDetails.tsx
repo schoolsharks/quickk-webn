@@ -11,6 +11,7 @@ import Loader from "../../../components/ui/Loader";
 import ErrorLayout from "../../../components/ui/Error";
 import formatEventTime from "../../../utils/formatEventTime";
 import { extractFullDateWithDay } from "../../../utils/dateExtract";
+import eventFallback from "../../../assets/images/Events/Events_fallback_img.png";
 
 // Dummy event data - replace with RTK Query later
 // const EventData = {
@@ -106,7 +107,7 @@ const EventDetails: React.FC = () => {
         sx={{
           height: "400px",
           backgroundColor: theme.palette.background.default,
-          backgroundImage: `url(${EventData?.eventImage})`,
+          backgroundImage: `url(${EventData?.eventImage || eventFallback})`,
           backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

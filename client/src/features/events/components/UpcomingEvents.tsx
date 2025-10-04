@@ -6,13 +6,13 @@ import {
   Card,
   CardContent,
   Collapse,
-  IconButton,
+  // IconButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { motion } from "framer-motion";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -71,7 +71,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
+  const [expandedEvents, _setExpandedEvents] = useState<Set<string>>(new Set());
   const sliderRef = React.useRef<Slider | null>(null);
   const EventData = eventsData || [];
 
@@ -143,15 +143,15 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
     });
   }, [EventData]);
 
-  const toggleEventExpansion = (eventId: string) => {
-    const newExpanded = new Set(expandedEvents);
-    if (newExpanded.has(eventId)) {
-      newExpanded.delete(eventId);
-    } else {
-      newExpanded.add(eventId);
-    }
-    setExpandedEvents(newExpanded);
-  };
+  // const toggleEventExpansion = (eventId: string) => {
+  //   const newExpanded = new Set(expandedEvents);
+  //   if (newExpanded.has(eventId)) {
+  //     newExpanded.delete(eventId);
+  //   } else {
+  //     newExpanded.add(eventId);
+  //   }
+  //   setExpandedEvents(newExpanded);
+  // };
 
   const handleEventClick = (eventId: string) => {
     // Navigate to event details page
@@ -287,12 +287,13 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           }}
           onClick={() => handleEventClick(event.id)}
         >
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box display="flex" alignItems="center" flex={1}>
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <Box
+              display="flex"
+              alignItems="center"
+              flex={1}
+              justifyContent={"center"}
+            >
               {/* Event Title */}
               <Typography
                 variant="body1"
@@ -308,7 +309,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
             </Box>
 
             {/* Expand/Collapse Icon */}
-            <IconButton
+            {/* <IconButton
               size="small"
               sx={{
                 color: theme.palette.text.primary,
@@ -320,7 +321,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
               }}
             >
               {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
+            </IconButton> */}
           </Box>
 
           {/* Expanded Content */}
@@ -481,7 +482,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           {groupedEvents.map((monthData) => (
             <Box
               key={`${monthData.month}-${monthData.year}`}
-              sx={{ height: "100%", px: 1 }}
+              sx={{ height: "100%" }}
             >
               <motion.div
                 variants={carouselSlide}

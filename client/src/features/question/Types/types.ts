@@ -30,9 +30,5 @@ export interface QuestionProps {
   };
 }
 
-export type OptionType =
-  | "text"
-  | "image"
-  | "correct-incorrect"
-  | "mcq"
-  | "drag-order";
+
+export type OptionType = "text" | "image" | "correct-incorrect" | "mcq" | "drag-order" | "yes-no";

@@ -153,7 +153,7 @@ export const getDailyPulses = async (
           if (
             userResponse &&
             companyId &&
-            (q.optionType === "text" || q.optionType === "correct-incorrect")
+            (q.optionType === "text" || q.optionType === "correct-incorrect" || q.optionType === "yes-no")
           ) {
             pulseStats = await pulseStatsService.calculateQuestionPulseStats(
               id,
@@ -387,6 +387,7 @@ export const updateDailyPulse = async (
       );
     }
 
+
     // Map uploaded files to pulses
     const fileMapping = mapFilesToPulses(uploadedFiles);
 
@@ -403,13 +404,15 @@ export const updateDailyPulse = async (
           index,
           fileMapping
         );
+        // console.log("Pulse data stars:", parsedPulses?.stars);
+        const modeifiedPulseData = { ...pulseData, score: stars / parsedPulses.length || 0 };
 
         if (pulse.type === "infoCard") {
           if (pulseData._id && pulseData._id !== "") {
             // Update existing infoCard
             const updatedInfoCard = await infoCardService.updateInfoCard(
               pulseData._id,
-              pulseData
+              modeifiedPulseData
             );
             return {
               refId: updatedInfoCard._id,
@@ -417,7 +420,7 @@ export const updateDailyPulse = async (
             };
           } else {
             // Create new infoCard
-            const infoCard = await infoCardService.createInfoCard(pulseData);
+            const infoCard = await infoCardService.createInfoCard(modeifiedPulseData);
             return {
               refId: infoCard._id,
               type: PulseType.InfoCard,
@@ -428,7 +431,7 @@ export const updateDailyPulse = async (
             // Update existing question
             const updatedQuestion = await questionService.updateQuestion(
               pulseData._id,
-              pulseData
+              modeifiedPulseData
             );
             return {
               refId: updatedQuestion._id,
@@ -436,7 +439,7 @@ export const updateDailyPulse = async (
             };
           } else {
             // Create new question
-            const question = await questionService.createQuestion(pulseData);
+            const question = await questionService.createQuestion(modeifiedPulseData);
             return {
               refId: question._id,
               type: PulseType.Question,
@@ -697,7 +700,6 @@ export const archievedailyPulseById = async (
 ) => {
   try {
     const { dailyPulseId } = req.params;
-    console.log("Archieve daily pulse controller.");
     const dailyPulse = await dailyPulseService.archieveDailyPulseById(
       dailyPulseId
     );

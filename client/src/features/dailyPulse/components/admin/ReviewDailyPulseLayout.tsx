@@ -48,6 +48,7 @@ interface PulseData {
   options: string[];
   wantFeedback: boolean;
   pulseType: string;
+  score: number;
 }
 
 interface ReviewDailyPulseLayoutProps {
@@ -87,6 +88,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       options: [],
       wantFeedback: true,
       pulseType: "Flash Card",
+      score: 0,
     },
   ]);
 
@@ -107,6 +109,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         wantFeedback: true,
         type: "infoCard",
         pulseType: "Flash Card",
+        score: 0,
       };
 
       const normalizedPulses: PulseData[] = PulseData.pulses?.length
@@ -171,12 +174,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               };
             }
 
-
             return {
               ...defaultPulseData,
               ...(p as Partial<PulseData>),
               type: p.type?.toLowerCase() || "question",
-              pulseType, 
+              pulseType,
               qType:
                 pulseType === "Advertisement"
                   ? "ADVERTISEMENT"
@@ -189,7 +191,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
       setPulses(normalizedPulses);
       setPublishOn(PulseData.publishOn ? new Date(PulseData.publishOn) : null);
-      setStars(PulseData.stars ?? 0);
+      const totalStars =
+        PulseData?.pulses?.reduce(
+          (sum, pulse) => sum + (pulse.score ?? 0),
+          0
+        ) ?? 0;
+      setStars(totalStars);
     }
   }, [PulseData]);
 
@@ -357,8 +364,10 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
     try {
       if (formData) {
+        console.log("Submitting with files. FormData entries:", formData);
         await UpdateDailyPulse(formData).unwrap();
       } else {
+        console.log("Submitting with files. newFormData entries:", newFormData);
         await UpdateDailyPulse(newFormData).unwrap();
       }
       setConfirmDialog({ open: false, action: "", title: "", message: "" });
@@ -475,6 +484,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       options: [],
       wantFeedback: true,
       pulseType: "Flash Card",
+      score: 0,
     };
     setPulses([...pulses, newPulse]);
     setCurrentPulseIndex(pulses.length);

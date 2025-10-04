@@ -153,7 +153,7 @@ export const getDailyPulses = async (
           if (
             userResponse &&
             companyId &&
-            (q.optionType === "text" || q.optionType === "correct-incorrect")
+            (q.optionType === "text" || q.optionType === "correct-incorrect" || q.optionType === "yes-no")
           ) {
             pulseStats = await pulseStatsService.calculateQuestionPulseStats(
               id,

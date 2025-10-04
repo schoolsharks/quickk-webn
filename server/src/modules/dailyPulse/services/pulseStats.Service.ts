@@ -28,7 +28,7 @@ class PulseStatsService {
       }
 
       // Only calculate stats for supported option types
-      if (question.optionType !== 'text' && question.optionType !== 'correct-incorrect') {
+      if (question.optionType !== 'text' && question.optionType !== 'correct-incorrect' && question.optionType !== 'yes-no') {
         return null;
       }
 
@@ -86,7 +86,7 @@ class PulseStatsService {
             percentage: Math.round((wrongStat.count / totalResponses) * 100)
           }
         ];
-      } else if (question.optionType === 'text') {
+      } else if (question.optionType === 'text' || question.optionType === 'yes-no') {
         // For text options, use the actual question options
         const optionA = question.options[0] || '';
         const optionB = question.options[1] || '';

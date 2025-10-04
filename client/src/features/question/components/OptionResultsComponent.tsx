@@ -39,7 +39,7 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
   // Use real pulse stats if available, otherwise generate dummy data for fallback
   const generateResultData = (): ResultData[] => {
     // If we have real pulse stats, use them
-    // console.log("Using real pulse stats:", pulseStats);
+    console.log("Using real pulse stats:", pulseStats);
     if (pulseStats && pulseStats.results.length > 0) {
       return pulseStats.results.map((stat) => ({
         option: stat.option,
@@ -155,8 +155,11 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
         </Box>
       </Box>
     );
-  } else if (type == "text") {
+  } else if (type == "text" || type === "yes-no") {
+    console.log("Rendering text/yes-no option results:");
+    console.log("result", resultData);
     const selectedResult = resultData.find((result) => result.isSelected);
+    console.log("Generated result data:", selectedResult);
     // console.log(resultData);
     // console.log("Selected result for text option:", selectedResult);
     if (!selectedResult) return null;

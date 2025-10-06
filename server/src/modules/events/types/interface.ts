@@ -45,6 +45,12 @@ export interface IEvent extends Document {
   }[];
   highlights?: string[];
 
+  // Custom Sections
+  customSections?: {
+    title: string;
+    description: string;
+  }[];
+
   // Engagement
   interestedCount: number;
   attendedCount?: number;

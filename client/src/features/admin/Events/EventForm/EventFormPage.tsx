@@ -40,6 +40,11 @@ interface Sponsor {
   logo: File | null;
 }
 
+interface CustomSection {
+  title: string;
+  description: string;
+}
+
 interface EventFormData {
   title: string;
   description: string;
@@ -52,6 +57,7 @@ interface EventFormData {
   speakers: Speaker[];
   keyHighlights: string[];
   sponsors: Sponsor[];
+  customSections: CustomSection[];
   ticketTypes: string[];
   ticketPrice: number;
   starsToBeEarned: number;
@@ -75,6 +81,7 @@ const EventFormPage: React.FC = () => {
     speakers: [{ name: "", designation: "" }],
     keyHighlights: [""],
     sponsors: [{ name: "", logo: null }],
+    customSections: [],
     ticketTypes: [],
     ticketPrice: 0,
     starsToBeEarned: 50,
@@ -158,6 +165,7 @@ const EventFormPage: React.FC = () => {
         event.sponsors?.length > 0
           ? event.sponsors
           : [{ name: "", logo: null }],
+      customSections: event.customSections?.length > 0 ? event.customSections : [],
       ticketTypes: event.ticketInfo.price != 0 ? ["Paid"] : ["Free"],
       ticketPrice: event.ticketInfo.price || 0,
       starsToBeEarned: event.starsToBeEarned || 0,
@@ -256,6 +264,28 @@ const EventFormPage: React.FC = () => {
       const newSponsors = formData.sponsors.filter((_, i) => i !== index);
       setFormData((prev) => ({ ...prev, sponsors: newSponsors }));
     }
+  };
+
+  const handleCustomSectionChange = (
+    index: number,
+    field: keyof CustomSection,
+    value: string
+  ) => {
+    const newSections = [...formData.customSections];
+    newSections[index] = { ...newSections[index], [field]: value };
+    setFormData((prev) => ({ ...prev, customSections: newSections }));
+  };
+
+  const addCustomSection = () => {
+    setFormData((prev) => ({
+      ...prev,
+      customSections: [...prev.customSections, { title: "", description: "" }],
+    }));
+  };
+
+  const removeCustomSection = (index: number) => {
+    const newSections = formData.customSections.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, customSections: newSections }));
   };
 
   const handleBannerUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -366,6 +396,10 @@ const EventFormPage: React.FC = () => {
       formDataToSend.append(
         "keyHighlights",
         JSON.stringify(formData.keyHighlights)
+      );
+      formDataToSend.append(
+        "customSections",
+        JSON.stringify(formData.customSections)
       );
       formDataToSend.append(
         "ticketTypes",
@@ -1217,6 +1251,108 @@ const EventFormPage: React.FC = () => {
                 }}
               >
                 Add
+              </Button>
+            </Box>
+
+            {/* Custom Sections */}
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="body1" sx={{ mb: 1, fontSize: "12px" }}>
+                Custom Sections
+              </Typography>
+              {formData.customSections.map((section, index) => (
+                <Box key={index} sx={{ mb: 2, p: 2, bgcolor: "#252525", borderRadius: "0px" }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+                    <Typography variant="body2" sx={{ color: "#999" }}>
+                      Section {index + 1}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      onClick={() => removeCustomSection(index)}
+                      sx={{ color: "#999" }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Box>
+                  <TextField
+                    fullWidth
+                    size="medium"
+                    placeholder="Section Title"
+                    value={section.title}
+                    onChange={(e) =>
+                      handleCustomSectionChange(index, "title", e.target.value)
+                    }
+                    sx={{
+                      mb: 2,
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "0px",
+                        color: "white",
+                        bgcolor: "#333",
+                        "& fieldset": {
+                          borderColor: "#555",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#777",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#999",
+                        },
+                      },
+                      "& .MuiInputBase-input::placeholder": {
+                        color: "#999",
+                        opacity: 1,
+                      },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={3}
+                    size="medium"
+                    placeholder="Section Description"
+                    value={section.description}
+                    onChange={(e) =>
+                      handleCustomSectionChange(index, "description", e.target.value)
+                    }
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "0px",
+                        color: "white",
+                        bgcolor: "#333",
+                        "& fieldset": {
+                          borderColor: "#555",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#777",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#999",
+                        },
+                      },
+                      "& .MuiInputBase-input::placeholder": {
+                        color: "#999",
+                        opacity: 1,
+                      },
+                    }}
+                  />
+                </Box>
+              ))}
+              <Button
+                size="medium"
+                endIcon={<Add />}
+                onClick={addCustomSection}
+                sx={{
+                  color: "white",
+                  bgcolor: "text.secondary",
+                  textTransform: "none",
+                  fontSize: "16px",
+                  padding: "8px 16px",
+                  borderRadius: "0px",
+                  width: "180px",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+              >
+                Add Section
               </Button>
             </Box>
           </Box>

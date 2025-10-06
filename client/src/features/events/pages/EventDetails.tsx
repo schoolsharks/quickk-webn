@@ -232,6 +232,7 @@ const EventDetails: React.FC = () => {
             variant="body1"
             sx={{
               color: theme.palette.text.primary,
+              whiteSpace: "pre-line",
             }}
           >
             {EventData?.description}
@@ -305,6 +306,31 @@ const EventDetails: React.FC = () => {
               );
           })}
         </Box>
+
+        {/* Custom Sections */}
+        {EventData.customSections?.length > 0 &&
+          EventData.customSections.map((section: any, index: number) => (
+            <Box key={index} sx={{ mb: 6 }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  color: theme.palette.primary.main,
+                  mb: 0.5,
+                }}
+              >
+                {section.title}
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: theme.palette.text.primary,
+                  whiteSpace: "pre-line",
+                }}
+              >
+                {section.description}
+              </Typography>
+            </Box>
+          ))}
 
         {/* Get Tickets Button */}
         <Button

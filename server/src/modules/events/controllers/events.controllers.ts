@@ -287,6 +287,10 @@ export class EventController {
         eventUpdateData.ticketTypes = JSON.parse(eventUpdateData.ticketTypes);
       }
 
+      if (eventUpdateData.customSections && typeof eventUpdateData.customSections === 'string') {
+        eventUpdateData.customSections = JSON.parse(eventUpdateData.customSections);
+      }
+
       if (eventUpdateData.ticketInfo && typeof eventUpdateData.ticketInfo === 'string') {
         try {
           eventUpdateData.ticketInfo = JSON.parse(eventUpdateData.ticketInfo);

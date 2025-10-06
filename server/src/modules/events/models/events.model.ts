@@ -96,6 +96,19 @@ const EventSchema = new Schema<IEvent>({
   }],
   highlights: [String],
 
+  // Custom Sections
+  customSections: [{
+    title: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      required: true
+    }
+  }],
+
   // Engagement
   interestedCount: {
     type: Number,

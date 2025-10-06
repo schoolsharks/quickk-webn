@@ -273,39 +273,41 @@ const EventDetails: React.FC = () => {
         ) : null}
 
         {/* Key Highlights */}
-        <Box sx={{ mb: 8 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: theme.palette.primary.main,
-              mb: 0.5,
-            }}
-          >
-            Key Highlights
-          </Typography>
-          {EventData.keyHighlights.map((highlight: any, index: number) => {
-            if (highlight !== "")
-              return (
-                <Typography
-                  key={index}
-                  variant="body1"
-                  sx={{
-                    color: theme.palette.text.primary,
-                    mb: 0.5,
-                    "&::before": {
-                      content: '"• "',
-                      color: theme.palette.primary.main,
-                      fontWeight: "bold",
-                    },
-                  }}
-                >
-                  {typeof highlight === "object"
-                    ? highlight?.name || highlight?.title
-                    : highlight}
-                </Typography>
-              );
-          })}
-        </Box>
+        {EventData.keyHighlights.filter((highlight: any) => highlight !== "").length > 0 && (
+          <>
+            <Typography
+              variant="h4"
+              sx={{
+                color: theme.palette.primary.main,
+                mb: 0.5,
+              }}
+            >
+              Key Highlights
+            </Typography>
+            {EventData.keyHighlights.map((highlight: any, index: number) => {
+              if (highlight !== "")
+                return (
+                  <Typography
+                    key={index}
+                    variant="body1"
+                    sx={{
+                      color: theme.palette.text.primary,
+                      mb: 0.5,
+                      "&::before": {
+                        content: '"• "',
+                        color: theme.palette.primary.main,
+                        fontWeight: "bold",
+                      },
+                    }}
+                  >
+                    {typeof highlight === "object"
+                      ? highlight?.name || highlight?.title
+                      : highlight}
+                  </Typography>
+                );
+            })}
+          </>
+        )}
 
         {/* Custom Sections */}
         {EventData.customSections?.length > 0 &&

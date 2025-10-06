@@ -48,8 +48,8 @@ const EventDetails: React.FC = () => {
   } = useGetEventByIdQuery(eventId, { skip: !eventId });
 
   const handleGetTickets = () => {
-    if (!EventData?.virtualMeetingLink) return;
-    window.open(EventData.virtualMeetingLink);
+    if (!EventData?.virtualMeetingLink || !EventData?.registrationLink) return;
+    window.open(EventData.registrationLink || EventData.virtualMeetingLink);
   };
 
   const handleBack = () => {
@@ -273,7 +273,8 @@ const EventDetails: React.FC = () => {
         ) : null}
 
         {/* Key Highlights */}
-        {EventData.keyHighlights.filter((highlight: any) => highlight !== "").length > 0 && (
+        {EventData.keyHighlights.filter((highlight: any) => highlight !== "")
+          .length > 0 && (
           <>
             <Typography
               variant="h4"
@@ -348,7 +349,11 @@ const EventDetails: React.FC = () => {
             borderRadius: "0px",
           }}
         >
-          {EventData.virtualMeetingLink ? "Apply Now" : "Coming Soon !"}
+          {EventData.registrationLink
+            ? "Apply Now"
+            : EventData.virtualMeetingLink
+            ? "Join Now"
+            : "Coming Soon !"}
         </Button>
       </Box>
     </Box>

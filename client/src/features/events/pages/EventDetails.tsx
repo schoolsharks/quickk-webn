@@ -191,28 +191,30 @@ const EventDetails: React.FC = () => {
         </Box>
 
         {/* Location */}
-        <Box sx={{ mb: 6 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: theme.palette.primary.main,
-              mb: 0.5,
-            }}
-          >
-            Location
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <LocationOnOutlinedIcon
-              sx={{ color: theme.palette.text.primary, mr: 1, fontSize: 16 }}
-            />
+        {EventData?.location ? (
+          <Box sx={{ mb: 6 }}>
             <Typography
-              variant="body1"
-              sx={{ color: theme.palette.text.primary }}
+              variant="h4"
+              sx={{
+                color: theme.palette.primary.main,
+                mb: 0.5,
+              }}
             >
-              {EventData?.location}
+              Location
             </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <LocationOnOutlinedIcon
+                sx={{ color: theme.palette.text.primary, mr: 1, fontSize: 16 }}
+              />
+              <Typography
+                variant="body1"
+                sx={{ color: theme.palette.text.primary }}
+              >
+                {EventData?.location}
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+        ) : null}
 
         {/* About the Event */}
         <Box sx={{ mb: 6 }}>
@@ -237,7 +239,8 @@ const EventDetails: React.FC = () => {
         </Box>
 
         {/* Sponsors */}
-        {EventData.sponsors?.length ? (
+        {EventData.sponsors?.length &&
+        EventData.sponsors[0].name.trim() !== "" ? (
           <Box sx={{ mb: 6 }}>
             <Typography
               variant="h4"
@@ -279,25 +282,28 @@ const EventDetails: React.FC = () => {
           >
             Key Highlights
           </Typography>
-          {EventData.highlights.map((highlight: any, index: number) => (
-            <Typography
-              key={index}
-              variant="body1"
-              sx={{
-                color: theme.palette.text.primary,
-                mb: 0.5,
-                "&::before": {
-                  content: '"• "',
-                  color: theme.palette.primary.main,
-                  fontWeight: "bold",
-                },
-              }}
-            >
-              {typeof highlight === "object"
-                ? highlight?.name || highlight?.title
-                : highlight}
-            </Typography>
-          ))}
+          {EventData.keyHighlights.map((highlight: any, index: number) => {
+            if (highlight !== "")
+              return (
+                <Typography
+                  key={index}
+                  variant="body1"
+                  sx={{
+                    color: theme.palette.text.primary,
+                    mb: 0.5,
+                    "&::before": {
+                      content: '"• "',
+                      color: theme.palette.primary.main,
+                      fontWeight: "bold",
+                    },
+                  }}
+                >
+                  {typeof highlight === "object"
+                    ? highlight?.name || highlight?.title
+                    : highlight}
+                </Typography>
+              );
+          })}
         </Box>
 
         {/* Get Tickets Button */}

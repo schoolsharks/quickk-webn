@@ -102,7 +102,8 @@ const GetListed = () => {
         order_id: orderId,
         handler: async function (response: any) {
           try {
-            // Verify payment
+            // Verify payment on client side for immediate feedback
+            // Note: Webhook will be the final source of truth
             await verifyPayment({
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -111,8 +112,7 @@ const GetListed = () => {
 
             setSnackbar({
               open: true,
-              message:
-                "🎉 Payment successful! You are now listed member.",
+              message: "🎉 Payment successful! You are now listed member.",
               severity: "success",
             });
 
@@ -122,13 +122,18 @@ const GetListed = () => {
             }, 2000);
           } catch (error: any) {
             console.error("Payment verification failed:", error);
+            // Even if client verification fails, webhook will update the status
             setSnackbar({
               open: true,
               message:
-                error?.data?.message ||
-                "Payment verification failed. Please contact support.",
-              severity: "error",
+                "Payment initiated successfully. We're confirming your payment...",
+              severity: "info",
             });
+            
+            // Still redirect, webhook will update status
+            setTimeout(() => {
+              navigate("/user/dashboard");
+            }, 3000);
           }
         },
         prefill: {

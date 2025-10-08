@@ -29,7 +29,6 @@ class PaymentService {
   async createOrder(data: CreateOrderData) {
     try {
       const { amount, currency, purpose, userId } = data;
-
       // Create order in Razorpay
       const options = {
         amount: amount * 100, // Amount in paise
@@ -40,9 +39,7 @@ class PaymentService {
           userId: userId.toString(),
         },
       };
-
       const razorpayOrder = await this.razorpay.orders.create(options);
-
       // Save payment record in database
       const payment = await Payment.create({
         userId,
@@ -55,7 +52,6 @@ class PaymentService {
           receipt: razorpayOrder.receipt,
         },
       });
-
       return {
         orderId: razorpayOrder.id,
         amount: razorpayOrder.amount,

@@ -1,4 +1,4 @@
-import { baseApi } from "../../../services/baseApi";
+import { api } from "../../../app/api";
 
 export interface CreateOrderRequest {
   amount: number;
@@ -50,7 +50,7 @@ export interface PaymentHistoryResponse {
   }>;
 }
 
-export const paymentApi = baseApi.injectEndpoints({
+export const paymentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     createOrder: builder.mutation<CreateOrderResponse, CreateOrderRequest>({
       query: (data) => ({

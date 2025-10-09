@@ -5,7 +5,7 @@ declare global {
     interface Request {
       user: {
         id: mongoose.Types.ObjectId;
-        role: 'USER' | 'ADMIN';
+        role: 'USER' | 'ADMIN' | 'SUPER-ADMIN';
         companyId: string;
       };
     }

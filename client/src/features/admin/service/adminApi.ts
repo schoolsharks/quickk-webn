@@ -14,9 +14,10 @@ export const adminApi = api.injectEndpoints({
                 dispatch(setAuth({ loading: true }));
                 try {
                     await queryFulfilled;
+                    // Role will be set when fetchAdmin is called after login
                     dispatch(setAuth({
                         isAuthenticated: true,
-                        role: Roles.ADMIN,
+                        role: Roles.ADMIN, // Default to ADMIN, will be updated by fetchAdmin
                         loading: false
                     }));
                 } catch (error: any) {
@@ -32,14 +33,16 @@ export const adminApi = api.injectEndpoints({
                 method: 'GET',
             }),
             providesTags: ["Admin"],
-            transformResponse: (response) => response,
+            transformResponse: (response: any) => response,
             async onQueryStarted(_, { dispatch, queryFulfilled }) {
                 dispatch(setAuth({ loading: true }));
                 try {
-                    await queryFulfilled;
+                    const { data } = await queryFulfilled;
+                    // Map backend role to frontend role enum
+                    const adminRole = data?.data?.admin?.role === 'super-admin' ? Roles.SUPER_ADMIN : Roles.ADMIN;
                     dispatch(setAuth({
                         isAuthenticated: true,
-                        role: Roles.ADMIN,
+                        role: adminRole,
                         loading: false
                     }));
                 } catch (error: any) {

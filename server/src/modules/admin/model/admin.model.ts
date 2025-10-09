@@ -12,7 +12,7 @@ const AdminSchema: Schema = new Schema(
     {
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
-        role: { type: String, default: 'admin' },
+        role: { type: String, enum: ['admin', 'super-admin'], default: 'admin' },
         company: {
             type: Schema.Types.ObjectId,
             ref: 'Company',

@@ -15,7 +15,7 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as { id: mongoose.Types.ObjectId; role: 'USER' | 'ADMIN'; companyId: string };
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as { id: mongoose.Types.ObjectId; role: 'USER' | 'ADMIN' | 'SUPER-ADMIN'; companyId: string };
     req.user = decoded;
     next();
   } catch (error) {
@@ -26,9 +26,19 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
 };
 
 
-export const authorizeRoles = (...roles: ('USER' | 'ADMIN')[]) => {
+export const authorizeRoles = (...roles: ('USER' | 'ADMIN' | 'SUPER-ADMIN')[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    if (!req.user) {
+      res.status(403).json({ success: false, message: 'Forbidden: Insufficient permissions' });
+      return;
+    }
+
+    // If 'ADMIN' is allowed, also allow 'SUPER-ADMIN'
+    const effectiveRoles = roles.includes('ADMIN') && !roles.includes('SUPER-ADMIN')
+      ? [...roles, 'SUPER-ADMIN']
+      : roles;
+
+    if (!effectiveRoles.includes(req.user.role)) {
       res.status(403).json({ success: false, message: 'Forbidden: Insufficient permissions' });
       return;
     }

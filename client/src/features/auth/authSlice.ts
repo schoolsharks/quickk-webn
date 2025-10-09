@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export enum Roles{
   ADMIN="ADMIN",
+  SUPER_ADMIN="SUPER-ADMIN",
   USER="USER"
 }
 

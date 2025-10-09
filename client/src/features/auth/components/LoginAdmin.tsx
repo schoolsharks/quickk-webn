@@ -15,6 +15,7 @@ import {
 import { useLoginAdminMutation } from "../../admin/service/adminApi";
 import logo from "../../../assets/images/header/logo.webp";
 import GreenButton from "../../../components/ui/GreenButton";
+import { Roles } from "../authSlice";
 
 const LoginAdmin = () => {
   const { isAuthenticated, role } = useSelector(
@@ -51,7 +52,7 @@ const LoginAdmin = () => {
       setLoginError("");
       const result = await login(formData).unwrap();
       if (result) {
-        navigate("/admin/members");
+        navigate("/admin/dashboard");
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;
@@ -66,7 +67,9 @@ const LoginAdmin = () => {
     navigate("/admin/onboarding");
   };
   const theme = useTheme();
-  if (isAuthenticated && role === "ADMIN") {
+  
+  // Redirect if already authenticated as ADMIN or SUPER_ADMIN
+  if (isAuthenticated && (role === Roles.ADMIN || role === Roles.SUPER_ADMIN)) {
     return <Navigate to="/admin/dashboard" />;
   }
 

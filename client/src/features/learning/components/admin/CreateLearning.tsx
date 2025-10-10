@@ -24,6 +24,9 @@ import {
 } from "../../service/learningApi";
 import { extractYouTubeId } from "../utils/youtubeUtils";
 import { theme } from "../../../../theme/theme";
+import { useSelector } from "react-redux";
+import { Roles } from "../../../auth/authSlice";
+import { RootState } from "../../../../app/store";
 
 // ------------------- Types ----------------------
 export interface Learning {
@@ -55,6 +58,13 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
   const [DeleteModuleById] = useDeleteModuleByIdMutation();
   const [PublishLearning] = useLazyPublishLearningQuery();
   const navigate = useNavigate();
+
+  // Get user role from Redux store
+  const userRole = useSelector((state: RootState) => state.auth.role);
+  const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
+  
+  // Button text changes based on role
+  const publishButtonText = isSuperAdmin ? "Publish" : "Send for Review";
 
   const [openError, setOpenError] = useState(false);
   const [currentError, setCurrentError] = useState("");
@@ -433,7 +443,7 @@ const CreateLearning: React.FC<LearningProps> = ({ Learning }) => {
       {/* Actions */}
       <Box gap="24px" display="flex" mt="24px" justifyContent="end">
         <GreenButton onClick={handleDraft}>Save to Drafts</GreenButton>
-        <GreenButton onClick={handlePublish}>Publish</GreenButton>
+        <GreenButton onClick={handlePublish}>{publishButtonText}</GreenButton>
       </Box>
     </Box>
   );

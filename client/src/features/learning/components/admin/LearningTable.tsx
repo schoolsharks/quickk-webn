@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import GlobalTable, {
   ActionButton,
   TableColumn,
@@ -19,7 +19,7 @@ export interface LearningData {
   name: string;
   users: number;
   modules: number;
-  status: "Published" | "Draft" | "Archived";
+  status: "Published" | "Draft" | "Archived" | "Pending Review";
 }
 
 export interface LearningTableProps {
@@ -53,24 +53,13 @@ const LearningTable: React.FC<LearningTableProps> = ({
       label: "Status",
       minWidth: 120,
       align: "left",
-      format: (value: string) => (
-        <Chip
-          label={value}
-          sx={{
-            bgcolor:
-              value === "published"
-                ? "primary.main"
-                : value === "drafts"
-                ? "#64748b"
-                : "#FFF",
-            color: value === "drafts" ? "white" : "black",
-            fontWeight: "bold",
-            fontSize: "13px",
-            height: 24,
-          }}
-          size="small"
-        />
-      ),
+      format: (value: string) => {
+        return (
+          <Typography sx={{ color: "black", fontSize: "14px" }}>
+            {value}
+          </Typography>
+        );
+      },
     },
     {
       id: "users",

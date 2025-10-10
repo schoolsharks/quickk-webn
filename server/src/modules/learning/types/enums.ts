@@ -8,6 +8,7 @@ export enum ModuleType {
 export enum Status {
     Published = "published",
     Drafts= "drafts",
+    PendingReview = "pending-review",
     Archived= "archived",
 }
 

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../../utils/appError";
 import ResourcesService from "../services/resources.service";
+import Admin from "../../admin/model/admin.model";
+import { resourceReviewTrigger } from "../../../services/emails/triggers/admin/resourceReviewTrigger";
 
 const resourcesService = new ResourcesService();
 
@@ -180,6 +182,9 @@ export const updateResource = async (
 ): Promise<void> => {
   try {
     const { resourceId } = req.params;
+    const userRole = (req as any).user?.role; // Get user role
+    const userId = req.user?.id; // Get user ID
+    const companyId = req.user?.companyId; // Get company ID
 
     if (!resourceId) {
       return next(
@@ -221,10 +226,54 @@ export const updateResource = async (
       resourceData.description = JSON.parse(resourceData.description);
     }
 
+    // Role-based status logic: Admin sends for review, Super Admin publishes
+    let finalStatus = resourceData.status;
+
+    if (resourceData.status === 'ACTIVE') {
+      if (userRole === "ADMIN") {
+        // Admin wants to publish, change to pending-review
+        finalStatus = 'PENDING_REVIEW';
+        console.log('Admin attempted to publish resource, changing status to PENDING_REVIEW');
+      } else if (userRole === 'SUPER-ADMIN') {
+        // Super Admin can publish directly
+        finalStatus = 'ACTIVE';
+        console.log('Super Admin publishing resource');
+      }
+    }
+
+    resourceData.status = finalStatus;
+
     const resource = await resourcesService.updateResource(
       resourceId,
       resourceData
     );
+
+    console.log('Resource updated with status:', finalStatus);
+    // Send email notification to Super Admins if status is pending-review
+    if (finalStatus === 'PENDING_REVIEW') {
+      try {
+        const superAdmins = await Admin.find({
+          company: companyId,
+          role: 'super-admin'
+        }).select('email name');
+
+        if (superAdmins && superAdmins.length > 0) {
+          const adminEmails = superAdmins.map((admin: any) => admin.email);
+          const submittedByAdmin = await Admin.findById(userId);
+          const submittedBy = submittedByAdmin?.name || 'Admin';
+
+          await resourceReviewTrigger({
+            adminEmails,
+            resourceTitle: resource.heading || "Untitled Resource",
+            resourceId: resourceId.toString(),
+            submittedBy,
+          });
+        }
+      } catch (emailError) {
+        console.error('Error sending resource review notification:', emailError);
+        // Don't fail the request if email fails
+      }
+    }
 
     res.status(StatusCodes.OK).json({
       success: true,

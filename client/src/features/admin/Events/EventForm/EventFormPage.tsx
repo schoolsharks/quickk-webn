@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Roles } from "../../../auth/authSlice";
+import { RootState } from "../../../../app/store";
 import {
   Box,
   Typography,
@@ -68,6 +71,10 @@ interface EventFormData {
 const EventFormPage: React.FC = () => {
   const { eventId } = useParams<{ eventId?: string }>();
   const navigate = useNavigate();
+
+  // Get user role for button text
+  const role = useSelector((state: RootState) => state.auth.role);
+  const isSuperAdmin = role === Roles.SUPER_ADMIN;
 
   const [formData, setFormData] = useState<EventFormData>({
     title: "",
@@ -1557,7 +1564,7 @@ const EventFormPage: React.FC = () => {
             disabled={loading}
             sx={{ bgcolor: "#0D0D0D", color: "white" }}
           >
-            {loading ? "Publishing..." : "Publish"}
+            {loading ? "Publishing..." : isSuperAdmin ? "Publish" : "Send for Review"}
           </GreenButton>
         </Box>
       </Box>

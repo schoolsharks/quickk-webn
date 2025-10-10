@@ -31,6 +31,9 @@ import { movingBorderVariants } from "../../animation/variants/movingBorder";
 import { baseTransition } from "../../animation/transitions/baseTransition";
 import { FeatureKeys } from "../../features/onboarding/Types/features";
 import { useFeatureAccess } from "../../features/onboarding/hooks/useFeatureAccess";
+import { useSelector } from "react-redux";
+import { Roles } from "../../features/auth/authSlice";
+import { RootState } from "../../app/store";
 
 const DRAWER_WIDTH = 259;
 
@@ -162,9 +165,24 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const { hasFeatureAccess } = useFeatureAccess();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-  const filteredMenuItems = menuItems.filter(
+  // Get user role from Redux state
+  const userRole = useSelector((state: RootState) => state.auth.role);
+  const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
+  isSuperAdmin;
+  // Filter menu items based on feature access
+  const featureFilteredMenuItems = menuItems.filter(
     (item) => hasFeatureAccess(item.feature) || !item.feature
   );
+
+  // For Super Admin, show Content, Events, and Resources
+  const filteredMenuItems = isSuperAdmin
+    ? featureFilteredMenuItems.filter(
+        (item) =>
+          item.id === "learnings" ||
+          item.id === "events" ||
+          item.id === "resources"
+      )
+    : featureFilteredMenuItems;
 
   const filteredOtherMenuItems = otherMenuItems.filter((item) =>
     hasFeatureAccess(item.feature)
@@ -521,6 +539,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <Typography variant="h5" fontWeight={500} color={"black"}>
           WEBN
         </Typography>
+        {isSuperAdmin && (
+          <Typography variant="h5" fontWeight={500} color={"black"}>
+            Super Admin
+          </Typography>
+        )}
       </Box>
 
       <Box
@@ -537,24 +560,28 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
       {/* Main Menu Items */}
       <List sx={{ px: "24px" }}> {filteredMenuItems.map(renderMenuItem)}</List>
 
-      {/* Divider and Other Section */}
-      <Box sx={{ px: 5, pt: 3, pb: 1 }}>
-        <Typography
-          variant="overline"
-          sx={{
-            fontSize: "12px",
-            fontWeight: 600,
-            color: "black",
-            letterSpacing: "0.5px",
-          }}
-        >
-          OTHER
-        </Typography>
-      </Box>
+      {/* Divider and Other Section - Hidden for Super Admin */}
+      {!isSuperAdmin && (
+        <>
+          <Box sx={{ px: 5, pt: 3, pb: 1 }}>
+            <Typography
+              variant="overline"
+              sx={{
+                fontSize: "12px",
+                fontWeight: 600,
+                color: "black",
+                letterSpacing: "0.5px",
+              }}
+            >
+              OTHER
+            </Typography>
+          </Box>
 
-      <List sx={{ px: "24px" }}>
-        {filteredOtherMenuItems.map(renderMenuItem)}
-      </List>
+          <List sx={{ px: "24px" }}>
+            {filteredOtherMenuItems.map(renderMenuItem)}
+          </List>
+        </>
+      )}
     </Box>
   );
 

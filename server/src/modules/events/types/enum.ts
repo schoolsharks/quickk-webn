@@ -3,5 +3,6 @@ export enum EventStatus {
   ACTIVE = 'active',
   PAST = 'past',
   MISCELLANEOUS = 'miscellaneous',
-  DRAFT = 'draft'
+  DRAFT = 'draft',
+  PENDING_REVIEW = 'pending-review'
 }

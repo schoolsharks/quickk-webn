@@ -52,7 +52,12 @@ const LoginAdmin = () => {
       setLoginError("");
       const result = await login(formData).unwrap();
       if (result) {
-        navigate("/admin/dashboard");
+        // Check role from the result to redirect appropriately
+        if (result.role === "super-admin") {
+          navigate("/admin/learnings/dailyPulse");
+        } else {
+          navigate("/admin/dashboard");
+        }
       }
     } catch (err) {
       const fetchError = err as FetchBaseQueryError;
@@ -67,10 +72,16 @@ const LoginAdmin = () => {
     navigate("/admin/onboarding");
   };
   const theme = useTheme();
-  
+
   // Redirect if already authenticated as ADMIN or SUPER_ADMIN
-  if (isAuthenticated && (role === Roles.ADMIN || role === Roles.SUPER_ADMIN)) {
-    return <Navigate to="/admin/dashboard" />;
+  if (isAuthenticated) {
+    if (role === Roles.ADMIN) {
+      return <Navigate to="/admin/dashboard" />;
+    } else if (role === Roles.SUPER_ADMIN) {
+      return <Navigate to="/admin/learnings/dailyPulse" />;
+    }
+    // Optionally, handle other roles or default redirect
+    return <Navigate to="/" />;
   }
 
   return (

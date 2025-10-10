@@ -287,7 +287,7 @@ class LearningService {
         details.learningId,
         {
           title: details.title,
-          videoUrl: details.videoUrl, // Add this
+          videoUrl: details.videoUrl,
           modules: details.moduleIds,
           status: details.status ? details.status : Status.Drafts,
           validTill: details.validTill,
@@ -310,7 +310,7 @@ class LearningService {
     }
   }
 
-  async publishLearningIfAllModulesCompleted(learningId: string) {
+  async publishLearningIfAllModulesCompleted(learningId: string, status: string = "published") {
     try {
       const learning = await LearningModel.findById(learningId).lean();
       if (!learning) {
@@ -334,9 +334,11 @@ class LearningService {
           );
         }
       }
+      
+      // Use the provided status (either "published" or "pending-review")
       const updatedLearning = await LearningModel.findByIdAndUpdate(
         learningId,
-        { status: Status.Published },
+        { status: status },
         { new: true }
       );
       return updatedLearning;

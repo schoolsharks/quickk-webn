@@ -61,9 +61,10 @@ const Settings = () => (
 
 const AdminMain: React.FC = () => {
   const [fetchAdmin] = useLazyFetchAdminQuery();
-  const { isAuthenticated, loading } = useSelector(
+  const { isAuthenticated, loading, role } = useSelector(
     (state: RootState) => state.auth
   );
+  const isSuperAdmin = role === Roles.SUPER_ADMIN;
   const dispatch = useDispatch();
   useEffect(() => {
     fetchAdmin({})
@@ -124,9 +125,7 @@ const AdminMain: React.FC = () => {
                 <BreadcrumbHeader />
                 {/* <RouteGuard> */}
                 <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-
-                  {/* Learning routes */}
+                  {/* Learning routes - Accessible to both Admin and Super Admin */}
                   <Route
                     path="/learnings/modules"
                     element={
@@ -177,45 +176,15 @@ const AdminMain: React.FC = () => {
                       // </FeatureGuard>
                     }
                   />
-                  {/* Quickk Ai routes */}
 
+                  {/* Events - Accessible to both Admin and Super Admin */}
+                  <Route path="/events" element={<EventsAdminPage />} />
                   <Route
-                    path="/quickk-ai"
-                    element={
-                      <FeatureGuard feature={FeatureKeys.QUICKKAI}>
-                        <QuickkAiPage />
-                      </FeatureGuard>
-                    }
-                  />
-                  <Route
-                    path="/quickk-ai/:chatId"
-                    element={
-                      <FeatureGuard feature={FeatureKeys.QUICKKAI}>
-                        <QuickkAiPage />
-                      </FeatureGuard>
-                    }
+                    path="/events/:eventId"
+                    element={<EventFormPage />}
                   />
 
-                  {/* Users Routes */}
-                  <Route path="/members/webn" element={<UserPage />} />
-                  <Route
-                    path="/members/new-members"
-                    element={<BulkUserUploadPage />}
-                  />
-                  <Route path="/member/:userId" element={<ReviewUserPage />} />
-                  <Route
-                    path="/members/gowomania"
-                    element={<GowomaniaUsers />}
-                  />
-
-                  <Route
-                    path="/rewards"
-                    element={
-                      <FeatureGuard feature={FeatureKeys.REWARDS}>
-                        <Rewards />
-                      </FeatureGuard>
-                    }
-                  />
+                  {/* Resources - Accessible to both Admin and Super Admin */}
                   <Route
                     path="/resources"
                     element={
@@ -240,25 +209,100 @@ const AdminMain: React.FC = () => {
                       </FeatureGuard>
                     }
                   />
-                  <Route
-                    path="/referral"
-                    element={
-                      <FeatureGuard feature={FeatureKeys.MODULES}>
-                        <ReferralPage />
-                      </FeatureGuard>
-                    }
-                  />
-                  <Route path="/events" element={<EventsAdminPage />} />
-                  <Route path="/events/:eventId" element={<EventFormPage />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/settings" element={<Settings />} />
+
+                  {/* Routes only for Regular Admin - Not accessible to Super Admin */}
+                  {!isSuperAdmin && (
+                    <>
+                      {/* Dashboard */}
+                      <Route path="/dashboard" element={<Dashboard />} />
+
+                      {/* Quickk Ai routes */}
+                      <Route
+                        path="/quickk-ai"
+                        element={
+                          <FeatureGuard feature={FeatureKeys.QUICKKAI}>
+                            <QuickkAiPage />
+                          </FeatureGuard>
+                        }
+                      />
+                      <Route
+                        path="/quickk-ai/:chatId"
+                        element={
+                          <FeatureGuard feature={FeatureKeys.QUICKKAI}>
+                            <QuickkAiPage />
+                          </FeatureGuard>
+                        }
+                      />
+
+                      {/* Users Routes */}
+                      <Route path="/members/webn" element={<UserPage />} />
+                      <Route
+                        path="/members/new-members"
+                        element={<BulkUserUploadPage />}
+                      />
+                      <Route
+                        path="/member/:userId"
+                        element={<ReviewUserPage />}
+                      />
+                      <Route
+                        path="/members/gowomania"
+                        element={<GowomaniaUsers />}
+                      />
+
+                      {/* Rewards */}
+                      <Route
+                        path="/rewards"
+                        element={
+                          <FeatureGuard feature={FeatureKeys.REWARDS}>
+                            <Rewards />
+                          </FeatureGuard>
+                        }
+                      />
+
+                      {/* Referral */}
+                      <Route
+                        path="/referral"
+                        element={
+                          <FeatureGuard feature={FeatureKeys.MODULES}>
+                            <ReferralPage />
+                          </FeatureGuard>
+                        }
+                      />
+
+                      {/* Analytics */}
+                      <Route path="/analytics" element={<Analytics />} />
+
+                      {/* Settings */}
+                      <Route path="/settings" element={<Settings />} />
+                    </>
+                  )}
+
+                  {/* Default redirects based on role */}
                   <Route
                     path="/"
-                    element={<Navigate to="/admin/members/webn" replace />}
+                    element={
+                      <Navigate
+                        to={
+                          isSuperAdmin
+                            ? "/admin/learnings/dailyPulse"
+                            : "/admin/dashboard"
+                        }
+                        replace
+                      />
+                    }
                   />
                   <Route
                     path="*"
-                    element={<Navigate to="/admin/members/webn" replace />}
+                    element={
+                      <Navigate
+                        to={
+                          isSuperAdmin
+                            ? "/admin/learnings/dailyPulse"
+                            : "/admin/dashboard"
+                        }
+                        replace
+                      />
+                    }
                   />
                 </Routes>
                 {/* </RouteGuard> */}

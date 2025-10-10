@@ -4,6 +4,8 @@ import AppError from "../../../utils/appError";
 import { StatusCodes } from "http-status-codes";
 import { SearchHelper } from "../../../utils/search/searchHelper";
 import { searchConfigs } from "../../../utils/search/searchConfigs";
+import Admin from "../../admin/model/admin.model";
+import learningReviewTrigger from "../../../services/emails/triggers/admin/learningReviewTrigger";
 
 const learningService = new LearningService();
 
@@ -118,15 +120,77 @@ export const updateLearningWithModules = async (
       status,
     } = req.body;
 
+    // Get user role for role-based status logic
+    const userRole = req.user?.role;
+    
+    // Determine final status based on user role
+    let finalStatus = status;
+    if (status === "published") {
+      if (userRole === "ADMIN") {
+        // Admin wants to publish → send for review
+        console.log("Admin attempted to publish, changing status to pending-review");
+        finalStatus = "pending-review";
+      } else if (userRole === "SUPER-ADMIN") {
+        // Super Admin wants to publish → actually publish
+        finalStatus = "published";
+      }
+    }
+
     const learning = await learningService.updateLearningWithModules({
       learningId,
       title,
-      videoUrl, // Add this
+      videoUrl,
       moduleIds,
       validTill,
       publishOn,
-      status,
+      status: finalStatus,
     });
+
+    // Send email notification if status changed to pending-review
+    if (finalStatus === "pending-review") {
+      try {
+        // Get all super admins from the company
+        const companyId = req.user?.companyId;
+        const superAdmins = await Admin.find({
+          company: companyId,
+          role: "super-admin",
+        });
+
+        if (superAdmins.length > 0) {
+          const superAdminEmails = superAdmins.map((admin) => admin.email);
+          
+          // Get the admin who submitted the learning
+          const submittedByAdmin = await Admin.findById(req.user?.id);
+          const submittedByName = submittedByAdmin?.name || "Admin";
+
+          // Format publish date
+          const formattedDate = publishOn
+            ? new Date(publishOn).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "Not Set";
+
+          // Send email notification to all super admins
+          await learningReviewTrigger({
+            adminEmails: superAdminEmails,
+            publishDate: formattedDate,
+            moduleCount: moduleIds?.length || 0,
+            learningId: learningId,
+            learningTitle: title || "Untitled Learning",
+            submittedBy: submittedByName,
+          });
+
+          console.log(
+            `Learning review notification sent to ${superAdminEmails.length} super admin(s)`
+          );
+        }
+      } catch (emailError) {
+        // Log email error but don't fail the request
+        console.error("Failed to send learning review notification emails:", emailError);
+      }
+    }
 
     res.status(StatusCodes.CREATED).json({
       status: "success",
@@ -156,8 +220,71 @@ export const publishLearningIfAllModulesCompleted = async (
       );
     }
 
+    // Get user role for role-based status logic
+    const userRole = req.user?.role;
+    
+    // Determine final status based on user role
+    let finalStatus = "published"; // Default intention is to publish
+    if (userRole === "ADMIN") {
+      // Admin wants to publish → send for review
+      console.log("Admin attempted to publish learning, changing status to pending-review");
+      finalStatus = "pending-review";
+    } else if (userRole === "SUPER-ADMIN") {
+      // Super Admin wants to publish → actually publish
+      finalStatus = "published";
+    }
+
     const updatedLearning =
-      await learningService.publishLearningIfAllModulesCompleted(learningId);
+      await learningService.publishLearningIfAllModulesCompleted(learningId, finalStatus);
+
+    // Send email notification if status changed to pending-review
+    if (finalStatus === "pending-review") {
+      try {
+        // Get all super admins from the company
+        const companyId = req.user?.companyId;
+        const superAdmins = await Admin.find({
+          company: companyId,
+          role: "super-admin",
+        });
+
+        if (superAdmins.length > 0) {
+          const superAdminEmails = superAdmins.map((admin) => admin.email);
+          
+          // Get the admin who submitted the learning
+          const submittedByAdmin = await Admin.findById(req.user?.id);
+          const submittedByName = submittedByAdmin?.name || "Admin";
+
+          // Get learning details for email
+          const learning = updatedLearning as any;
+          
+          // Format publish date
+          const formattedDate = learning.publishOn
+            ? new Date(learning.publishOn).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "Not Set";
+
+          // Send email notification to all super admins
+          await learningReviewTrigger({
+            adminEmails: superAdminEmails,
+            publishDate: formattedDate,
+            moduleCount: learning.modules?.length || 0,
+            learningId: learningId,
+            learningTitle: learning.title || "Untitled Learning",
+            submittedBy: submittedByName,
+          });
+
+          console.log(
+            `Learning review notification sent to ${superAdminEmails.length} super admin(s)`
+          );
+        }
+      } catch (emailError) {
+        // Log email error but don't fail the request
+        console.error("Failed to send learning review notification emails:", emailError);
+      }
+    }
 
     res.status(StatusCodes.OK).json({
       status: "success",

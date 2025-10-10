@@ -12,7 +12,6 @@ import PulseStatsService from "../services/pulseStats.Service";
 import { SearchHelper } from "../../../utils/search/searchHelper";
 import { searchConfigs } from "../../../utils/search/searchConfigs";
 import mongoose from "mongoose";
-import UserConnectionFeedbackService from "../../user/service/user.connection.feedback.service";
 import UserResourceRatingService from "../../user/service/user.resource.rating.service";
 import Admin from "../../admin/model/admin.model";
 import dailyPulseReviewTrigger from "../../../services/emails/triggers/admin/dailyPulseReviewTrigger";

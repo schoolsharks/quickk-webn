@@ -164,19 +164,24 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const location = useLocation();
   const { hasFeatureAccess } = useFeatureAccess();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
-  
+
   // Get user role from Redux state
   const userRole = useSelector((state: RootState) => state.auth.role);
   const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
-
+  isSuperAdmin;
   // Filter menu items based on feature access
   const featureFilteredMenuItems = menuItems.filter(
     (item) => hasFeatureAccess(item.feature) || !item.feature
   );
-  
-  // For Super Admin, only show Content section
-  const filteredMenuItems = isSuperAdmin 
-    ? featureFilteredMenuItems.filter((item) => item.id === "learnings")
+
+  // For Super Admin, show Content, Events, and Resources
+  const filteredMenuItems = isSuperAdmin
+    ? featureFilteredMenuItems.filter(
+        (item) =>
+          item.id === "learnings" ||
+          item.id === "events" ||
+          item.id === "resources"
+      )
     : featureFilteredMenuItems;
 
   const filteredOtherMenuItems = otherMenuItems.filter((item) =>
@@ -534,6 +539,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         <Typography variant="h5" fontWeight={500} color={"black"}>
           WEBN
         </Typography>
+        {isSuperAdmin && (
+          <Typography variant="h5" fontWeight={500} color={"black"}>
+            Super Admin
+          </Typography>
+        )}
       </Box>
 
       <Box

@@ -177,6 +177,39 @@ const AdminMain: React.FC = () => {
                     }
                   />
 
+                  {/* Events - Accessible to both Admin and Super Admin */}
+                  <Route path="/events" element={<EventsAdminPage />} />
+                  <Route
+                    path="/events/:eventId"
+                    element={<EventFormPage />}
+                  />
+
+                  {/* Resources - Accessible to both Admin and Super Admin */}
+                  <Route
+                    path="/resources"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourcesPage />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/resources/create"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourceEditPage />
+                      </FeatureGuard>
+                    }
+                  />
+                  <Route
+                    path="/resources/edit/:resourceId"
+                    element={
+                      <FeatureGuard feature={FeatureKeys.MODULES}>
+                        <ResourceEditPage />
+                      </FeatureGuard>
+                    }
+                  />
+
                   {/* Routes only for Regular Admin - Not accessible to Super Admin */}
                   {!isSuperAdmin && (
                     <>
@@ -226,32 +259,6 @@ const AdminMain: React.FC = () => {
                         }
                       />
 
-                      {/* Resources */}
-                      <Route
-                        path="/resources"
-                        element={
-                          <FeatureGuard feature={FeatureKeys.MODULES}>
-                            <ResourcesPage />
-                          </FeatureGuard>
-                        }
-                      />
-                      <Route
-                        path="/resources/create"
-                        element={
-                          <FeatureGuard feature={FeatureKeys.MODULES}>
-                            <ResourceEditPage />
-                          </FeatureGuard>
-                        }
-                      />
-                      <Route
-                        path="/resources/edit/:resourceId"
-                        element={
-                          <FeatureGuard feature={FeatureKeys.MODULES}>
-                            <ResourceEditPage />
-                          </FeatureGuard>
-                        }
-                      />
-
                       {/* Referral */}
                       <Route
                         path="/referral"
@@ -260,13 +267,6 @@ const AdminMain: React.FC = () => {
                             <ReferralPage />
                           </FeatureGuard>
                         }
-                      />
-
-                      {/* Events */}
-                      <Route path="/events" element={<EventsAdminPage />} />
-                      <Route
-                        path="/events/:eventId"
-                        element={<EventFormPage />}
                       />
 
                       {/* Analytics */}

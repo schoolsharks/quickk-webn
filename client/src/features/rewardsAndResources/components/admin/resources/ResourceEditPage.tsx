@@ -3,6 +3,9 @@ import { Box, Stack, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Roles } from "../../../../auth/authSlice";
+import { RootState } from "../../../../../app/store";
 import dayjs, { Dayjs } from "dayjs";
 import {
   useGetResourceByIdQuery,
@@ -42,6 +45,10 @@ const ResourceEditPage: React.FC = () => {
   const { resourceId } = useParams<{ resourceId: string }>();
   const navigate = useNavigate();
   const isEditMode = Boolean(resourceId);
+
+  // Get user role for button text
+  const role = useSelector((state: RootState) => state.auth.role);
+  const isSuperAdmin = role === Roles.SUPER_ADMIN;
 
   // API hooks
   const { data: resourceData, isLoading: isLoadingResource } =
@@ -351,7 +358,7 @@ const ResourceEditPage: React.FC = () => {
             disabled={isCreating || isUpdating}
             sx={{ bgcolor: "#0D0D0D", color: "white" }}
           >
-            {isCreating || isUpdating ? "Publishing..." : "Publish"}
+            {isCreating || isUpdating ? "Publishing..." : isSuperAdmin ? "Publish" : "Send for Review"}
           </GreenButton>
         </Box>
 

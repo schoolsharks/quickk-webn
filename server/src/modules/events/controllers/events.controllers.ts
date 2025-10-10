@@ -4,6 +4,8 @@ import { AddressSearchService } from "../services/addressSearch.service";
 import { IEventQuery, IRegisterEventRequest } from "../types/interface";
 import { EventStatus } from "../types/enum";
 import AppError from "../../../utils/appError";
+import Admin from "../../admin/model/admin.model";
+import { eventReviewTrigger } from "../../../services/emails/triggers/admin/eventReviewTrigger";
 
 const eventService = new EventService();
 const addressSearchService = new AddressSearchService();
@@ -240,6 +242,8 @@ export class EventController {
     try {
       const { eventId } = req.params;
       const updatedBy = (req as any).user?.id || req.body.updatedBy;
+      const userRole = (req as any).user?.role;
+      const companyId = req.user?.companyId;
 
       if (!updatedBy) {
         throw new AppError("Updater information is required", 400);
@@ -306,6 +310,23 @@ export class EventController {
         eventUpdateData.status = eventUpdateData.status.toLowerCase();
       }
 
+      // Role-based status logic: Admin sends for review, Super Admin publishes
+      let finalStatus = eventUpdateData.status;
+
+      if (eventUpdateData.status === "upcoming" || eventUpdateData.status === "active") {
+        if (userRole === "ADMIN") {
+          // Admin wants to publish, change to pending-review
+          finalStatus = 'pending-review';
+          console.log('Admin attempted to publish event, changing status to pending-review');
+        } else if (userRole === 'SUPER-ADMIN') {
+          // Super Admin can publish directly
+          finalStatus = eventUpdateData.status;
+          console.log('Super Admin publishing event');
+        }
+      }
+
+      eventUpdateData.status = finalStatus;
+
       const event = await eventService.updateEvent(
         eventId,
         eventUpdateData,
@@ -314,6 +335,31 @@ export class EventController {
 
       if (!event) {
         throw new AppError("Event not found", 404);
+      }
+
+      // Send email notification to Super Admins if status is pending-review
+      if (finalStatus === 'pending-review') {
+        try {
+          const superAdmins = await Admin.find({
+            company: companyId,
+            role: "super-admin",
+          });
+
+          if (superAdmins && superAdmins.length > 0) {
+            const adminEmails = superAdmins.map((admin: any) => admin.email);
+            const submittedByAdmin = await Admin.findById(updatedBy);
+            const submittedBy = submittedByAdmin?.name || 'Admin';
+            
+            await eventReviewTrigger({
+              adminEmails,
+              eventTitle: event.title || "Untitled Event",
+              eventId: event._id?.toString() || eventId,
+              submittedBy,
+            });
+          }
+        } catch (emailError) {
+          console.error('Error sending event review notification:', emailError);
+        }
       }
 
       res.status(200).json({

@@ -7,7 +7,8 @@ export enum RewardTypes {
 
 export enum ResourceStatus {
     "ACTIVE" = "ACTIVE",
-    "DRAFT" = "DRAFT"
+    "DRAFT" = "DRAFT",
+    "PENDING_REVIEW" = "PENDING_REVIEW"
 }
 
 export enum ResourceType {

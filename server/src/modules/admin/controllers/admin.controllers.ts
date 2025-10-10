@@ -104,7 +104,9 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
             return next(new AppError("Comapny code didn't match.", 404));
         }
 
-        const accessToken = generateAccessToken(admin._id.toString(), "ADMIN", admin.company.toString());
+        // Use the admin's role from database (either 'admin' or 'super-admin')
+        const adminRole = admin.role === 'super-admin' ? 'SUPER-ADMIN' : 'ADMIN';
+        const accessToken = generateAccessToken(admin._id.toString(), adminRole, admin.company.toString());
         const refreshToken = generateRefreshToken(admin._id.toString());
 
         res.cookie("accessToken", accessToken, setCookieOptions);
@@ -150,7 +152,9 @@ export const refreshAdminToken = async (req: Request, res: Response, next: NextF
             return next(new AppError("Admin not found", 404));
         }
 
-        const accessToken = generateAccessToken(admin._id.toString(), "ADMIN", admin.company.toString());
+        // Use the admin's role from database (either 'admin' or 'super-admin')
+        const adminRole = admin.role === 'super-admin' ? 'SUPER-ADMIN' : 'ADMIN';
+        const accessToken = generateAccessToken(admin._id.toString(), adminRole, admin.company.toString());
         res.cookie("accessToken", accessToken, setCookieOptions);
         res.json({ success: true, accessToken });
     } catch (error) {

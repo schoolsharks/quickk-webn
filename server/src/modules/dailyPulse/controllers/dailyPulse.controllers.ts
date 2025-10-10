@@ -14,6 +14,8 @@ import { searchConfigs } from "../../../utils/search/searchConfigs";
 import mongoose from "mongoose";
 import UserConnectionFeedbackService from "../../user/service/user.connection.feedback.service";
 import UserResourceRatingService from "../../user/service/user.resource.rating.service";
+import Admin from "../../admin/model/admin.model";
+import dailyPulseReviewTrigger from "../../../services/emails/triggers/admin/dailyPulseReviewTrigger";
 // import AdminService from '../../admin/service/admin.service';
 
 // const imageUploadService = new AdminService();
@@ -369,6 +371,21 @@ export const updateDailyPulse = async (
     const uploadedFiles: Express.Multer.File[] =
       (req.files as Express.Multer.File[]) || [];
 
+    // Get user role for role-based status logic
+    const userRole = req.user?.role;
+    
+    // Determine final status based on user role
+    let finalStatus = status;
+    if (status === "published") {
+      if (userRole === "ADMIN") {
+        // Admin wants to publish → send for review
+        finalStatus = "pending-review";
+      } else if (userRole === "SUPER-ADMIN") {
+        // Super Admin wants to publish → actually publish
+        finalStatus = "published";
+      }
+    }
+
     // Parse pulses
     let parsedPulses;
     try {
@@ -455,8 +472,53 @@ export const updateDailyPulse = async (
       publishOn,
       pulses: createdPulses as Pulse[],
       stars,
-      status,
+      status: finalStatus,
     });
+
+    // Send email notification if status changed to pending-review
+    if (finalStatus === "pending-review") {
+      try {
+        // Get all super admins from the company
+        const companyId = req.user?.companyId;
+        const superAdmins = await Admin.find({
+          company: companyId,
+          role: "super-admin",
+        });
+
+        if (superAdmins.length > 0) {
+          const superAdminEmails = superAdmins.map((admin) => admin.email);
+          
+          // Get the admin who submitted the pulse
+          const submittedByAdmin = await Admin.findById(req.user?.id);
+          const submittedByName = submittedByAdmin?.name || "Admin";
+
+          // Format publish date
+          const formattedDate = publishOn
+            ? new Date(publishOn).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            : "Not Set";
+
+          // Send email notification to all super admins
+          await dailyPulseReviewTrigger({
+            adminEmails: superAdminEmails,
+            publishDate: formattedDate,
+            pulseCount: createdPulses.length,
+            dailyPulseId: dailyPulseId,
+            submittedBy: submittedByName,
+          });
+
+          console.log(
+            `Review notification sent to ${superAdminEmails.length} super admin(s)`
+          );
+        }
+      } catch (emailError) {
+        // Log email error but don't fail the request
+        console.error("Failed to send review notification emails:", emailError);
+      }
+    }
 
     res.status(StatusCodes.OK).json({
       success: true,

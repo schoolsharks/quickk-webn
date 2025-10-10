@@ -7,5 +7,6 @@ export enum PulseType {
 export enum Status {
     Published = "published",
     Drafts= "drafts",
+    PendingReview = "pending-review",
     Archived= "archived",
 }

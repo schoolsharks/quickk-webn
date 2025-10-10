@@ -32,6 +32,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useNavigate } from "react-router-dom";
 import { CloudUpload } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { Roles } from "../../../auth/authSlice";
+import { RootState } from "../../../../app/store";
 
 interface PulseData {
   type: string;
@@ -66,6 +69,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
   const [UpdateDailyPulse] = useUpdateDailyPulseMutation();
   const navigate = useNavigate();
   const [GetDailyPulseTable] = useLazyGetDailyPulseTableQuery();
+  
+  // Get user role from Redux store
+  const userRole = useSelector((state: RootState) => state.auth.role);
+  const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
+  
+  // Button text changes based on role
+  const publishButtonText = isSuperAdmin ? "Publish" : "Send for Review";
 
   const [publishOn, setPublishOn] = useState<Date | null>(null);
 
@@ -421,11 +431,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
           setShowDatePicker(true);
         } else {
           // No conflict, proceed with confirmation
+          const actionText = isSuperAdmin ? "publish" : "send for review";
+          const titleText = isSuperAdmin ? "Publish Daily Pulse" : "Send for Review";
           setConfirmDialog({
             open: true,
             action: "publish",
-            title: "Publish Daily Pulse",
-            message: `Are you sure you want to publish this daily pulse with ${pulses.length} pulse(s) on ${currentDateStr}?`,
+            title: titleText,
+            message: `Are you sure you want to ${actionText} this daily pulse with ${pulses.length} pulse(s) on ${currentDateStr}?`,
           });
         }
       })
@@ -1718,7 +1730,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               onClick={handlePublishClick}
               sx={{ background: "black", color: "white", minWidth: "150px" }}
             >
-              Publish
+              {publishButtonText}
             </GreenButton>
           </Box>
         </Box>
@@ -1776,7 +1788,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 },
               }}
             >
-              {confirmDialog.action === "draft" ? "Save to Drafts" : "Publish"}
+              {confirmDialog.action === "draft" ? "Save to Drafts" : publishButtonText}
             </Button>
           </DialogActions>
         </Dialog>

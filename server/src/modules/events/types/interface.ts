@@ -1,7 +1,8 @@
-import { Document } from "mongoose";
 import { EventStatus } from "./enum";
+import mongoose from "mongoose";
 
-export interface IEvent extends Document {
+export interface IEvent {
+  _id?: mongoose.Types.ObjectId;
   title: string;
   description?: string;
   eventImage?: string;
@@ -98,7 +99,8 @@ export interface IRegisterEventRequest {
   };
 }
 
-export interface IEventRegistration extends Document {
+export interface IEventRegistration {
+  _id?: mongoose.Types.ObjectId;
   eventId: string;
   userId: string;
   registrationDate: Date;
@@ -110,4 +112,6 @@ export interface IEventRegistration extends Document {
     comment?: string;
     submittedAt: Date;
   };
+  createdAt?: Date;
+  updatedAt?: Date;
 }

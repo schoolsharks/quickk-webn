@@ -18,7 +18,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 // Daily Pulse Table Component
 export interface DailyPulseData {
   publishOn: string;
-  status: "Published" | "Draft" | "Archived";
+  status: "Published" | "Draft" | "Archived" | "Pending Review";
   pulses: Array<{
     refId: string;
     type: "Question" | "infoCard";
@@ -109,21 +109,21 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
       label: "Status",
       minWidth: 120,
       align: "left",
-      format: (value: string) => (
-        // <Chip
-        //   label={value}
-        //   sx={{
-        //     backgroundColor: "transparent",
-        //     fontWeight: "bold",
-        //     fontSize: "13px",
-        //     height: 24,
-        //   }}
-        //   size="small"
-        // />
-        <Typography sx={{ color: "black", fontSize: "14px" }}>
-          {value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()}
-        </Typography>
-      ),
+      format: (value: string) => {
+        // Format status display - convert backend status to display text
+        let displayStatus = value;
+        if (value === "pending-review") {
+          displayStatus = "Pending Review";
+        } else {
+          displayStatus = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
+        
+        return (
+          <Typography sx={{ color: "black", fontSize: "14px" }}>
+            {displayStatus}
+          </Typography>
+        );
+      },
     },
     {
       id: "responses",

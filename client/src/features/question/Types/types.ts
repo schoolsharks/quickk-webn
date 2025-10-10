@@ -31,4 +31,4 @@ export interface QuestionProps {
 }
 
 
-export type OptionType = "text" | "image" | "correct-incorrect" | "mcq" | "drag-order" | "yes-no";
+export type OptionType = "text" | "image" | "correct-incorrect" | "mcq" | "drag-order" | "yes-no" | "agree-disagree";

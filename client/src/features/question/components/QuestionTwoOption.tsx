@@ -29,7 +29,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
     // Show results if user has responded to supported question types
     setShowResults(
       !!response &&
-        (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no")
+        (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no" || optionType === "agree-disagree")
     );
   }, [response, optionType]);
 
@@ -37,7 +37,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
     if (onAnswer) {
       setUserResponse(selectedOption);
       // Show results immediately for supported option types
-      if (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no") {
+      if (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no" || optionType === "agree-disagree") {
         setShowResults(true);
       }
       onAnswer(selectedOption, id);
@@ -47,7 +47,7 @@ const QuestionTwoOption: React.FC<QuestionProps> = ({
   const shouldShowResults =
     showResults &&
     userResponse &&
-    (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no");
+    (optionType === "text" || optionType === "correct-incorrect" || optionType === "yes-no" || optionType === "agree-disagree");
 
   return (
     <Box

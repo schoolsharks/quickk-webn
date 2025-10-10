@@ -69,11 +69,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
   const [UpdateDailyPulse] = useUpdateDailyPulseMutation();
   const navigate = useNavigate();
   const [GetDailyPulseTable] = useLazyGetDailyPulseTableQuery();
-  
+
   // Get user role from Redux store
   const userRole = useSelector((state: RootState) => state.auth.role);
   const isSuperAdmin = userRole === Roles.SUPER_ADMIN;
-  
+
   // Button text changes based on role
   const publishButtonText = isSuperAdmin ? "Publish" : "Send for Review";
 
@@ -146,6 +146,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
                 case "yes-no":
                   pulseType = "Yes / No";
+                  break;
+                case "agree-disagree":
+                  pulseType = "Agree / Disagree";
                   break;
                 case "text":
                   // Detect Advertisement when it's a single 'Interested' option
@@ -262,6 +265,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         pulse.type = "question";
         pulse.optionType = "yes-no";
         pulse.options = ["YES", "NO"];
+        return pulse.questionText.trim() !== "";
+      } else if (pulse.pulseType === "Agree / Disagree") {
+        pulse.qType = "TWO_CHOICE";
+        pulse.type = "question";
+        pulse.optionType = "agree-disagree";
+        pulse.options = ["AGREE", "DISAGREE"];
         return pulse.questionText.trim() !== "";
       } else if (pulse.pulseType === "Image (Right / Wrong)") {
         pulse.qType = "TWO_CHOICE";
@@ -432,7 +441,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         } else {
           // No conflict, proceed with confirmation
           const actionText = isSuperAdmin ? "publish" : "send for review";
-          const titleText = isSuperAdmin ? "Publish Daily Pulse" : "Send for Review";
+          const titleText = isSuperAdmin
+            ? "Publish Daily Pulse"
+            : "Send for Review";
           setConfirmDialog({
             open: true,
             action: "publish",
@@ -590,6 +601,22 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             />
           </Box>
         );
+      
+
+      case "Agree / Disagree":
+        return (
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={currentPulse.questionText || ""}
+              optionType="text"
+              options={["Agree", "Disagree"]}
+              correctAnswer={currentPulse.correctAnswer || ""}
+              onAnswer={() => {}}
+            />
+          </Box>
+        );
+      
 
       case "Image (Right / Wrong)":
         return (
@@ -824,43 +851,6 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 },
               }}
             />
-
-            {/* <Typography variant="h6" color="white">
-              Option A
-            </Typography>
-            <TextField
-              fullWidth
-              value={currentPulse.optionA}
-              onChange={(e) => handleInputChange("optionA", e.target.value)}
-              sx={{
-                backgroundColor: "#333",
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": { borderColor: "#444" },
-                  "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
-                },
-              }}
-            />
-
-            <Typography variant="h6" color="white">
-              Option B
-            </Typography>
-            <TextField
-              fullWidth
-              value={currentPulse.optionB}
-              onChange={(e) => handleInputChange("optionB", e.target.value)}
-              sx={{
-                backgroundColor: "#333",
-                "& .MuiOutlinedInput-root": {
-                  color: "white",
-                  "& fieldset": { borderColor: "#444" },
-                  "&:hover fieldset": { borderColor: "#666" },
-                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
-                },
-              }}
-            /> */}
-
             <Typography variant="h6" color="white">
               Correct Answer
             </Typography>
@@ -879,6 +869,50 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 value="B"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">No</Typography>}
+              />
+            </RadioGroup>
+          </Box>
+        );
+      case "Agree / Disagree":
+        return (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <Typography variant="h6" color="white">
+              Question
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.questionText}
+              onChange={(e) =>
+                handleInputChange("questionText", e.target.value)
+              }
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            />
+            <Typography variant="h6" color="white">
+              Correct Answer
+            </Typography>
+            <RadioGroup
+              value={currentPulse.correctAnswer}
+              onChange={(e) =>
+                handleInputChange("correctAnswer", e.target.value)
+              }
+            >
+              <FormControlLabel
+                value="A"
+                control={<Radio sx={{ color: "white" }} />}
+                label={<Typography color="white">Agree</Typography>}
+              />
+              <FormControlLabel
+                value="B"
+                control={<Radio sx={{ color: "white" }} />}
+                label={<Typography color="white">Disagree</Typography>}
               />
             </RadioGroup>
           </Box>
@@ -1456,6 +1490,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     Multiple Choice Question
                   </MenuItem>
                   <MenuItem value="Yes / No">Yes / No</MenuItem>
+                  <MenuItem value="Agree / Disagree">Agree / Disagree</MenuItem>
                   <MenuItem value="Image (Right / Wrong)">
                     Image (Right / Wrong)
                   </MenuItem>
@@ -1788,7 +1823,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 },
               }}
             >
-              {confirmDialog.action === "draft" ? "Save to Drafts" : publishButtonText}
+              {confirmDialog.action === "draft"
+                ? "Save to Drafts"
+                : publishButtonText}
             </Button>
           </DialogActions>
         </Dialog>

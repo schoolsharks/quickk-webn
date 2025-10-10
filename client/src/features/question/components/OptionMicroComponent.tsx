@@ -109,7 +109,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
         </AnimateOnClick>
       </Box>
     );
-  } else if (type === "text" || type === "yes-no") {
+  } else if (type === "text" || type === "yes-no" || type === "agree-disagree") {
     if (
       selectedOption &&
       Array.isArray(options) &&

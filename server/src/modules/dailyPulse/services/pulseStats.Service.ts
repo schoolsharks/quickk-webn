@@ -28,7 +28,7 @@ class PulseStatsService {
       }
 
       // Only calculate stats for supported option types
-      if (question.optionType !== 'text' && question.optionType !== 'correct-incorrect' && question.optionType !== 'yes-no') {
+      if (question.optionType !== 'text' && question.optionType !== 'correct-incorrect' && question.optionType !== 'yes-no' && question.optionType !== 'agree-disagree') {
         return null;
       }
 
@@ -86,7 +86,7 @@ class PulseStatsService {
             percentage: Math.round((wrongStat.count / totalResponses) * 100)
           }
         ];
-      } else if (question.optionType === 'text' || question.optionType === 'yes-no') {
+      } else if (question.optionType === 'text' || question.optionType === 'yes-no' || question.optionType === 'agree-disagree') {
         // For text options, use the actual question options
         const optionA = question.options[0] || '';
         const optionB = question.options[1] || '';

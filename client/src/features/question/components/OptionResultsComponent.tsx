@@ -155,11 +155,8 @@ const OptionResultsComponent: React.FC<OptionResultsProps> = ({
         </Box>
       </Box>
     );
-  } else if (type == "text" || type === "yes-no") {
-    console.log("Rendering text/yes-no option results:");
-    console.log("result", resultData);
+  } else if (type == "text" || type === "yes-no" || type === "agree-disagree") {
     const selectedResult = resultData.find((result) => result.isSelected);
-    console.log("Generated result data:", selectedResult);
     // console.log(resultData);
     // console.log("Selected result for text option:", selectedResult);
     if (!selectedResult) return null;

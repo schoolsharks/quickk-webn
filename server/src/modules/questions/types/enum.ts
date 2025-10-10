@@ -11,6 +11,7 @@ export enum OptionType {
     TEXT = "text",
     IMAGE = "image",
     YES_NO = "yes-no",
+    AGREE_DISAGREE = "agree-disagree",
     CORRECT_INCORRECT = "correct-incorrect",
     MCQ = "mcq",
     DRAG_ORDER = "drag-order",

@@ -340,7 +340,7 @@ export class EventService {
     const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
 
     const filter = {
-      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      status: { $nin: [EventStatus.DRAFT, EventStatus.PENDING_REVIEW] },// Exclude draft events
       $or: [
         // Events that start today
         {
@@ -392,7 +392,7 @@ export class EventService {
     const startOfTomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
     const filter = {
-      status: { $ne: EventStatus.DRAFT }, // Exclude draft events
+      status: { $nin: [EventStatus.DRAFT, EventStatus.PENDING_REVIEW] }, // Exclude draft and pending review events
       startDate: { $gte: startOfTomorrow }
     };
 
@@ -470,8 +470,8 @@ export class EventService {
       status: { $ne: EventStatus.DRAFT }, // Exclude draft events
       startDate: { $gte: startOfTomorrow }
     })
-    .sort({ startDate: 1 })
-    .lean();
+      .sort({ startDate: 1 })
+      .lean();
 
     return event as IEvent | null;
   }

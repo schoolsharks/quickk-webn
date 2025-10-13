@@ -150,40 +150,46 @@ const ResourceEditPage: React.FC = () => {
           // { field: "expiryDate", label: "Expiry Date" },
         ];
 
-        const missingFields = requiredFields.filter(({ field
-          // , validator
-         }) => {
-          const value = formData[field as keyof ResourceFormData];
-          // if (validator) {
-          //   return !validator(value as number);
-          // }
-          if (field === "image" || field === "companyLogo") {
+        const missingFields = requiredFields.filter(
+          ({
+            field,
+            // , validator
+          }) => {
+            const value = formData[field as keyof ResourceFormData];
+            // if (validator) {
+            //   return !validator(value as number);
+            // }
+            if (field === "image" || field === "companyLogo") {
+              return !value || (typeof value === "string" && !value.trim());
+            }
             return !value || (typeof value === "string" && !value.trim());
           }
-          return !value || (typeof value === "string" && !value.trim());
-        });
+        );
 
         if (missingFields.length > 0) {
-          const fieldNames = missingFields.map(({ label }) => label).join(", ");
+          const fieldNames = missingFields
+            .map(({ label }) => `*${label}`)
+            .join(", ");
           alert(
             `Please fill in the following required fields before publishing: ${fieldNames}`
           );
           return;
         }
 
-        // Validate description sections when publishing
-        const hasEmptyDescriptions = formData.description.some(
-          (section) =>
-            !section.title.trim() ||
-            section.points.some((point) => !point.trim())
-        );
+        // // Validate description sections when publishing
+        
+        // const hasEmptyDescriptions = formData.description.some(
+        //   (section) =>
+        //     !section.title.trim() ||
+        //     section.points.some((point) => !point.trim())
+        // );
 
-        if (hasEmptyDescriptions) {
-          alert(
-            "Please fill in all description section titles and points before publishing."
-          );
-          return;
-        }
+        // if (hasEmptyDescriptions) {
+        //   alert(
+        //     "Please fill in all description section titles and points before publishing."
+        //   );
+        //   return;
+        // }
       }
 
       // Check if we have file uploads
@@ -360,7 +366,11 @@ const ResourceEditPage: React.FC = () => {
             disabled={isCreating || isUpdating}
             sx={{ bgcolor: "#0D0D0D", color: "white" }}
           >
-            {isCreating || isUpdating ? "Publishing..." : isSuperAdmin ? "Publish" : "Send for Review"}
+            {isCreating || isUpdating
+              ? "Publishing..."
+              : isSuperAdmin
+              ? "Publish"
+              : "Send for Review"}
           </GreenButton>
         </Box>
 

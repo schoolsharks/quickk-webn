@@ -87,11 +87,8 @@ const UserLayout: React.FC = () => {
     Active:
       regularData?.filter((user: any) => user.learningStreak > 0).length || 0,
     moved:
-      regularData?.filter(
-        (user: any) =>
-          new Date(user.updatedAt || "").getTime() >
-          Date.now() - 7 * 24 * 60 * 60 * 1000
-      ).length || 0,
+      regularData?.filter((user: any) => user.webnClubMember === true).length ||
+      0,
     // NotActive:
     //   regularData?.filter((user: any) => user.learningStreak === 0).length || 0,
     Listed: regularData?.filter((user: any) => user.listed).length || 0,

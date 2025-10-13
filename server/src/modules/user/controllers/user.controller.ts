@@ -80,6 +80,7 @@ export const getAllUsersTableData = async (
     const { webnClubMember } = req.query; // Get filter from query params
 
     let users = await userService.getAllUsers(companyId);
+    const totalUsers = users.length;
 
     // Filter users by webnClubMember if provided
     if (typeof webnClubMember !== "undefined") {
@@ -102,6 +103,7 @@ export const getAllUsersTableData = async (
       specialisation: user.specialisation,
       updatedAt: user.updatedAt || "",
       webnClubMember: user.webnClubMember || false,
+      totalUsers, // Include total users count
     }));
 
     res.status(StatusCodes.OK).json(filteredUsers);

@@ -96,6 +96,7 @@ export const eventsApi = api.injectEndpoints({
         params,
       }),
       transformResponse: (response: any) => response?.data,
+      providesTags: ['AdminEvents'],
     }),
 
     searchEventsAdmin: builder.query({
@@ -112,6 +113,7 @@ export const eventsApi = api.injectEndpoints({
         params,
       }),
       transformResponse: (response: any) => response?.data,
+      providesTags: ['AdminEvents'],
     }),
 
     createEvent: builder.mutation({
@@ -138,7 +140,10 @@ export const eventsApi = api.injectEndpoints({
           body: { eventData },
         };
       },
-      invalidatesTags: ['AdminEvents'],
+      invalidatesTags: (_result, _error, { eventId }) => [
+        'AdminEvents',
+        { type: 'AdminEvents', id: eventId }
+      ],
     }),
 
     deleteEvent: builder.mutation({

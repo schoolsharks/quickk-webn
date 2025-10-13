@@ -37,17 +37,6 @@ const UserRewardsClaimsSchema = new Schema<IUserRewardsClaims>(
   }
 );
 
-// Create index for efficient queries
-UserRewardsClaimsSchema.index({ user: 1, rewardType: 1 }, { 
-  unique: true, 
-  partialFilterExpression: { rewardType: { $ne: "RESOURCES" } } 
-});
-UserRewardsClaimsSchema.index({ user: 1, rewardType: 1, resourceId: 1 }, { 
-  unique: true,
-  partialFilterExpression: { rewardType: "RESOURCES" }
-});
-UserRewardsClaimsSchema.index({ createdAt: -1 });
-
 const UserRewardsClaims = model<IUserRewardsClaims>(
   "UserRewardsClaims",
   UserRewardsClaimsSchema

@@ -601,7 +601,6 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             />
           </Box>
         );
-      
 
       case "Agree / Disagree":
         return (
@@ -616,7 +615,6 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             />
           </Box>
         );
-      
 
       case "Image (Right / Wrong)":
         return (
@@ -816,12 +814,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             >
               <FormControlLabel
-                value="YES"
+                value={currentPulse.optionA}
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Option A</Typography>}
               />
               <FormControlLabel
-                value="NO"
+                value={currentPulse.optionB}
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Option B</Typography>}
               />
@@ -861,12 +859,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             >
               <FormControlLabel
-                value="A"
+                value="YES"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Yes</Typography>}
               />
               <FormControlLabel
-                value="B"
+                value="NO"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">No</Typography>}
               />
@@ -905,12 +903,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }
             >
               <FormControlLabel
-                value="A"
+                value="AGREE"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Agree</Typography>}
               />
               <FormControlLabel
-                value="B"
+                value="DISAGREE"
                 control={<Radio sx={{ color: "white" }} />}
                 label={<Typography color="white">Disagree</Typography>}
               />

@@ -372,7 +372,7 @@ export const updateDailyPulse = async (
 
     // Get user role for role-based status logic
     const userRole = req.user?.role;
-    
+
     // Determine final status based on user role
     let finalStatus = status;
     if (status === "published") {
@@ -486,7 +486,7 @@ export const updateDailyPulse = async (
 
         if (superAdmins.length > 0) {
           const superAdminEmails = superAdmins.map((admin) => admin.email);
-          
+
           // Get the admin who submitted the pulse
           const submittedByAdmin = await Admin.findById(req.user?.id);
           const submittedByName = submittedByAdmin?.name || "Admin";
@@ -494,10 +494,10 @@ export const updateDailyPulse = async (
           // Format publish date
           const formattedDate = publishOn
             ? new Date(publishOn).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
             : "Not Set";
 
           // Send email notification to all super admins

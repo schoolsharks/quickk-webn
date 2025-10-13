@@ -272,19 +272,25 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                     }}
                   />
                   {/* <Typography sx={{ minWidth: 60 }}>{user.time}</Typography> */}
-                  <Typography sx={{ minWidth: 50 }}>
-                    {user.totalStars}{" "}
-                    {isHighlight ? (
-                      <StarsOutlinedIcon
-                        sx={{
-                          fontSize: 18,
-                          verticalAlign: "middle",
-                          color: theme.palette.primary.main,
-                        }}
-                      />
-                    ) : (
+                  <Typography
+                    sx={{
+                      minWidth: 50,
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    {user.totalStars} {/* {isHighlight ? ( */}
+                    <StarsOutlinedIcon
+                      sx={{
+                        fontSize: 18,
+                        verticalAlign: "middle",
+                        color: theme.palette.primary.main,
+                      }}
+                    />
+                    {/* ) : (
                       <></>
-                    )}
+                    )} */}
                   </Typography>
                 </Box>
               </ListItem>

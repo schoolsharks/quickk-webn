@@ -22,7 +22,8 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
   const limit = 10;
 
   // API hooks
-  const [createResource, { isLoading: isCreating }] = useCreateResourceMutation();
+  const [createResource, { isLoading: isCreating }] =
+    useCreateResourceMutation();
 
   // Debounce search term
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
@@ -44,14 +45,12 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
   const { data: statsData, isLoading: statsLoading } =
     useGetResourcesStatsQuery();
 
-  const {
-    data: resourcesData,
-    isLoading: resourcesLoading,
-  } = useSearchResourcesAdminQuery({
-    search: debouncedSearchTerm,
-    page,
-    limit,
-  });
+  const { data: resourcesData, isLoading: resourcesLoading } =
+    useSearchResourcesAdminQuery({
+      search: debouncedSearchTerm,
+      page,
+      limit,
+    });
 
   // Transform data for table with redeemed count
   const transformedData = useMemo(() => {
@@ -121,7 +120,12 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
       />
 
       {/* Search Bar with Create New Button */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" gap={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={2}
+      >
         <Box flex={1}>
           <ResourcesSearchBar
             searchTerm={searchTerm}
@@ -145,10 +149,7 @@ const ResourcesAdminLayout: React.FC<ResourcesAdminLayoutProps> = () => {
       </Box>
 
       {/* Resources Table */}
-      <ResourcesTable
-        data={transformedData}
-        isLoading={resourcesLoading}
-      />
+      <ResourcesTable data={transformedData} isLoading={resourcesLoading} />
     </Stack>
   );
 };

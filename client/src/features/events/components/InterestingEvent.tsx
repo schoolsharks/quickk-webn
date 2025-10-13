@@ -23,6 +23,10 @@ const InterestingEvent: React.FC<InterestingEventProps> = ({ eventData }) => {
         .toLocaleString("en-US", { month: "short" })
         .toLowerCase()
     : "";
+
+  const dayNumber = EventData?.startDate
+    ? new Date(EventData.startDate).getDate()
+    : "";
   // today
   //   .toLocaleDateString("en-US", { month: "short" })
   //   .toUpperCase();
@@ -102,7 +106,7 @@ const InterestingEvent: React.FC<InterestingEventProps> = ({ eventData }) => {
                 margin: 0,
               }}
             >
-              12
+              {dayNumber}
             </Typography>
             <Typography
               variant="h6"

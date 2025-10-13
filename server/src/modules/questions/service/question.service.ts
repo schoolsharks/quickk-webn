@@ -8,12 +8,11 @@ import mongoose from "mongoose";
 
 class QuestionService {
   async getAllQuestions(
-    questionIds: mongoose.Types.ObjectId[]
+    questionIds: mongoose.Types.ObjectId[],
   ): Promise<IQuestion[]> {
     try {
       const questions = await QuestionModel.find(
         { _id: { $in: questionIds } },
-        { correctAnswer: 0 }
       );
       return questions;
     } catch (error) {

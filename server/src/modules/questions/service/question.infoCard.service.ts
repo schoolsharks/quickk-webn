@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 class InfoCardService {
     async getAllInfoCards(infoCardIds: mongoose.Types.ObjectId[]) {
         try {
-            const infoCards = await InfoCardModel.find( {_id: { $in: infoCardIds }});
+            const infoCards = await InfoCardModel.find({ _id: { $in: infoCardIds } });
             return infoCards;
         } catch (error) {
             throw new AppError('Error fetching info cards', StatusCodes.INTERNAL_SERVER_ERROR);
@@ -53,15 +53,15 @@ class InfoCardService {
     }
 
     async getFeedbackCountByInfocardId(InfocardId: mongoose.Types.ObjectId): Promise<number> {
-            try {
-                const count = await QuestionInfoFeedback.countDocuments(
-                    // { question: InfocardId }
-                );
-                return count;
-            } catch (error) {
-                throw new AppError('Error fetching Feedback count', StatusCodes.INTERNAL_SERVER_ERROR);
-            }
+        try {
+            const count = await QuestionInfoFeedback.countDocuments(
+                { infoCard: InfocardId }
+            );
+            return count;
+        } catch (error) {
+            throw new AppError('Error fetching Feedback count', StatusCodes.INTERNAL_SERVER_ERROR);
         }
+    }
 
     async createInfoCard(infoCardData: Partial<IInfoCard>) {
         try {
@@ -117,5 +117,5 @@ class InfoCardService {
     }
 }
 
-export default InfoCardService ;
+export default InfoCardService;
 

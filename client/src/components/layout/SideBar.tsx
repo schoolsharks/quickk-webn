@@ -95,12 +95,12 @@ const menuItems: MenuItem[] = [
         path: "/admin/learnings/dailyPulse",
         feature: FeatureKeys.DAILYPULSE,
       },
-      {
-        id: "modules",
-        label: "Modules",
-        path: "/admin/learnings/modules",
-        feature: FeatureKeys.MODULES,
-      },
+      // {
+      //   id: "modules",
+      //   label: "Modules",
+      //   path: "/admin/learnings/modules",
+      //   feature: FeatureKeys.MODULES,
+      // },
     ],
   },
   {

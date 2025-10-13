@@ -137,24 +137,26 @@ const ResourceEditPage: React.FC = () => {
           { field: "subHeading", label: "Offer" },
           { field: "image", label: "Logo" },
           { field: "companyName", label: "Company Name" },
-          {
-            field: "stars",
-            label: "Stars Needed To Redeem",
-            validator: (value: number) => value > 0,
-          },
-          {
-            field: "quantity",
-            label: "Quantity",
-            validator: (value: number) => value > 0,
-          },
-          { field: "expiryDate", label: "Expiry Date" },
+          // {
+          //   field: "stars",
+          //   label: "Stars Needed To Redeem",
+          //   validator: (value: number) => value > 0,
+          // },
+          // {
+          //   field: "quantity",
+          //   label: "Quantity",
+          //   validator: (value: number) => value > 0,
+          // },
+          // { field: "expiryDate", label: "Expiry Date" },
         ];
 
-        const missingFields = requiredFields.filter(({ field, validator }) => {
+        const missingFields = requiredFields.filter(({ field
+          // , validator
+         }) => {
           const value = formData[field as keyof ResourceFormData];
-          if (validator) {
-            return !validator(value as number);
-          }
+          // if (validator) {
+          //   return !validator(value as number);
+          // }
           if (field === "image" || field === "companyLogo") {
             return !value || (typeof value === "string" && !value.trim());
           }

@@ -340,6 +340,7 @@ const EventDetails: React.FC = () => {
           onClick={handleGetTickets}
           fullWidth
           sx={{
+            mt: 4,
             backgroundColor: theme.palette.text.primary,
             color: theme.palette.background.paper,
             textTransform: "none",

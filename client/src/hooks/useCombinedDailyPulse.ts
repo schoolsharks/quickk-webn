@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { 
-  useGetDailyPulseQuery, 
+import {
+  useGetDailyPulseQuery,
   useGetConnectionFeedbackPulseQuery,
   useGetResourceRatingPulseQuery
 } from '../features/dailyPulse/dailyPulseApi';
@@ -88,9 +88,9 @@ export const useCombinedDailyPulse = (): CombinedDailyPulseData => {
         createdAt: connectionFeedbackData.data.createdAt,
         expiresAt: connectionFeedbackData.data.expiresAt,
       };
-      
+
       // Add connection feedback at the beginning so it appears first
-      pulseItems.unshift(connectionPulse);
+      pulseItems.push(connectionPulse);
     }
 
     // Add resource rating pulse if available
@@ -106,9 +106,9 @@ export const useCombinedDailyPulse = (): CombinedDailyPulseData => {
         claimedAt: resourceRatingData.data.claimedAt,
         expiresAt: resourceRatingData.data.expiresAt,
       };
-      
+
       // Add resource rating at the beginning (or after connection feedback)
-      pulseItems.unshift(resourceRatingPulse);
+      pulseItems.push(resourceRatingPulse);
     }
 
     return {

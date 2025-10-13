@@ -2,11 +2,11 @@ import { Box, Typography } from "@mui/material";
 import EventsToday from "./EventsToday";
 import UpcomingEvents from "./UpcomingEvents";
 import InterestingEvent from "./InterestingEvent";
-import Recordings from "./Recordings";
+// import Recordings from "./Recordings";
 import {
   useGetTodaysEventsQuery,
   useGetUpcomingEventsByDateQuery,
-  useGetPastEventsByDateQuery,
+  // useGetPastEventsByDateQuery,
 } from "../services/eventsApi";
 import Loader from "../../../components/ui/Loader";
 
@@ -18,8 +18,8 @@ const Events = () => {
   const { data: upcomingEventsData, isLoading: upcomingLoading } =
     useGetUpcomingEventsByDateQuery({ limit: 10 });
 
-  const { data: pastEventsData, isLoading: pastLoading } =
-    useGetPastEventsByDateQuery({ limit: 10 });
+  // const { data: pastEventsData, isLoading: pastLoading } =
+  //   useGetPastEventsByDateQuery({ limit: 10 });
 
   // Show loader while any critical data is loading
   if (todaysLoading || upcomingLoading) {
@@ -29,12 +29,12 @@ const Events = () => {
   // Check if we have any events at all
   const hasTodaysEvents = todaysEventsData?.events?.length > 0;
   const hasUpcomingEvents = upcomingEventsData?.events?.length > 0;
-  const hasPastEvents = pastEventsData?.events?.length > 0;
-  const hasAnyEvents = hasTodaysEvents || hasUpcomingEvents || hasPastEvents;
-  const hasSameEvent = upcomingEventsData?.events?.length === 1;
+  // const hasPastEvents = pastEventsData?.events?.length > 0;
+  const hasAnyEvents = hasTodaysEvents || hasUpcomingEvents;
+  //  || hasPastEvents;
 
   // If no events at all, show the fallback message
-  if (!hasAnyEvents && !todaysLoading && !upcomingLoading && !pastLoading) {
+  if (!hasAnyEvents && !todaysLoading && !upcomingLoading) {
     return (
       <Box position={"relative"} height={"40vh"}>
         <Box
@@ -81,13 +81,13 @@ const Events = () => {
         <InterestingEvent eventData={upcomingEventsData.events[0]} />
       )}
 
-      {/* Show Upcoming Events section if we have upcoming events */}
-      {hasUpcomingEvents && !hasSameEvent && (
-        <UpcomingEvents eventsData={upcomingEventsData.events} />
+      {/* Show Upcoming Events section if we have more than one upcoming event */}
+      {hasUpcomingEvents && upcomingEventsData.events.length > 1 && (
+        <UpcomingEvents eventsData={upcomingEventsData.events.slice(1)} />
       )}
 
       {/* Show Recordings section only if we have past events */}
-      {hasPastEvents && <Recordings eventsData={pastEventsData.events} />}
+      {/* {hasPastEvents && <Recordings eventsData={pastEventsData.events} />} */}
     </Box>
   );
 };

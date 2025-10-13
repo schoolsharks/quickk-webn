@@ -111,8 +111,12 @@ class UserRewardClaimsService {
 
       await session.commitTransaction();
 
-      // Populate user data before returning
+      // Populate user data and resource data before returning
       await savedClaim.populate("user", "name companyMail");
+      
+      if (rewardType === RewardTypes.RESOURCES && resourceId) {
+        await savedClaim.populate("resourceId");
+      }
 
       return savedClaim;
     } catch (error) {

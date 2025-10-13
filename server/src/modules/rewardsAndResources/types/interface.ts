@@ -20,6 +20,9 @@ export interface IResources {
   subHeading: string;
   stars: number;
   companyName: string;
+  companyEmail?: string;
+  companyContact?: string;
+  companyLogo?: string;
   status: ResourceStatus;
   type: ResourceType;
   targetAudience: string[];

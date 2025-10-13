@@ -3,6 +3,8 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../../utils/appError';
 import UserRewardClaimsService from '../services/userRewardClaims.service';
 import { RewardTypes } from '../types/enums';
+import { resourceClaimTrigger } from '../../../services/emails/triggers/user/resourceClaimTrigger';
+import { ResourceType } from '../types/enums';
 
 const userRewardClaimsService = new UserRewardClaimsService();
 
@@ -73,6 +75,47 @@ export const applyForReward = async (
       resourceId,
       userInput
     );
+
+    // Send email notification to company if this is a RESOURCES claim with SERVICE type
+    if (rewardType === RewardTypes.RESOURCES && resourceId) {
+      try {
+        const resource = (result as any).resourceId;
+        const user = (result as any).user;
+
+        // Only send email if:
+        // 1. Resource type is SERVICE
+        // 2. Company email exists
+        // 3. Resource and user are populated
+        if (
+          resource && 
+          resource.type === ResourceType.SERVICE && 
+          resource.companyEmail && 
+          user
+        ) {
+          await resourceClaimTrigger({
+            companyEmail: resource.companyEmail,
+            companyName: resource.companyName || 'Company',
+            resourceTitle: resource.heading || 'Resource',
+            userName: user.name || 'User',
+            userEmail: user.companyMail || '',
+            userInput: userInput,
+          });
+
+          console.log(`Resource claim notification sent to company: ${resource.companyEmail}`);
+        } else {
+          console.log('Skipping email notification:', {
+            hasResource: !!resource,
+            resourceType: resource?.type,
+            hasCompanyEmail: !!resource?.companyEmail,
+            hasUser: !!user
+          });
+        }
+      } catch (emailError) {
+        // Log the error but don't fail the request
+        console.error('Failed to send resource claim notification email:', emailError);
+        // Don't throw - the claim was successful, email is just a notification
+      }
+    }
 
     res.status(StatusCodes.CREATED).json({
       success: true,

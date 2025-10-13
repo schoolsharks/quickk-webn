@@ -22,6 +22,18 @@ const ResourcesSchema = new mongoose.Schema<IResources>(
         return this.status === ResourceStatus.ACTIVE;
       },
     },
+    companyEmail: {
+      type: String,
+      required: false,
+    },
+    companyContact: {
+      type: String,
+      required: false,
+    },
+    companyLogo: {
+      type: String,
+      required: false,
+    },
     subHeading: {
       type: String,
       required: function (this: IResources) {

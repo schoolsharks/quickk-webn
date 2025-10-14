@@ -22,8 +22,10 @@ interface SearchResourcesParams {
 
 class ResourcesService {
   async getAllResources(userId?: mongoose.Types.ObjectId): Promise<(IResources & { isClaimed?: boolean })[]> {
-    const resources = await Resources.find();
-    
+    const resources = await Resources.find({
+      status: { $nin: [ResourceStatus.DRAFT, ResourceStatus.PENDING_REVIEW] }
+    });
+
     // If no userId provided, return resources without isClaimed field
     if (!userId) {
       return resources;
@@ -37,7 +39,7 @@ class ResourcesService {
           resourceId: resource._id,
           rewardType: RewardTypes.RESOURCES
         });
-        
+
         return {
           ...resource.toObject(),
           isClaimed: !!claimedRecord
@@ -55,7 +57,7 @@ class ResourcesService {
     }
 
     const resource = await Resources.findById(resourceId);
-    
+
     if (!resource) {
       throw new AppError('Resource not found', StatusCodes.NOT_FOUND);
     }
@@ -66,16 +68,16 @@ class ResourcesService {
   async getResourcesStats(): Promise<ResourcesStats> {
     // Get total count
     const total = await Resources.countDocuments();
-    
+
     // Get active count
     const active = await Resources.countDocuments({ status: ResourceStatus.ACTIVE });
-    
+
     // Get drafts count
     const drafts = await Resources.countDocuments({ status: ResourceStatus.DRAFT });
-    
+
     // Get total redeemed count from UserRewardClaims where rewardType is RESOURCES
-    const totalRedeemed = await UserRewardsClaims.countDocuments({ 
-      rewardType: RewardTypes.RESOURCES 
+    const totalRedeemed = await UserRewardsClaims.countDocuments({
+      rewardType: RewardTypes.RESOURCES
     });
 
     return {
@@ -98,7 +100,7 @@ class ResourcesService {
 
     // Build search query
     let searchQuery: any = {};
-    
+
     if (search && search.trim()) {
       const searchRegex = new RegExp(search.trim(), 'i');
       searchQuery = {
@@ -112,7 +114,7 @@ class ResourcesService {
 
     // Get total count for pagination
     const totalCount = await Resources.countDocuments(searchQuery);
-    
+
     // Get resources with pagination
     const resources = await Resources.find(searchQuery)
       .sort({ createdAt: -1 })
@@ -126,7 +128,7 @@ class ResourcesService {
           rewardType: RewardTypes.RESOURCES,
           resourceId: resource._id
         });
-        
+
         return {
           ...resource.toObject(),
           totalRedeemed
@@ -174,7 +176,7 @@ class ResourcesService {
       { $set: resourceData },
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedResource) {
       throw new AppError('Resource not found', StatusCodes.NOT_FOUND);
     }
@@ -189,7 +191,7 @@ class ResourcesService {
     }
 
     const deletedResource = await Resources.findByIdAndDelete(resourceId);
-    
+
     if (!deletedResource) {
       throw new AppError('Resource not found', StatusCodes.NOT_FOUND);
     }
@@ -206,14 +208,14 @@ class ResourcesService {
     }
 
     const searchRegex = new RegExp(searchTerm.trim(), 'i');
-    
+
     const companies = await User.find({
       businessName: { $regex: searchRegex, $exists: true, $ne: '' },
       companyMail: { $exists: true, $ne: '' }
     })
-    .select('businessName businessLogo companyMail contact')
-    .limit(10)
-    .lean();
+      .select('businessName businessLogo companyMail contact')
+      .limit(10)
+      .lean();
 
     return companies.map(company => ({
       businessName: company.businessName || '',

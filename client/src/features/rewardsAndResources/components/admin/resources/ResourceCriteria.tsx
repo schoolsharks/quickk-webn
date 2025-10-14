@@ -39,7 +39,7 @@ const ResourceCriteria: React.FC<ResourceCriteriaProps> = ({
           </Typography>
           <TextField
             fullWidth
-            type="number"
+            type="text"
             value={stars}
             onChange={(e) => onStarsChange(Number(e.target.value))}
             sx={{
@@ -62,13 +62,13 @@ const ResourceCriteria: React.FC<ResourceCriteriaProps> = ({
               onChange={(e) =>
                 onEmailDestinationChange(e.target.value as "user" | "company")
               }
-              sx={{ 
-                backgroundColor: "#2A2A2A", 
+              sx={{
+                backgroundColor: "#2A2A2A",
                 color: "white",
                 borderRadius: 0,
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: 0,
-                }
+                },
               }}
             >
               <MenuItem value="user">

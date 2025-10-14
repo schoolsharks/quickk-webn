@@ -9,6 +9,7 @@ import v1Routes from "./routes/v1/index";
 import errorHandlerMiddleware from "./middlewares/errorHandler";
 import notFoundMiddleware from "./middlewares/notFound";
 import cookieParser from "cookie-parser";
+import { initializeEventStatusAutomation } from "./modules/events/jobs/eventStatusCron";
 // import "./modules/reward/jobs/jobs"
 
 
@@ -16,6 +17,11 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 connectDB();
+
+// Initialize Event Status Automation (Cron Job)
+initializeEventStatusAutomation().catch((error) => {
+  console.error('Failed to initialize event status automation:', error);
+});
 
 const app = express();
 

@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { IEvent, IEventRegistration } from '../types/interface';
 import { EventStatus } from '../types/enum';
+import { eventLogger } from '../utils/eventLogger';
 
 // Main Event Schema
 const EventSchema = new Schema<IEvent>({
@@ -32,7 +33,6 @@ const EventSchema = new Schema<IEvent>({
     type: String,
     enum: ['All', 'Gowomania Only', 'Webn Only']
   }],
-
 
   startDate: {
     type: Date,
@@ -185,36 +185,65 @@ EventSchema.virtual('duration').get(function () {
 
 // Static method to update event statuses
 EventSchema.statics.updateEventStatuses = async function () {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  try {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  // Update to PAST
-  await this.updateMany(
-    {
-      endDate: { $lt: today },
-      status: { $ne: EventStatus.PAST }
-    },
-    { status: EventStatus.PAST }
-  );
+    eventLogger.info('Starting event status update job', { currentDate: today.toISOString() });
 
-  // Update to ACTIVE
-  await this.updateMany(
-    {
-      startDate: { $lte: today },
-      endDate: { $gte: today },
-      status: { $ne: EventStatus.ACTIVE }
-    },
-    { status: EventStatus.ACTIVE }
-  );
+    // Statuses that should be excluded from auto-updates
+    const excludedStatuses = [EventStatus.DRAFT, EventStatus.PENDING_REVIEW];
 
-  // Update to UPCOMING
-  await this.updateMany(
-    {
-      startDate: { $gt: today },
-      status: { $ne: EventStatus.UPCOMING }
-    },
-    { status: EventStatus.UPCOMING }
-  );
+    // Update to PAST
+    const pastResult = await this.updateMany(
+      {
+        endDate: { $lt: today },
+        status: { $nin: [...excludedStatuses, EventStatus.PAST] }
+      },
+      { status: EventStatus.PAST }
+    );
+
+    // Update to ACTIVE
+    const activeResult = await this.updateMany(
+      {
+        startDate: { $lte: today },
+        endDate: { $gte: today },
+        status: { $nin: [...excludedStatuses, EventStatus.ACTIVE] }
+      },
+      { status: EventStatus.ACTIVE }
+    );
+
+    // Update to UPCOMING
+    const upcomingResult = await this.updateMany(
+      {
+        startDate: { $gt: today },
+        status: { $nin: [...excludedStatuses, EventStatus.UPCOMING] }
+      },
+      { status: EventStatus.UPCOMING }
+    );
+
+    const totalUpdated = pastResult.modifiedCount + activeResult.modifiedCount + upcomingResult.modifiedCount;
+
+    eventLogger.success('Event status update completed', {
+      totalUpdated,
+      pastEvents: pastResult.modifiedCount,
+      activeEvents: activeResult.modifiedCount,
+      upcomingEvents: upcomingResult.modifiedCount,
+    });
+
+    return {
+      success: true,
+      totalUpdated,
+      details: {
+        past: pastResult.modifiedCount,
+        active: activeResult.modifiedCount,
+        upcoming: upcomingResult.modifiedCount,
+      }
+    };
+  } catch (error) {
+    eventLogger.error('Error updating event statuses', error);
+    throw error;
+  }
 };
 
 export const Event = model<IEvent>('Event', EventSchema);

@@ -546,7 +546,7 @@ export class EventService {
       }
     } else {
       // If no status is provided, exclude past events by default
-      filter.status = { $ne: EventStatus.PAST };
+      // filter.status = { $ne: EventStatus.PAST };
     }
 
     if (city) {

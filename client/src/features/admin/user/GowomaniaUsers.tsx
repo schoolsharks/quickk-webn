@@ -111,6 +111,7 @@ const GowomaniaUsers: React.FC = () => {
             onSearchChange={setSearchTerm}
             searchValue={searchTerm}
             onFilterClick={handleFilterOpen}
+            button={false}
           />
         </Grid>
         <Grid size={12}>

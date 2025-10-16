@@ -47,6 +47,7 @@ const GetListed = () => {
   });
 
   const [isRazorpayLoaded, setIsRazorpayLoaded] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Load Razorpay script
   useEffect(() => {
@@ -110,30 +111,24 @@ const GetListed = () => {
               razorpaySignature: response.razorpay_signature,
             }).unwrap();
 
+            setPaymentSuccess(true);
             setSnackbar({
               open: true,
               message: "🎉 Payment successful! You are now listed member.",
               severity: "success",
             });
 
-            // Redirect after success
-            setTimeout(() => {
-              navigate("/user/dashboard");
-            }, 2000);
+            // Don't redirect immediately, show success page
           } catch (error: any) {
             console.error("Payment verification failed:", error);
             // Even if client verification fails, webhook will update the status
+            setPaymentSuccess(true);
             setSnackbar({
               open: true,
               message:
                 "Payment initiated successfully. We're confirming your payment...",
               severity: "info",
             });
-            
-            // Still redirect, webhook will update status
-            setTimeout(() => {
-              navigate("/user/dashboard");
-            }, 3000);
           }
         },
         prefill: {
@@ -171,6 +166,10 @@ const GetListed = () => {
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleHomeClick = () => {
+    navigate("/user/dashboard");
   };
 
   const isProcessing = isCreatingOrder || isVerifyingPayment;
@@ -236,136 +235,188 @@ const GetListed = () => {
           }}
         />
 
-        {/* Main Content */}
-        <Box sx={{ marginBottom: "40px", px: "24px" }}>
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: "20px",
-              fontWeight: 700,
-              color: "#000",
-              lineHeight: 1.2,
-              marginBottom: "16px",
-            }}
-          >
-            Want to Get Listed on Our Platform?
-          </Typography>
-
-          <Typography
-            sx={{
-              fontSize: "16px",
-              color: theme.palette.text.secondary,
-              lineHeight: "18px",
-              marginBottom: "32px",
-            }}
-          >
-            Showcase yourself or your business to our entire community. Getting
-            listed means more visibility, more connections, and more
-            opportunities.
-          </Typography>
-        </Box>
-
-        {/* Benefits Section */}
-        <Box sx={{ marginBottom: "40px", px: "24px" }}>
-          <Typography
-            sx={{
-              fontSize: "20px",
-              fontWeight: 700,
-              color: theme.palette.primary.main,
-              marginBottom: "16px",
-            }}
-          >
-            Benefits of Listing
-          </Typography>
-
-          <List sx={{ padding: 0 }}>
-            {benefits.map((benefit, index) => (
-              <ListItem
-                key={index}
+        {/* Main Content - Conditional Rendering */}
+        {paymentSuccess ? (
+          // Success State
+          <>
+            <Box sx={{ marginBottom: "40px", px: "24px" }}>
+              <Typography
+                variant="h1"
                 sx={{
-                  padding: "2px 0",
-                  alignItems: "flex-start",
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  color: "#000",
+                  lineHeight: 1.2,
+                  marginBottom: "16px",
                 }}
               >
-                <ListItemIcon sx={{ minWidth: "20px", marginTop: "8px" }}>
-                  <FiberManualRecord
+                Congratulations!
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: theme.palette.text.secondary,
+                  lineHeight: "18px",
+                  marginBottom: "32px",
+                }}
+              >
+                You're now a listed member of our community. Complete your
+                profile to make your services shine.
+              </Typography>
+            </Box>
+
+            {/* Home Button */}
+            <Box px={"24px"} sx={{ marginTop: "auto", paddingBottom: "30px" }}>
+              <GlobalButton
+                onClick={handleHomeClick}
+                fullWidth={true}
+                sx={{
+                  backgroundColor: "#4A4A4A",
+                  color: "#FFFFFF",
+                  "&:hover": {
+                    backgroundColor: "#3A3A3A",
+                  },
+                }}
+              >
+                Home
+              </GlobalButton>
+            </Box>
+          </>
+        ) : (
+          // Default State
+          <>
+            <Box sx={{ marginBottom: "40px", px: "24px" }}>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  color: "#000",
+                  lineHeight: 1.2,
+                  marginBottom: "16px",
+                }}
+              >
+                Want to Get Listed on Our Platform?
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: theme.palette.text.secondary,
+                  lineHeight: "18px",
+                  marginBottom: "32px",
+                }}
+              >
+                Showcase yourself or your business to our entire community.
+                Getting listed means more visibility, more connections, and more
+                opportunities.
+              </Typography>
+            </Box>
+
+            {/* Benefits Section */}
+            <Box sx={{ marginBottom: "40px", px: "24px" }}>
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  color: theme.palette.primary.main,
+                  marginBottom: "16px",
+                }}
+              >
+                Benefits of Listing
+              </Typography>
+
+              <List sx={{ padding: 0 }}>
+                {benefits.map((benefit, index) => (
+                  <ListItem
+                    key={index}
                     sx={{
-                      fontSize: "8px",
-                      color: "#000",
+                      padding: "2px 0",
+                      alignItems: "flex-start",
                     }}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={benefit}
-                  sx={{
-                    margin: 0,
-                    "& .MuiListItemText-primary": {
-                      fontSize: "16px",
-                      color: "#000",
-                      lineHeight: 1.5,
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
+                  >
+                    <ListItemIcon sx={{ minWidth: "20px", marginTop: "8px" }}>
+                      <FiberManualRecord
+                        sx={{
+                          fontSize: "8px",
+                          color: "#000",
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={benefit}
+                      sx={{
+                        margin: 0,
+                        "& .MuiListItemText-primary": {
+                          fontSize: "16px",
+                          color: "#000",
+                          lineHeight: 1.5,
+                        },
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
 
-        {/* Listing Fee Section */}
-        <Box sx={{ marginBottom: "60px", px: "24px" }}>
-          <Typography
-            sx={{
-              fontSize: "20px",
-              fontWeight: 700,
-              color: theme.palette.primary.main,
-              marginBottom: "8px",
-            }}
-          >
-            Listing Fee
-          </Typography>
+            {/* Listing Fee Section */}
+            <Box sx={{ marginBottom: "60px", px: "24px" }}>
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  color: theme.palette.primary.main,
+                  marginBottom: "8px",
+                }}
+              >
+                Listing Fee
+              </Typography>
 
-          <Typography
-            sx={{
-              fontSize: "18px",
-              fontWeight: 600,
-              color: "#000",
-            }}
-          >
-            ₹399 only (GST included)
-          </Typography>
-        </Box>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  color: "#000",
+                }}
+              >
+                ₹399 only (GST included)
+              </Typography>
+            </Box>
 
-        {/* Pay Button */}
-        <Box px={"24px"}>
-          <GlobalButton
-            onClick={handlePayClick}
-            fullWidth={true}
-            disabled={isProcessing || !isRazorpayLoaded}
-            sx={{
-              backgroundColor: "#4A4A4A",
-              color: "#FFFFFF",
-              marginBottom: "30px",
-              "&:hover": {
-                backgroundColor: "#3A3A3A",
-              },
-              "&:disabled": {
-                backgroundColor: "#CCCCCC",
-                color: "#666666",
-              },
-            }}
-          >
-            {isProcessing ? (
-              <>
-                <CircularProgress size={20} sx={{ mr: 1, color: "#fff" }} />
-                Processing...
-              </>
-            ) : !isRazorpayLoaded ? (
-              "Loading..."
-            ) : (
-              "Pay ₹399"
-            )}
-          </GlobalButton>
-        </Box>
+            {/* Pay Button */}
+            <Box px={"24px"}>
+              <GlobalButton
+                onClick={handlePayClick}
+                fullWidth={true}
+                disabled={isProcessing || !isRazorpayLoaded}
+                sx={{
+                  backgroundColor: "#4A4A4A",
+                  color: "#FFFFFF",
+                  marginBottom: "30px",
+                  "&:hover": {
+                    backgroundColor: "#3A3A3A",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "#CCCCCC",
+                    color: "#666666",
+                  },
+                }}
+              >
+                {isProcessing ? (
+                  <>
+                    <CircularProgress size={20} sx={{ mr: 1, color: "#fff" }} />
+                    Processing...
+                  </>
+                ) : !isRazorpayLoaded ? (
+                  "Loading..."
+                ) : (
+                  "Pay ₹399"
+                )}
+              </GlobalButton>
+            </Box>
+          </>
+        )}
       </Box>
 
       {/* Snackbar for notifications */}

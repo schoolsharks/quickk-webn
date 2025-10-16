@@ -167,6 +167,12 @@ router.post(
     authorizeRoles('ADMIN'),
     asyncHandeler(DailyPulseControllers.cloneDailyPulseById)
 );
+router.get(
+    '/downloadDailyPulseReport/:dailyPulseId',
+    authenticateUser,
+    authorizeRoles('ADMIN'),
+    asyncHandeler(DailyPulseControllers.downloadDailyPulseReport)
+);
 router.post(
     '/createAIDailyPulse',
     authenticateUser,

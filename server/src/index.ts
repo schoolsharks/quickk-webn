@@ -13,7 +13,6 @@ import { initializeEventStatusAutomation } from "./modules/events/jobs/eventStat
 // import "./modules/reward/jobs/jobs"
 
 
-
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 connectDB();

@@ -6,6 +6,7 @@ import AdminMain from './pages/admin/AdminMain';
 import useDynamicTitle from './utils/useDynamicTitle';
 // import NotFoundPage from './components/ui/NotFoundPage';
 
+
 const App: React.FC = () => {
   // Use the dynamic title hook
   useDynamicTitle();

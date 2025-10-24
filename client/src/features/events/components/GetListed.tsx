@@ -181,6 +181,12 @@ const GetListed = () => {
     "Get discovered by potential customers & collaborators.",
   ];
 
+  // For temp usage
+  if (false) {
+    handlePayClick();
+    <CircularProgress />;
+  }
+
   return (
     <>
       <Box
@@ -386,7 +392,7 @@ const GetListed = () => {
 
             {/* Pay Button */}
             <Box px={"24px"}>
-              <GlobalButton
+              {/* <GlobalButton
                 onClick={handlePayClick}
                 fullWidth={true}
                 disabled={isProcessing || !isRazorpayLoaded}
@@ -413,6 +419,26 @@ const GetListed = () => {
                 ) : (
                   "Pay ₹399"
                 )}
+              </GlobalButton> */}
+              <GlobalButton
+                onClick={() => {}}
+                // onClick={handlePayClick}
+                fullWidth={true}
+                disabled={true}
+                sx={{
+                  backgroundColor: "#4A4A4A",
+                  color: "#FFFFFF",
+                  marginBottom: "30px",
+                  "&:hover": {
+                    backgroundColor: "#3A3A3A",
+                  },
+                  "&:disabled": {
+                    backgroundColor: "#CCCCCC",
+                    color: "#666666",
+                  },
+                }}
+              >
+                Coming Soon
               </GlobalButton>
             </Box>
           </>

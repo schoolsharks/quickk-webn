@@ -313,9 +313,13 @@ export const searchUsers = async (
 ): Promise<void> => {
   const userId = req?.user.id;
   try {
+    // Extract categories from query params
+    const { categories, ...otherParams } = req.query;
+
+    // Perform the text search without categories
     const result = await SearchHelper.search(
       searchConfigs.user,
-      req.query,
+      otherParams,
       req?.user.companyId
     );
 
@@ -324,6 +328,35 @@ export const searchUsers = async (
       result.data = result.data.filter(
         (user: any) => user.webnClubMember !== false && user._id.toString() !== userId.toString()
       );
+
+      // Apply category filter if categories are provided
+      if (categories) {
+        const categoryArray = typeof categories === 'string'
+          ? categories.split(',').map(cat => cat.trim())
+          : Array.isArray(categories)
+            ? categories.map(cat => String(cat).trim())
+            : [String(categories).trim()];
+
+        if (categoryArray.length > 0) {
+          result.data = result.data.filter((user: any) => {
+            if (!user.businessCategory) return false;
+
+            // Split user's businessCategory (comma-separated) and check for matches
+            const userCategories = user.businessCategory
+              .split(',')
+              .map((cat: string) => cat.trim().toLowerCase());
+
+            // Check if any of the user's categories match any selected category
+            return categoryArray.some((selectedCat: string) =>
+              userCategories.includes(selectedCat.toLowerCase())
+            );
+          });
+
+          // Update pagination count after filtering
+          result.pagination.totalCount = result.data.length;
+          result.pagination.totalPages = Math.ceil(result.data.length / (Number(req.query.limit) || 20));
+        }
+      }
     }
     res.status(StatusCodes.OK).json(result);
   } catch (error) {

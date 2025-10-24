@@ -9,9 +9,15 @@ import {
   InputAdornment,
   Tooltip,
   Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import EmailIcon from "@mui/icons-material/Email";
@@ -23,6 +29,7 @@ import {
   useAddConnectionMutation,
 } from "../../user/userApi";
 import { Person } from "@mui/icons-material";
+import { businessCategories } from "../../../utils/businessCategories";
 
 // Platform enum to match backend
 enum ConnectionPlatform {
@@ -53,8 +60,10 @@ interface NetworkProfile {
 const NetworkSearch: React.FC = () => {
   const theme = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [profiles, setProfiles] = useState<NetworkProfile[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
 
   // RTK Query hooks
   const [searchUsers, { data: searchData, isLoading }] =
@@ -64,21 +73,31 @@ const NetworkSearch: React.FC = () => {
 
   // Handle search with debouncing
   useEffect(() => {
-    if (searchQuery.trim().length > 2) {
+    if (searchQuery.trim().length > 2 || selectedCategories.length > 0) {
       const timeoutId = setTimeout(() => {
-        searchUsers({
-          name: searchQuery,
-          businessCategory: searchQuery,
-          designation: searchQuery,
-          specialisation: searchQuery,
+        const searchParams: any = {
           page: 1,
           limit: 20,
-        });
+        };
+
+        // Add text search params
+        if (searchQuery.trim().length > 2) {
+          searchParams.name = searchQuery;
+          searchParams.designation = searchQuery;
+          searchParams.specialisation = searchQuery;
+        }
+
+        // Add category filter
+        if (selectedCategories.length > 0) {
+          searchParams.categories = selectedCategories.join(',');
+        }
+
+        searchUsers(searchParams);
       }, 500);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [searchQuery, searchUsers]);
+  }, [searchQuery, selectedCategories, searchUsers]);
 
   // Update profiles when search data changes
   useEffect(() => {
@@ -120,7 +139,36 @@ const NetworkSearch: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
-    setIsSearching(value.trim().length > 2);
+    setIsSearching(value.trim().length > 2 || selectedCategories.length > 0);
+  };
+
+  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
+    setFilterAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategories((prev) => {
+      const newCategories = prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category];
+      
+      // Update search state
+      setIsSearching(searchQuery.trim().length > 2 || newCategories.length > 0);
+      
+      return newCategories;
+    });
+  };
+
+  const handleRemoveCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      const newCategories = prev.filter((c) => c !== category);
+      setIsSearching(searchQuery.trim().length > 2 || newCategories.length > 0);
+      return newCategories;
+    });
   };
 
   const handleQuickkConnect = (profileId: string) => {
@@ -677,68 +725,140 @@ Best regards`;
         What are you looking for?
       </Typography>
       <Box mx={"24px"}>
-        {/* Search Input */}
-        <TextField
-          fullWidth
-          variant="standard"
-          placeholder="Search"
-          value={searchQuery}
-          onChange={(e) => handleSearch(e.target.value)}
-          sx={{
-            marginBottom: "24px",
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: theme.palette.background.paper,
-              borderRadius: "0px",
-              "& fieldset": {
-                borderColor: theme.palette.text.secondary + "30",
-                borderWidth: "1px",
+        {/* Search Input with Filter Button */}
+        <Box display="flex" gap={1} alignItems="flex-start" mb="16px">
+          <TextField
+            fullWidth
+            variant="standard"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: theme.palette.background.paper,
+                borderRadius: "0px",
+                "& fieldset": {
+                  borderColor: theme.palette.text.secondary + "30",
+                  borderWidth: "1px",
+                },
+                "&:hover fieldset": {
+                  borderColor: theme.palette.primary.main,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: theme.palette.primary.main,
+                  borderWidth: "2px",
+                },
               },
-              "&:hover fieldset": {
-                borderColor: theme.palette.primary.main,
+              "& .MuiInputBase-input": {
+                color: theme.palette.text.secondary,
+                fontSize: "16px",
+                padding: "12px 0px",
               },
-              "&.Mui-focused fieldset": {
-                borderColor: theme.palette.primary.main,
-                borderWidth: "2px",
+              "& .MuiInputBase-input::placeholder": {
+                color: theme.palette.text.secondary,
+                opacity: 1,
               },
-            },
-            "& .MuiInputBase-input": {
-              color: theme.palette.text.secondary,
-              fontSize: "16px",
-              padding: "12px 0px",
-            },
-            "& .MuiInputBase-input::placeholder": {
-              color: theme.palette.text.secondary,
-              opacity: 1,
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon sx={{ color: theme.palette.text.secondary }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          
+          {/* Filter Button */}
+          <IconButton
+            onClick={handleFilterClick}
+            sx={{
+              border: `1px solid ${theme.palette.text.secondary}30`,
+              borderRadius: "4px",
+              padding: "12px",
+              backgroundColor: selectedCategories.length > 0 ? theme.palette.primary.main + "20" : "transparent",
+              "&:hover": {
+                backgroundColor: theme.palette.primary.main + "30",
+              },
+            }}
+          >
+            <FilterListIcon 
+              sx={{ 
+                color: selectedCategories.length > 0 ? theme.palette.primary.main : theme.palette.text.secondary 
+              }} 
+            />
+          </IconButton>
+        </Box>
+
+        {/* Category Filter Menu */}
+        <Menu
+          anchorEl={filterAnchorEl}
+          open={Boolean(filterAnchorEl)}
+          onClose={handleFilterClose}
+          PaperProps={{
+            sx: {
+              maxHeight: 400,
+              width: "300px",
+              borderRadius: "8px",
             },
           }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon sx={{ color: theme.palette.text.secondary }} />
-              </InputAdornment>
-            ),
-          }}
-        />
+        >
+          <Box px={2} py={1}>
+            <Typography variant="subtitle2" fontWeight={600}>
+              Filter by Category
+            </Typography>
+          </Box>
+          {businessCategories
+            .filter((cat) => cat !== "None" && cat !== "Other")
+            .map((category) => (
+              <MenuItem
+                key={category}
+                onClick={() => handleCategoryToggle(category)}
+                sx={{ py: 0.5 }}
+              >
+                <Checkbox
+                  checked={selectedCategories.includes(category)}
+                  size="small"
+                />
+                <ListItemText primary={category} />
+              </MenuItem>
+            ))}
+        </Menu>
+
+        {/* Selected Categories as Chips */}
+        {selectedCategories.length > 0 && (
+          <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
+            {selectedCategories.map((category) => (
+              <Chip
+                key={category}
+                label={category}
+                onDelete={() => handleRemoveCategory(category)}
+                sx={{
+                  borderRadius: "16px",
+                  backgroundColor: theme.palette.primary.main + "20",
+                  color: theme.palette.primary.main,
+                  border: `1px solid ${theme.palette.primary.main}`,
+                  "& .MuiChip-deleteIcon": {
+                    color: theme.palette.primary.main,
+                    "&:hover": {
+                      color: theme.palette.primary.dark,
+                    },
+                  },
+                }}
+              />
+            ))}
+          </Box>
+        )}
       </Box>
 
       {/* Results Count */}
       {isSearching && (
         <Box
           display="flex"
-          justifyContent="space-between"
+          justifyContent="flex-end"
           alignItems="center"
           mx="24px"
           mb="16px"
         >
-          <Typography
-            variant="body2"
-            sx={{
-              color: theme.palette.text.secondary,
-              fontSize: "14px",
-            }}
-          >
-            Filters
-          </Typography>
           <Typography
             variant="body2"
             sx={{

@@ -12,14 +12,13 @@ import cookieParser from "cookie-parser";
 import { initializeEventStatusAutomation } from "./modules/events/jobs/eventStatusCron";
 // import "./modules/reward/jobs/jobs"
 
-
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
 connectDB();
 
 // Initialize Event Status Automation (Cron Job)
 initializeEventStatusAutomation().catch((error) => {
-  console.error('Failed to initialize event status automation:', error);
+  console.error("Failed to initialize event status automation:", error);
 });
 
 const app = express();
@@ -46,7 +45,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", v1Routes);
 
-if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "staging"
+) {
   const buildPath = path.join(__dirname, "..", "..", "client", "dist");
   app.use(express.static(buildPath));
 
@@ -60,7 +62,6 @@ app.use(errorHandlerMiddleware);
 
 const args = process.argv.slice(2);
 const portArgIndex = args.indexOf("--port");
-
 
 const PORT =
   portArgIndex !== -1

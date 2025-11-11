@@ -285,6 +285,103 @@ class DailyPulseService {
         }
     }
 
+    async getDailyPulseReportData(dailyPulseId: string) {
+        try {
+            const dailyPulse = await DailyPulse.findById(dailyPulseId);
+            if (!dailyPulse) {
+                throw new AppError('Daily pulse not found', StatusCodes.NOT_FOUND);
+            }
+
+            const questionService = new QuestionService();
+            const infoCardService = new InfoCardService();
+
+            // Separate question and infoCard IDs
+            const questionPulses = dailyPulse.pulses.filter(p => p.type === PulseType.Question);
+            const infoCardPulses = dailyPulse.pulses.filter(p => p.type === PulseType.InfoCard);
+
+            const questionIds = questionPulses.map(p => p.refId);
+            const infoCardIds = infoCardPulses.map(p => p.refId);
+
+            // Fetch all questions and info cards
+            const [questions, infoCards] = await Promise.all([
+                questionIds.length > 0 ? questionService.getAllQuestions(questionIds) : [],
+                infoCardIds.length > 0 ? infoCardService.getAllInfoCards(infoCardIds) : [],
+            ]);
+
+            // Get all users in the company
+            const { users } = await userService.getAllUsersWithDetails(dailyPulse.company.toString());
+            // Fetch all responses and feedback, only include users who have responded
+            const allUserData = await Promise.all(
+                users.map(async (user: any) => {
+                    const userId = user._id;
+                    const userName = user.name || 'Unknown';
+                    const userEmail = user.companyMail || 'N/A';
+
+                    const [questionResponses, infoCardFeedbacks] = await Promise.all([
+                        questionIds.length > 0
+                            ? questionService.getUserResponsesForQuestions(userId, questionIds)
+                            : [],
+                        infoCardIds.length > 0
+                            ? infoCardService.getUserFeedbackForInfoCards(userId, infoCardIds)
+                            : [],
+                    ]);
+
+                    // Skip users who haven't responded to any pulse
+                    if (questionResponses.length === 0 && infoCardFeedbacks.length === 0) {
+                        return null;
+                    }
+
+                    // Create response map
+                    const responseMap = new Map(
+                        questionResponses.map((r: any) => [r.question.toString(), r])
+                    );
+                    const feedbackMap = new Map(
+                        infoCardFeedbacks.map((f: any) => [f.infoCard.toString(), f])
+                    );
+
+                    return {
+                        userName,
+                        userEmail,
+                        userId: userId.toString(),
+                        questions: questions.map((q: any) => {
+                            const response = responseMap.get(q._id.toString());
+                            return {
+                                questionId: q._id.toString(),
+                                questionText: q.questionText,
+                                questionType: q.qType,
+                                userResponse: response ? (Array.isArray(response.response) ? response.response.join(', ') : response.response) : 'No Response',
+                                starsAwarded: response?.starsAwarded || 0,
+                            };
+                        }),
+                        infoCards: infoCards.map((ic: any) => {
+                            const feedback = feedbackMap.get(ic._id.toString());
+                            return {
+                                infoCardId: ic._id.toString(),
+                                title: ic.title,
+                                feedback: feedback?.feedback || 'No Feedback',
+                            };
+                        }),
+                    };
+                })
+            );
+
+            // Filter out null values (users who haven't responded)
+            const reportData = allUserData.filter(user => user !== null);
+
+            return {
+                dailyPulse: {
+                    id: dailyPulse._id,
+                    publishOn: dailyPulse.publishOn,
+                    status: dailyPulse.status,
+                },
+                reportData,
+            };
+        } catch (error) {
+            console.error(error);
+            throw new AppError('Failed to generate daily pulse report data', StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
 export default DailyPulseService;

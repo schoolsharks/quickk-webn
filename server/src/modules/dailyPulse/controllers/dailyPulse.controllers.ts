@@ -15,6 +15,7 @@ import mongoose from "mongoose";
 import UserResourceRatingService from "../../user/service/user.resource.rating.service";
 import Admin from "../../admin/model/admin.model";
 import dailyPulseReviewTrigger from "../../../services/emails/triggers/admin/dailyPulseReviewTrigger";
+import * as XLSX from "xlsx";
 // import AdminService from '../../admin/service/admin.service';
 
 // const imageUploadService = new AdminService();
@@ -946,6 +947,112 @@ export const cloneDailyPulseById = async (
       },
     });
   } catch (error) {
+    next(error);
+  }
+};
+
+export const downloadDailyPulseReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { dailyPulseId } = req.params;
+
+    if (!dailyPulseId) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Daily pulse ID is required",
+      });
+      return;
+    }
+
+    // Get report data from service
+    const { dailyPulse, reportData } = await dailyPulseService.getDailyPulseReportData(dailyPulseId);
+
+    // Create Excel workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Prepare data for Excel sheet
+    const excelData: any[] = [];
+
+    // Add headers
+    const headers = ['User Name', 'User Email'];
+    
+    // Add question headers (combine response and stars in description)
+    if (reportData.length > 0 && reportData[0].questions.length > 0) {
+      reportData[0].questions.forEach((q: any, index: number) => {
+        // Truncate long question text for readability
+        const questionText = q.questionText.length > 60 
+          ? q.questionText.substring(0, 60) + '...' 
+          : q.questionText;
+        headers.push(`Q${index + 1}: ${questionText}`);
+      });
+    }
+
+    // Add info card headers
+    if (reportData.length > 0 && reportData[0].infoCards.length > 0) {
+      reportData[0].infoCards.forEach((ic: any, index: number) => {
+        const title = ic.title.length > 60 
+          ? ic.title.substring(0, 60) + '...' 
+          : ic.title;
+        headers.push(`InfoCard ${index + 1}: ${title} (Feedback)`);
+      });
+    }
+
+    excelData.push(headers);
+
+    // Add user data rows
+    reportData.forEach((user: any) => {
+      const row: any[] = [user.userName, user.userEmail];
+
+      // Add question responses with stars combined
+      user.questions.forEach((q: any) => {
+        const responseText = q.userResponse !== 'No Response' 
+          ? `${q.userResponse}` 
+          : 'No Response';
+        row.push(responseText);
+      });
+
+      // Add info card feedback
+      user.infoCards.forEach((ic: any) => {
+        row.push(ic.feedback);
+      });
+
+      excelData.push(row);
+    });
+
+    // Create worksheet
+    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+
+    // Set column widths
+    const columnWidths = headers.map((header) => ({
+      wch: Math.max(header.length, 20),
+    }));
+    worksheet['!cols'] = columnWidths;
+
+    // Add worksheet to workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Pulse Report');
+
+    // Generate buffer
+    const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+    // Format date for filename
+    const publishDate = dailyPulse.publishOn 
+      ? new Date(dailyPulse.publishOn).toISOString().split('T')[0]
+      : 'no-date';
+
+    const filename = `DailyPulse_Report_${publishDate}.xlsx`;
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Length', excelBuffer.length.toString());
+
+    // Send the buffer
+    res.send(excelBuffer);
+  } catch (error) {
+    console.error('Error generating daily pulse report:', error);
     next(error);
   }
 };

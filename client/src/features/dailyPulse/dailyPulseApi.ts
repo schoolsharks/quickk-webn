@@ -107,6 +107,37 @@ export const dailyPulseApi = api.injectEndpoints({
             }),
         }),
 
+        downloadDailyPulseReport: builder.mutation({
+            query: (dailyPulseId) => ({
+                url: `/admin/downloadDailyPulseReport/${dailyPulseId}`,
+                method: 'GET',
+                responseHandler: async (response) => {
+                    const blob = await response.blob();
+                    const contentDisposition = response.headers.get('Content-Disposition');
+                    let filename = 'DailyPulse_Report.xlsx';
+                    
+                    if (contentDisposition) {
+                        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+                        if (filenameMatch) {
+                            filename = filenameMatch[1];
+                        }
+                    }
+                    
+                    // Create download link
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    
+                    return { success: true, filename };
+                },
+            }),
+        }),
+
         // Connection Feedback endpoints
         getConnectionFeedbackPulse: builder.query({
             query: () => ({
@@ -188,6 +219,7 @@ export const {
     useCloneDailyPulseByIdMutation,
     useSearchDailyPulseQuery,
     useGetTodayDailyPulseEngagementQuery,
+    useDownloadDailyPulseReportMutation,
     // Connection Feedback hooks
     useGetConnectionFeedbackPulseQuery,
     useLazyGetConnectionFeedbackPulseQuery,

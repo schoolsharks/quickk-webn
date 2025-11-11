@@ -1,0 +1,76 @@
+# .github/workflows/deploy-client-main.yml
+name: Deploy Client to AWS EC2 (main)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "client/**"
+
+jobs:
+  deploy-client:
+    name: Deploy Client
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cache Client Dependencies
+        uses: actions/cache@v3
+        with:
+          path: client/node_modules
+          key: ${{ runner.os }}-client-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-client-
+
+      - name: Build Client
+        run: |
+          cd client
+          echo "VITE_BACKEND_BASE_URL=${{ secrets.VITE_BACKEND_BASE_URL_MAIN }}" > .env
+          echo "VITE_REMOVE_BG_API_KEY=${{ secrets.VITE_REMOVE_BG_API_KEY }}" >> .env
+          npm ci
+          npm run build
+
+      - name: Clean and Prepare Remote Client Directory
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST_MAIN }}
+          username: ${{ secrets.AWS_USER_MAIN }}
+          key: ${{ secrets.AWS_PRIVATE_KEY_MAIN }}
+          script: |
+            source ~/.bashrc || source ~/.bash_profile || true
+
+            export PATH="$PATH:/usr/local/bin:/usr/bin:$HOME/.nvm/versions/node/*/bin"
+
+            sudo rm -rf /home/ubuntu/quickk/quickk-webn/client/dist
+            mkdir -p /home/ubuntu/quickk/quickk-webn/client/
+
+      - name: Deploy Client Build Files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST_MAIN }}
+          username: ${{ secrets.AWS_USER_MAIN }}
+          key: ${{ secrets.AWS_PRIVATE_KEY_MAIN }}
+          source: "client/dist/"
+          target: "/home/ubuntu/quickk/quickk-webn/client"
+          strip_components: 1
+
+      - name: Set Permissions and Verify Deployment
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST_MAIN }}
+          username: ${{ secrets.AWS_USER_MAIN }}
+          key: ${{ secrets.AWS_PRIVATE_KEY_MAIN }}
+          script: |
+            source ~/.bashrc || source ~/.bash_profile || true
+
+            export PATH="$PATH:/usr/local/bin:/usr/bin:$HOME/.nvm/versions/node/*/bin"
+
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/quickk/quickk-webn/client
+            if [ ! -f "/home/ubuntu/quickk/quickk-webn/client/dist/index.html" ]; then
+              echo "Client deployment verification failed - index.html not found in dist folder"
+              exit 1
+            fi
+            echo "Client deployment to quickk/quickk-webn completed successfully"

@@ -7,13 +7,13 @@ import GlobalTable, {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DownloadIcon from "@mui/icons-material/Download";
 import { useNavigate } from "react-router-dom";
 import {
-  useArchievedailyPulseByIdMutation,
   useDeleteDailyPulseByIdMutation,
   useCloneDailyPulseByIdMutation,
+  useDownloadDailyPulseReportMutation,
 } from "../../dailyPulseApi";
-import ArchiveIcon from "@mui/icons-material/Archive";
 
 // Daily Pulse Table Component
 export interface DailyPulseData {
@@ -21,7 +21,7 @@ export interface DailyPulseData {
   status: "Published" | "Draft" | "Archived" | "Pending Review";
   pulses: Array<{
     refId: string;
-    type: "Question" | "infoCard";
+    type: "question" | "infoCard";
     responseCount?: number;
     feedbackCount?: number;
   }>;
@@ -37,8 +37,8 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
   isLoading = false,
 }) => {
   const [DeleteDailyPulseById] = useDeleteDailyPulseByIdMutation();
-  const [ArchievedailyPulseById] = useArchievedailyPulseByIdMutation();
   const [CloneDailyPulseById] = useCloneDailyPulseByIdMutation();
+  const [DownloadDailyPulseReport] = useDownloadDailyPulseReportMutation();
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -64,7 +64,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
   const transformedData = data?.map((item, index) => {
     // Calculate total responses across all pulses
     const totalResponses = item.pulses.reduce((total, pulse) => {
-      if (pulse.type === "Question" && pulse.responseCount) {
+      if (pulse.type === "question" && pulse.responseCount) {
         return total + pulse.responseCount;
       }
       if (pulse.type === "infoCard" && pulse.feedbackCount) {
@@ -74,7 +74,7 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
     }, 0);
 
     // Format date
-    const publishDate = item.publishOn 
+    const publishDate = item.publishOn
       ? new Date(item.publishOn).toLocaleDateString("en-GB", {
           day: "numeric",
           month: "short",
@@ -115,9 +115,10 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
         if (value === "pending-review") {
           displayStatus = "Pending Review";
         } else {
-          displayStatus = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+          displayStatus =
+            value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
         }
-        
+
         return (
           <Typography sx={{ color: "black", fontSize: "14px" }}>
             {displayStatus}
@@ -142,6 +143,20 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
 
   const actionButtons: ActionButton[] = [
     {
+      icon: <DownloadIcon />,
+      label: "Download Report",
+      color: "success",
+      onClick: async (row) => {
+        try {
+          await DownloadDailyPulseReport(row.originalData._id).unwrap();
+          showSnackbar("Report downloaded successfully!", "success");
+        } catch (error) {
+          console.log("Error downloading report:", error);
+          showSnackbar("Failed to download report. Please try again.", "error");
+        }
+      },
+    },
+    {
       icon: <ContentCopyIcon />,
       label: "Clone",
       color: "primary",
@@ -151,25 +166,28 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
           showSnackbar("Daily pulse cloned successfully!", "success");
         } catch (error) {
           console.log("Error cloning daily pulse:", error);
-          showSnackbar("Failed to clone daily pulse. Please try again.", "error");
+          showSnackbar(
+            "Failed to clone daily pulse. Please try again.",
+            "error"
+          );
         }
       },
     },
-    {
-      icon: <ArchiveIcon />,
-      label: "Archive",
-      color: "info",
-      onClick: async (row) => {
-        try {
-          console.log(row.originalData._id);
-          await ArchievedailyPulseById(row.originalData._id).unwrap();
-          showSnackbar("Daily pulse archived successfully!", "success");
-        } catch (error) {
-          console.log("Error archiving daily pulse:", error);
-          showSnackbar("Failed to archive daily pulse. Please try again.", "error");
-        }
-      },
-    },
+    // {
+    //   icon: <ArchiveIcon />,
+    //   label: "Archive",
+    //   color: "info",
+    //   onClick: async (row) => {
+    //     try {
+    //       console.log(row.originalData._id);
+    //       await ArchievedailyPulseById(row.originalData._id).unwrap();
+    //       showSnackbar("Daily pulse archived successfully!", "success");
+    //     } catch (error) {
+    //       console.log("Error archiving daily pulse:", error);
+    //       showSnackbar("Failed to archive daily pulse. Please try again.", "error");
+    //     }
+    //   },
+    // },
     {
       icon: <EditIcon />,
       label: "Edit",
@@ -188,7 +206,10 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
           showSnackbar("Daily pulse deleted successfully!", "success");
         } catch (error) {
           console.log("Error deleting daily pulse:", error);
-          showSnackbar("Failed to delete daily pulse. Please try again.", "error");
+          showSnackbar(
+            "Failed to delete daily pulse. Please try again.",
+            "error"
+          );
         }
       },
     },

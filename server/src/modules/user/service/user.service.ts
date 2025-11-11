@@ -135,6 +135,7 @@ class UserService {
           name: 1,
           totalStars: 1,
           time: 1,
+          companyMail: 1,
           avatar: { $arrayElemAt: ["$avatarDetails.src", 0] },
           businessLogo: 1,
         },

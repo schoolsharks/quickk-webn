@@ -145,7 +145,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   break;
 
                 case "yes-no":
-                  pulseType = "Yes / No";
+                  if (p.image != "") {
+                    pulseType = "Mentor";
+                  } else {
+                    pulseType = "Yes / No";
+                  }
                   break;
                 case "agree-disagree":
                   pulseType = "Agree / Disagree";
@@ -274,6 +278,12 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
         return pulse.questionText.trim() !== "";
       } else if (pulse.pulseType === "Image (Right / Wrong)") {
         pulse.qType = "TWO_CHOICE";
+        pulse.type = "question";
+        return pulse.questionText.trim() !== "";
+      } else if (pulse.pulseType === "Mentor") {
+        pulse.qType = "TWO_CHOICE";
+        pulse.optionType = "yes-no";
+        pulse.options = ["YES", "NO"];
         pulse.type = "question";
         return pulse.questionText.trim() !== "";
       } else if (pulse.pulseType === "Multiple Images") {
@@ -634,6 +644,24 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             />
           </Box>
         );
+      case "Mentor":
+        return (
+          <Box sx={{ minHeight: "400px" }}>
+            <QuestionTwoOption
+              id="preview"
+              questionText={
+                currentPulse.questionText || ""
+                // defaultData.rightWrong.questionText
+              }
+              optionType="text"
+              options={["Yes", "No"]}
+              image={
+                currentPulse.image || uploadedImages[currentPulseIndex] || ""
+              }
+              onAnswer={() => {}}
+            />
+          </Box>
+        );
 
       case "Advertisement":
         return (
@@ -941,6 +969,130 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
             <Typography variant="h6" color="white">
               Image
+            </Typography>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <Button
+                startIcon={<CloudUpload />}
+                variant={
+                  imageInputModes[currentPulseIndex] === "file"
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() =>
+                  setImageInputModes((m) => ({
+                    ...m,
+                    [currentPulseIndex]: "file",
+                  }))
+                }
+                sx={{
+                  color:
+                    imageInputModes[currentPulseIndex] === "file"
+                      ? "black"
+                      : "white",
+                  borderColor: "primary.main",
+                  background:
+                    imageInputModes[currentPulseIndex] === "file"
+                      ? "primary.main"
+                      : "transparent",
+                  minWidth: 0,
+                }}
+              >
+                File
+              </Button>
+              <Button
+                variant={
+                  imageInputModes[currentPulseIndex] === "url" ||
+                  !imageInputModes[currentPulseIndex]
+                    ? "contained"
+                    : "outlined"
+                }
+                onClick={() =>
+                  setImageInputModes((m) => ({
+                    ...m,
+                    [currentPulseIndex]: "url",
+                  }))
+                }
+                sx={{
+                  color:
+                    imageInputModes[currentPulseIndex] === "url"
+                      ? "black"
+                      : "white",
+                  borderColor: "primary.main",
+                  background:
+                    imageInputModes[currentPulseIndex] === "url" ||
+                    !imageInputModes[currentPulseIndex]
+                      ? "primary.main"
+                      : "transparent",
+                  minWidth: 0,
+                }}
+              >
+                URL
+              </Button>
+            </Box>
+            {imageInputModes[currentPulseIndex] === "file" ? (
+              <input
+                type="file"
+                // value={currentPulse?.image || " "}
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setUploadedImages((imgs) => ({
+                    ...imgs,
+                    [currentPulseIndex]: file,
+                  }));
+                  handleInputChange("image", "");
+                }}
+              />
+            ) : (
+              <TextField
+                fullWidth
+                value={currentPulse.image ?? ""}
+                onChange={(e) => {
+                  handleInputChange("image", e.target.value);
+                  setUploadedImages((imgs) => ({
+                    ...imgs,
+                    [currentPulseIndex]: null,
+                  }));
+                }}
+                sx={{
+                  backgroundColor: "#333",
+                  "& .MuiOutlinedInput-root": {
+                    color: "white",
+                    "& fieldset": { borderColor: "#444" },
+                    "&:hover fieldset": { borderColor: "#666" },
+                    "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                  },
+                }}
+                placeholder="Paste image URL"
+              />
+            )}
+          </Box>
+        );
+      case "Mentor":
+        return (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+            <Typography variant="h6" color="white">
+              Text
+            </Typography>
+            <TextField
+              fullWidth
+              value={currentPulse.questionText ?? ""}
+              onChange={(e) =>
+                handleInputChange("questionText", e.target.value)
+              }
+              sx={{
+                backgroundColor: "#333",
+                "& .MuiOutlinedInput-root": {
+                  color: "white",
+                  "& fieldset": { borderColor: "#444" },
+                  "&:hover fieldset": { borderColor: "#666" },
+                  "&.Mui-focused fieldset": { borderColor: "primary.main" },
+                },
+              }}
+            />
+
+            <Typography variant="h6" color="white">
+              Banner
             </Typography>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
               <Button
@@ -1492,6 +1644,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   <MenuItem value="Image (Right / Wrong)">
                     Image (Right / Wrong)
                   </MenuItem>
+                  <MenuItem value="Mentor">Mentor</MenuItem>
                   <MenuItem value="Multiple Images">Multiple Images</MenuItem>
                   <MenuItem value="Advertisement">Advertisement</MenuItem>
                 </Select>

@@ -80,10 +80,10 @@ const Dashboard = () => {
               px={1}
               mt={1}
               sx={{ cursor: "pointer" }}
-              onClick={() => (window.location.href = "/user/webn-membership")}
+              onClick={() => (window.location.href = "/user/get-listed")}
             >
               <Typography color={"black"} fontSize={14}>
-                Become Webn Member
+                Want to get listed?
               </Typography>
             </Box>
           )}

@@ -22,7 +22,7 @@ const StatusPanel: React.FC = () => {
     },
     {
       icon: <Leaderboard sx={{ fontSize: 24, color: "white" }} />,
-      title: "Leaderboard",
+      title: "Achievers",
       value: null,
       bgColor: theme.palette.text.secondary,
       onClick: () => {

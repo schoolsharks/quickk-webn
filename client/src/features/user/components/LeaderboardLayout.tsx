@@ -17,6 +17,7 @@ import { RootState } from "../../../app/store";
 import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
+import { motion } from "framer-motion";
 
 interface Leaderboard {
   users: Array<{
@@ -73,7 +74,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
           <ArrowBackIcon />
         </IconButton>
         <Typography fontWeight="bold" fontSize={"25px"} ml={1}>
-          Leaderboard
+          Achievers
         </Typography>
       </Box>
 
@@ -128,17 +129,27 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 #{user.rank}
               </Typography>
               <Box
+                component={motion.div}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: index * 0.2,
+                  ease: "easeOut" 
+                }}
                 border={
                   isHighlight
                     ? `2px solid ${theme.palette.primary.main}`
                     : "none"
                 }
                 sx={{
-                  ...podiumStyles[index],
+                  height: podiumStyles[index].height,
+                  background: podiumStyles[index].background || podiumStyles[index].backgroundColor,
                   p: 1,
                   display: "flex",
                   flexDirection: "column",
                   flex: 1,
+                  transformOrigin: "bottom",
                 }}
               >
                 {user.businessLogo ? (

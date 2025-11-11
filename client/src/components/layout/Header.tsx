@@ -1,6 +1,7 @@
 import { Stack, Box, useTheme } from "@mui/material";
 import logo from "../../assets/images/header/logo.webp";
-import EventModeToggle from "../ui/EventMode";
+// import EventModeToggle from "../ui/EventMode";
+import SidebarHamburger from "../../features/user/components/SidebarHamburger";
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -21,7 +22,8 @@ const Header: React.FC = () => {
           sx={{ width: "50px", height: "50px", objectFit: "cover" }}
         />
 
-        <EventModeToggle />
+        {/* <EventModeToggle /> */}
+        <SidebarHamburger />
       </Stack>
     </header>
   );

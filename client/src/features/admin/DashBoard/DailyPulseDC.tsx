@@ -116,7 +116,7 @@ const DailyPulseDC: React.FC = () => {
           >
             <Box>
               <Typography variant="h4" color="white">
-                Daily Interaction
+                What’s up today?
               </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>

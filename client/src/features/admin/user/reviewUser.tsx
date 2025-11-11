@@ -135,10 +135,10 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
     },
     {
       name: "businessLogo",
-      label: "Business Logo",
+      label: "Founder's image",
       type: "image",
       required: false,
-      placeholder: "Upload business logo or enter image URL",
+      placeholder: "Upload founder's image or enter image URL",
     },
     {
       name: "instagram",

@@ -200,30 +200,26 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 <Box
                   display={"flex"}
                   flexDirection={"column"}
-                  alignItems={"center"}
+                  // alignItems={"center"}
                   // justifyContent={"space-between"}
                 >
                   <Typography
                     color={index === 2 ? "inherit" : "black"}
                     fontSize="14px"
                     mt={1}
+                    textAlign={"left"}
+                    lineHeight={"120%"}
                   >
                     {user.name}
                   </Typography>
-                  <Box display={"flex"} alignItems={"center"} gap={1}>
+                  <Box display={"flex"} alignItems={"center"} gap="3px" mt={"4px"}>
                     <Typography
-                      ml={"4px"}
                       fontSize="14px"
                       color={index === 2 ? "inherit" : "black"}
-                      sx={{
-                        textWrap: "nowrap",
-                      }}
                     >
                       {user.totalStars}{" "}
-                      <StarsOutlinedIcon
-                        sx={{ fontSize: 12, verticalAlign: "middle" }}
-                      />
                     </Typography>
+                    <StarsOutlinedIcon sx={{ fontSize: 12 }} />
                   </Box>
                 </Box>
               </Box>

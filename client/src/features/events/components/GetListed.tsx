@@ -297,7 +297,7 @@ const GetListed = () => {
                   marginBottom: "16px",
                 }}
               >
-                Want to Get Listed on Our Platform?
+                Want to get your business listed on our Platform?
               </Typography>
 
               <Typography

@@ -1,29 +1,27 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import {
   Menu,
   X,
-  User,
   Gift,
+  Home,
   // Trophy
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LeaderboardOutlined, Logout } from "@mui/icons-material";
+import {
+  CardGiftcard,
+  Leaderboard,
+  PeopleOutlineOutlined,
+  PersonOutline,
+} from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLogoutMutation } from "../userApi";
+// import { useLogoutMutation } from "../userApi";
+import joinWebnBanner from "../../../assets/images/join-webn-banner.webp";
 
 const SidebarHamburger = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const theme = useTheme();
-  const [logout, { isLoading }] = useLogoutMutation();
+  // const [logout, { isLoading }] = useLogoutMutation();
 
   // Disable scroll when sidebar is open
   useEffect(() => {
@@ -41,20 +39,41 @@ const SidebarHamburger = () => {
 
   const tabs = [
     {
-      name: "Dashboard",
-      icon: <User size={24} strokeWidth={1.5} />,
+      name: "Home",
+      icon: <Home size={24} strokeWidth={1.5} />,
       path: "/user/dashboard",
     },
     {
-      name: "Event mode",
+      name: "Events",
       icon: <Gift size={24} strokeWidth={1.5} />,
       path: "/user/event-mode",
     },
     {
-      name: "Become a webn member",
-      icon: <LeaderboardOutlined sx={{ fontSize: "24px" }} />,
-      path: "/user/webn-membership",
+      name: "Rewards & Resources",
+      icon: <CardGiftcard sx={{ fontSize: 24, color: "black" }} />,
+      path: "/user/rewards",
     },
+    {
+      name: "Achievers",
+      icon: <Leaderboard sx={{ fontSize: 24, color: "black" }} />,
+      path: "/user/leaderboard",
+    },
+    {
+      name: "Referral",
+      icon: <PeopleOutlineOutlined sx={{ fontSize: 24, color: "black" }} />,
+      path: "/user/referral",
+    },
+    {
+      name: "Profile",
+      icon: <PersonOutline sx={{ fontSize: 24, color: "black" }} />,
+      path: "/user/profile",
+    },
+
+    // {
+    //   name: "Become a webn member",
+    //   icon: <LeaderboardOutlined sx={{ fontSize: "24px" }} />,
+    //   path: "/user/webn-membership",
+    // },
     // {
     //   name: "Challenges",
     //   icon: <Trophy size={24} strokeWidth={1.5} />,
@@ -67,14 +86,14 @@ const SidebarHamburger = () => {
     setSidebarOpen(false);
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout({}).unwrap();
-      navigate("/user/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
+  // const handleLogout = async () => {
+  //   try {
+  //     await logout({}).unwrap();
+  //     navigate("/user/login");
+  //   } catch (error) {
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
 
   const renderSidebar = () => {
     // Render your sidebar here
@@ -92,7 +111,7 @@ const SidebarHamburger = () => {
           zIndex: 999,
           display: "flex",
           flexDirection: "column",
-          background: `linear-gradient(360deg, #000000 0%, ${theme.palette.primary.main} 100%)`,
+          background: `linear-gradient(360deg, #A04AD4 0%, #E7C0FF 100%)`,
         }}
       >
         <IconButton
@@ -115,7 +134,7 @@ const SidebarHamburger = () => {
               key={index}
               display={"flex"}
               alignItems={"center"}
-              color={"#fff"}
+              color={"#000"}
               gap={"4px"}
               onClick={() => handleNavigation(tab.path)}
               sx={{
@@ -127,25 +146,41 @@ const SidebarHamburger = () => {
               }}
             >
               {tab.icon}
-              <Typography fontSize={"20px"} fontWeight={"400"}>
+              <Typography
+                fontSize={"20px"}
+                fontWeight={"500"}
+                whiteSpace="pre-line"
+              >
                 {tab.name}
               </Typography>
             </Box>
           ))}
         </Stack>
-        <Button
-          startIcon={<Logout />}
-          disabled={isLoading}
-          onClick={handleLogout}
+        <Stack
           sx={{
-            margin: "auto 8px 8px",
-            fontSize: "20px",
-            color: "#fff",
-            justifyContent: "flex-start",
+            mt: "auto",
           }}
         >
-          Logout
-        </Button>
+          {/* <Button
+            startIcon={<Logout />}
+            disabled={isLoading}
+            onClick={handleLogout}
+            sx={{
+              fontSize: "20px",
+              color: "#000",
+              justifyContent: "flex-start",
+              mx: "8px",
+            }}
+          >
+            Logout
+          </Button> */}
+          <Box
+            component={"img"}
+            src={joinWebnBanner}
+            width="240px"
+            onClick={() => navigate("/user/webn-membership")}
+          />
+        </Stack>
       </motion.div>
     );
   };

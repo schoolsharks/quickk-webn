@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Header from "../../components/layout/Header";
 import { useTheme } from "@mui/material/styles";
 import DailyPulse from "./DailyPulse";
-import StatusPanel from "../../features/user/components/StatusPanel";
+// import StatusPanel from "../../features/user/components/StatusPanel";
 // import MissionMillion from "../../features/user/components/MisssionMillion";
 // import ToggleBar from "../../features/user/components/ToggleBar";
 import { useSelector } from "react-redux";
@@ -83,7 +83,7 @@ const Dashboard = () => {
               onClick={() => (window.location.href = "/user/get-listed")}
             >
               <Typography color={"black"} fontSize={14}>
-                Want to get listed?
+                Want to get your business listed?
               </Typography>
             </Box>
           )}
@@ -138,11 +138,11 @@ const Dashboard = () => {
       {/* </AnimateOnScroll> */}
 
       {/* Status Panel */}
-      <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
+      {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"60px"}>
           <StatusPanel />
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* <AnimateOnScroll transition={baseTransition} variants={fadeInUp}>
         <Box mt={"48px"}>

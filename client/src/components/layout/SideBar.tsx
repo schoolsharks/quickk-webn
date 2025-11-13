@@ -390,7 +390,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               disablePadding
               sx={{
                 // borderRadius: "8px",
-                bgcolor: shouldShowBlackBg ? "#000000" : "transparent",
+                bgcolor: shouldShowBlackBg ? "#bfb5ff" : "transparent",
               }}
             >
               <ListItemButton
@@ -409,7 +409,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               >
                 <Box
                   sx={{
-                    bgcolor: shouldShowBlackBg ? "#FFFFFF" : "black",
+                    bgcolor: shouldShowBlackBg ? "#FFFFFF" : "#bfb5ff",
                     width: 40,
                     height: 40,
                     display: "flex",
@@ -422,7 +422,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: shouldShowBlackBg ? "#000000" : "#FFFFFF",
+                      color: shouldShowBlackBg ? "#bfb5ff" : "#FFFFFF",
                       "& svg": {
                         fontSize: "20px",
                       },
@@ -441,7 +441,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     "& .MuiListItemText-primary": {
                       fontWeight: 400,
                       fontSize: "14px",
-                      color: shouldShowBlackBg ? "#FFFFFF" : "black",
+                      color: "black",
                     },
                   }}
                 />
@@ -457,7 +457,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <List
               component="div"
               disablePadding
-              sx={{ backgroundColor: "#000", mb: 1 }}
+              sx={{ backgroundColor: "#bfb5ff", mb: 1 }}
             >
               {accessibleChildren.map((child) => (
                 <ListItem key={child.id} disablePadding>
@@ -469,11 +469,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       pl: 6,
                       pr: 2.5,
                       height: 32,
-                      backgroundColor: "#000",
+                      backgroundColor: "#bfb5ff",
                       color: isActiveItem(child.path) ? "#6B21A8" : "#FFFFFF",
-                      "&:hover": {
-                        backgroundColor: "#FFFFFF80",
-                      },
                       borderRadius: 0,
                       mx: 1,
                       mb: 0.5,
@@ -494,8 +491,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                         "& .MuiListItemText-primary": {
                           fontWeight: isActiveItem(child.path) ? 600 : 400,
                           color: isActiveItem(child.path)
-                            ? "white"
-                            : "#FFFFFF80",
+                            ? "black"
+                            : "black",
                           fontSize: "12px",
                         },
                       }}

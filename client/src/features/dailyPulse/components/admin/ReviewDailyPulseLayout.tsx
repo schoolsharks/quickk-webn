@@ -712,7 +712,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Flash Card":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Title
             </Typography>
             <TextField
@@ -720,20 +720,20 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               value={currentPulse.title}
               onChange={(e) => handleInputChange("title", e.target.value)}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
-                "& .MuiInputLabel-root": { color: "white" },
+                "& .MuiInputLabel-root": { color: "black" },
                 "& .MuiInputBase-root": {
                   borderRadius: "0",
                 },
               }}
             />
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Content
             </Typography>
             <TextField
@@ -743,14 +743,14 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               value={currentPulse.content}
               onChange={(e) => handleInputChange("content", e.target.value)}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
-                "& .MuiInputLabel-root": { color: "white" },
+                "& .MuiInputLabel-root": { color: "black" },
                 "& .MuiInputBase-root": {
                   borderRadius: "0",
                 },
@@ -768,7 +768,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 />
               }
               label="Want Feedback?"
-              sx={{ color: "white" }}
+              sx={{ color: "black" }}
             />
           </Box>
         );
@@ -776,7 +776,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Multiple Choice Question":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Question
             </Typography>
             <TextField
@@ -786,9 +786,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -796,7 +796,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Option A
             </Typography>
             <TextField
@@ -804,9 +804,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               value={currentPulse.optionA}
               onChange={(e) => handleInputChange("optionA", e.target.value)}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -814,7 +814,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Option B
             </Typography>
             <TextField
@@ -822,9 +822,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               value={currentPulse.optionB}
               onChange={(e) => handleInputChange("optionB", e.target.value)}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -832,7 +832,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Correct Answer
             </Typography>
             <RadioGroup
@@ -843,13 +843,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             >
               <FormControlLabel
                 value={currentPulse.optionA}
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">Option A</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">Option A</Typography>}
               />
               <FormControlLabel
                 value={currentPulse.optionB}
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">Option B</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">Option B</Typography>}
               />
             </RadioGroup>
           </Box>
@@ -858,7 +858,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Yes / No":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Question
             </Typography>
             <TextField
@@ -868,16 +868,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Correct Answer
             </Typography>
             <RadioGroup
@@ -888,13 +888,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             >
               <FormControlLabel
                 value="YES"
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">Yes</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">Yes</Typography>}
               />
               <FormControlLabel
                 value="NO"
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">No</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">No</Typography>}
               />
             </RadioGroup>
           </Box>
@@ -902,7 +902,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Agree / Disagree":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Question
             </Typography>
             <TextField
@@ -912,16 +912,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Correct Answer
             </Typography>
             <RadioGroup
@@ -932,13 +932,13 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             >
               <FormControlLabel
                 value="AGREE"
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">Agree</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">Agree</Typography>}
               />
               <FormControlLabel
                 value="DISAGREE"
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">Disagree</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">Disagree</Typography>}
               />
             </RadioGroup>
           </Box>
@@ -947,7 +947,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Image (Right / Wrong)":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Question
             </Typography>
             <TextField
@@ -957,9 +957,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -967,7 +967,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Image
             </Typography>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -1055,9 +1055,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   }));
                 }}
                 sx={{
-                  backgroundColor: "#333",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-root": {
-                    color: "white",
+                    color: "black",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
                     "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1071,7 +1071,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Mentor":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Text
             </Typography>
             <TextField
@@ -1081,9 +1081,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1091,7 +1091,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               }}
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Banner
             </Typography>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -1179,9 +1179,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   }));
                 }}
                 sx={{
-                  backgroundColor: "#333",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-root": {
-                    color: "white",
+                    color: "black",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
                     "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1196,7 +1196,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Multiple Images":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Enter Question
             </Typography>
             <TextField
@@ -1206,9 +1206,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1217,7 +1217,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             />
             {[0, 1].map((i) => (
               <Box key={i}>
-                <Typography variant="h6" color="white">
+                <Typography variant="h6" color="black">
                   Option {i === 0 ? "A" : "B"} (Image)
                 </Typography>
                 <Box
@@ -1330,9 +1330,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       }));
                     }}
                     sx={{
-                      backgroundColor: "#333",
+                      backgroundColor: "white",
                       "& .MuiOutlinedInput-root": {
-                        color: "white",
+                        color: "black",
                         "& fieldset": { borderColor: "#444" },
                         "&:hover fieldset": { borderColor: "#666" },
                         "&.Mui-focused fieldset": {
@@ -1350,7 +1350,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       case "Advertisement":
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Company Name
             </Typography>
             <TextField
@@ -1360,9 +1360,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1371,7 +1371,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               placeholder="Enter company name"
             />
 
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Image
             </Typography>
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -1458,9 +1458,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   }));
                 }}
                 sx={{
-                  backgroundColor: "#333",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-root": {
-                    color: "white",
+                    color: "black",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
                     "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1474,7 +1474,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
       default:
         return (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Enter Question
             </Typography>
             <TextField
@@ -1484,16 +1484,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("questionText", e.target.value)
               }
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Option A (Image URL)
             </Typography>
             <TextField
@@ -1505,16 +1505,16 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("options", newOptions);
               }}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
                 },
               }}
             />
-            <Typography variant="h6" color="white">
+            <Typography variant="h6" color="black">
               Option B (Image URL)
             </Typography>
             <TextField
@@ -1526,9 +1526,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 handleInputChange("options", newOptions);
               }}
               sx={{
-                backgroundColor: "#333",
+                backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
-                  color: "white",
+                  color: "black",
                   "& fieldset": { borderColor: "#444" },
                   "&:hover fieldset": { borderColor: "#666" },
                   "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1556,7 +1556,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
           <Box
             sx={{
               width: "40%",
-              background: "black",
+              background: "#F0D7FF",
               p: 4,
             }}
           >
@@ -1569,7 +1569,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 alignItems: "center",
               }}
             >
-              <Typography variant="h6" color="white">
+              <Typography variant="h6" color="black">
                 Pulse {currentPulseIndex + 1} of {pulses.length}
               </Typography>
               <Box sx={{ display: "flex", gap: 1 }}>
@@ -1605,7 +1605,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
 
             {/* Pulse Type Selector */}
             <Box sx={{ mb: 4 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "black" }}>
                 Choose the type of Pulse.
               </Typography>
               <FormControl fullWidth>
@@ -1613,8 +1613,8 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                   value={pulseType}
                   onChange={(e) => handlePulseTypeChange(e.target.value)}
                   sx={{
-                    backgroundColor: "#333",
-                    color: "white",
+                    backgroundColor: "white",
+                    color: "black",
                     borderRadius: "0",
                     "& .MuiOutlinedInput-notchedOutline": {
                       borderColor: "#444",
@@ -1626,11 +1626,11 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                       borderColor: "primary.main",
                     },
                     "& .MuiSvgIcon-root": {
-                      color: "white",
+                      color: "black",
                     },
                     "& fieldset": { borderRadius: 0 },
                     "& .MuiOutlinedInput-root": {
-                      color: "white",
+                      color: "black",
                       "& fieldset": { borderColor: "#444" },
                     },
                   }}
@@ -1656,7 +1656,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             {/* Publish Date */}
 
             <Box sx={{ mt: 4 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "black" }}>
                 Stars-(For all Daily Pulse)
               </Typography>
               <TextField
@@ -1666,9 +1666,9 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 onChange={(e) => setStars(Number(e.target.value))}
                 sx={{
                   mb: 2,
-                  backgroundColor: "#333",
+                  backgroundColor: "white",
                   "& .MuiOutlinedInput-root": {
-                    color: "white",
+                    color: "black",
                     "& fieldset": { borderColor: "#444" },
                     "&:hover fieldset": { borderColor: "#666" },
                     "&.Mui-focused fieldset": { borderColor: "primary.main" },
@@ -1676,7 +1676,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                 }}
               />
 
-              <Typography variant="h6" sx={{ mb: 2 }}>
+              <Typography variant="h6" sx={{ mb: 2, color: "black" }}>
                 Publish on
               </Typography>
               <DatePicker
@@ -1689,25 +1689,25 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
                     fullWidth: true,
                     variant: "outlined",
                     sx: {
-                      backgroundColor: "#1e1e1e",
-                      color: "white",
+                      backgroundColor: "white",
+                      color: "black",
                       "& .MuiPickersInputBase-root": {
                         borderRadius: "0",
                       },
                       "& .MuiInputBase-root": {
-                        color: "white",
+                        color: "black",
                       },
                       "& .MuiInputLabel-root": {
-                        color: "white",
+                        color: "black",
                       },
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "black",
                       },
                       "& .MuiPickersSectionList-section ": {
-                        color: "white",
+                        color: "black",
                       },
                       "& .MuiSvgIcon-root": {
-                        color: "white",
+                        color: "black",
                       },
                     },
                   },
@@ -1723,7 +1723,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
               p: 4,
               display: "flex",
               flexDirection: "column",
-              background: "black",
+              background: "#F0D7FF",
             }}
           >
             <Box

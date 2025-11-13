@@ -217,8 +217,8 @@ const DailyPulseTable: React.FC<DailyPulseTableProps> = ({
 
   if (isLoading) {
     return (
-      <Box sx={{ background: "black", p: "24px 28px" }}>
-        <Typography sx={{ color: "white" }}>Loading...</Typography>
+      <Box sx={{ background: "#F0D7FF", p: "24px 28px" }}>
+        <Typography sx={{ color: "black" }}>Loading...</Typography>
       </Box>
     );
   }

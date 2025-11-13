@@ -24,7 +24,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
     {
       title: "Total Members",
       value: isLoading ? "..." : totalMembers,
-      backgroundColor: "black",
+      backgroundColor: "#BFB5FF",
       icons: <Person />,
       onManageClick: () => {
         navigate("/admin/members/webn");
@@ -33,7 +33,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
     {
       title: "Total Signups",
       value: isLoading ? "..." : totalSignups,
-      backgroundColor: "#464646",
+      backgroundColor: "#F0D7FF",
       icons: <Person />,
       onManageClick: () => {
         navigate("/admin/members/gowomania");
@@ -42,7 +42,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
     {
       title: "Upcoming Events",
       value: isLoading ? "..." : upcomingEvents,
-      backgroundColor: "Black",
+      backgroundColor: "#BFB5FF",
       icons: <CalendarTodayIcon />,
       onManageClick: () => {
         navigate("/admin/events");
@@ -60,8 +60,8 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({
               title={stat.title}
               value={stat.value}
               backgroundColor={stat.backgroundColor}
-              textColor="white"
-              iconColor="white"
+              textColor="black"
+              iconColor="black"
             />
           </Grid>
         ))}

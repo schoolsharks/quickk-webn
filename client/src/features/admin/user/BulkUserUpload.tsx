@@ -682,19 +682,19 @@ const BulkUserUpload: React.FC = () => {
       <Card
         sx={{
           mb: 3,
-          backgroundColor: theme.palette.text.secondary,
+          backgroundColor:"#F0D7FF",
           borderRadius: 0,
         }}
       >
         <CardContent>
-          <Typography variant="h5" sx={{ color: "white", mb: 2 }}>
+          <Typography variant="h5" sx={{ color: "black", mb: 2 }}>
             Upload excel file
           </Typography>
 
           <Box
             {...getRootProps()}
             sx={{
-              border: "2px dashed white",
+              border: "2px dashed black",
               borderRadius: 0,
               p: 4,
               textAlign: "center",
@@ -704,18 +704,18 @@ const BulkUserUpload: React.FC = () => {
                 : "transparent",
               transition: "background-color 0.3s",
               "&:hover": {
-                backgroundColor: "rgba(160, 74, 212, 0.05)",
+                backgroundColor: "white",
               },
             }}
           >
             <input {...getInputProps()} />
-            <CloudUpload sx={{ fontSize: 48, color: "white", mb: 2 }} />
-            <Typography variant="body1" sx={{ color: "white", mb: 1 }}>
+            <CloudUpload sx={{ fontSize: 48, color: "black", mb: 2 }} />
+            <Typography variant="body1" sx={{ color: "black", mb: 1 }}>
               {isDragActive
                 ? "Drop the Excel file here..."
                 : "Drag & drop an Excel file here, or click to select"}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#ccc" }}>
+            <Typography variant="body2" sx={{ color: "black" }}>
               Supported formats: .xlsx, .xls
             </Typography>
           </Box>

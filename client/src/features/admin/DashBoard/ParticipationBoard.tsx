@@ -152,8 +152,8 @@ const ParticipationBoard: React.FC = () => {
                 participant.rank === 1
                   ? theme.palette.primary.main
                   : participant.rank <= 3
-                  ? "#444444"
-                  : "#0D0D0D",
+                  ? "#F0D7FF"
+                  : "#BFB5FF",
               border: participant.rank > 3 ? "1px solid #FFFFFF80" : "none",
               "&:hover": {
                 opacity: 0.9,
@@ -184,8 +184,8 @@ const ParticipationBoard: React.FC = () => {
                 sx={{
                   color:
                     participant.rank === 1
-                      ? theme.palette.background.default
-                      : "white",
+                      ? "black"
+                      : "black",
                   fontSize: "16px",
                   // minWidth: 40,
                 }}
@@ -198,8 +198,8 @@ const ParticipationBoard: React.FC = () => {
                 sx={{
                   color:
                     participant.rank === 1
-                      ? theme.palette.background.default
-                      : "white",
+                      ? "black"
+                      : "black",
                   fontSize: "16px",
                   flex: 1,
                   ml: 2,
@@ -213,8 +213,8 @@ const ParticipationBoard: React.FC = () => {
                 sx={{
                   color:
                     participant.rank === 1
-                      ? theme.palette.background.default
-                      : "white",
+                      ? "black"
+                      : "black",
                   fontSize: "16px",
                   mr: 2,
                 }}
@@ -226,8 +226,8 @@ const ParticipationBoard: React.FC = () => {
                 sx={{
                   color:
                     participant.rank === 1
-                      ? theme.palette.background.default
-                      : "white",
+                      ? "black"
+                      : "black",
                 }}
               >
                 <DownloadIcon />

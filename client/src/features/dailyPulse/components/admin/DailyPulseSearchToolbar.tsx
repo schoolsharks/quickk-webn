@@ -48,7 +48,7 @@ const DailyPulseSearchToolbar: React.FC<DailyPulseSearchToolbarProps> = ({
       >
         <Box display="flex" gap={2}>
           <Box
-            bgcolor="#1A1A1A"
+            bgcolor="#F0D7FF"
             px={2}
             py={1}
             borderRadius="4px"
@@ -78,19 +78,19 @@ const DailyPulseSearchToolbar: React.FC<DailyPulseSearchToolbarProps> = ({
                   size: "small",
                   sx: {
                     "& .MuiInputBase-root": {
-                      color: "white",
+                      color: "black",
                     },
                     "& .MuiInputLabel-root": {
-                      color: "white",
+                      color: "black",
                     },
                     "& .MuiOutlinedInput-notchedOutline": {
                       borderColor: "black",
                     },
                     "& .MuiPickersSectionList-section ": {
-                      color: "white",
+                      color: "black",
                     },
                     "& .MuiSvgIcon-root": {
-                      color: "white",
+                      color: "black",
                     },
                   },
                 },

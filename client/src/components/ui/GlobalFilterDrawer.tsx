@@ -47,7 +47,7 @@ const GlobalFilterDrawer: React.FC<GlobalFilterDrawerProps> = ({
       <Box
         width={350}
         height="100%"
-        bgcolor="#252525"
+        bgcolor="#F0D7FF"
         px={"16px"}
         py={"24px"}
         display={"flex"}
@@ -61,11 +61,11 @@ const GlobalFilterDrawer: React.FC<GlobalFilterDrawerProps> = ({
             alignItems="center"
             mb={3}
           >
-            <Typography variant="h5" color="white">
+            <Typography variant="h5" color="black">
               Filters
             </Typography>
             <IconButton onClick={onClose}>
-              <CloseIcon sx={{ color: "white" }} />
+              <CloseIcon sx={{ color: "black" }} />
             </IconButton>
           </Box>
 
@@ -82,7 +82,7 @@ const GlobalFilterDrawer: React.FC<GlobalFilterDrawerProps> = ({
 
             return (
               <FormControl fullWidth sx={{ mb: 3 }} key={key}>
-                <FormLabel sx={{ color: "white", mb: 1, fontWeight: 500 }}>
+                <FormLabel sx={{ color: "black", mb: 1, fontWeight: 500 }}>
                   {label}
                 </FormLabel>
                 <Select
@@ -90,9 +90,9 @@ const GlobalFilterDrawer: React.FC<GlobalFilterDrawerProps> = ({
                   onChange={handleChange(key)}
                   displayEmpty
                   sx={{
-                    bgcolor: "#000",
-                    color: "white",
-                    "& .MuiSvgIcon-root": { color: "white" },
+                    bgcolor: "#F0D7FF",
+                    color: "black",
+                    "& .MuiSvgIcon-root": { color: "black" },
                   }}
                 >
                   {options.map((option) => (

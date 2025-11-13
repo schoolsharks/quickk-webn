@@ -31,15 +31,15 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
       title: "Total",
       value: Stats.total,
       icon: <PopularIcon />,
-      backgroundColor: "#000000",
-      iconColor: "white",
+      backgroundColor: "#BFB5FF",
+      iconColor: "black",
     },
     {
       title: webnClubMember ? "Moved from Gowomania" : "Moved to Webn",
       value: Stats.moved,
       icon: <UploadFileIcon />,
-      backgroundColor: "#404040",
-      iconColor: "white",
+      backgroundColor: "#F0D7FF",
+      iconColor: "black",
     },
     {
       title: "Active",
@@ -55,15 +55,15 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
           }}
         />
       ),
-      backgroundColor: "#000000",
-      iconColor: "white",
+      backgroundColor: "#BFB5FF",
+      iconColor: "black",
     },
     {
       title: "Listed",
       value: Stats.Listed,
       icon: <List />,
-      backgroundColor: "#404040",
-      iconColor: "white",
+      backgroundColor: "#F0D7FF",
+      iconColor: "black",
     },
   ];
 
@@ -73,7 +73,7 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
         {statsData.map((stat, index) => (
           <Grid size={3} key={index}>
             <StatsCard
-              textColor={"white"}
+              textColor={"black"}
               title={stat.title}
               value={stat.value}
               icon={stat.icon}

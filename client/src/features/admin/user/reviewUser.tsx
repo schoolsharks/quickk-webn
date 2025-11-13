@@ -315,7 +315,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         sx={{
           maxWidth: "80vw",
           mx: "auto",
-          backgroundColor: "black",
+          backgroundColor: "#F0D7FF",
           borderRadius: 0,
           p: 4,
         }}
@@ -324,7 +324,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
         <Typography
           variant="h4"
           sx={{
-            color: "white",
+            color: "black",
             mb: 3,
             textAlign: "center",
             fontWeight: "bold",
@@ -358,7 +358,7 @@ const ReviewUser: React.FC<UserFormPageProps> = ({ userData }) => {
           data={formData}
           onChange={handleFieldChange}
           containerStyle={{
-            backgroundColor: "black",
+            backgroundColor: "#F0D7FF",
           }}
         />
       </Box>

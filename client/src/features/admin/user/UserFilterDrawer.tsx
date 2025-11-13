@@ -54,7 +54,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
       <Box
         width={350}
         height="100%"
-        bgcolor="#252525"
+        bgcolor="#F0D7FF"
         px={"16px"}
         py={"24px"}
         display={"flex"}
@@ -68,16 +68,16 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
             alignItems="center"
             mb={3}
           >
-            <Typography variant="h5" color="white">
+            <Typography variant="h5" color="black">
               Sort Users
             </Typography>
             <IconButton onClick={onClose}>
-              <CloseIcon sx={{ color: "white" }} />
+              <CloseIcon sx={{ color: "black" }} />
             </IconButton>
           </Box>
 
           <FormControl fullWidth sx={{ mb: 3 }}>
-            <FormLabel sx={{ color: "white", mb: 2, fontWeight: 500 }}>
+            <FormLabel sx={{ color: "black", mb: 2, fontWeight: 500 }}>
               Sort By
             </FormLabel>
             <RadioGroup
@@ -92,7 +92,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
                   control={
                     <Radio
                       sx={{
-                        color: "white",
+                        color: "black",
                         "&.Mui-checked": {
                           color: "#A04AD4",
                         },
@@ -100,7 +100,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
                     />
                   }
                   label={
-                    <Typography sx={{ color: "white", fontSize: "16px" }}>
+                    <Typography sx={{ color: "black", fontSize: "16px" }}>
                       {option.label}
                     </Typography>
                   }
@@ -113,7 +113,7 @@ const UserFilterDrawer: React.FC<UserFilterDrawerProps> = ({
         <GreenButton
           onClick={onApply}
           fullWidth
-          sx={{ background: "black", borderRadius: "2px", color: "white" }}
+          sx={{ background: "white", borderRadius: "2px", color: "black" }}
         >
           Apply
         </GreenButton>

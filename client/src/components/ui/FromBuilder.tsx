@@ -80,24 +80,24 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
   fieldStyle,
 }) => {
   const defaultFieldStyle = {
-    // backgroundColor: "#333",
+    backgroundColor: "white",
     borderRadius: "0",
-    color: "white",
+    color: "black",
     "& .MuiOutlinedInput-root": {
       borderRadius: "0",
-      border: "1px solid #464646",
-      color: "white",
+      // border: "1px solid #464646",
+      color: "black",
       "& fieldset": { borderRadius: "0" },
-      "&:hover fieldset": { borderColor: "#464646" },
-      "&.Mui-focused fieldset": { borderColor: "464646" },
+      // "&:hover fieldset": { borderColor: "#464646" },
+      // "&.Mui-focused fieldset": { borderColor: "464646" },
     },
-    "& .MuiInputLabel-root": { color: "white" },
-    "& .MuiSelect-icon": { color: "white" },
+    "& .MuiInputLabel-root": { color: "black" },
+    "& .MuiSelect-icon": { color: "black" },
     "& .MuiInputBase-root": {
       borderRadius: "0",
     },
     "& .MuiInputBase-input": {
-      color: "white",
+      color: "black",
     },
   };
 
@@ -156,7 +156,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
                 ...defaultFieldStyle,
                 ...fieldStyle,
                 border: "1px solid #464646",
-                "& .MuiSvgIcon-root": { color: "white" },
+                "& .MuiSvgIcon-root": { color: "black" },
                 "& .MuiInputBase-root": {
                   borderRadius: "0",
                 },
@@ -181,8 +181,8 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               <FormControlLabel
                 key={option.value}
                 value={option.value}
-                control={<Radio sx={{ color: "white" }} />}
-                label={<Typography color="white">{option.label}</Typography>}
+                control={<Radio sx={{ color: "black" }} />}
+                label={<Typography color="black">{option.label}</Typography>}
               />
             ))}
           </RadioGroup>
@@ -204,7 +204,7 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               />
             }
             label={field.label}
-            sx={{ color: "white" }}
+            sx={{ color: "black" }}
           />
         );
 
@@ -215,11 +215,11 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
               <Checkbox
                 checked={Boolean(value)}
                 onChange={(e) => onChange(field.name, e.target.checked)}
-                sx={{ color: "white" }}
+                sx={{ color: "black" }}
               />
             }
             label={field.label}
-            sx={{ color: "white" }}
+            sx={{ color: "black" }}
           />
         );
 
@@ -503,9 +503,9 @@ const FormBuilder: React.FC<DynamicFormBuilderProps> = ({
       {fields.map((field) => (
         <Box key={field.name}>
           {field.type !== "switch" && field.type !== "checkbox" && (
-            <Typography variant="h6" color="white" sx={{ mb: 1 }}>
+            <Typography variant="h6" color="black" sx={{ mb: 1 }}>
               {field.label}
-              {field.required && <span style={{ color: "white" }}> *</span>}
+              {field.required && <span style={{ color: "black" }}> *</span>}
             </Typography>
           )}
           {renderField(field)}

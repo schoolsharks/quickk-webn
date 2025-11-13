@@ -453,9 +453,9 @@ const ProfileLayout = () => {
             flexDirection={"column"}
             p={"18px 24px"}
             gap={1}
-            bgcolor="rgba(37, 37, 37, 1)"
+            bgcolor="#F0D7FF"
             flex={1}
-            color={"white"}
+            color={"black"}
             letterSpacing={"-3%"}
             height={"100px"}
           >
@@ -467,8 +467,8 @@ const ProfileLayout = () => {
             flexDirection={"column"}
             p={"18px 20px"}
             gap={1}
-            color={"white"}
-            bgcolor={theme.palette.text.secondary}
+            color={"black"}
+            bgcolor={"#BFB5FF"}
             flex={1}
             height={"100px"}
             letterSpacing={"-3%"}

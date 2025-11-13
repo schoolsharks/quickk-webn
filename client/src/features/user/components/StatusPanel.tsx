@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Stack, Button, useTheme } from "@mui/material";
+import { Box, Typography, Stack, Button, } from "@mui/material";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
@@ -8,39 +8,39 @@ import { Leaderboard } from "@mui/icons-material";
 
 const StatusPanel: React.FC = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const cardData = [
     {
       icon: <CardGiftcardIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Rewards & Resources",
       value: null,
-      bgColor: "#D9D9D9",
+      bgColor: "#BFB5FF",
       onClick: () => {
         navigate("/user/rewards");
       },
     },
     {
-      icon: <Leaderboard sx={{ fontSize: 24, color: "white" }} />,
+      icon: <Leaderboard sx={{ fontSize: 24, color: "black" }} />,
       title: "Achievers",
       value: null,
-      bgColor: theme.palette.text.secondary,
+      bgColor: "#F0D7FF",
       onClick: () => {
         navigate("/user/leaderboard");
       },
     },
     {
-      icon: <PeopleOutlineOutlinedIcon sx={{ fontSize: 24, color: "white" }} />,
+      icon: <PeopleOutlineOutlinedIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Referral",
       value: null,
-      bgColor: theme.palette.text.secondary,
+      bgColor: "#F0D7FF",
       onClick: () => navigate("/user/referral"),
     },
     {
       icon: <PersonOutlineIcon sx={{ fontSize: 24, color: "black" }} />,
       title: "Profile",
       value: null,
-      bgColor: "#D9D9D9",
+      bgColor: "#BFB5FF",
       onClick: () => navigate("/user/profile"),
     },
   ];
@@ -60,7 +60,7 @@ const StatusPanel: React.FC = () => {
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
-            color: idx === 1 || idx === 2 ? "white" : "black",
+            color: idx === 1 || idx === 2 ? "black" : "black",
             // borderRight: idx % 2 === 0 ? "1px solid #252525" : "none",
             // borderBottom: idx < 2 ? "1px solid #252525" : "none",
             "&:hover, &:focus": {

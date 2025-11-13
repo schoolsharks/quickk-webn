@@ -21,9 +21,9 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          background: active == "home" ? theme.palette.primary.main : "#464646",
+          background: active == "home" ? "#BFB5FF" : "#BFB5FF",
 
-          color: active == "home" ? "black" : "white",
+          color: active == "home" ? "black" : "black",
           flex: "1",
           p: "12px 18px",
           borderRadius: "0",
@@ -41,8 +41,7 @@ const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          background:
-            active == "rewards" ? theme.palette.primary.main : "#D9D9D9",
+          background:"#F0D7FF",
           color:
             // active == "home" ? "black" :
             "black",

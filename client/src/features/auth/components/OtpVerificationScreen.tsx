@@ -255,8 +255,8 @@ const OtpVerificationScreen = ({
         onClick={handleVerify}
         disabled={isLoading || otp.some((digit) => digit === "")}
         sx={{
-          bgcolor: theme.palette.text.secondary,
-          color: "white",
+          bgcolor: "#F0D7FF",
+          color: "black",
         }}
       >
         {isLoading ? "Verifying..." : "Login"}

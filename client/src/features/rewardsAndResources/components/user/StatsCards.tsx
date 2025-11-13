@@ -10,12 +10,12 @@ const StatsCards: React.FC = () => {
     {
       value: totalStars,
       name: "Total Stars",
-      background: "#464646",
+      background: "#F0D7FF",
     },
     {
       value: redeemedStars,
       name: "Stars Used",
-      background: "#252525",
+      background: "#BFB5FF",
     },
   ];
 
@@ -32,7 +32,7 @@ const StatsCards: React.FC = () => {
           padding="16px"
           bgcolor={card.background}
           flex={1}
-          color={"#fff"}
+          color={"#000"}
         >
           <Typography fontSize={"25px"} fontWeight={"600"} lineHeight={"100%"}>
             {card.value}

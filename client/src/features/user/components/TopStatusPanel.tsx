@@ -19,7 +19,7 @@ const TopStatusPanel: React.FC = () => {
 
   const topCardData = [
     {
-      icon: <StarsOutlinedIcon sx={{ fontSize: 34, color: "white" }} />,
+      icon: <StarsOutlinedIcon sx={{ fontSize: 34, color: "black" }} />,
       value: totalStars,
       bgColor: theme.palette.text.secondary,
     },
@@ -45,7 +45,7 @@ const TopStatusPanel: React.FC = () => {
           // onClick={item.onClick || (() => {})}
           sx={{
             flex: 1,
-            backgroundColor: item.bgColor,
+            backgroundColor: idx === 0 ? "#F0D7FF" : "#bfb5ff",
             borderRadius: 0,
             padding: "16px 20px",
             display: "flex",
@@ -53,10 +53,10 @@ const TopStatusPanel: React.FC = () => {
             alignItems: "center",
             justifyContent: "flex-start",
             gap: 2,
-            color: idx === 1 ? "black" : "white",
+            color: idx === 1 ? "black" : "black",
             minHeight: 64,
             "&:hover, &:focus": {
-              backgroundColor: item.bgColor,
+              backgroundColor: idx === 0 ? "#F0D7FF" : "#bfb5ff",
               opacity: 0.9,
             },
           }}

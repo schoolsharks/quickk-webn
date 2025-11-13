@@ -56,7 +56,7 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
     rank: index + 1,
     ...user,
   }));
-  const podiumOrder = [topThree[2], topThree[0], topThree[1]];
+  const podiumOrder = [topThree[0], topThree[1], topThree[2]];
 
   const restOfUsers = sortedUsers.slice(3);
 
@@ -81,13 +81,13 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
       {/* Month Indicator */}
       <Box
         sx={{
-          backgroundColor: theme.palette.text.secondary,
+          backgroundColor: "#F0D7FF",
           py: "4px",
           px: 2,
           textAlign: "right",
         }}
       >
-        <Typography variant="body1" fontWeight={600} color="white">
+        <Typography variant="body1" fontWeight={600} color="black">
           Month - {leaderboardData.currentMonth}, {leaderboardData.currentYear}
         </Typography>
       </Box>
@@ -106,17 +106,17 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
 
           const podiumStyles = [
             {
-              height: 180,
-              background: isHighlight ? "#CD7BFF80" : "#00000040",
-            }, // #3
-            {
               height: 330,
-              backgroundColor: isHighlight ? "#CD7BFF80" : "#00000033",
+              backgroundColor: isHighlight ? "#E6BDFF" : "#E6BDFF",
             }, // #1
             {
               height: 260,
-              background: isHighlight ? "#CD7BFF80" : "#4040409C",
+              backgroundColor: isHighlight ? "#ECE0FF" : "#ECE0FF",
             }, // #2
+            {
+              height: 180,
+              backgroundColor: isHighlight ? "#FFFFFF" : "#FFFFFF",
+            }, // #3
           ];
 
           return (
@@ -137,11 +137,6 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   delay: index * 0.2,
                   ease: "easeOut" 
                 }}
-                border={
-                  isHighlight
-                    ? `2px solid ${theme.palette.primary.main}`
-                    : "none"
-                }
                 sx={{
                   height: podiumStyles[index].height,
                   background: podiumStyles[index].background || podiumStyles[index].backgroundColor,
@@ -150,6 +145,9 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                   flexDirection: "column",
                   flex: 1,
                   transformOrigin: "bottom",
+                  border: isHighlight
+                    ? `2px solid ${theme.palette.primary.main}`
+                    : "1px solid black",
                 }}
               >
                 {user.businessLogo ? (
@@ -253,8 +251,8 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
               >
                 <Box
                   sx={{
-                    backgroundColor: isHighlight ? "#333" : "transparent",
-                    color: !isHighlight ? "#000" : "#fff",
+                    backgroundColor: isHighlight ? "#F0D7FF" : "transparent",
+                    color: !isHighlight ? "#000" : "#000",
                     border: `1px solid  ${theme.palette.primary.main}`,
                     p: "5px",
                   }}
@@ -265,8 +263,8 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 </Box>
                 <Box
                   sx={{
-                    backgroundColor: isHighlight ? "#333" : "transparent",
-                    color: !isHighlight ? "#000" : "#fff",
+                    backgroundColor: isHighlight ? "#F0D7FF" : "transparent",
+                    color: !isHighlight ? "#000" : "#000",
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-between",

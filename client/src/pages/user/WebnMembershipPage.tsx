@@ -267,15 +267,15 @@ const WebnMembershipPage = () => {
             variant="contained"
             onClick={handleApplyNow}
             sx={{
-              bgcolor: theme.palette.text.secondary,
-              color: "white",
+              bgcolor: "#F0D7FF",
+              color: "black",
               py: 2,
               borderRadius: "0px",
               fontSize: "16px",
               fontWeight: "600",
               textTransform: "none",
               "&:hover": {
-                bgcolor: theme.palette.text.secondary,
+                bgcolor: "#CD7BFF",
                 opacity: 0.9,
               },
             }}

@@ -96,7 +96,7 @@ const ModeSelection: React.FC = () => {
             onClick={handleEventMode}
             fullWidth
             sx={{
-              backgroundColor: theme.palette.text.primary,
+              backgroundColor: "#F0D7FF",
               color: theme.palette.background.paper,
               textTransform: "none",
               fontWeight: 600,
@@ -104,7 +104,7 @@ const ModeSelection: React.FC = () => {
               padding: "16px",
               height: "56px",
               "&:hover": {
-                backgroundColor: theme.palette.text.secondary,
+                backgroundColor: "#F0D7FF",
               },
             }}
           >

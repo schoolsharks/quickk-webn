@@ -104,11 +104,11 @@ const EventDashboard = () => {
           sx={{
             border:
               activeTab === "events"
-                ? `2px solid ${theme.palette.primary.main}`
+                ? `none `
                 : "none",
             backgroundColor:
-              activeTab === "events" ? "#E7CEF3" : theme.palette.text.secondary,
-            color: activeTab === "events" ? "black" : "white",
+              activeTab === "events" ? "#E7CEF3" : "#BFB5FF",
+            color: activeTab === "events" ? "black" : "black",
             cursor: "pointer",
             display: "flex",
             flexDirection: "column",
@@ -132,13 +132,13 @@ const EventDashboard = () => {
           sx={{
             border:
               activeTab === "networks"
-                ? `2px solid ${theme.palette.primary.main}`
+                ? `none`
                 : "none",
             backgroundColor:
               activeTab === "networks"
                 ? "#E7CEF3"
-                : theme.palette.text.secondary,
-            color: activeTab === "networks" ? "black" : "white",
+                : "#BFB5FF",
+            color: activeTab === "networks" ? "black" : "black",
             cursor: "pointer",
             display: "flex",
             flexDirection: "column",

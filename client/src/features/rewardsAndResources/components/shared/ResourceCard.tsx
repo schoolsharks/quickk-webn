@@ -130,8 +130,8 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
           disabled={resource.isClaimed}
           sx={{
             borderRadius: "0",
-            backgroundColor: resource.isClaimed ? "#ccc" : "#404040",
-            color: resource.isClaimed ? "#666" : "#fff",
+            backgroundColor: resource.isClaimed ? "#F0D7FF" : "#F0D7FF",
+            color: resource.isClaimed ? "black" : "black",
             fontSize: "14px",
             fontWeight: "500",
             padding: "8px 12px",
@@ -140,7 +140,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
             justifyContent: "center",
             gap: "8px",
             "&:hover": {
-              backgroundColor: resource.isClaimed ? "#ccc" : "#555",
+              backgroundColor: resource.isClaimed ? "#F0D7FF" : "#BFB5FF",
             },
             "&:disabled": {
               cursor: "not-allowed",

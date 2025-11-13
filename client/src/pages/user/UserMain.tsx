@@ -38,20 +38,20 @@ import PodcastPlayer from "../../features/learning/components/user/PodcastPlayer
 import FlashcardPage from "./FlashcardPage";
 
 // Component to handle dashboard redirection based on event mode
-const DashboardRedirect = () => {
-  const { eventMode } = useSelector((state: RootState) => state.user);
-  const [searchParams] = useSearchParams();
+// const DashboardRedirect = () => {
+//   const { eventMode } = useSelector((state: RootState) => state.user);
+//   const [searchParams] = useSearchParams();
 
-  // Preserve query parameters when redirecting
-  const queryString = searchParams.toString();
-  const redirectPath = queryString ? `?${queryString}` : "";
+//   // Preserve query parameters when redirecting
+//   const queryString = searchParams.toString();
+//   const redirectPath = queryString ? `?${queryString}` : "";
 
-  if (eventMode) {
-    return <Navigate to={`/user/event-mode${redirectPath}`} replace />;
-  }
+//   if (eventMode) {
+//     return <Navigate to={`/user/event-mode${redirectPath}`} replace />;
+//   }
 
-  return <Dashboard />;
-};
+//   return <Dashboard />;
+// };
 
 // Component to handle initial redirection when user visits root
 const InitialRedirect = () => {
@@ -109,7 +109,7 @@ const UserMain = () => {
           }
         >
           <Route index element={<InitialRedirect />} />
-          <Route path="dashboard" element={<DashboardRedirect />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="learning" element={<LearningPage />} />
           <Route path="module/:moduleId" element={<ModulePage />} />
           <Route path="practice/:moduleId" element={<TimeToPracticePage />} />

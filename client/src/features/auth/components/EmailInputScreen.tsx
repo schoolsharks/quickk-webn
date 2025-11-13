@@ -162,8 +162,8 @@ const EmailInputScreen = ({
           onClick={handleSubmit}
           disabled={isLoading || !email.trim()}
           sx={{
-            bgcolor: theme.palette.text.secondary,
-            color: "white",
+            bgcolor: "#F0D7FF",
+            color: "black",
           }}
         >
           {isLoading ? "Sending OTP..." : "Send OTP"}

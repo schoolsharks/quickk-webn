@@ -17,6 +17,7 @@ import { Sparkle } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
+import { hover } from "framer-motion";
 
 const Referral: React.FC = () => {
   const theme = useTheme();
@@ -294,13 +295,14 @@ It’s more than a platform, it’s a community where everyone’s growth matter
         <GlobalButton
           onClick={handleReferNow}
           sx={{
-            backgroundColor: "#404040",
-            color: "#FFFFFF",
+            backgroundColor: "#F0D7FF",
+            color: "#000000",
             borderRadius: "0px",
             fontWeight: 600,
             fontSize: "16px",
             textTransform: "none",
             py: 2,
+            "&:hover": { backgroundColor: "#D1A3FF" },
           }}
         >
           Refer Now

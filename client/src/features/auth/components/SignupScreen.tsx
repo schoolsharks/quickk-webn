@@ -282,8 +282,8 @@ const SignupScreen = ({ onSignup, isLoading, error }: SignupScreenProps) => {
             onClick={handleSubmit}
             disabled={isLoading || !isFormValid()}
             sx={{
-              bgcolor: theme.palette.text.secondary,
-              color: "white",
+              bgcolor: "#F0D7FF",
+              color: "black",
             }}
           >
             {isLoading ? "Signing up..." : "Signup"}

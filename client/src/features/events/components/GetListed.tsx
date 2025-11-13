@@ -391,14 +391,14 @@ const GetListed = () => {
                 fullWidth={true}
                 disabled={isProcessing || !isRazorpayLoaded}
                 sx={{
-                  backgroundColor: "#4A4A4A",
-                  color: "#FFFFFF",
+                  backgroundColor: "#F0D7FF",
+                  color: "#000000",
                   marginBottom: "30px",
                   "&:hover": {
-                    backgroundColor: "#3A3A3A",
+                    backgroundColor: "#D1A3FF",
                   },
                   "&:disabled": {
-                    backgroundColor: "#CCCCCC",
+                    backgroundColor: "#F0F0F0",
                     color: "#666666",
                   },
                 }}

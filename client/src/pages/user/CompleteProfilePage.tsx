@@ -471,20 +471,13 @@ const CompleteProfilePage: React.FC = () => {
           disabled={!canProceed()}
           fullWidth
           sx={{
-            backgroundColor: canProceed()
-              ? theme.palette.text.primary
-              : theme.palette.text.secondary + "40",
-            color: theme.palette.background.paper,
+            backgroundColor: canProceed() ? "#F0D7FF" : "#bfb5ff",
+            color: "black",
             borderRadius: "0px",
             textTransform: "none",
             fontWeight: 600,
             fontSize: "16px",
             padding: "16px",
-            "&:hover": {
-              backgroundColor: canProceed()
-                ? theme.palette.text.secondary
-                : theme.palette.text.secondary + "40",
-            },
             "&:disabled": {
               color: theme.palette.text.secondary,
               backgroundColor: theme.palette.text.secondary + "20",

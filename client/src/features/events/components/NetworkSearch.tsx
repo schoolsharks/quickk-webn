@@ -489,8 +489,8 @@ Best regards`;
               onClick={() => handleQuickkConnect(profile._id)}
               fullWidth
               sx={{
-                backgroundColor: theme.palette.text.primary,
-                color: theme.palette.background.paper,
+                bgcolor: "#F0D7FF",
+                color: "black",
                 borderRadius: "0px",
                 textTransform: "none",
                 fontWeight: 600,
@@ -498,7 +498,8 @@ Best regards`;
                 padding: "16px 12px",
                 transition: "all 0.3s ease",
                 "&:hover": {
-                  backgroundColor: theme.palette.text.secondary,
+                  bgcolor: "#CD7BFF",
+                  opacity: 0.9,
                 },
               }}
             >

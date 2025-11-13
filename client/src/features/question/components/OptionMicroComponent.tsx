@@ -46,9 +46,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             alignItems="center"
             width={"100%"}
             py="18px"
-            bgcolor={
-              isCorrect ? "rgba(64, 64, 64, 1)" : "rgba(166, 166, 166, 1)"
-            }
+            bgcolor={isCorrect ? "#bfb5ff" : "#F0D7FF"}
             color={"white"}
           >
             {isCorrect ? (
@@ -97,19 +95,23 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             flex={1}
-            bgcolor="black"
+            bgcolor="#bfb5ff"
             py="18px"
             onClick={() => handleClick("wrong")}
           >
             <ClearOutlinedIcon
               fontSize={smallSize ? "small" : "large"}
-              sx={{ color: "white" }}
+              sx={{ color: "black" }}
             />
           </Box>
         </AnimateOnClick>
       </Box>
     );
-  } else if (type === "text" || type === "yes-no" || type === "agree-disagree") {
+  } else if (
+    type === "text" ||
+    type === "yes-no" ||
+    type === "agree-disagree"
+  ) {
     if (
       selectedOption &&
       Array.isArray(options) &&
@@ -117,7 +119,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
     ) {
       const selectedIndex = (options as string[]).indexOf(selectedOption);
       const selectedBgColor =
-        selectedIndex === 0 ? theme.palette.primary.light : "black";
+        selectedIndex === 0 ? theme.palette.primary.light : "#bfb5ff";
       return (
         <Box display="flex" fontSize={"30px"}>
           <Box
@@ -150,10 +152,10 @@ const OptionItem: React.FC<OptionItemProps> = ({
             justifyContent="center"
             alignItems="center"
             py="18px"
-            bgcolor={"#464646"}
+            bgcolor={"#F0D7FF"}
             borderTop={`1px solid ${theme.palette.primary.main}`}
             borderRight={`1px solid ${theme.palette.primary.main}`}
-            color={"white"}
+            color={"black"}
             onClick={() => handleClick(options[0])}
             fontSize={smallSize ? "15px" : "30px"}
           >
@@ -171,7 +173,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
             borderTop={`1px solid ${theme.palette.primary.main}`}
             py="18px"
             color={"black"}
-            bgcolor="#D9D9D9"
+            bgcolor="#bfb5ff"
             onClick={() => handleClick(options[1])}
             fontSize={smallSize ? "15px" : "30px"}
           >

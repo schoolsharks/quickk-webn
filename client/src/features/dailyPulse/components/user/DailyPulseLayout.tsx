@@ -501,7 +501,7 @@ const DailyPulseLayout: React.FC<DailyPulseProps> = ({
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="h4">Daily Pulse</Typography>
+          <Typography variant="h4">What’s up today?</Typography>
           {showScore && (
             <Typography variant="h4" display={"flex"} alignItems={"center"}>
               {localPulseItems[currentIndex]?.score}

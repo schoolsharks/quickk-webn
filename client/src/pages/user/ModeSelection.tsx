@@ -97,7 +97,7 @@ const ModeSelection: React.FC = () => {
             fullWidth
             sx={{
               backgroundColor: "#F0D7FF",
-              color: theme.palette.background.paper,
+              color: "#000",
               textTransform: "none",
               fontWeight: 600,
               fontSize: "16px",

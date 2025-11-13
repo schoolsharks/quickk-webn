@@ -17,7 +17,6 @@ import { Sparkle } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import StarsOutlinedIcon from "@mui/icons-material/StarsOutlined";
-import { hover } from "framer-motion";
 
 const Referral: React.FC = () => {
   const theme = useTheme();

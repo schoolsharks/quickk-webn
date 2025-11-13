@@ -2,7 +2,6 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { useNavigate } from "react-router-dom";
-import { theme } from "../../theme/theme";
 import { PersonOutlineOutlined } from "@mui/icons-material";
 
 const BottomNavigation: React.FC<{ active?: string }> = ({ active }) => {

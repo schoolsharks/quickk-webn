@@ -341,13 +341,17 @@ const EventDetails: React.FC = () => {
           fullWidth
           sx={{
             mt: 4,
-            backgroundColor: theme.palette.text.primary,
-            color: theme.palette.background.paper,
+            bgcolor: "#F0D7FF",
+            color: "black",
             textTransform: "none",
             fontWeight: 600,
             fontSize: "16px",
             padding: "12px",
             borderRadius: "0px",
+            "&:hover": {
+              bgcolor: "#CD7BFF",
+              opacity: 0.9,
+            },
           }}
         >
           {EventData.registrationLink

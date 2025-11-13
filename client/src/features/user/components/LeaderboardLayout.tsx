@@ -132,14 +132,16 @@ const LeaderboardLayout: React.FC<LeaderboardLayoutProps> = ({
                 component={motion.div}
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
-                transition={{ 
-                  duration: 0.8, 
+                transition={{
+                  duration: 0.8,
                   delay: index * 0.2,
-                  ease: "easeOut" 
+                  ease: "easeOut",
                 }}
                 sx={{
                   height: podiumStyles[index].height,
-                  background: podiumStyles[index].background || podiumStyles[index].backgroundColor,
+                  background:
+                    podiumStyles[index].backgroundColor ||
+                    podiumStyles[index].backgroundColor,
                   p: 1,
                   display: "flex",
                   flexDirection: "column",

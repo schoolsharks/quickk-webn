@@ -23,29 +23,29 @@ const ResourcesSearchBar: React.FC<ResourcesSearchBarProps> = ({
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: "white" }} />
+              <SearchIcon sx={{ color: "black" }} />
             </InputAdornment>
           ),
         }}
         sx={{
           "& .MuiOutlinedInput-root": {
-            backgroundColor: "#252525",
+            backgroundColor: "#F0D7FF",
             color: "white",
             width:"100%",
             borderRadius: "0",
             maxWidth: "330px",
             "& fieldset": {
-              borderColor: "#404040",
+              borderColor: "#F0D7FF",
             },
             "&:hover fieldset": {
-              borderColor: "#505050",
+              borderColor: "#F0D7FF",
             },
             "&.Mui-focused fieldset": {
               borderColor: "#A04AD4",
             },
           },
           "& .MuiInputBase-input::placeholder": {
-            color: "#ffffff80",
+            color: "black",
             opacity: 1,
           },
         }}

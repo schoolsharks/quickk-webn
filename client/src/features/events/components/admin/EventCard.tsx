@@ -59,13 +59,13 @@ const EventCard: React.FC<EventCardProps> = ({
       case "active":
         return "primary.main";
       case "upcoming":
-        return "white";
+        return "#bfb5ff";
       case "past":
-        return "#757575";
+        return "#bfb5ff";
       case "draft":
-        return "#757575";
+        return "#bfb5ff";
       default:
-        return "#757575";
+        return "#bfb5ff";
     }
   };
 
@@ -92,7 +92,7 @@ const EventCard: React.FC<EventCardProps> = ({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: "#0D0D0D",
+        background: "#F0D7FF",
         border: "1px solid #e0e0e0",
         borderRadius: "0px",
         "&:hover": {
@@ -126,7 +126,7 @@ const EventCard: React.FC<EventCardProps> = ({
               left: 0,
               backgroundColor: getStatusColor(event.status),
               color:
-                event.status.toLowerCase() === "upcoming" ? "black" : "white",
+                event.status.toLowerCase() === "upcoming" ? "black" : "black",
               fontSize: "12px",
               borderRadius: "0px",
             }}
@@ -157,7 +157,7 @@ const EventCard: React.FC<EventCardProps> = ({
         </Box>
       </Box>
 
-      <CardContent sx={{ flexGrow: 1, p: 2, color: "white" }}>
+      <CardContent sx={{ flexGrow: 1, p: 2, color: "black" }}>
         {/* Event Title */}
         <Typography
           variant="h4"

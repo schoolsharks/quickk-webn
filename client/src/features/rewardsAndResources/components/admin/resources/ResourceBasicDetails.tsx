@@ -35,8 +35,8 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
   };
 
   return (
-    <Box sx={{ backgroundColor: "#1A1A1A", p: 3 }}>
-      <Typography variant="h6" color="white" mb={2}>
+    <Box sx={{ backgroundColor: "#F0D7FF", p: 3 }}>
+      <Typography variant="h6" color="black" mb={2}>
         Basic Details
       </Typography>
       <Grid container spacing={2}>
@@ -52,7 +52,7 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
           <Stack spacing={2}>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Typography color="white" mb={1} fontSize="14px">
+                <Typography color="black" mb={1} fontSize="14px">
                   Title *
                 </Typography>
                 <TextField
@@ -61,17 +61,17 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                   placeholder="New Resource"
                   onChange={(e) => onFormDataChange({ heading: e.target.value })}
                   sx={{
-                    backgroundColor: "#2A2A2A",
+                    backgroundColor: "#ffffff",
                     borderRadius: 0,
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 0,
                     },
-                    input: { color: "white" },
+                    input: { color: "black" },
                   }}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Typography color="white" mb={1} fontSize="14px">
+                <Typography color="black" mb={1} fontSize="14px">
                   Offer *
                 </Typography>
                 <TextField
@@ -80,12 +80,12 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                   value={formData.subHeading}
                   onChange={(e) => onFormDataChange({ subHeading: e.target.value })}
                   sx={{
-                    backgroundColor: "#2A2A2A",
+                    backgroundColor: "#ffffff",
                     borderRadius: 0,
                     "& .MuiOutlinedInput-root": {
                       borderRadius: 0,
                     },
-                    input: { color: "white" },
+                    input: { color: "black" },
                   }}
                 />
               </Grid>
@@ -93,7 +93,7 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
 
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 6 }}>
-                <Typography color="white" mb={1} fontSize="14px">
+                <Typography color="black" mb={1} fontSize="14px">
                   Voucher Type
                 </Typography>
                 <FormControl fullWidth>
@@ -105,8 +105,8 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                       })
                     }
                     sx={{ 
-                      backgroundColor: "#2A2A2A", 
-                      color: "white",
+                      backgroundColor: "#ffffff", 
+                      color: "black",
                       borderRadius: 0,
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderRadius: 0,
@@ -122,12 +122,12 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
 
             {/* Target Audience */}
             <Box>
-              <Typography color="white" mb={1} fontSize="14px">
+              <Typography color="black" mb={1} fontSize="14px">
                 Target Audience
               </Typography>
               <Box display="flex" gap={2}>
                 {["All", "Gowomania Only", "Webn Only"].map((audience) => (
-                  <Box bgcolor={"#252525"} padding={"4px"} key={audience}>
+                  <Box bgcolor={"#fff"} padding={"4px"} key={audience}>
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -140,9 +140,9 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                           }
                           size="medium"
                           sx={{
-                            color: "white",
+                            color: "black",
                             "&.Mui-checked": {
-                              color: "white",
+                              color: "primary.main",
                             },
                           }}
                         />
@@ -150,7 +150,7 @@ const ResourceBasicDetails: React.FC<ResourceBasicDetailsProps> = ({
                       label={
                         <Typography
                           variant="caption"
-                          sx={{ fontSize: "16px",color:"white" }}
+                          sx={{ fontSize: "16px",color:"black" }}
                         >
                           {audience}
                         </Typography>

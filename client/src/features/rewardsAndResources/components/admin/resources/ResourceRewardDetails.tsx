@@ -65,15 +65,15 @@ const ResourceRewardDetails: React.FC<ResourceRewardDetailsProps> = ({
   };
 
   return (
-    <Box sx={{ backgroundColor: "#1A1A1A", p: 3 }}>
-      <Typography variant="h6" color="white" mb={2}>
+    <Box sx={{ backgroundColor: "#F0D7FF", p: 3 }}>
+      <Typography variant="h6" color="black" mb={2}>
         Reward Details
       </Typography>
 
       {description.map((section, sectionIndex) => (
         <Box key={sectionIndex} mb={3}>
           {/* Static section title - not editable */}
-          <Typography color="white" mb={2} fontSize="16px" fontWeight="500">
+          <Typography color="black" mb={2} fontSize="16px" fontWeight="500">
             {section.title}
           </Typography>
 
@@ -88,12 +88,12 @@ const ResourceRewardDetails: React.FC<ResourceRewardDetailsProps> = ({
                   handleDescriptionChange(sectionIndex, pointIndex, e.target.value)
                 }
                 sx={{
-                  backgroundColor: "#2A2A2A",
+                  backgroundColor: "#fff",
                   borderRadius: 0,
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 0,
                   },
-                  "& .MuiInputBase-input": { color: "white" },
+                  "& .MuiInputBase-input": { color: "black" },
                   mb: 1,
                 }}
               />

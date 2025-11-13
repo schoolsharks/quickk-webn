@@ -33,29 +33,29 @@ const EventsStats: React.FC<EventsStatsProps> = ({ stats }) => {
       title: "Total",
       value: stats.total,
       icon: <EventIcon />,
-      backgroundColor: "#000000",
-      iconColor: "white",
+      backgroundColor: "#bfb5ff",
+      iconColor: "black",
     },
     {
       title: "Drafts",
       value: stats.drafts,
       icon: <DraftIcon />,
-      backgroundColor: "#404040",
-      iconColor: "white",
+      backgroundColor: "#F0D7FF",
+      iconColor: "black",
     },
     {
       title: "Offline",
       value: stats.offline,
       icon: <OfflineIcon />,
-      backgroundColor: "#000000",
-      iconColor: "white",
+      backgroundColor: "#bfb5ff",
+      iconColor: "black",
     },
     {
       title: "Online",
       value: stats.online,
       icon: <OnlineIcon />,
-      backgroundColor: "#404040",
-      iconColor: "white",
+      backgroundColor: "#F0D7FF",
+      iconColor: "black",
     },
   ];
 
@@ -65,7 +65,7 @@ const EventsStats: React.FC<EventsStatsProps> = ({ stats }) => {
         {statsData.map((stat, index) => (
           <Grid size={3} key={index}>
             <StatsCard
-              textColor={"white"}
+              textColor={"black"}
               title={stat.title}
               value={stat.value}
               icon={stat.icon}

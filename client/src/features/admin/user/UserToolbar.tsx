@@ -55,16 +55,16 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
         display="flex"
         alignItems="center"
         gap={1}
-        bgcolor={theme.palette.text.secondary}
+        bgcolor={"#F0D7FF"}
         px={2}
         py={1}
         borderRadius="4px"
       >
-        <SearchIcon sx={{ color: "white" }} />
+        <SearchIcon sx={{ color: "black" }} />
         <InputBase
           placeholder="search name, company mail, contact"
           onChange={(e) => onSearchChange?.(e.target.value)}
-          sx={{ color: "white" }}
+          sx={{ color: "black" ,}}
         />
       </Box>
       <Box display={"flex"} gap={"18px"} color={theme.palette.primary.light}>

@@ -101,7 +101,8 @@ const EventFormPage: React.FC = () => {
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
   const [isImprovingDescription, setIsImprovingDescription] = useState(false);
   const [originalDescription, setOriginalDescription] = useState<string>("");
-  const [_selectedAddressData, setSelectedAddressData] = useState<AddressOption | null>(null);
+  const [_selectedAddressData, setSelectedAddressData] =
+    useState<AddressOption | null>(null);
 
   const [createBlankEvent] = useCreateBlankEventMutation();
   const [updateEvent] = useUpdateEventMutation();
@@ -172,7 +173,8 @@ const EventFormPage: React.FC = () => {
         event.sponsors?.length > 0
           ? event.sponsors
           : [{ name: "", logo: null }],
-      customSections: event.customSections?.length > 0 ? event.customSections : [],
+      customSections:
+        event.customSections?.length > 0 ? event.customSections : [],
       ticketTypes: event.ticketInfo.price != 0 ? ["Paid"] : ["Free"],
       ticketPrice: event.ticketInfo.price || 0,
       starsToBeEarned: event.starsToBeEarned || 0,
@@ -307,7 +309,9 @@ const EventFormPage: React.FC = () => {
 
   const handleImproveDescription = async () => {
     if (!formData.description || formData.description.trim().length < 10) {
-      setError("Description must be at least 10 characters long to improve with AI");
+      setError(
+        "Description must be at least 10 characters long to improve with AI"
+      );
       return;
     }
 
@@ -354,13 +358,16 @@ const EventFormPage: React.FC = () => {
     }
   };
 
-  const handleAddressChange = (address: string, addressData?: AddressOption) => {
+  const handleAddressChange = (
+    address: string,
+    addressData?: AddressOption
+  ) => {
     handleInputChange("address", address);
-    
+
     // Store the complete address data for potential future use (coordinates, etc.)
     if (addressData) {
       setSelectedAddressData(addressData);
-      console.log('Selected address coordinates:', addressData.coordinates);
+      console.log("Selected address coordinates:", addressData.coordinates);
     } else {
       setSelectedAddressData(null);
     }
@@ -391,14 +398,17 @@ const EventFormPage: React.FC = () => {
         "targetAudience",
         JSON.stringify(formData.targetAudience)
       );
-      
+
       // Send location or virtualMeetingLink based on event type
       if (formData.eventType === "ONLINE") {
-        formDataToSend.append("virtualMeetingLink", formData.virtualMeetingLink);
+        formDataToSend.append(
+          "virtualMeetingLink",
+          formData.virtualMeetingLink
+        );
       } else {
         formDataToSend.append("location", formData.address);
       }
-      
+
       formDataToSend.append("speakers", JSON.stringify(formData.speakers));
       formDataToSend.append(
         "keyHighlights",
@@ -450,7 +460,6 @@ const EventFormPage: React.FC = () => {
       );
       formDataToSend.append("sponsors", JSON.stringify(sponsorsData));
 
-
       await updateEvent({ eventId, eventData: formDataToSend }).unwrap();
 
       // Navigate back to events list
@@ -497,7 +506,7 @@ const EventFormPage: React.FC = () => {
 
         <Box
           sx={{
-            color: "white",
+            color: "black",
             borderRadius: "0px",
             border: "none",
             boxSizing: "none",
@@ -509,13 +518,13 @@ const EventFormPage: React.FC = () => {
           <Box
             sx={{
               p: "24px",
-              bgcolor: "#0D0D0D",
+              bgcolor: "#F0D7FF",
             }}
           >
             <Typography
               variant="h4"
               sx={{
-                color: "white",
+                color: "black",
                 mb: 2,
               }}
             >
@@ -529,8 +538,8 @@ const EventFormPage: React.FC = () => {
                 sx={{
                   width: "380px",
                   height: "300px",
-                  bgcolor: "#333",
-                  border: "2px dashed #555",
+                  bgcolor: "#fff",
+                  border: "2px dashed #fff",
                   borderRadius: "0px",
                   display: "flex",
                   alignItems: "center",
@@ -540,7 +549,10 @@ const EventFormPage: React.FC = () => {
                   background: (() => {
                     if (formData.eventImage instanceof File) {
                       return `url(${URL.createObjectURL(formData.eventImage)})`;
-                    } else if (typeof formData.eventImage === "string" && formData.eventImage) {
+                    } else if (
+                      typeof formData.eventImage === "string" &&
+                      formData.eventImage
+                    ) {
                       return `url(${formData.eventImage})`;
                     } else if (bannerPreview) {
                       return `url(${bannerPreview})`;
@@ -578,7 +590,7 @@ const EventFormPage: React.FC = () => {
                 >
                   {bannerPreview ? "Change Banner" : "Upload Banner"}
                 </GreenButton>
-                <Typography variant="caption" sx={{ color: "#999" }}>
+                <Typography variant="caption" sx={{ color: "#fff" }}>
                   Size: 390px x 300px
                 </Typography>
               </Box>
@@ -604,21 +616,21 @@ const EventFormPage: React.FC = () => {
                 onChange={(e) => handleInputChange("title", e.target.value)}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    color: "white",
+                    color: "black",
                     borderRadius: "0px",
-                    bgcolor: "#333",
+                    bgcolor: "#fff",
                     "& fieldset": {
-                      borderColor: "#555",
+                      borderColor: "#fff",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#777",
+                      borderColor: "#fff",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#999",
+                      borderColor: "#fff",
                     },
                   },
                   "& .MuiInputBase-input::placeholder": {
-                    color: "#999",
+                    color: "#fff",
                     opacity: 1,
                   },
                 }}
@@ -639,19 +651,19 @@ const EventFormPage: React.FC = () => {
                     }
                     sx={{
                       borderRadius: "0px",
-                      color: "white",
-                      bgcolor: "#333",
+                      color: "black",
+                      bgcolor: "#fff",
                       "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#555",
+                        borderColor: "#fff",
                       },
                       "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#777",
+                        borderColor: "#fff",
                       },
                       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#999",
+                        borderColor: "#fff",
                       },
                       "& .MuiSvgIcon-root": {
-                        color: "white",
+                        color: "black",
                       },
                     }}
                   >
@@ -673,7 +685,7 @@ const EventFormPage: React.FC = () => {
                   }}
                 >
                   {["All", "Gowomania Only", "Webn Only"].map((audience) => (
-                    <Box bgcolor={"#252525"} padding={"4px"} key={audience}>
+                    <Box bgcolor={"#fff"} padding={"4px"} key={audience}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -686,9 +698,9 @@ const EventFormPage: React.FC = () => {
                             }
                             size="medium"
                             sx={{
-                              color: "white",
+                              color: "black",
                               "&.Mui-checked": {
-                                color: "white",
+                                color: "primary.main",
                               },
                             }}
                           />
@@ -726,9 +738,9 @@ const EventFormPage: React.FC = () => {
                       handleInputChange("startDate", newValue)
                     }
                     sx={{
-                      borderColor: "white",
+                      borderColor: "black",
                       "& .MuiPickersInputBase-root ": {
-                        color: "white",
+                        color: "black",
                         borderColor: "#FFFFFF",
                         borderRadius: "0px",
                       },
@@ -738,23 +750,23 @@ const EventFormPage: React.FC = () => {
                         size: "medium",
                         sx: {
                           "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            bgcolor: "#333",
+                            color: "black",
+                            bgcolor: "#fff",
                             "& fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                             "&:hover fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                             "&.Mui-focused fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                           },
                           "& .MuiSvgIcon-root": {
-                            color: "white",
+                            color: "black",
                           },
                           "& .MuiPickersInputBase-root ": {
-                            color: "white",
+                            color: "black",
                             borderColor: "#FFFFFF",
                             borderRadius: "0px",
                           },
@@ -769,9 +781,9 @@ const EventFormPage: React.FC = () => {
                       handleInputChange("endDate", newValue)
                     }
                     sx={{
-                      borderColor: "white",
+                      borderColor: "black",
                       "& .MuiPickersInputBase-root ": {
-                        color: "white",
+                        color: "black",
                         borderColor: "#FFFFFF",
                         borderRadius: "0px",
                       },
@@ -781,23 +793,23 @@ const EventFormPage: React.FC = () => {
                         size: "medium",
                         sx: {
                           "& .MuiOutlinedInput-root": {
-                            color: "white",
-                            bgcolor: "#333",
+                            color: "black",
+                            bgcolor: "#fff",
                             "& fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                             "&:hover fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                             "&.Mui-focused fieldset": {
-                              borderColor: "white",
+                              borderColor: "black",
                             },
                           },
                           "& .MuiSvgIcon-root": {
-                            color: "white",
+                            color: "black",
                           },
                           "& .MuiPickersInputBase-root ": {
-                            color: "white",
+                            color: "black",
                             borderColor: "#FFFFFF",
                             borderRadius: "0px",
                           },
@@ -823,21 +835,21 @@ const EventFormPage: React.FC = () => {
                     }
                     sx={{
                       "& .MuiOutlinedInput-root": {
-                        color: "white",
+                        color: "black",
                         borderRadius: "0px",
-                        bgcolor: "#333",
+                        bgcolor: "#fff",
                         "& fieldset": {
-                          borderColor: "#555",
+                          borderColor: "#fff",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#777",
+                          borderColor: "#fff",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#999",
+                          borderColor: "#fff",
                         },
                       },
                       "& .MuiInputBase-input::placeholder": {
-                        color: "#999",
+                        color: "#fff",
                         opacity: 1,
                       },
                     }}
@@ -855,11 +867,11 @@ const EventFormPage: React.FC = () => {
           </Box>
 
           {/* About the Event Section */}
-          <Box sx={{ p: "24px", mt: 10, bgcolor: "#0D0D0D" }}>
+          <Box sx={{ p: "24px", mt: 10, bgcolor: "#F0D7FF" }}>
             <Typography
               variant="h4"
               sx={{
-                color: "white",
+                color: "black",
                 mb: 2,
               }}
             >
@@ -882,9 +894,10 @@ const EventFormPage: React.FC = () => {
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{ 
-                      color: formData.description.length > 500 ? "#ff6b6b" : "#999", 
-                      fontSize: "10px" 
+                    sx={{
+                      color:
+                        formData.description.length > 500 ? "#ff6b6b" : "#000",
+                      fontSize: "10px",
                     }}
                   >
                     {formData.description.length}/500 characters
@@ -896,7 +909,7 @@ const EventFormPage: React.FC = () => {
                       size="small"
                       onClick={handleUndoImprovement}
                       sx={{
-                        color: "#999",
+                        color: "#fff",
                         textTransform: "none",
                         fontSize: "12px",
                         minWidth: "auto",
@@ -909,9 +922,13 @@ const EventFormPage: React.FC = () => {
                   <Button
                     size="small"
                     onClick={handleImproveDescription}
-                    disabled={isImprovingDescription || !formData.description?.trim() || formData.description.trim().length < 10}
+                    disabled={
+                      isImprovingDescription ||
+                      !formData.description?.trim() ||
+                      formData.description.trim().length < 10
+                    }
                     sx={{
-                      color: isImprovingDescription ? "#666" : "white",
+                      color: isImprovingDescription ? "#666" : "black",
                       textTransform: "none",
                       fontSize: "14px",
                       minWidth: "auto",
@@ -922,7 +939,9 @@ const EventFormPage: React.FC = () => {
                     }}
                   >
                     {isImprovingDescription ? (
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
                         <CircularProgress size={12} sx={{ color: "#666" }} />
                         Improving...
                       </Box>
@@ -947,20 +966,23 @@ const EventFormPage: React.FC = () => {
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "0px",
-                    color: "white",
-                    bgcolor: "#333",
+                    color: "black",
+                    bgcolor: "#fff",
                     "& fieldset": {
-                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#555",
+                      borderColor:
+                        formData.description.length > 500 ? "#ff6b6b" : "#fff",
                     },
                     "&:hover fieldset": {
-                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#777",
+                      borderColor:
+                        formData.description.length > 500 ? "#ff6b6b" : "#fff",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: formData.description.length > 500 ? "#ff6b6b" : "#999",
+                      borderColor:
+                        formData.description.length > 500 ? "#ff6b6b" : "#fff",
                     },
                   },
                   "& .MuiInputBase-input::placeholder": {
-                    color: "#999",
+                    color: "#fff",
                     opacity: 1,
                   },
                 }}
@@ -986,20 +1008,20 @@ const EventFormPage: React.FC = () => {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "0px",
-                          color: "white",
-                          bgcolor: "#333",
+                          color: "black",
+                          bgcolor: "#fff",
                           "& fieldset": {
-                            borderColor: "#555",
+                            borderColor: "#fff",
                           },
                           "&:hover fieldset": {
-                            borderColor: "#777",
+                            borderColor: "#fff",
                           },
                           "&.Mui-focused fieldset": {
-                            borderColor: "#999",
+                            borderColor: "#fff",
                           },
                         },
                         "& .MuiInputBase-input::placeholder": {
-                          color: "#999",
+                          color: "#fff",
                           opacity: 1,
                         },
                       }}
@@ -1019,20 +1041,20 @@ const EventFormPage: React.FC = () => {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "0px",
-                          color: "white",
-                          bgcolor: "#333",
+                          color: "black",
+                          bgcolor: "#fff",
                           "& fieldset": {
-                            borderColor: "#555",
+                            borderColor: "#fff",
                           },
                           "&:hover fieldset": {
-                            borderColor: "#777",
+                            borderColor: "#fff",
                           },
                           "&.Mui-focused fieldset": {
-                            borderColor: "#999",
+                            borderColor: "#fff",
                           },
                         },
                         "& .MuiInputBase-input::placeholder": {
-                          color: "#999",
+                          color: "#fff",
                           opacity: 1,
                         },
                       }}
@@ -1041,7 +1063,7 @@ const EventFormPage: React.FC = () => {
                       <IconButton
                         size="medium"
                         onClick={() => removeSpeaker(index)}
-                        sx={{ color: "#999" }}
+                        sx={{ color: "#000" }}
                       >
                         <Delete fontSize="medium" />
                       </IconButton>
@@ -1054,8 +1076,8 @@ const EventFormPage: React.FC = () => {
                 endIcon={<Add />}
                 onClick={addSpeaker}
                 sx={{
-                  color: "white",
-                  bgcolor: "text.secondary",
+                  color: "black",
+                  bgcolor: "#bfb5ff",
                   textTransform: "none",
                   fontSize: "16px",
                   padding: "8px 16px",
@@ -1088,20 +1110,20 @@ const EventFormPage: React.FC = () => {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "0px",
-                          color: "white",
-                          bgcolor: "#333",
+                          color: "black",
+                          bgcolor: "#fff",
                           "& fieldset": {
-                            borderColor: "#555",
+                            borderColor: "#fff",
                           },
                           "&:hover fieldset": {
-                            borderColor: "#777",
+                            borderColor: "#fff",
                           },
                           "&.Mui-focused fieldset": {
-                            borderColor: "#999",
+                            borderColor: "#fff",
                           },
                         },
                         "& .MuiInputBase-input::placeholder": {
-                          color: "#999",
+                          color: "#fff",
                           opacity: 1,
                         },
                       }}
@@ -1110,9 +1132,8 @@ const EventFormPage: React.FC = () => {
                       <IconButton
                         size="medium"
                         onClick={() => removeHighlight(index)}
-                        sx={{ color: "#999" }}
                       >
-                        <Delete fontSize="medium" />
+                        <Delete fontSize="medium" sx={{ color: "#000" }} />
                       </IconButton>
                     )}
                   </Box>
@@ -1123,8 +1144,8 @@ const EventFormPage: React.FC = () => {
                 endIcon={<Add />}
                 onClick={addHighlight}
                 sx={{
-                  color: "white",
-                  bgcolor: "text.secondary",
+                  color: "black",
+                  bgcolor: "#bfb5ff",
                   textTransform: "none",
                   fontSize: "16px",
                   padding: "8px 16px",
@@ -1158,20 +1179,20 @@ const EventFormPage: React.FC = () => {
                         sx={{
                           "& .MuiOutlinedInput-root": {
                             borderRadius: "0px",
-                            color: "white",
-                            bgcolor: "#333",
+                            color: "black",
+                            bgcolor: "#fff",
                             "& fieldset": {
-                              borderColor: "#555",
+                              borderColor: "#fff",
                             },
                             "&:hover fieldset": {
-                              borderColor: "#777",
+                              borderColor: "#fff",
                             },
                             "&.Mui-focused fieldset": {
-                              borderColor: "#999",
+                              borderColor: "#fff",
                             },
                           },
                           "& .MuiInputBase-input::placeholder": {
-                            color: "#999",
+                            color: "#fff",
                             opacity: 1,
                           },
                         }}
@@ -1182,9 +1203,9 @@ const EventFormPage: React.FC = () => {
                         variant="outlined"
                         component="label"
                         sx={{
-                          color: "white",
-                          borderColor: "text.secondary",
-                          bgcolor: "text.secondary",
+                          color: "black",
+                          borderColor: "#bfb5ff",
+                          bgcolor: "#bfb5ff",
                           textTransform: "none",
                           fontSize: "16px",
                           borderRadius: "0px",
@@ -1232,7 +1253,7 @@ const EventFormPage: React.FC = () => {
                         <IconButton
                           size="medium"
                           onClick={() => removeSponsor(index)}
-                          sx={{ color: "#999" }}
+                          sx={{ color: "#000" }}
                         >
                           <Delete fontSize="medium" />
                         </IconButton>
@@ -1246,8 +1267,8 @@ const EventFormPage: React.FC = () => {
                 endIcon={<Add />}
                 onClick={addSponsor}
                 sx={{
-                  color: "white",
-                  bgcolor: "text.secondary",
+                  color: "black",
+                  bgcolor: "#bfb5ff",
                   textTransform: "none",
                   fontSize: "16px",
                   padding: "8px 16px",
@@ -1267,15 +1288,25 @@ const EventFormPage: React.FC = () => {
                 Custom Sections
               </Typography>
               {formData.customSections.map((section, index) => (
-                <Box key={index} sx={{ mb: 2, p: 2, bgcolor: "#252525", borderRadius: "0px" }}>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                    <Typography variant="body2" sx={{ color: "#999" }}>
+                <Box
+                  key={index}
+                  sx={{ mb: 2, p: 2, bgcolor: "#fff", borderRadius: "0px" }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 2,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ color: "#fff" }}>
                       Section {index + 1}
                     </Typography>
                     <IconButton
                       size="small"
                       onClick={() => removeCustomSection(index)}
-                      sx={{ color: "#999" }}
+                      sx={{ color: "#000" }}
                     >
                       <Delete fontSize="small" />
                     </IconButton>
@@ -1292,20 +1323,20 @@ const EventFormPage: React.FC = () => {
                       mb: 2,
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "0px",
-                        color: "white",
-                        bgcolor: "#333",
+                        color: "black",
+                        bgcolor: "#fff",
                         "& fieldset": {
-                          borderColor: "#555",
+                          borderColor: "#fff",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#777",
+                          borderColor: "#fff",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#999",
+                          borderColor: "#fff",
                         },
                       },
                       "& .MuiInputBase-input::placeholder": {
-                        color: "#999",
+                        color: "#fff",
                         opacity: 1,
                       },
                     }}
@@ -1318,25 +1349,29 @@ const EventFormPage: React.FC = () => {
                     placeholder="Section Description"
                     value={section.description}
                     onChange={(e) =>
-                      handleCustomSectionChange(index, "description", e.target.value)
+                      handleCustomSectionChange(
+                        index,
+                        "description",
+                        e.target.value
+                      )
                     }
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "0px",
-                        color: "white",
-                        bgcolor: "#333",
+                        color: "black",
+                        bgcolor: "#fff",
                         "& fieldset": {
-                          borderColor: "#555",
+                          borderColor: "#fff",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#777",
+                          borderColor: "#fff",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#999",
+                          borderColor: "#fff",
                         },
                       },
                       "& .MuiInputBase-input::placeholder": {
-                        color: "#999",
+                        color: "#fff",
                         opacity: 1,
                       },
                     }}
@@ -1348,8 +1383,8 @@ const EventFormPage: React.FC = () => {
                 endIcon={<Add />}
                 onClick={addCustomSection}
                 sx={{
-                  color: "white",
-                  bgcolor: "text.secondary",
+                  color: "black",
+                  bgcolor: "#bfb5ff",
                   textTransform: "none",
                   fontSize: "16px",
                   padding: "8px 16px",
@@ -1365,11 +1400,11 @@ const EventFormPage: React.FC = () => {
           </Box>
 
           {/* Add Tickets Section */}
-          <Box sx={{ p: "24px", mt: 10, bgcolor: "#0D0D0D" }}>
+          <Box sx={{ p: "24px", mt: 10, bgcolor: "#F0D7FF" }}>
             <Typography
               variant="h4"
               sx={{
-                color: "white",
+                color: "black",
                 mb: 2,
               }}
             >
@@ -1384,7 +1419,7 @@ const EventFormPage: React.FC = () => {
               <Box sx={{ display: "flex", gap: 2 }}>
                 <FormControlLabel
                   sx={{
-                    bgcolor: "#252525",
+                    bgcolor: "#fff",
                     width: "175px",
                   }}
                   label={
@@ -1400,9 +1435,9 @@ const EventFormPage: React.FC = () => {
                       }
                       size="medium"
                       sx={{
-                        color: "#999",
+                        color: "#fff",
                         "&.Mui-checked": {
-                          color: "white",
+                          color: "black",
                         },
                       }}
                     />
@@ -1410,7 +1445,7 @@ const EventFormPage: React.FC = () => {
                 />
                 <FormControlLabel
                   sx={{
-                    bgcolor: "#252525",
+                    bgcolor: "#fff",
                     width: "175px",
                   }}
                   control={
@@ -1421,9 +1456,9 @@ const EventFormPage: React.FC = () => {
                       }
                       size="medium"
                       sx={{
-                        color: "#999",
+                        color: "#fff",
                         "&.Mui-checked": {
-                          color: "white",
+                          color: "black",
                         },
                       }}
                     />
@@ -1458,16 +1493,16 @@ const EventFormPage: React.FC = () => {
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "0px",
-                        color: "white",
-                        bgcolor: "#333",
+                        color: "black",
+                        bgcolor: "#fff",
                         "& fieldset": {
-                          borderColor: "#555",
+                          borderColor: "#fff",
                         },
                         "&:hover fieldset": {
-                          borderColor: "#777",
+                          borderColor: "#fff",
                         },
                         "&.Mui-focused fieldset": {
-                          borderColor: "#999",
+                          borderColor: "#fff",
                         },
                       },
                     }}
@@ -1493,16 +1528,16 @@ const EventFormPage: React.FC = () => {
                   sx={{
                     "& .MuiOutlinedInput-root": {
                       borderRadius: "0px",
-                      color: "white",
-                      bgcolor: "#333",
+                      color: "black",
+                      bgcolor: "#fff",
                       "& fieldset": {
-                        borderColor: "#555",
+                        borderColor: "#fff",
                       },
                       "&:hover fieldset": {
-                        borderColor: "#777",
+                        borderColor: "#fff",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "#999",
+                        borderColor: "#fff",
                       },
                     },
                   }}
@@ -1526,20 +1561,20 @@ const EventFormPage: React.FC = () => {
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "0px",
-                    color: "white",
-                    bgcolor: "#333",
+                    color: "black",
+                    bgcolor: "#fff",
                     "& fieldset": {
-                      borderColor: "#555",
+                      borderColor: "#fff",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#777",
+                      borderColor: "#fff",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#999",
+                      borderColor: "#fff",
                     },
                   },
                   "& .MuiInputBase-input::placeholder": {
-                    color: "#999",
+                    color: "#fff",
                     opacity: 1,
                   },
                 }}
@@ -1562,9 +1597,13 @@ const EventFormPage: React.FC = () => {
           <GreenButton
             onClick={handlePublish}
             disabled={loading}
-            sx={{ bgcolor: "#0D0D0D", color: "white" }}
+            sx={{ bgcolor: "#fff", color: "black" }}
           >
-            {loading ? "Publishing..." : isSuperAdmin ? "Publish" : "Send for Review"}
+            {loading
+              ? "Publishing..."
+              : isSuperAdmin
+              ? "Publish"
+              : "Send for Review"}
           </GreenButton>
         </Box>
       </Box>

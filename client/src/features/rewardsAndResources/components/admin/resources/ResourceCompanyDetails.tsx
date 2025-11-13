@@ -65,12 +65,12 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
   };
 
   return (
-    <Box sx={{ backgroundColor: "#1A1A1A", p: 3 }}>
-      <Typography variant="h6" color="white" mb={2}>
+    <Box sx={{ backgroundColor: "#F0D7FF", p: 3 }}>
+      <Typography variant="h6" color="black" mb={2}>
         Company details
       </Typography>
 
-      <Typography color="white" mb={1} fontSize="14px">
+      <Typography color="black" mb={1} fontSize="14px">
         Name of the company/member
       </Typography>
       <Autocomplete
@@ -92,12 +92,12 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
             {...params}
             placeholder="Search Name"
             sx={{
-              backgroundColor: "#2A2A2A",
+              backgroundColor: "#fff",
               borderRadius: 0,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 0,
               },
-              input: { color: "white" },
+              input: { color: "black" },
               mb: 2,
             }}
           />
@@ -107,7 +107,7 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 3 }}>
-          <Typography color="white" mb={1} fontSize="14px">
+          <Typography color="black" mb={1} fontSize="14px">
             Company Name *
           </Typography>
           <TextField
@@ -115,12 +115,12 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
             value={formData.companyName}
             onChange={(e) => onFormDataChange({ companyName: e.target.value })}
             sx={{
-              backgroundColor: "#2A2A2A",
+              backgroundColor: "#fff",
               borderRadius: 0,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 0,
               },
-              input: { color: "white" },
+              input: { color: "black" },
             }}
           />
         </Grid>
@@ -134,7 +134,7 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
           />
         </Grid>
         <Grid size={{ xs: 12, md: 3 }}>
-          <Typography color="white" mb={1} fontSize="14px">
+          <Typography color="black" mb={1} fontSize="14px">
             Company Email
           </Typography>
           <TextField
@@ -142,17 +142,17 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
             value={formData.companyEmail}
             onChange={(e) => onFormDataChange({ companyEmail: e.target.value })}
             sx={{
-              backgroundColor: "#2A2A2A",
+              backgroundColor: "#fff",
               borderRadius: 0,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 0,
               },
-              input: { color: "white" },
+              input: { color: "black" },
             }}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 3 }}>
-          <Typography color="white" mb={1} fontSize="14px">
+          <Typography color="black" mb={1} fontSize="14px">
             Company Contact
           </Typography>
           <TextField
@@ -160,12 +160,12 @@ const ResourceCompanyDetails: React.FC<ResourceCompanyDetailsProps> = ({
             value={formData.companyContact}
             onChange={(e) => onFormDataChange({ companyContact: e.target.value })}
             sx={{
-              backgroundColor: "#2A2A2A",
+              backgroundColor: "#fff",
               borderRadius: 0,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 0,
               },
-              input: { color: "white" },
+              input: { color: "black" },
             }}
           />
         </Grid>

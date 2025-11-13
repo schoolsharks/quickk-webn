@@ -43,7 +43,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
       <Box
         width={350}
         height="100%"
-        bgcolor="#252525"
+        bgcolor="#F0D7FF"
         px="16px"
         py="24px"
         display="flex"
@@ -57,16 +57,16 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
             alignItems="center"
             mb={3}
           >
-            <Typography variant="h5" color="white">
+            <Typography variant="h5" color="black">
               Sort Referrals
             </Typography>
             <IconButton onClick={onClose}>
-              <CloseIcon sx={{ color: "white" }} />
+              <CloseIcon sx={{ color: "black" }} />
             </IconButton>
           </Box>
 
           <FormControl fullWidth sx={{ mb: 3 }}>
-            <FormLabel sx={{ color: "white", mb: 2, fontWeight: 500 }}>
+            <FormLabel sx={{ color: "black", mb: 2, fontWeight: 500 }}>
               Sort By
             </FormLabel>
             <RadioGroup value={sortBy} onChange={handleChange} sx={{ gap: 1 }}>
@@ -75,7 +75,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                 control={
                   <Radio
                     sx={{
-                      color: "white",
+                      color: "black",
                       "&.Mui-checked": {
                         color: "#A04AD4",
                       },
@@ -83,7 +83,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                   />
                 }
                 label={
-                  <Typography sx={{ color: "white", fontSize: "16px" }}>
+                  <Typography sx={{ color: "black", fontSize: "16px" }}>
                     Most Stars
                   </Typography>
                 }
@@ -93,7 +93,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                 control={
                   <Radio
                     sx={{
-                      color: "white",
+                      color: "black",
                       "&.Mui-checked": {
                         color: "#A04AD4",
                       },
@@ -101,7 +101,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                   />
                 }
                 label={
-                  <Typography sx={{ color: "white", fontSize: "16px" }}>
+                  <Typography sx={{ color: "black", fontSize: "16px" }}>
                     Least Stars
                   </Typography>
                 }
@@ -111,7 +111,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                 control={
                   <Radio
                     sx={{
-                      color: "white",
+                      color: "black",
                       "&.Mui-checked": {
                         color: "#A04AD4",
                       },
@@ -119,7 +119,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                   />
                 }
                 label={
-                  <Typography sx={{ color: "white", fontSize: "16px" }}>
+                  <Typography sx={{ color: "black", fontSize: "16px" }}>
                     Recent Activity
                   </Typography>
                 }
@@ -129,7 +129,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                 control={
                   <Radio
                     sx={{
-                      color: "white",
+                      color: "black",
                       "&.Mui-checked": {
                         color: "#A04AD4",
                       },
@@ -137,7 +137,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
                   />
                 }
                 label={
-                  <Typography sx={{ color: "white", fontSize: "16px" }}>
+                  <Typography sx={{ color: "black", fontSize: "16px" }}>
                     Advertise Applicants
                   </Typography>
                 }
@@ -149,7 +149,7 @@ const ReferralFilterDrawer: React.FC<ReferralFilterDrawerProps> = ({
         <GreenButton
           onClick={onApply}
           fullWidth
-          sx={{ background: "black", borderRadius: "2px", color: "white" }}
+          sx={{ background: "#FFF", borderRadius: "2px", color: "black" }}
         >
           Apply
         </GreenButton>

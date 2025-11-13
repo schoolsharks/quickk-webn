@@ -27,14 +27,14 @@ const ResourceCriteria: React.FC<ResourceCriteriaProps> = ({
   companyEmail = "",
 }) => {
   return (
-    <Box sx={{ backgroundColor: "#1A1A1A", p: 3 }}>
-      <Typography variant="h6" color="white" mb={2}>
+    <Box sx={{ backgroundColor: "#F0D7FF", p: 3 }}>
+      <Typography variant="h6" color="black" mb={2}>
         Reward Criteria
       </Typography>
 
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography color="white" mb={1} fontSize="14px">
+          <Typography color="black" mb={1} fontSize="14px">
             Stars Needed To Redeem *
           </Typography>
           <TextField
@@ -43,17 +43,17 @@ const ResourceCriteria: React.FC<ResourceCriteriaProps> = ({
             value={stars}
             onChange={(e) => onStarsChange(Number(e.target.value))}
             sx={{
-              backgroundColor: "#2A2A2A",
+              backgroundColor: "#fff",
               borderRadius: 0,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 0,
               },
-              input: { color: "white" },
+              input: { color: "black" },
             }}
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Typography color="white" mb={1} fontSize="14px">
+          <Typography color="black" mb={1} fontSize="14px">
             All Requests will be sent to
           </Typography>
           <FormControl fullWidth>
@@ -63,8 +63,8 @@ const ResourceCriteria: React.FC<ResourceCriteriaProps> = ({
                 onEmailDestinationChange(e.target.value as "user" | "company")
               }
               sx={{
-                backgroundColor: "#2A2A2A",
-                color: "white",
+                backgroundColor: "#fff",
+                color: "black",
                 borderRadius: 0,
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderRadius: 0,

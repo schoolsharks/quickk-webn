@@ -147,15 +147,15 @@ const EventsSearchToolbar: React.FC<EventsSearchToolbarProps> = ({
             sx={{
               minWidth: 300,
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "black",
+                backgroundColor: "#F0D7FF",
                 borderRadius: "0px",
-                color: "#FFFFFF",
+                color: "#000",
               },
             }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "#666" }} />
+                  <SearchIcon sx={{ color: "#000" }} />
                 </InputAdornment>
               ),
             }}

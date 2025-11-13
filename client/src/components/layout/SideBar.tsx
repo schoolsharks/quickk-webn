@@ -390,7 +390,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               disablePadding
               sx={{
                 // borderRadius: "8px",
-                bgcolor: shouldShowBlackBg ? "#bfb5ff" : "transparent",
+                bgcolor: shouldShowBlackBg ? "#F0D7FF" : "transparent",
               }}
             >
               <ListItemButton
@@ -409,7 +409,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
               >
                 <Box
                   sx={{
-                    bgcolor: shouldShowBlackBg ? "#FFFFFF" : "#bfb5ff",
+                    bgcolor: shouldShowBlackBg ? "#FFFFFF" : "#F0D7FF",
                     width: 40,
                     height: 40,
                     display: "flex",
@@ -422,7 +422,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: shouldShowBlackBg ? "#bfb5ff" : "#FFFFFF",
+                      color: shouldShowBlackBg ? "#F0D7FF" : "#FFFFFF",
                       "& svg": {
                         fontSize: "20px",
                       },
@@ -457,7 +457,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <List
               component="div"
               disablePadding
-              sx={{ backgroundColor: "#bfb5ff", mb: 1 }}
+              sx={{ backgroundColor: "#F0D7FF", mb: 1 }}
             >
               {accessibleChildren.map((child) => (
                 <ListItem key={child.id} disablePadding>
@@ -469,7 +469,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       pl: 6,
                       pr: 2.5,
                       height: 32,
-                      backgroundColor: "#bfb5ff",
+                      backgroundColor: "#F0D7FF",
                       color: isActiveItem(child.path) ? "#6B21A8" : "#FFFFFF",
                       borderRadius: 0,
                       mx: 1,

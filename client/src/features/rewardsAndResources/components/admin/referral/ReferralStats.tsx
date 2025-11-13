@@ -24,25 +24,25 @@ const ReferralStats: React.FC<ReferralStatsProps> = ({ stats, isLoading }) => {
       title: "Total Referrals",
       value: stats?.totalReferrals ?? 0,
       icon: <PeopleIcon />,
-      backgroundColor: "#000000",
+      backgroundColor: "#bfb5ff",
     },
     {
       title: "Signed Up",
       value: stats?.signedUp ?? 0,
       icon: <HowToRegIcon />,
-      backgroundColor: "#404040",
+      backgroundColor: "#F0D7FF",
     },
     {
       title: "Converted to Webn",
       value: stats?.converted ?? 0,
       icon: <WorkspacePremiumIcon />,
-      backgroundColor: "#000000",
+      backgroundColor: "#bfb5ff",
     },
     {
       title: "Advertised",
       value: stats?.advertised ?? 0,
       icon: <CampaignIcon />,
-      backgroundColor: "#404040",
+      backgroundColor: "#F0D7FF",
     },
   ];
 
@@ -75,8 +75,8 @@ const ReferralStats: React.FC<ReferralStatsProps> = ({ stats, isLoading }) => {
               value={card.value}
               icon={card.icon}
               backgroundColor={card.backgroundColor}
-              textColor="white"
-              iconColor="white"
+              textColor="black"
+              iconColor="black"
             />
           </Grid>
         ))}

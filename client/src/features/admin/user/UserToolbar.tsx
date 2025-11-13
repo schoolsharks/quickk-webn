@@ -64,7 +64,7 @@ const UserToolbar: React.FC<UserToolbarProps> = ({
         <InputBase
           placeholder="search name, company mail, contact"
           onChange={(e) => onSearchChange?.(e.target.value)}
-          sx={{ color: "black" }}
+          sx={{ color: "black" ,}}
         />
       </Box>
       <Box display={"flex"} gap={"18px"} color={theme.palette.primary.light}>

@@ -71,10 +71,10 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
       {...props}
       sx={{
         '& .MuiPaper-root': {
-          bgcolor: '#333',
+          bgcolor: '#fff',
           border: '1px solid #555',
           borderRadius: '0px',
-          color: 'white',
+          color: 'black',
         },
       }}
     />
@@ -85,16 +85,13 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     <Paper
       {...props}
       sx={{
-        bgcolor: '#333',
+        bgcolor: '#fff',
         border: '1px solid #555',
         borderRadius: '0px',
-        color: 'white',
+        color: 'black',
         '& .MuiAutocomplete-listbox': {
           '& .MuiAutocomplete-option': {
-            color: 'white',
-            '&:hover': {
-              bgcolor: '#444',
-            },
+            color: 'black',
             '&[aria-selected="true"]': {
               bgcolor: '#555 !important',
             },
@@ -153,9 +150,9 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
           sx={{
             ...sx,
             "& .MuiOutlinedInput-root": {
-              color: "white",
+              color: "black",
               borderRadius: "0px",
-              bgcolor: "#333",
+              bgcolor: "#fff",
               "& fieldset": {
                 borderColor: error || searchError ? "#ff6b6b" : "#555",
               },
@@ -186,7 +183,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
             gap: 1.5,
             py: 1,
             px: 2,
-            color: 'white',
+            color: 'black',
             '&:hover': {
               bgcolor: '#444',
             },
@@ -197,11 +194,11 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
             <Typography 
               variant="body2" 
               sx={{ 
-                color: 'white',
+                color: 'black',
                 fontWeight: 500,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                blackSpace: 'nowrap',
               }}
             >
               {option.mainText}
@@ -212,7 +209,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
                 color: '#ccc',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                blackSpace: 'nowrap',
                 display: 'block',
               }}
             >

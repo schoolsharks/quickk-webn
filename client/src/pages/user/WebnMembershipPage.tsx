@@ -29,7 +29,7 @@ const WebnMembershipPage = () => {
   }, []);
 
   const navigateBack = () => {
-    navigate("/user/profile");
+    navigate(-1);
   };
 
   const handleApplyNow = () => {

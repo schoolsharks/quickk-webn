@@ -57,7 +57,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   return (
     <Box>
       {label && (
-        <Typography color="white" mb={1} fontSize="14px">
+        <Typography color="black" mb={1} fontSize="14px">
           {label}
         </Typography>
       )}
@@ -69,7 +69,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         sx={{
           width,
           height,
-          backgroundColor: "#2A2A2A",
+          backgroundColor: "#fff",
           border: `2px dashed ${dragOver ? "#A04AD4" : "#444"}`,
           borderRadius: 0,
           display: "flex",
@@ -80,7 +80,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           transition: "all 0.2s ease",
           "&:hover": {
             borderColor: "#A04AD4",
-            backgroundColor: "#333",
+            backgroundColor: "#ffffff8c",
           },
         }}
       >

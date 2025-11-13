@@ -23,9 +23,9 @@ const MyNetworks = () => {
     navigate("/user/complete-profile");
   };
 
-  const handleGetListedClick = () => {
-    navigate("/user/get-listed");
-  };
+  // const handleGetListedClick = () => {
+  //   navigate("/user/get-listed");
+  // };
 
   return (
     <Box pt={"8px"} pb={8} display={"flex"} flexDirection={"column"} gap={8}>
@@ -65,8 +65,10 @@ const MyNetworks = () => {
       {profileComplete && <Box mt={"40px"} />}
       <NetworkSearch />
       <Recommendation />
+
       {user.listed === false && user.webnClubMember === false && (
-        <Box
+        <>
+          {/* <Box
           mt="60px"
           display="flex"
           borderTop={`2px solid ${theme.palette.primary.main}`}
@@ -80,14 +82,14 @@ const MyNetworks = () => {
         >
           <Box>
             <Typography variant="h2" fontSize={"20px"} color="#000">
-              Want to Get Listed on Our Platform?
+              Want to get your business listed on Our Platform?
             </Typography>
           </Box>
           <Box>
-            {/* <ArrowRight size={36} strokeWidth={1.75} rotate={"45deg"} /> */}
             <CallMadeOutlined sx={{ fontSize: 35, marginRight: "24px" }} />
           </Box>
-        </Box>
+        </Box> */}
+        </>
       )}
 
       <BottomNavigation />

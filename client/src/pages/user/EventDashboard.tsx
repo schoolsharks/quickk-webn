@@ -87,7 +87,7 @@ const EventDashboard = () => {
               onClick={() => (window.location.href = "/user/get-listed")}
             >
               <Typography color={"black"} fontSize={14}>
-                Want to get listed?
+                Want to get your business listed?
               </Typography>
             </Box>
           )}

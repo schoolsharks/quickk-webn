@@ -36,25 +36,25 @@ const ResourcesStats: React.FC<ResourcesStatsProps> = ({
       title: "Total",
       value: isLoading ? "..." : stats.total,
       icon: <TotalIcon />,
-      backgroundColor: "#000000",
+      backgroundColor: "#bfb5ff",
     },
     {
       title: "Active",
       value: isLoading ? "..." : stats.active,
       icon: <ActiveIcon />,
-      backgroundColor: "#404040",
+      backgroundColor: "#F0D7FF",
     },
     {
       title: "Drafts",
       value: isLoading ? "..." : stats.drafts,
       icon: <DraftsIcon />,
-      backgroundColor: "#000000",
+      backgroundColor: "#bfb5ff",
     },
     {
       title: "Total Redeemed",
       value: isLoading ? "..." : stats.totalRedeemed,
       icon: <RedeemIcon />,
-      backgroundColor: "#404040",
+      backgroundColor: "#F0D7FF",
     },
   ];
 
@@ -67,9 +67,9 @@ const ResourcesStats: React.FC<ResourcesStatsProps> = ({
               title={stat.title}
               value={stat.value}
               icon={stat.icon}
-              textColor="#fff"
+              textColor="#000"
               backgroundColor={stat.backgroundColor}
-              iconColor={"#fff"}
+              iconColor={"#000"}
             />
           </Grid>
         ))}

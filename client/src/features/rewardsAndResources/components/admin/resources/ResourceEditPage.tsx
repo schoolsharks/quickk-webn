@@ -297,7 +297,7 @@ const ResourceEditPage: React.FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box px={3}>
-        <Box sx={{ backgroundColor: "#000", minHeight: "100vh", p: 3 }}>
+        <Box sx={{ backgroundColor: "#fff", minHeight: "100vh" }}>
           <Stack spacing={3}>
             {/* Basic Details */}
             <ResourceBasicDetails
@@ -364,7 +364,7 @@ const ResourceEditPage: React.FC = () => {
           <GreenButton
             onClick={() => handleSubmit("ACTIVE")}
             disabled={isCreating || isUpdating}
-            sx={{ bgcolor: "#0D0D0D", color: "white" }}
+            sx={{ bgcolor: "#fff", color: "black" }}
           >
             {isCreating || isUpdating
               ? "Publishing..."

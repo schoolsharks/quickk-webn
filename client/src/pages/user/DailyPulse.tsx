@@ -32,7 +32,7 @@ const DailyPulse: React.FC = () => {
     return (
       <Box
         sx={{
-          bgcolor: "#1e1e1e",
+          bgcolor: "#F0D7FF",
           p: 3,
           borderRadius: 2,
           textAlign: "center",

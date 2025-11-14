@@ -422,7 +422,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                     sx={{
                       minWidth: 0,
                       fontSize: "14px",
-                      color: shouldShowBlackBg ? "#F0D7FF" : "#FFFFFF",
+                      color: shouldShowBlackBg ? "#000" : "#000",
                       "& svg": {
                         fontSize: "20px",
                       },

@@ -50,7 +50,7 @@ const MemberStats: React.FC<MemberStatsProps> = ({ Stats, webnClubMember }) => {
             width: 18,
             height: 18,
             borderRadius: "50%",
-            backgroundColor: "#10B981",
+            backgroundColor: "black",
             margin: "0 auto",
           }}
         />

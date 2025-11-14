@@ -1,4 +1,5 @@
 import { Box, IconButton, Stack, Typography } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useState, useEffect } from "react";
 import {
   Menu,
@@ -68,17 +69,6 @@ const SidebarHamburger = () => {
       icon: <PersonOutline sx={{ fontSize: 24, color: "black" }} />,
       path: "/user/profile",
     },
-
-    // {
-    //   name: "Become a webn member",
-    //   icon: <LeaderboardOutlined sx={{ fontSize: "24px" }} />,
-    //   path: "/user/webn-membership",
-    // },
-    // {
-    //   name: "Challenges",
-    //   icon: <Trophy size={24} strokeWidth={1.5} />,
-    //   path: "/user/challenges",
-    // },
   ];
 
   const handleNavigation = (path: string) => {
@@ -120,22 +110,28 @@ const SidebarHamburger = () => {
         >
           <X size={24} strokeWidth={2} color="#000" />
         </IconButton>
-        <Typography
-          fontWeight={"500"}
-          fontSize={"24px"}
-          color="#000"
-          padding={"0px 20px"}
-        >
-          Menu
-        </Typography>
-        <Stack marginTop={"20px"} gap="14px" padding={"0 12px"}>
+        <Box sx={{display:"flex", justifyContent:"left", alignItems:"center", padding: "0 12px", marginBottom: "8px"}}>
+          <MenuIcon
+            sx={{ fontSize: 24, color: "black"}}
+          />
+          <Typography
+            fontWeight={"700"}
+            fontSize={"24px"}
+            color="#000"
+            paddingLeft={"8px"}
+          >
+            Menu
+          </Typography>
+        </Box>
+        <Box sx={{ width: "100%", height: "1px",maxWidth: "90%",mx:"auto", backgroundColor: "#A04AD4", marginBottom: "16px" }} />
+        <Stack gap="20px" padding={"0 12px"}>
           {tabs.map((tab, index) => (
             <Box
               key={index}
               display={"flex"}
               alignItems={"center"}
               color={"#000"}
-              gap={"4px"}
+              gap={"12px"}
               onClick={() => handleNavigation(tab.path)}
               sx={{
                 cursor: "pointer",
@@ -147,8 +143,8 @@ const SidebarHamburger = () => {
             >
               {tab.icon}
               <Typography
-                fontSize={"20px"}
-                fontWeight={"500"}
+                fontSize={"18px"}
+                fontWeight={"700"}
                 whiteSpace="pre-line"
               >
                 {tab.name}

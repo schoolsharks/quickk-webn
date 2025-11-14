@@ -4,7 +4,13 @@ import QuickkLogo from "../../assets/images/Quickk-logo.webp";
 
 const Quickk: React.FC = () => {
   return (
-    <Box display="flex" alignItems="flex-end" gap={1} flexDirection="column">
+    <Box 
+      display="flex" 
+      alignItems="flex-end" 
+      gap={1} 
+      flexDirection="column"
+      sx={{ marginTop: "auto" }}
+    >
       <Typography variant="h6">Powered By</Typography>
       <Box
         component="img"

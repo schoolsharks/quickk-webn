@@ -20,7 +20,7 @@ import { theme } from "../../../theme/theme";
 import ActiveLearning from "../../../components/ui/ActiveLearning";
 // import amajon from "../../../assets/images/user/amajon.png";
 // import starbucks from "../../../assets/images/user/starbucks.png";
-import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
+// import foundation from "../../../assets/images/WebnMembership/WebnMembership.webp";
 // import watch from "../../../assets/images/user/watch.png";
 // import Badge from "../../../components/ui/badge";
 // import Certificate from "../../../components/ui/certificate";
@@ -30,7 +30,7 @@ import { logout as logoutAction } from "../../auth/authSlice";
 import AnimateOnScroll from "../../../animation/AnimateOnScroll";
 import { fadeInUp } from "../../../animation";
 import { baseTransition } from "../../../animation/transitions/baseTransition";
-import { ArrowRight } from "lucide-react";
+// import { ArrowRight } from "lucide-react";
 import { useLogoutMutation } from "../userApi";
 import { Logout } from "@mui/icons-material";
 
@@ -367,7 +367,7 @@ const ProfileLayout = () => {
         </Collapse>
       </Box>
 
-      {/* Become a Webn Member Section */}
+      {/* Become a Webn Member Section
       <AnimateOnScroll
         variants={fadeInUp}
         transition={baseTransition}
@@ -381,9 +381,9 @@ const ProfileLayout = () => {
           }}
           onClick={() => navigate("/user/webn-membership")}
         >
-          <Stack direction="row" sx={{ height: "160px" }}>
+          <Stack direction="row" sx={{ height: "160px" }}> */}
             {/* Left side - Text content */}
-            <Box
+            {/* <Box
               sx={{
                 flex: 1,
                 bgcolor: theme.palette.primary.main,
@@ -420,9 +420,9 @@ const ProfileLayout = () => {
                 </Typography>
               </Box>
               <ArrowRight size={30} color="white" />
-            </Box>
+            </Box> */}
             {/* Right side - Image */}
-            <Box
+            {/* <Box
               sx={{
                 width: "50%",
                 backgroundImage: `url(${foundation})`,
@@ -434,7 +434,7 @@ const ProfileLayout = () => {
             />
           </Stack>
         </Box>
-      </AnimateOnScroll>
+      </AnimateOnScroll> */}
 
       {/* Stars Section */}
       <AnimateOnScroll
@@ -480,7 +480,7 @@ const ProfileLayout = () => {
       </AnimateOnScroll>
 
       {/* Active Learning */}
-      <Box>
+      <Box mt={"24px"}>
         <ActiveLearning />
       </Box>
 

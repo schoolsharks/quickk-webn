@@ -36,7 +36,7 @@ const DailyPulse: React.FC = () => {
           p: 3,
           borderRadius: 2,
           textAlign: "center",
-          color: "#ffffff",
+          color: "#000000",
         }}
       >
         <Typography variant="h6" fontWeight="bold" gutterBottom>

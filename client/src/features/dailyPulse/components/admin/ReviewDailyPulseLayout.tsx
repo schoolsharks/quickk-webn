@@ -1914,7 +1914,7 @@ const ReviewDailyPulseLayout: React.FC<ReviewDailyPulseLayoutProps> = ({
             {/* Publish Button */}
             <GreenButton
               onClick={handlePublishClick}
-              sx={{ background: "black", color: "white", minWidth: "150px" }}
+              sx={{ background: "white", color: "black", minWidth: "150px" }}
             >
               {publishButtonText}
             </GreenButton>

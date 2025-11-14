@@ -58,9 +58,7 @@ const Dashboard = () => {
       >
         <Box>
           <Typography mt={"40px"} variant="h2">
-            Hello,
-            <br />
-            {name}
+            Hello, {name}
           </Typography>
           {webnClubMember ? (
             <Box

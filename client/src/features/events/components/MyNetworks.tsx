@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import NetworkSearch from "./NetworkSearch";
-import BottomNavigation from "../../../components/ui/BottomNavigation";
+// import BottomNavigation from "../../../components/ui/BottomNavigation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { isProfileComplete } from "../../../utils/profileUtils";
@@ -92,7 +92,7 @@ const MyNetworks = () => {
         </>
       )}
 
-      <BottomNavigation />
+      {/* <BottomNavigation /> */}
     </Box>
   );
 };

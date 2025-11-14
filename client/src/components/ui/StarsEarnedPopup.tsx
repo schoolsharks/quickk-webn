@@ -1,5 +1,5 @@
 import { Box, Drawer, IconButton, Stack, Typography } from "@mui/material";
-import starsEarnedBg from "../../assets/images/stars-earned-popup-bg.webp";
+// import starsEarnedBg from "../../assets/images/stars-earned-popup-bg.webp";
 import { Close, StarsOutlined } from "@mui/icons-material";
 
 interface StarsEarnedPopupProps {
@@ -26,10 +26,11 @@ const StarsEarnedPopup = ({ open, stars, onClose }: StarsEarnedPopupProps) => {
     >
       <Box
         sx={{
-          background: `url(${starsEarnedBg})`,
+          // background: `url(${starsEarnedBg})`,
+          background: "linear-gradient(#FFF 0%, #F0D7FF 100%)",
           textAlign: "center",
-          backgroundSize: "100% 100%",
-          backgroundRepeat: "no-repeat",
+          // backgroundSize: "100% 100%",
+          // backgroundRepeat: "no-repeat",
           paddingBottom:"60px"
         }}
       >
